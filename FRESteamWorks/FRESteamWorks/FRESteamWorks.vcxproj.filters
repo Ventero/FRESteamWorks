@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FlashRuntimeExtensions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FRESteamWorks.h">
       <Filter>Header Files</Filter>
     </ClInclude>

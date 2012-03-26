@@ -300,14 +300,141 @@ extern "C" {
 		return result;
 	}
 	
+	//Steam Cloud
+	FREObject AIRSteam_GetFileCount(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		FREObject result;
+		int32 count;
+		if (g_Steam) {
+			count = SteamRemoteStorage()->GetFileCount();
+		}
+		FRENewObjectFromInt32((uint32_t)count, &result);
+		return result;
+	}
 
+	FREObject AIRSteam_GetFileSize(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		FREObject result;
+		int32 fileSize = 0;
+		if (g_Steam && argc==1) {
+			uint32_t len = -1;
+			const uint8_t *fileName = 0;
+			if(	FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK ) {
+				fileSize = SteamRemoteStorage()->GetFileSize((char *)fileName);
+			}
+		}
+		FRENewObjectFromInt32((uint32_t)fileSize, &result);
+		return result;
+	}
+
+	FREObject AIRSteam_FileExists(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		FREObject result;
+		bool fileExists = 0;
+		if (g_Steam && argc==1) {
+			uint32_t len = -1;
+			const uint8_t *fileName = 0;
+			if(	FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK ) {
+				fileExists = SteamRemoteStorage()->FileExists((char *)fileName);
+			}
+		}
+		FRENewObjectFromBool((uint32_t)fileExists, &result);
+		return result;
+	}
+
+	FREObject AIRSteam_FileWrite(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		FREObject result;
+		FREByteArray byteArray;
+		bool retVal=0;
+
+		if (g_Steam && argc==2) {
+
+			uint32_t len = -1;
+			const uint8_t *fileName = 0;
+			if(
+				FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK
+				&& FREAcquireByteArray(argv[1], &byteArray) == FRE_OK
+			) {
+				retVal = SteamRemoteStorage()->FileWrite((char *)fileName, byteArray.bytes, byteArray.length);
+				FREReleaseByteArray(argv[1]); 
+			}
+		}
+		FRENewObjectFromBool((uint32_t)retVal, &result);
+		return result;
+	}
+
+	FREObject AIRSteam_FileRead(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		FREObject result;
+		FREByteArray byteArray;
+		int32 retVal=0;
+
+		if (g_Steam && argc==2) {
+
+			uint32_t len = -1;
+			const uint8_t *fileName = 0;
+			uint32 fileSize;
+			char *dataIn;
+			if(
+				FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK
+				&& FREAcquireByteArray(argv[1], &byteArray) == FRE_OK
+			) {
+				fileSize = SteamRemoteStorage()->GetFileSize((char *)fileName);
+				if(fileSize > 0 && fileSize <= byteArray.length) {
+					dataIn = (char *)malloc(fileSize);
+					retVal = SteamRemoteStorage()->FileRead((char *)fileName, dataIn, fileSize);
+					memcpy (byteArray.bytes, dataIn, fileSize); 
+					free(dataIn);
+				}
+				FREReleaseByteArray(argv[1]);
+			}
+		}
+		FRENewObjectFromBool((uint32_t)retVal, &result);
+		return result;
+	}
+
+	FREObject AIRSteam_FileDelete(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		FREObject result;
+		bool retVal = 0;
+		if (g_Steam && argc==1) {
+			uint32_t len = -1;
+			const uint8_t *fileName = 0;
+			if(	FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK ) {
+				retVal = SteamRemoteStorage()->FileDelete((char *)fileName);
+			}
+		}
+		FRENewObjectFromBool((uint32_t)retVal, &result);
+		return result;
+	}
+
+	FREObject AIRSteam_IsCloudEnabledForApp(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		FREObject result;
+		bool retVal = 0;
+		if (g_Steam) {
+			retVal = SteamRemoteStorage()->IsCloudEnabledForApp();
+		}
+		FRENewObjectFromBool((uint32_t)retVal, &result);
+		return result;
+	}
+
+	FREObject AIRSteam_SetCloudEnabledForApp(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		FREObject result;
+		bool retVal = 0;
+		if (g_Steam && argc==1) {
+			uint32_t enabled = 0;
+			bool bEnabled;
+			if(	FREGetObjectAsBool(argv[0], &enabled) == FRE_OK ) {
+				bEnabled = (enabled!=0);
+				SteamRemoteStorage()->SetCloudEnabledForApp(bEnabled);
+				retVal = (bEnabled == SteamRemoteStorage()->IsCloudEnabledForApp());
+			}
+		}
+		FRENewObjectFromBool((uint32_t)retVal, &result);
+		return result;
+	}
 	//============================
 
 	void contextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctions, const FRENamedFunction** functions)
 	{
 		AIRContext = ctx;
 
-		*numFunctions = 12;
+		*numFunctions = 20;
 
 		FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * (*numFunctions));
 
@@ -358,7 +485,40 @@ extern "C" {
 		func[11].name = (const uint8_t*) "AIRSteam_ResetAllStats";
 		func[11].functionData = NULL;
 		func[11].function = &AIRSteam_ResetAllStats;
-		
+
+		//SteamRemoteStorage...
+		func[12].name = (const uint8_t*) "AIRSteam_GetFileCount";
+		func[12].functionData = NULL;
+		func[12].function = &AIRSteam_GetFileCount;
+
+		func[13].name = (const uint8_t*) "AIRSteam_GetFileSize";
+		func[13].functionData = NULL;
+		func[13].function = &AIRSteam_GetFileSize;
+
+		func[14].name = (const uint8_t*) "AIRSteam_FileExists";
+		func[14].functionData = NULL;
+		func[14].function = &AIRSteam_FileExists;
+
+		func[15].name = (const uint8_t*) "AIRSteam_FileWrite";
+		func[15].functionData = NULL;
+		func[15].function = &AIRSteam_FileWrite;
+
+		func[16].name = (const uint8_t*) "AIRSteam_FileRead";
+		func[16].functionData = NULL;
+		func[16].function = &AIRSteam_FileRead;
+
+		func[17].name = (const uint8_t*) "AIRSteam_FileDelete";
+		func[17].functionData = NULL;
+		func[17].function = &AIRSteam_FileDelete;
+
+		func[18].name = (const uint8_t*) "AIRSteam_IsCloudEnabledForApp";
+		func[18].functionData = NULL;
+		func[18].function = &AIRSteam_IsCloudEnabledForApp;
+
+		func[19].name = (const uint8_t*) "AIRSteam_SetCloudEnabledForApp";
+		func[19].functionData = NULL;
+		func[19].function = &AIRSteam_SetCloudEnabledForApp;
+
 		*functions = func;
 
 	}

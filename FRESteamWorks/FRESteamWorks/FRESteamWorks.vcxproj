@@ -90,7 +90,6 @@
     <ClCompile Include="FRESteamWorks.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FlashRuntimeExtensions.h" />
     <ClInclude Include="FRESteamWorks.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

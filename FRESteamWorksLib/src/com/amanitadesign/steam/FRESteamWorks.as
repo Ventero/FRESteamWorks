@@ -5,6 +5,7 @@ package com.amanitadesign.steam
 	import flash.events.IEventDispatcher;
 	import flash.events.StatusEvent;
 	import flash.external.ExtensionContext;
+	import flash.utils.ByteArray;
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
 	
@@ -108,6 +109,47 @@ package com.amanitadesign.steam
 		public function resetAllStats(bAchievementsToo:Boolean):Boolean
 		{
 			return _ExtensionContext.call("AIRSteam_ResetAllStats", bAchievementsToo) as Boolean;
+		}
+		
+		
+		public function getFileCount():int
+		{
+			return _ExtensionContext.call("AIRSteam_GetFileCount") as int;
+		}
+		
+		public function getFileSize(fileName:String):int
+		{
+			return _ExtensionContext.call("AIRSteam_GetFileSize", fileName) as int;
+		}
+		
+		public function fileExists(fileName:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_FileExists", fileName) as Boolean;
+		}
+		
+		public function fileWrite(fileName:String, data:ByteArray):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_FileWrite", fileName, data) as Boolean;
+		}
+		
+		public function fileRead(fileName:String, data:ByteArray):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_FileRead", fileName, data) as Boolean;
+		}
+		
+		public function fileDelete(fileName:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_FileDelete", fileName) as Boolean;
+		}
+		
+		public function isCloudEnabledForApp():Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_IsCloudEnabledForApp") as Boolean;
+		}
+		
+		public function setCloudEnabledForApp(enabled:Boolean):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_SetCloudEnabledForApp", enabled) as Boolean;
 		}
 	}
 }
