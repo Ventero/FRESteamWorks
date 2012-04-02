@@ -1,0 +1,333 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1214330215298AAF003FF426 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1214330115298AAF003FF426 /* Cocoa.framework */; };
+		1214331015298AAF003FF426 /* FRESteamWorks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1214330F15298AAF003FF426 /* FRESteamWorks.cpp */; };
+		1214331715298BD2003FF426 /* Adobe AIR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1214331615298BD2003FF426 /* Adobe AIR.framework */; };
+		1214331915298C47003FF426 /* libsteam_api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1214331815298C47003FF426 /* libsteam_api.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		121432FE15298AAF003FF426 /* FRESteamWorks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FRESteamWorks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1214330115298AAF003FF426 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		1214330415298AAF003FF426 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		1214330515298AAF003FF426 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		1214330615298AAF003FF426 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1214330E15298AAF003FF426 /* FRESteamWorks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRESteamWorks.h; sourceTree = "<group>"; };
+		1214330F15298AAF003FF426 /* FRESteamWorks.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = FRESteamWorks.cpp; sourceTree = "<group>"; };
+		1214331615298BD2003FF426 /* Adobe AIR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Adobe AIR.framework"; path = "SDKs/AdobeAIRSDK/runtimes/air/mac/Adobe AIR.framework"; sourceTree = DEVELOPER_DIR; };
+		1214331815298C47003FF426 /* libsteam_api.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsteam_api.dylib; path = SDKs/steamworks_sdk_118/sdk/redistributable_bin/osx32/libsteam_api.dylib; sourceTree = DEVELOPER_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		121432FA15298AAF003FF426 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1214330215298AAF003FF426 /* Cocoa.framework in Frameworks */,
+				1214331715298BD2003FF426 /* Adobe AIR.framework in Frameworks */,
+				1214331915298C47003FF426 /* libsteam_api.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		121432F215298AAF003FF426 = {
+			isa = PBXGroup;
+			children = (
+				1214330715298AAF003FF426 /* FRESteamWorks */,
+				1214330015298AAF003FF426 /* Frameworks */,
+				121432FF15298AAF003FF426 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		121432FF15298AAF003FF426 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				121432FE15298AAF003FF426 /* FRESteamWorks.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1214330015298AAF003FF426 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1214331615298BD2003FF426 /* Adobe AIR.framework */,
+				1214330115298AAF003FF426 /* Cocoa.framework */,
+				1214330315298AAF003FF426 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1214330315298AAF003FF426 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1214330415298AAF003FF426 /* AppKit.framework */,
+				1214330515298AAF003FF426 /* CoreData.framework */,
+				1214330615298AAF003FF426 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		1214330715298AAF003FF426 /* FRESteamWorks */ = {
+			isa = PBXGroup;
+			children = (
+				1214330E15298AAF003FF426 /* FRESteamWorks.h */,
+				1214330F15298AAF003FF426 /* FRESteamWorks.cpp */,
+				1214330815298AAF003FF426 /* Supporting Files */,
+			);
+			path = FRESteamWorks;
+			sourceTree = "<group>";
+		};
+		1214330815298AAF003FF426 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1214331815298C47003FF426 /* libsteam_api.dylib */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		121432FB15298AAF003FF426 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		121432FD15298AAF003FF426 /* FRESteamWorks */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1214331315298AAF003FF426 /* Build configuration list for PBXNativeTarget "FRESteamWorks" */;
+			buildPhases = (
+				121432F915298AAF003FF426 /* Sources */,
+				121432FA15298AAF003FF426 /* Frameworks */,
+				121432FB15298AAF003FF426 /* Headers */,
+				121432FC15298AAF003FF426 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FRESteamWorks;
+			productName = FRESteamWorks;
+			productReference = 121432FE15298AAF003FF426 /* FRESteamWorks.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		121432F415298AAF003FF426 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "Amanita Design";
+			};
+			buildConfigurationList = 121432F715298AAF003FF426 /* Build configuration list for PBXProject "FRESteamWorks" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 121432F215298AAF003FF426;
+			productRefGroup = 121432FF15298AAF003FF426 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				121432FD15298AAF003FF426 /* FRESteamWorks */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		121432FC15298AAF003FF426 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		121432F915298AAF003FF426 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1214331015298AAF003FF426 /* FRESteamWorks.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1214331115298AAF003FF426 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = /Developer/SDKs/AdobeAIRSDK/runtimes/air/mac;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FRESteamWorks/FRESteamWorks-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/Developer/SDKs/steamworks_sdk_118/sdk/public/steam,
+					/Developer/SDKs/AdobeAIRSDK/include,
+				);
+				INFOPLIST_FILE = "FRESteamWorks/FRESteamWorks-Info.plist";
+				INSTALL_PATH = "@rpath";
+				LD_DYLIB_INSTALL_NAME = /Library/Frameworks/FRESteamWorks.framework/Version/A/FRESteamWorks;
+				LD_RUNPATH_SEARCH_PATHS = "\"@executable_path/../runtimes/air/mac\" \"@executable_path/../Frameworks\" \"/Library/Frameworks\"";
+				LIBRARY_SEARCH_PATHS = /Developer/SDKs/steamworks_sdk_118/sdk/redistributable_bin/osx32;
+				MACH_O_TYPE = mh_dylib;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				ONLY_ACTIVE_ARCH = YES;
+				PRIVATE_HEADERS_FOLDER_PATH = FRESteamWorks.framework/Versions/A/PrivateHeaders;
+				PRODUCT_NAME = FRESteamWorks;
+				PUBLIC_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/Headers";
+				SDKROOT = macosx10.6;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
+				VALID_ARCHS = i386;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		1214331215298AAF003FF426 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = /Developer/SDKs/AdobeAIRSDK/runtimes/air/mac;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FRESteamWorks/FRESteamWorks-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/Developer/SDKs/steamworks_sdk_118/sdk/public/steam,
+					/Developer/SDKs/AdobeAIRSDK/include,
+				);
+				INFOPLIST_FILE = "FRESteamWorks/FRESteamWorks-Info.plist";
+				INSTALL_PATH = "@rpath";
+				LD_DYLIB_INSTALL_NAME = /Library/Frameworks/FRESteamWorks.framework/Version/A/FRESteamWorks;
+				LD_RUNPATH_SEARCH_PATHS = "\"@executable_path/../runtimes/air/mac\" \"@executable_path/../Frameworks\" \"/Library/Frameworks\"";
+				LIBRARY_SEARCH_PATHS = /Developer/SDKs/steamworks_sdk_118/sdk/redistributable_bin/osx32;
+				MACH_O_TYPE = mh_dylib;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				PRIVATE_HEADERS_FOLDER_PATH = FRESteamWorks.framework/Versions/A/PrivateHeaders;
+				PRODUCT_NAME = FRESteamWorks;
+				PUBLIC_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/Headers";
+				SDKROOT = macosx10.6;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = debugging;
+				VALID_ARCHS = i386;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		1214331415298AAF003FF426 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_DIR)/SDKs/AdobeAIRSDK/runtimes/air/mac\"",
+				);
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				INFOPLIST_FILE = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_DIR)/SDKs/steamworks_sdk_118/sdk/redistributable_bin/osx32\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		1214331515298AAF003FF426 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_DIR)/SDKs/AdobeAIRSDK/runtimes/air/mac\"",
+				);
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				INFOPLIST_FILE = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_DIR)/SDKs/steamworks_sdk_118/sdk/redistributable_bin/osx32\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		121432F715298AAF003FF426 /* Build configuration list for PBXProject "FRESteamWorks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1214331115298AAF003FF426 /* Debug */,
+				1214331215298AAF003FF426 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1214331315298AAF003FF426 /* Build configuration list for PBXNativeTarget "FRESteamWorks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1214331415298AAF003FF426 /* Debug */,
+				1214331515298AAF003FF426 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 121432F415298AAF003FF426 /* Project object */;
+}

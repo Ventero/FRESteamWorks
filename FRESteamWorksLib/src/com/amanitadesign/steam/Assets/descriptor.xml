@@ -5,9 +5,16 @@
         <platform name="Windows-x86"> 
             <applicationDeployment> 
                 <nativeLibrary>FRESteamWorks.dll</nativeLibrary> 
-                <initializer>initializer</initializer> 
-                <finalizer>finalizer</finalizer> 
-            </applicationDeployment> 
+                <initializer>ExtInitializer</initializer> 
+                <finalizer>ExtFinalizer</finalizer> 
+            </applicationDeployment>
+		</platform>
+		<platform name="MacOS-x86">
+			<applicationDeployment>
+				<nativeLibrary>FRESteamWorks.framework</nativeLibrary>
+				<initializer>ExtInitializer</initializer>
+				<finalizer>ExtFinalizer</finalizer>
+	        </applicationDeployment>
         </platform> 
     </platforms> 
 </extension>
