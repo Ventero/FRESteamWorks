@@ -9,8 +9,8 @@
 	#define _CRT_SECURE_NO_WARNINGS
 	#define EXPORT __declspec( dllexport ) 
 	#include <windows.h>
-	#include <stdio.h>
-	#include <stdlib.h>
+	//#include <stdio.h>
+	//#include <stdlib.h>
 	#include <string.h>
 	#include "FlashRuntimeExtensions.h"
 #else
