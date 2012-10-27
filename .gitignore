@@ -8,6 +8,7 @@ FRESteamWorksTest/bin-debug/FRESteamWorksTest
 *.ane
 *.dll
 *.exe
+*.swc
 
 [Dd]ebug/
 [Rr]elease/
