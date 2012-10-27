@@ -18,7 +18,8 @@ m_iAppID( 0 ),
 m_bInitialized( false ),
 m_CallbackUserStatsReceived( this, &CSteam::OnUserStatsReceived ),
 m_CallbackUserStatsStored( this, &CSteam::OnUserStatsStored ),
-m_CallbackAchievementStored( this, &CSteam::OnAchievementStored )
+m_CallbackAchievementStored( this, &CSteam::OnAchievementStored ),
+m_CallbackGameOverlayActivated( this, &CSteam::OnGameOverlayActivated )
 {
     m_iAppID = SteamUtils()->GetAppID();
     m_bInitialized = !( NULL == SteamUserStats() || NULL == SteamUser() );
@@ -134,6 +135,10 @@ void CSteam::OnAchievementStored( UserAchievementStored_t *pCallback ) {
     if ( m_iAppID == pCallback->m_nGameID ) {
         g_Steam->DispatchEvent(RESPONSE_OnAchievementStored, RESPONSE_OK);
     }
+}
+
+void CSteam::OnGameOverlayActivated( GameOverlayActivated_t *pCallback ) {
+	g_Steam->DispatchEvent(RESPONSE_OnGameOverlayActivated, pCallback->m_bActive);
 }
 
 extern "C" {

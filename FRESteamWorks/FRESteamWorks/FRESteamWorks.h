@@ -29,7 +29,8 @@ enum ResponseTypes
 {
 	RESPONSE_OnUserStatsReceived,
 	RESPONSE_OnUserStatsStored,
-	RESPONSE_OnAchievementStored
+	RESPONSE_OnAchievementStored,
+	RESPONSE_OnGameOverlayActivated
 };
 enum ResponseCodes
 {
@@ -66,6 +67,9 @@ public:
                    m_CallbackUserStatsStored );
 	STEAM_CALLBACK( CSteam, OnAchievementStored, 
                    UserAchievementStored_t, m_CallbackAchievementStored );
+	STEAM_CALLBACK( CSteam, OnGameOverlayActivated, GameOverlayActivated_t,
+	               m_CallbackGameOverlayActivated );
+
 };
 
 extern "C" {
