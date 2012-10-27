@@ -1,15 +1,15 @@
 package com.amanitadesign.steam
 {
 	import flash.events.Event;
-	
+
 	public class SteamEvent extends Event
 	{
 		public static var STEAM_RESPONSE:String = "steamResponse";
-		
+
 		private var _req_type:int=-1;
 		private var _response:int=-1;
 		private var _data:* = null;
-		
+
 		public function SteamEvent(type:String, req_type:int, response:int, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
