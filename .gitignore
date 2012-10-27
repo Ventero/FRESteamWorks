@@ -1,9 +1,13 @@
-steamworks_sdk_118
 FRESteamWorksTest/bin-debug/FRESteamWorksTest
 
 *.suo
 *.user
 *.sln.docstates
+
+# build files
+*.ane
+*.dll
+*.exe
 
 [Dd]ebug/
 [Rr]elease/
