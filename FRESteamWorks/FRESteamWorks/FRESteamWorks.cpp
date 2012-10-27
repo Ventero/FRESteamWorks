@@ -39,7 +39,7 @@ bool CSteam::RequestStats() {
 }
 
 bool CSteam::SetAchievement(const char* ID) {
-	bool result;
+	bool result = false;
 	if (m_bInitialized) {
 		SteamUserStats()->SetAchievement(ID);
 		return SteamUserStats()->StoreStats();
@@ -48,7 +48,7 @@ bool CSteam::SetAchievement(const char* ID) {
 }
 
 bool CSteam::ClearAchievement(const char* ID) {
-	bool result;
+	bool result = false;
 	if (m_bInitialized) {
 		SteamUserStats()->ClearAchievement(ID);
 		return SteamUserStats()->StoreStats();
