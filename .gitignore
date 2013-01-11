@@ -3,6 +3,8 @@ FRESteamWorksTest/bin-debug/FRESteamWorksTest
 *.suo
 *.user
 *.sln.docstates
+xcuserdata
+project.xcworkspace
 
 # build files
 *.ane
@@ -13,10 +15,6 @@ FRESteamWorksTest/bin-debug/FRESteamWorksTest
 [Dd]ebug/
 [Rr]elease/
 
-*.opensdf
-*.sdf
-*.psess
-*.vsp
-
 Thumbs.db
 Desktop.ini
+.DS_Store
