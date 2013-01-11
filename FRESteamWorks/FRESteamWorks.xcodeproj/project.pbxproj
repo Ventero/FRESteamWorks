@@ -96,16 +96,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		121432FB15298AAF003FF426 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
 		121432FD15298AAF003FF426 /* FRESteamWorks */ = {
 			isa = PBXNativeTarget;
@@ -113,8 +103,7 @@
 			buildPhases = (
 				121432F915298AAF003FF426 /* Sources */,
 				121432FA15298AAF003FF426 /* Frameworks */,
-				121432FB15298AAF003FF426 /* Headers */,
-				121432FC15298AAF003FF426 /* Resources */,
+				54C3E01E16A0D36E00D0BA87 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -151,15 +140,22 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		121432FC15298AAF003FF426 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
+/* Begin PBXShellScriptBuildPhase section */
+		54C3E01E16A0D36E00D0BA87 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
 			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -e\ncp -r $TARGET_BUILD_DIR/$FULL_PRODUCT_NAME $PROJECT_DIR/../FRESteamWorksLib/bin/\ncd $PROJECT_DIR/../FRESteamWorksLib/bin/\necho \"Compiling ANE...\"\n./compileANE.sh\n";
 		};
-/* End PBXResourcesBuildPhase section */
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		121432F915298AAF003FF426 /* Sources */ = {

@@ -1,10 +1,7 @@
 #!/bin/sh
-set -x
-AIR_SDK=/Developer/SDKs/AdobeAIRSDK
-FLEX_SDK=/Developer/SDKs/FlexSDK
-
-rm -R ./FRESteamWorks.framework
-cp -R ../../FRESteamWorks/build/Release/ ./
+set -xe
+AIR_SDK=../../../AdobeAIRSDK
+FLEX_SDK=../../../FlexSDK
 
 install_name_tool -change \
     "@loader_path/libsteam_api.dylib" "@rpath/../Resources/libsteam_api.dylib" \
