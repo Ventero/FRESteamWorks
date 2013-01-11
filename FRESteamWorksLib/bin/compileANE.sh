@@ -13,11 +13,9 @@ install_name_tool -change \
                       -swf-version=11 -output FRESteamWorksLib.swc
 
 unzip -o FRESteamWorksLib.swc
+trap "rm -f library.swf catalog.xml" EXIT
 
 "$AIR_SDK"/bin/adt -package -target ane FRESteamWorks.ane descriptor.xml \
                    -swc FRESteamWorksLib.swc \
                    -platform Windows-x86 library.swf FRESteamWorks.dll \
                    -platform MacOS-x86 library.swf FRESteamWorks.framework
-
-rm -f library.swf
-rm -f catalog.xml
