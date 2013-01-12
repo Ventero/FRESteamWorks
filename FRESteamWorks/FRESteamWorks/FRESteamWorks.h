@@ -13,6 +13,11 @@
 	//#include <stdlib.h>
 	#include <string.h>
 	#include "FlashRuntimeExtensions.h"
+#elif defined(LINUX)
+	#define EXPORT __attribute__((visibility("default")))
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include "FlashRuntimeExtensions.h"
 #else
 	// Symbols tagged with EXPORT are externally visible.
 	// Must use the -fvisibility=hidden gcc option.
@@ -22,7 +27,7 @@
 #endif
 
 #include <steam_api.h>
-#include <ISteamRemoteStorage.h>
+#include <isteamremotestorage.h>
 
 // General result codes
 enum ResponseTypes
