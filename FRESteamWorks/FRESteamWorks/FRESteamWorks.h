@@ -7,7 +7,7 @@
 //
 #if defined(WIN32)
 	#define _CRT_SECURE_NO_WARNINGS
-	#define EXPORT __declspec( dllexport ) 
+	#define EXPORT __declspec( dllexport )
 	#include <windows.h>
 	//#include <stdio.h>
 	//#include <stdlib.h>
@@ -16,7 +16,7 @@
 #else
 	// Symbols tagged with EXPORT are externally visible.
 	// Must use the -fvisibility=hidden gcc option.
-	#define EXPORT __attribute__((visibility("default"))) 
+	#define EXPORT __attribute__((visibility("default")))
 	#include <Foundation/Foundation.h>
 	#include <Adobe AIR/Adobe AIR.h>
 #endif
@@ -43,11 +43,11 @@ class CSteam
 private:
 	uint64 m_iAppID; // Our current AppID
 	bool m_bInitialized;
-    
+
 public:
 	CSteam();
 	~CSteam();
-	
+
 	bool RequestStats();
 	bool SetAchievement( const char* ID );
 	bool ClearAchievement( const char* ID );
@@ -58,15 +58,15 @@ public:
 	bool SetStat( const char* ID, float value );
 	bool StoreStats();
 	bool ResetAllStats( bool bAchievementsToo );
-    
+
 	void DispatchEvent( const int req_type, const int response );
-    
-	STEAM_CALLBACK( CSteam, OnUserStatsReceived, UserStatsReceived_t, 
-                   m_CallbackUserStatsReceived );
-	STEAM_CALLBACK( CSteam, OnUserStatsStored, UserStatsStored_t, 
-                   m_CallbackUserStatsStored );
-	STEAM_CALLBACK( CSteam, OnAchievementStored, 
-                   UserAchievementStored_t, m_CallbackAchievementStored );
+
+	STEAM_CALLBACK( CSteam, OnUserStatsReceived, UserStatsReceived_t,
+	                 m_CallbackUserStatsReceived );
+	STEAM_CALLBACK( CSteam, OnUserStatsStored, UserStatsStored_t,
+	                 m_CallbackUserStatsStored );
+	STEAM_CALLBACK( CSteam, OnAchievementStored,
+	                 UserAchievementStored_t, m_CallbackAchievementStored );
 	STEAM_CALLBACK( CSteam, OnGameOverlayActivated, GameOverlayActivated_t,
 	               m_CallbackGameOverlayActivated );
 
@@ -94,11 +94,11 @@ extern "C" {
 	FREObject AIRSteam_FileDelete(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
 	FREObject AIRSteam_IsCloudEnabledForApp(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
 	FREObject AIRSteam_SetCloudEnabledForApp(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-    // A native context instance is created
-    void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, 
-                            uint32_t* numFunctions, const FRENamedFunction** functions);
-    void ContextFinalizer(FREContext ctx);
-    EXPORT void ExtInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerToSet, 
-                               FREContextFinalizer* ctxFinalizerToSet);
-    EXPORT void ExtFinalizer(void* extData);
+	// A native context instance is created
+	void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
+	                        uint32_t* numFunctions, const FRENamedFunction** functions);
+	void ContextFinalizer(FREContext ctx);
+	EXPORT void ExtInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerToSet,
+	                           FREContextFinalizer* ctxFinalizerToSet);
+	EXPORT void ExtFinalizer(void* extData);
 }
