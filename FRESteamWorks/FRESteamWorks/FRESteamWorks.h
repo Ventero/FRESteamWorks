@@ -41,7 +41,7 @@ enum ResponseCodes
 class CSteam
 {
 private:
-	int64 m_iAppID; // Our current AppID
+	uint64 m_iAppID; // Our current AppID
 	bool m_bInitialized;
     
 public:
