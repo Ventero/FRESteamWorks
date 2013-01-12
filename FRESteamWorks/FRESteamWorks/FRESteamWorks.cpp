@@ -58,36 +58,36 @@ bool CSteam::ClearAchievement(const char* ID) {
 }
 
 bool CSteam::IsAchievement(const char* ID) {
-	bool result;
+	bool result = false;
 	if (m_bInitialized) SteamUserStats()->GetAchievement(ID, &result);
 	return result;
 }
 
 bool CSteam::GetStat(const char* ID, int32 *value) {
-	bool result;
+	bool result = false;
 	if (m_bInitialized) result = SteamUserStats()->GetStat(ID, value);
 	return result;
 }
 bool CSteam::GetStat(const char* ID, float *value) {
-	bool result;
+	bool result = false;
 	if (m_bInitialized) result = SteamUserStats()->GetStat(ID, value);
 	return result;
 }
 
 
 bool CSteam::SetStat(const char* ID, int32 value) {
-	bool result;
+	bool result = false;
 	if (m_bInitialized) result = SteamUserStats()->SetStat(ID, value);
 	return result;
 }
 bool CSteam::SetStat(const char* ID, float value) {
-	bool result;
+	bool result = false;
 	if (m_bInitialized) result = SteamUserStats()->SetStat(ID, value);
 	return result;
 }
 
 bool CSteam::StoreStats() {
-	bool result;
+	bool result = false;
 	if (m_bInitialized) result = SteamUserStats()->StoreStats();
 	return result;
 }
@@ -170,7 +170,7 @@ extern "C" {
 	}
     
 	FREObject AIRSteam_SetAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-		FREObject result;
+		FREObject result = NULL;
 		if (g_Steam && argc == 1) {
 			FREResult res;
 			uint32_t len = -1;
@@ -185,7 +185,7 @@ extern "C" {
 	}
 	
 	FREObject AIRSteam_ClearAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-		FREObject result;
+		FREObject result = NULL;
 		if (g_Steam) {
 			FREResult res;
 			uint32_t len = -1;
@@ -199,7 +199,7 @@ extern "C" {
 	}
     
 	FREObject AIRSteam_IsAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-		FREObject result;
+		FREObject result = NULL;
 		if (g_Steam && argc == 1) {
 			FREResult res;
 			uint32_t len = -1;
@@ -219,36 +219,36 @@ extern "C" {
     
 	FREObject AIRSteam_GetStatInt(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		FREObject result;
+		int32 value = 0;
 		if (g_Steam) {
 			FREResult res;
 			uint32_t len = -1;
 			const uint8_t *ID = 0;
-			int32 value;
 			if((res=FREGetObjectAsUTF8(argv[0], &len, &ID)) == FRE_OK) {
 				g_Steam->GetStat((const char *)ID, &value);
-				FRENewObjectFromInt32(value, &result);
 			}
 		}
+		FRENewObjectFromInt32(value, &result);
 		return result;
 	}
     
 	FREObject AIRSteam_GetStatFloat(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		FREObject result;
+		float value = 0.0f;
 		if (g_Steam) {
 			FREResult res;
 			uint32_t len = -1;
 			const uint8_t *ID = 0;
-			float value;
 			if((res=FREGetObjectAsUTF8(argv[0], &len, &ID)) == FRE_OK) {
 				g_Steam->GetStat((const char *)ID, &value);
-				FRENewObjectFromDouble(value, &result);
 			}
 		}
+		FRENewObjectFromDouble(value, &result);
 		return result;
 	}
     
 	FREObject AIRSteam_SetStatInt(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-		FREObject result;
+		FREObject result = NULL;
 		if (g_Steam && argc == 2) {
 			uint32_t len = -1;
 			const uint8_t *ID = 0;
@@ -260,10 +260,11 @@ extern "C" {
 				FRENewObjectFromBool((uint32_t)g_Steam->SetStat((const char *)ID, value), &result);
 			}
 		}
+        if (NULL == result) FRENewObjectFromBool(false, &result);
 		return result;
 	}
 	FREObject AIRSteam_SetStatFloat(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-		FREObject result;
+		FREObject result = NULL;
 		if (g_Steam && argc == 2) {
 			uint32_t len = -1;
 			const uint8_t *ID = 0;
@@ -275,6 +276,7 @@ extern "C" {
 				FRENewObjectFromBool((uint32_t)g_Steam->SetStat((const char *)ID, (float)value), &result);
 			}
 		}
+		if (NULL == result) FRENewObjectFromBool(false, &result);
 		return result;
 	}
     
@@ -289,7 +291,7 @@ extern "C" {
 	}
     
 	FREObject AIRSteam_ResetAllStats(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-		FREObject result;
+		FREObject result = NULL;
 		if (g_Steam && argc == 1) {
 			uint32_t bAchievementsToo;
 			if( FREGetObjectAsBool( argv[0], &bAchievementsToo ) == FRE_OK ) {
@@ -303,7 +305,7 @@ extern "C" {
 	//Steam Cloud
 	FREObject AIRSteam_GetFileCount(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		FREObject result;
-		int32 count;
+		int32 count = 0;
 		if (g_Steam) {
 			count = SteamRemoteStorage()->GetFileCount();
 		}
