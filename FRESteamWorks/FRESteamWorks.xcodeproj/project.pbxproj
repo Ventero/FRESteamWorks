@@ -21,8 +21,8 @@
 		1214330615298AAF003FF426 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1214330E15298AAF003FF426 /* FRESteamWorks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRESteamWorks.h; sourceTree = "<group>"; };
 		1214330F15298AAF003FF426 /* FRESteamWorks.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = FRESteamWorks.cpp; sourceTree = "<group>"; usesTabs = 1; };
-		1214331615298BD2003FF426 /* Adobe AIR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Adobe AIR.framework"; path = "SDKs/AdobeAIRSDK/runtimes/air/mac/Adobe AIR.framework"; sourceTree = DEVELOPER_DIR; };
-		1214331815298C47003FF426 /* libsteam_api.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsteam_api.dylib; path = SDKs/steamworks_sdk_118/sdk/redistributable_bin/osx32/libsteam_api.dylib; sourceTree = DEVELOPER_DIR; };
+		1214331615298BD2003FF426 /* Adobe AIR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Adobe AIR.framework"; path = "../../AdobeAIRSDK/runtimes/air/mac/Adobe AIR.framework"; sourceTree = DEVELOPER_DIR; };
+		1214331815298C47003FF426 /* libsteam_api.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsteam_api.dylib; path = ../../Steam/sdk/redistributable_bin/osx32/libsteam_api.dylib; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
