@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		1214330215298AAF003FF426 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1214330115298AAF003FF426 /* Cocoa.framework */; };
 		1214331015298AAF003FF426 /* FRESteamWorks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1214330F15298AAF003FF426 /* FRESteamWorks.cpp */; };
-		1214331715298BD2003FF426 /* Adobe AIR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1214331615298BD2003FF426 /* Adobe AIR.framework */; };
-		1214331915298C47003FF426 /* libsteam_api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1214331815298C47003FF426 /* libsteam_api.dylib */; };
+		546198A316A8B30E00E9B390 /* Adobe AIR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 546198A116A8B2FE00E9B390 /* Adobe AIR.framework */; };
+		546198A516A8B32100E9B390 /* libsteam_api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 546198A416A8B32100E9B390 /* libsteam_api.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +23,11 @@
 		1214330F15298AAF003FF426 /* FRESteamWorks.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = FRESteamWorks.cpp; sourceTree = "<group>"; usesTabs = 1; };
 		1214331615298BD2003FF426 /* Adobe AIR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Adobe AIR.framework"; path = "../../AdobeAIRSDK/runtimes/air/mac/Adobe AIR.framework"; sourceTree = DEVELOPER_DIR; };
 		1214331815298C47003FF426 /* libsteam_api.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsteam_api.dylib; path = ../../Steam/sdk/redistributable_bin/osx32/libsteam_api.dylib; sourceTree = DEVELOPER_DIR; };
+		5461989A16A8B2FE00E9B390 /* Runtime.apk */ = {isa = PBXFileReference; lastKnownFileType = file; path = Runtime.apk; sourceTree = "<group>"; };
+		5461989C16A8B2FE00E9B390 /* Runtime.apk */ = {isa = PBXFileReference; lastKnownFileType = file; path = Runtime.apk; sourceTree = "<group>"; };
+		5461989E16A8B2FE00E9B390 /* Adobe AIR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "Adobe AIR.framework"; sourceTree = "<group>"; };
+		546198A116A8B2FE00E9B390 /* Adobe AIR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "Adobe AIR.framework"; sourceTree = "<group>"; };
+		546198A416A8B32100E9B390 /* libsteam_api.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsteam_api.dylib; path = ../../Steam/sdk/redistributable_bin/osx32/libsteam_api.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,9 +35,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				546198A516A8B32100E9B390 /* libsteam_api.dylib in Frameworks */,
+				546198A316A8B30E00E9B390 /* Adobe AIR.framework in Frameworks */,
 				1214330215298AAF003FF426 /* Cocoa.framework in Frameworks */,
-				1214331715298BD2003FF426 /* Adobe AIR.framework in Frameworks */,
-				1214331915298C47003FF426 /* libsteam_api.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +47,8 @@
 		121432F215298AAF003FF426 = {
 			isa = PBXGroup;
 			children = (
+				546198A416A8B32100E9B390 /* libsteam_api.dylib */,
+				5461989616A8B2FE00E9B390 /* runtimes */,
 				1214330715298AAF003FF426 /* FRESteamWorks */,
 				1214330015298AAF003FF426 /* Frameworks */,
 				121432FF15298AAF003FF426 /* Products */,
@@ -92,6 +99,74 @@
 				1214331815298C47003FF426 /* libsteam_api.dylib */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5461989616A8B2FE00E9B390 /* runtimes */ = {
+			isa = PBXGroup;
+			children = (
+				5461989716A8B2FE00E9B390 /* air */,
+				5461989F16A8B2FE00E9B390 /* air-captive */,
+			);
+			name = runtimes;
+			path = ../../AdobeAIRSDK/runtimes;
+			sourceTree = "<group>";
+		};
+		5461989716A8B2FE00E9B390 /* air */ = {
+			isa = PBXGroup;
+			children = (
+				5461989816A8B2FE00E9B390 /* android */,
+				5461989D16A8B2FE00E9B390 /* mac */,
+			);
+			path = air;
+			sourceTree = "<group>";
+		};
+		5461989816A8B2FE00E9B390 /* android */ = {
+			isa = PBXGroup;
+			children = (
+				5461989916A8B2FE00E9B390 /* device */,
+				5461989B16A8B2FE00E9B390 /* emulator */,
+			);
+			path = android;
+			sourceTree = "<group>";
+		};
+		5461989916A8B2FE00E9B390 /* device */ = {
+			isa = PBXGroup;
+			children = (
+				5461989A16A8B2FE00E9B390 /* Runtime.apk */,
+			);
+			path = device;
+			sourceTree = "<group>";
+		};
+		5461989B16A8B2FE00E9B390 /* emulator */ = {
+			isa = PBXGroup;
+			children = (
+				5461989C16A8B2FE00E9B390 /* Runtime.apk */,
+			);
+			path = emulator;
+			sourceTree = "<group>";
+		};
+		5461989D16A8B2FE00E9B390 /* mac */ = {
+			isa = PBXGroup;
+			children = (
+				5461989E16A8B2FE00E9B390 /* Adobe AIR.framework */,
+			);
+			path = mac;
+			sourceTree = "<group>";
+		};
+		5461989F16A8B2FE00E9B390 /* air-captive */ = {
+			isa = PBXGroup;
+			children = (
+				546198A016A8B2FE00E9B390 /* mac */,
+			);
+			path = "air-captive";
+			sourceTree = "<group>";
+		};
+		546198A016A8B2FE00E9B390 /* mac */ = {
+			isa = PBXGroup;
+			children = (
+				546198A116A8B2FE00E9B390 /* Adobe AIR.framework */,
+			);
+			path = mac;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -262,12 +337,18 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../AdobeAIRSDK/runtimes/air-captive/mac\"",
+				);
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../Steam/sdk/redistributable_bin/osx32\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -279,12 +360,18 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../AdobeAIRSDK/runtimes/air-captive/mac\"",
+				);
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../Steam/sdk/redistributable_bin/osx32\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};
