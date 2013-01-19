@@ -2,7 +2,7 @@
 INC = -I../../AdobeAIRSDK/include -I../../SteamSDK/public/steam
 LIB = -L../..//SteamSDK/redistributable_bin/linux32
 LINK = -lsteam_api
-CXXFLAGS = -m32 -Wall -Wextra
+CXXFLAGS = -m32 -Wall -Wextra -Wno-unused-parameter
 
 dir := FRESteamWorks
 
