@@ -19,3 +19,6 @@ trap "rm -f library.swf catalog.xml" EXIT
                    -swc FRESteamWorksLib.swc \
                    -platform Windows-x86 library.swf FRESteamWorks.dll \
                    -platform MacOS-x86 library.swf FRESteamWorks.framework
+
+rm -rf FRESteamWorks.Unpacked.ane
+unzip FRESteamWorks.ane -d FRESteamWorks.Unpacked.ane
