@@ -14,8 +14,6 @@
 
 /* Begin PBXFileReference section */
 		121432FE15298AAF003FF426 /* FRESteamWorks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FRESteamWorks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		1214330415298AAF003FF426 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		1214330515298AAF003FF426 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		1214330615298AAF003FF426 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1214330E15298AAF003FF426 /* FRESteamWorks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRESteamWorks.h; sourceTree = "<group>"; };
 		1214330F15298AAF003FF426 /* FRESteamWorks.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = FRESteamWorks.cpp; sourceTree = "<group>"; usesTabs = 1; };
@@ -67,8 +65,6 @@
 		1214330315298AAF003FF426 /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1214330415298AAF003FF426 /* AppKit.framework */,
-				1214330515298AAF003FF426 /* CoreData.framework */,
 				1214330615298AAF003FF426 /* Foundation.framework */,
 			);
 			name = "Other Frameworks";
