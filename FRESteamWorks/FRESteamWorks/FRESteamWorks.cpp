@@ -437,92 +437,38 @@ extern "C" {
 	                        uint32_t* numFunctions, const FRENamedFunction** functions) {
 		AIRContext = ctx;
 
-		*numFunctions = 20;
+#define FRE_FUNC(fname) \
+		{ (const uint8_t*) #fname, NULL, &fname }
 
-		FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * (*numFunctions));
+		FRENamedFunction func[] = {
+			FRE_FUNC(AIRSteam_Init),
+			FRE_FUNC(AIRSteam_RunCallbacks),
 
-		func[0].name = (const uint8_t*) "AIRSteam_Init";
-		func[0].functionData = NULL;
-		func[0].function = &AIRSteam_Init;
+			// stats / achievements
+			FRE_FUNC(AIRSteam_RequestStats),
+			FRE_FUNC(AIRSteam_SetAchievement),
+			FRE_FUNC(AIRSteam_ClearAchievement),
+			FRE_FUNC(AIRSteam_IsAchievement),
+			FRE_FUNC(AIRSteam_GetStatInt),
+			FRE_FUNC(AIRSteam_GetStatFloat),
+			FRE_FUNC(AIRSteam_SetStatInt),
+			FRE_FUNC(AIRSteam_SetStatFloat),
+			FRE_FUNC(AIRSteam_StoreStats),
+			FRE_FUNC(AIRSteam_ResetAllStats),
 
-		func[1].name = (const uint8_t*) "AIRSteam_RequestStats";
-		func[1].functionData = NULL;
-		func[1].function = &AIRSteam_RequestStats;
-
-		func[2].name = (const uint8_t*) "AIRSteam_SetAchievement";
-		func[2].functionData = NULL;
-		func[2].function = &AIRSteam_SetAchievement;
-
-		func[3].name = (const uint8_t*) "AIRSteam_ClearAchievement";
-		func[3].functionData = NULL;
-		func[3].function = &AIRSteam_ClearAchievement;
-
-		func[4].name = (const uint8_t*) "AIRSteam_IsAchievement";
-		func[4].functionData = NULL;
-		func[4].function = &AIRSteam_IsAchievement;
-
-		func[5].name = (const uint8_t*) "AIRSteam_GetStatInt";
-		func[5].functionData = NULL;
-		func[5].function = &AIRSteam_GetStatInt;
-
-		func[6].name = (const uint8_t*) "AIRSteam_GetStatFloat";
-		func[6].functionData = NULL;
-		func[6].function = &AIRSteam_GetStatFloat;
-
-		func[7].name = (const uint8_t*) "AIRSteam_SetStatInt";
-		func[7].functionData = NULL;
-		func[7].function = &AIRSteam_SetStatInt;
-
-		func[8].name = (const uint8_t*) "AIRSteam_SetStatFloat";
-		func[8].functionData = NULL;
-		func[8].function = &AIRSteam_SetStatFloat;
-
-		func[9].name = (const uint8_t*) "AIRSteam_StoreStats";
-		func[9].functionData = NULL;
-		func[9].function = &AIRSteam_StoreStats;
-
-		func[10].name = (const uint8_t*) "AIRSteam_RunCallbacks";
-		func[10].functionData = NULL;
-		func[10].function = &AIRSteam_RunCallbacks;
-
-		func[11].name = (const uint8_t*) "AIRSteam_ResetAllStats";
-		func[11].functionData = NULL;
-		func[11].function = &AIRSteam_ResetAllStats;
-
-		//SteamRemoteStorage...
-		func[12].name = (const uint8_t*) "AIRSteam_GetFileCount";
-		func[12].functionData = NULL;
-		func[12].function = &AIRSteam_GetFileCount;
-
-		func[13].name = (const uint8_t*) "AIRSteam_GetFileSize";
-		func[13].functionData = NULL;
-		func[13].function = &AIRSteam_GetFileSize;
-
-		func[14].name = (const uint8_t*) "AIRSteam_FileExists";
-		func[14].functionData = NULL;
-		func[14].function = &AIRSteam_FileExists;
-
-		func[15].name = (const uint8_t*) "AIRSteam_FileWrite";
-		func[15].functionData = NULL;
-		func[15].function = &AIRSteam_FileWrite;
-
-		func[16].name = (const uint8_t*) "AIRSteam_FileRead";
-		func[16].functionData = NULL;
-		func[16].function = &AIRSteam_FileRead;
-
-		func[17].name = (const uint8_t*) "AIRSteam_FileDelete";
-		func[17].functionData = NULL;
-		func[17].function = &AIRSteam_FileDelete;
-
-		func[18].name = (const uint8_t*) "AIRSteam_IsCloudEnabledForApp";
-		func[18].functionData = NULL;
-		func[18].function = &AIRSteam_IsCloudEnabledForApp;
-
-		func[19].name = (const uint8_t*) "AIRSteam_SetCloudEnabledForApp";
-		func[19].functionData = NULL;
-		func[19].function = &AIRSteam_SetCloudEnabledForApp;
+			// remote storage
+			FRE_FUNC(AIRSteam_GetFileCount),
+			FRE_FUNC(AIRSteam_GetFileSize),
+			FRE_FUNC(AIRSteam_FileExists),
+			FRE_FUNC(AIRSteam_FileWrite),
+			FRE_FUNC(AIRSteam_FileRead),
+			FRE_FUNC(AIRSteam_FileDelete),
+			FRE_FUNC(AIRSteam_IsCloudEnabledForApp),
+			FRE_FUNC(AIRSteam_SetCloudEnabledForApp)
+		};
 
 		*functions = func;
+		*numFunctions = sizeof(func) / sizeof(func[0]);
 	}
 
 	// A native context instance is disposed
