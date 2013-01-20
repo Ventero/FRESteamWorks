@@ -440,7 +440,7 @@ extern "C" {
 #define FRE_FUNC(fname) \
 		{ (const uint8_t*) #fname, NULL, &fname }
 
-		FRENamedFunction func[] = {
+		static FRENamedFunction func[] = {
 			FRE_FUNC(AIRSteam_Init),
 			FRE_FUNC(AIRSteam_RunCallbacks),
 
