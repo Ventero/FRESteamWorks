@@ -17,7 +17,7 @@
 	// Symbols tagged with EXPORT are externally visible.
 	// Must use the -fvisibility=hidden gcc option.
 	#define EXPORT __attribute__((visibility("default")))
-	#include <Foundation/Foundation.h>
+	#include <stdlib.h>
 	#include <Adobe AIR/Adobe AIR.h>
 #endif
 
