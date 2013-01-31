@@ -183,7 +183,7 @@
 				);
 				INFOPLIST_FILE = "FRESteamWorks/FRESteamWorks-Info.plist";
 				INSTALL_PATH = "@rpath";
-				LD_RUNPATH_SEARCH_PATHS = "\"/Library/Frameworks\"";
+				LD_RUNPATH_SEARCH_PATHS = "\"@executable_path/../Frameworks\" \"/Library/Frameworks\"";
 				LIBRARY_SEARCH_PATHS = ../../Steam/sdk/redistributable_bin/osx32;
 				MACH_O_TYPE = mh_dylib;
 				MACOSX_DEPLOYMENT_TARGET = "";
