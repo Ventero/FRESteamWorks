@@ -27,34 +27,38 @@ package
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
 			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
+			try {
+				if(Steamworks.init()){
+					log("STEAMWORKS API is available\n");
 
-			if(Steamworks.init()){
-				log("STEAMWORKS API is available\n");
+					//comment.. current stats and achievement ids are from steam example app which is provided with their SDK
+					log("isAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.isAchievement("ACH_WIN_ONE_GAME"));
+					log("isAchievement('ACH_TRAVEL_FAR_SINGLE') == "+Steamworks.isAchievement("ACH_TRAVEL_FAR_SINGLE"));
+					log("setStatFloat('FeetTraveled') == "+Steamworks.setStatFloat('FeetTraveled', 21.3));
+					log("setStatInt('NumGames', 2) == "+Steamworks.setStatInt('NumGames', 2));
+					Steamworks.storeStats();
+					log("getStatInt('NumGames') == "+Steamworks.getStatInt('NumGames'));
+					log("getStatFloat('FeetTraveled') == "+Steamworks.getStatFloat('FeetTraveled'));
 
-				//comment.. current stats and achievement ids are from steam example app which is provided with their SDK
-				log("isAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.isAchievement("ACH_WIN_ONE_GAME"));
-				log("isAchievement('ACH_TRAVEL_FAR_SINGLE') == "+Steamworks.isAchievement("ACH_TRAVEL_FAR_SINGLE"));
-				log("setStatFloat('FeetTraveled') == "+Steamworks.setStatFloat('FeetTraveled', 21.3));
-				log("setStatInt('NumGames', 2) == "+Steamworks.setStatInt('NumGames', 2));
-				Steamworks.storeStats();
-				log("getStatInt('NumGames') == "+Steamworks.getStatInt('NumGames'));
-				log("getStatFloat('FeetTraveled') == "+Steamworks.getStatFloat('FeetTraveled'));
+					log("setCloudEnabledForApp(false) == "+Steamworks.setCloudEnabledForApp(false) );
+					log("setCloudEnabledForApp(true) == "+Steamworks.setCloudEnabledForApp(true) );
+					log("isCloudEnabledForApp() == "+Steamworks.isCloudEnabledForApp() );
+					log("getFileCount() == "+Steamworks.getFileCount() );
+					log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt') );
 
-				log("setCloudEnabledForApp(false) == "+Steamworks.setCloudEnabledForApp(false) );
-				log("setCloudEnabledForApp(true) == "+Steamworks.setCloudEnabledForApp(true) );
-				log("isCloudEnabledForApp() == "+Steamworks.isCloudEnabledForApp() );
-				log("getFileCount() == "+Steamworks.getFileCount() );
-				log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt') );
+					//comment.. writing to app with id 480 is somehow not working, but works with our real appId
+					log("writeFileToCloud('test.txt','hello steam') == "+writeFileToCloud('test.txt','hello steam'));
+					log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
+					//-----------
 
-				//comment.. writing to app with id 480 is somehow not working, but works with our real appId
-				log("writeFileToCloud('test.txt','hello steam') == "+writeFileToCloud('test.txt','hello steam'));
-				log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
-				//-----------
-
-				//Steamworks.requestStats();
-				Steamworks.resetAllStats(true);
-			}else {
-				tf.appendText("STEAMWORKS API is NOT available\n");
+					//Steamworks.requestStats();
+					Steamworks.resetAllStats(true);
+				}else {
+					tf.appendText("STEAMWORKS API is NOT available\n");
+				}
+			} catch(e:Error) {
+				tf.appendText("*** ERROR ***");
+				tf.appendText(e.message);
 			}
 
 		}
