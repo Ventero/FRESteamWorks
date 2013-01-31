@@ -3,8 +3,9 @@ set -xe
 AIR_SDK=../../../AdobeAIRSDK
 FLEX_SDK=../../../FlexSDK
 
+# FIXME: this seems wrong
 install_name_tool -change \
-    "@loader_path/libsteam_api.dylib" "@rpath/../Resources/libsteam_api.dylib" \
+    "@loader_path/libsteam_api.dylib" "@executable_path/../Resources/libsteam_api.dylib" \
     ./FRESteamWorks.framework/FRESteamWorks
 
 "$FLEX_SDK/bin/compc" +configname=air -source-path ../src -optimize \
