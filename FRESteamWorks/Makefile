@@ -1,6 +1,6 @@
 #include "vars.mk"
 INC = -I../../AdobeAIRSDK/include -I../../SteamSDK/public/steam
-LIB = -L../..//SteamSDK/redistributable_bin/linux32
+LIB = -L../../SteamSDK/redistributable_bin/linux32
 LINK = -lsteam_api
 CXXFLAGS = -m32 -fvisibility=hidden -Wall -Wextra -Wno-unused-parameter
 
