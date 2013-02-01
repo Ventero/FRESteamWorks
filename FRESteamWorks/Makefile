@@ -1,4 +1,3 @@
-#include "vars.mk"
 INC = -I../../AdobeAIRSDK/include -I../../SteamSDK/public/steam
 LIB = -L../../SteamSDK/redistributable_bin/linux32
 LINK = -lsteam_api
