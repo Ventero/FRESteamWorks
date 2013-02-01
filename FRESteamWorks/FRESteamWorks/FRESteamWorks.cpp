@@ -8,31 +8,32 @@
 
 #include "FRESteamWorks.h"
 
-FREContext  AIRContext; // Used to dispatch event back to AIR
+// Used to dispatch event back to AIR
+FREContext AIRContext;
 
 // Global access to Steam object
 CSteam*	g_Steam = NULL;
 
 CSteam::CSteam():
-m_iAppID( 0 ),
-m_bInitialized( false ),
-m_CallbackUserStatsReceived( this, &CSteam::OnUserStatsReceived ),
-m_CallbackUserStatsStored( this, &CSteam::OnUserStatsStored ),
-m_CallbackAchievementStored( this, &CSteam::OnAchievementStored ),
-m_CallbackGameOverlayActivated( this, &CSteam::OnGameOverlayActivated )
+m_iAppID(0),
+m_bInitialized(false),
+m_CallbackUserStatsReceived(this, &CSteam::OnUserStatsReceived),
+m_CallbackUserStatsStored(this, &CSteam::OnUserStatsStored),
+m_CallbackAchievementStored(this, &CSteam::OnAchievementStored),
+m_CallbackGameOverlayActivated(this, &CSteam::OnGameOverlayActivated)
 {
 	m_iAppID = SteamUtils()->GetAppID();
-	m_bInitialized = !( NULL == SteamUserStats() || NULL == SteamUser() );
+	m_bInitialized = !(SteamUserStats() == NULL || SteamUser() == NULL);
 	RequestStats();
 }
 
 bool CSteam::RequestStats() {
 	// Is Steam loaded? If not we can't get stats.
-	if ( NULL == SteamUserStats() || NULL == SteamUser() ) {
+	if (SteamUserStats() == NULL || SteamUser() == NULL) {
 		return false;
 	}
 	// Is the user logged on?  If not we can't get stats.
-	if ( !SteamUser()->BLoggedOn() ) {
+	if (!SteamUser()->BLoggedOn()) {
 		return false;
 	}
 	// Request user stats.
@@ -74,7 +75,6 @@ bool CSteam::GetStat(const char* ID, float *value) {
 	return result;
 }
 
-
 bool CSteam::SetStat(const char* ID, int32 value) {
 	bool result = false;
 	if (m_bInitialized) result = SteamUserStats()->SetStat(ID, value);
@@ -92,7 +92,7 @@ bool CSteam::StoreStats() {
 	return result;
 }
 
-bool CSteam::ResetAllStats( bool bAchievementsToo ) {
+bool CSteam::ResetAllStats(bool bAchievementsToo) {
 	if (m_bInitialized) {
 		SteamUserStats()->ResetAllStats(bAchievementsToo);
 		return SteamUserStats()->StoreStats();
@@ -101,43 +101,41 @@ bool CSteam::ResetAllStats( bool bAchievementsToo ) {
 }
 
 void CSteam::DispatchEvent(const int req_type, const int response) {
-	FREResult res;
 	char code[5];
 	char level[5];
 
 	sprintf(code,  "%d", req_type);
 	sprintf(level, "%d", response);
-	if((res=FREDispatchStatusEventAsync(AIRContext, (const uint8_t*)code, (const uint8_t*)level)) != FRE_OK)
-	{
-		//Debug::logDebug("ERROR: FREDispatchStatusEventAsync(ctx, (const uint8_t*)code, (const uint8_t*)level) = %d", res);
+	FREResult res = FREDispatchStatusEventAsync(AIRContext, (const uint8_t*)code, (const uint8_t*)level);
+	if (res != FRE_OK) {
 		return;
 	}
 }
 
-void CSteam::OnUserStatsReceived( UserStatsReceived_t *pCallback ) {
+void CSteam::OnUserStatsReceived(UserStatsReceived_t *pCallback) {
 	// we may get callbacks for other games' stats arriving, ignore them
-	if ( m_iAppID == pCallback->m_nGameID )	{
+	if (m_iAppID == pCallback->m_nGameID)	{
 		g_Steam->DispatchEvent(RESPONSE_OnUserStatsReceived, pCallback->m_eResult);
 	}
 }
 
 
-void CSteam::OnUserStatsStored( UserStatsStored_t *pCallback ) {
+void CSteam::OnUserStatsStored(UserStatsStored_t *pCallback) {
 	// we may get callbacks for other games' stats arriving, ignore them
-	if ( m_iAppID == pCallback->m_nGameID )	{
+	if (m_iAppID == pCallback->m_nGameID)	{
 		DispatchEvent(RESPONSE_OnUserStatsStored, pCallback->m_eResult);
 	}
 }
 
 
-void CSteam::OnAchievementStored( UserAchievementStored_t *pCallback ) {
-    // we may get callbacks for other games' stats arriving, ignore them
-    if ( m_iAppID == pCallback->m_nGameID ) {
-        g_Steam->DispatchEvent(RESPONSE_OnAchievementStored, RESPONSE_OK);
-    }
+void CSteam::OnAchievementStored(UserAchievementStored_t *pCallback) {
+  // we may get callbacks for other games' stats arriving, ignore them
+  if (m_iAppID == pCallback->m_nGameID) {
+      g_Steam->DispatchEvent(RESPONSE_OnAchievementStored, RESPONSE_OK);
+  }
 }
 
-void CSteam::OnGameOverlayActivated( GameOverlayActivated_t *pCallback ) {
+void CSteam::OnGameOverlayActivated(GameOverlayActivated_t *pCallback) {
 	g_Steam->DispatchEvent(RESPONSE_OnGameOverlayActivated, pCallback->m_bActive);
 }
 
@@ -172,14 +170,14 @@ extern "C" {
 	FREObject AIRSteam_SetAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		FREObject result = NULL;
 		if (g_Steam && argc == 1) {
-			FREResult res;
 			uint32_t len = -1;
 			const uint8_t *ID = 0;
-			if((res=FREGetObjectAsUTF8(argv[0], &len, &ID)) == FRE_OK) {
+			FREResult res = FREGetObjectAsUTF8(argv[0], &len, &ID);
+			if (res == FRE_OK) {
 				FRENewObjectFromBool((uint32_t)g_Steam->SetAchievement((const char *)ID), &result);
 			}
 		}
-		if (NULL == result) FRENewObjectFromBool(false, &result);
+		if (result == NULL) FRENewObjectFromBool(false, &result);
 		SteamAPI_RunCallbacks();
 		return result;
 	}
@@ -187,28 +185,28 @@ extern "C" {
 	FREObject AIRSteam_ClearAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		FREObject result = NULL;
 		if (g_Steam) {
-			FREResult res;
 			uint32_t len = -1;
 			const uint8_t *ID = 0;
-			if((res=FREGetObjectAsUTF8(argv[0], &len, &ID)) == FRE_OK) {
+			FREResult res = FREGetObjectAsUTF8(argv[0], &len, &ID);
+			if (res == FRE_OK) {
 				FRENewObjectFromBool((uint32_t)g_Steam->ClearAchievement((const char *)ID), &result);
 			}
 		}
-		if (NULL == result) FRENewObjectFromBool(false, &result);
+		if (result == NULL) FRENewObjectFromBool(false, &result);
 		return result;
 	}
 
 	FREObject AIRSteam_IsAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		FREObject result = NULL;
 		if (g_Steam && argc == 1) {
-			FREResult res;
 			uint32_t len = -1;
 			const uint8_t *ID = 0;
-			if((res=FREGetObjectAsUTF8(argv[0], &len, &ID)) == FRE_OK) {
+			FREResult res = FREGetObjectAsUTF8(argv[0], &len, &ID);
+			if (res == FRE_OK) {
 				FRENewObjectFromBool((uint32_t)g_Steam->IsAchievement((const char *)ID), &result);
 			}
 		}
-		if (NULL == result) FRENewObjectFromBool(false, &result);
+		if (result == NULL) FRENewObjectFromBool(false, &result);
 		return result;
 	}
 
@@ -221,10 +219,10 @@ extern "C" {
 		FREObject result;
 		int32 value = 0;
 		if (g_Steam) {
-			FREResult res;
 			uint32_t len = -1;
 			const uint8_t *ID = 0;
-			if((res=FREGetObjectAsUTF8(argv[0], &len, &ID)) == FRE_OK) {
+			FREResult res = FREGetObjectAsUTF8(argv[0], &len, &ID);
+			if (res == FRE_OK) {
 				g_Steam->GetStat((const char *)ID, &value);
 			}
 		}
@@ -236,10 +234,10 @@ extern "C" {
 		FREObject result;
 		float value = 0.0f;
 		if (g_Steam) {
-			FREResult res;
 			uint32_t len = -1;
 			const uint8_t *ID = 0;
-			if((res=FREGetObjectAsUTF8(argv[0], &len, &ID)) == FRE_OK) {
+			FREResult res = FREGetObjectAsUTF8(argv[0], &len, &ID);
+			if (res == FRE_OK) {
 				g_Steam->GetStat((const char *)ID, &value);
 			}
 		}
@@ -253,14 +251,12 @@ extern "C" {
 			uint32_t len = -1;
 			const uint8_t *ID = 0;
 			int32 value;
-			if(
-				FREGetObjectAsUTF8(argv[0], &len, &ID) == FRE_OK
-				&& FREGetObjectAsInt32(argv[1], &value) == FRE_OK
-				) {
+			if (FREGetObjectAsUTF8(argv[0], &len, &ID) == FRE_OK &&
+			    FREGetObjectAsInt32(argv[1], &value) == FRE_OK) {
 				FRENewObjectFromBool((uint32_t)g_Steam->SetStat((const char *)ID, value), &result);
 			}
 		}
-		if (NULL == result) FRENewObjectFromBool(false, &result);
+		if (result == NULL) FRENewObjectFromBool(false, &result);
 		return result;
 	}
 	FREObject AIRSteam_SetStatFloat(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
@@ -269,14 +265,12 @@ extern "C" {
 			uint32_t len = -1;
 			const uint8_t *ID = 0;
 			double value;
-			if(
-				FREGetObjectAsUTF8(argv[0], &len, &ID) == FRE_OK
-				&& FREGetObjectAsDouble(argv[1], &value) == FRE_OK
-				) {
+			if (FREGetObjectAsUTF8(argv[0], &len, &ID) == FRE_OK &&
+			    FREGetObjectAsDouble(argv[1], &value) == FRE_OK) {
 				FRENewObjectFromBool((uint32_t)g_Steam->SetStat((const char *)ID, (float)value), &result);
 			}
 		}
-		if (NULL == result) FRENewObjectFromBool(false, &result);
+		if (result == NULL) FRENewObjectFromBool(false, &result);
 		return result;
 	}
 
@@ -294,11 +288,11 @@ extern "C" {
 		FREObject result = NULL;
 		if (g_Steam && argc == 1) {
 			uint32_t bAchievementsToo;
-			if( FREGetObjectAsBool( argv[0], &bAchievementsToo ) == FRE_OK ) {
+			if (FREGetObjectAsBool(argv[0], &bAchievementsToo) == FRE_OK) {
 				FRENewObjectFromBool((uint32_t)g_Steam->ResetAllStats((bAchievementsToo!=0)), &result);
 			}
 		}
-		if ( NULL == result ) FRENewObjectFromBool(false, &result);
+		if (result == NULL) FRENewObjectFromBool(false, &result);
 		return result;
 	}
 
@@ -319,7 +313,7 @@ extern "C" {
 		if (g_Steam && argc==1) {
 			uint32_t len = -1;
 			const uint8_t *fileName = 0;
-			if(	FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK ) {
+			if (FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK) {
 				fileSize = SteamRemoteStorage()->GetFileSize((char *)fileName);
 			}
 		}
@@ -333,7 +327,7 @@ extern "C" {
 		if (g_Steam && argc==1) {
 			uint32_t len = -1;
 			const uint8_t *fileName = 0;
-			if(	FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK ) {
+			if (FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK) {
 				fileExists = SteamRemoteStorage()->FileExists((char *)fileName);
 			}
 		}
@@ -347,13 +341,10 @@ extern "C" {
 		bool retVal=0;
 
 		if (g_Steam && argc==2) {
-
 			uint32_t len = -1;
 			const uint8_t *fileName = 0;
-			if(
-               FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK
-               && FREAcquireByteArray(argv[1], &byteArray) == FRE_OK
-               ) {
+			if (FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK &&
+				  FREAcquireByteArray(argv[1], &byteArray) == FRE_OK) {
 				retVal = SteamRemoteStorage()->FileWrite((char *)fileName, byteArray.bytes, byteArray.length);
 				FREReleaseByteArray(argv[1]);
 			}
@@ -373,15 +364,13 @@ extern "C" {
 			const uint8_t *fileName = 0;
 			uint32 fileSize;
 			char *dataIn;
-			if(
-				FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK
-				&& FREAcquireByteArray(argv[1], &byteArray) == FRE_OK
-				) {
+			if (FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK &&
+				  FREAcquireByteArray(argv[1], &byteArray) == FRE_OK) {
 				fileSize = SteamRemoteStorage()->GetFileSize((char *)fileName);
-				if(fileSize > 0 && fileSize <= byteArray.length) {
+				if (fileSize > 0 && fileSize <= byteArray.length) {
 					dataIn = (char *)malloc(fileSize);
 					retVal = SteamRemoteStorage()->FileRead((char *)fileName, dataIn, fileSize);
-					memcpy (byteArray.bytes, dataIn, fileSize);
+					memcpy(byteArray.bytes, dataIn, fileSize);
 					free(dataIn);
 				}
 				FREReleaseByteArray(argv[1]);
@@ -397,7 +386,7 @@ extern "C" {
 		if (g_Steam && argc==1) {
 			uint32_t len = -1;
 			const uint8_t *fileName = 0;
-			if(	FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK ) {
+			if (FREGetObjectAsUTF8(argv[0], &len, &fileName) == FRE_OK) {
 				retVal = SteamRemoteStorage()->FileDelete((char *)fileName);
 			}
 		}
@@ -421,8 +410,8 @@ extern "C" {
 		if (g_Steam && argc==1) {
 			uint32_t enabled = 0;
 			bool bEnabled;
-			if(	FREGetObjectAsBool(argv[0], &enabled) == FRE_OK ) {
-				bEnabled = (enabled!=0);
+			if (FREGetObjectAsBool(argv[0], &enabled) == FRE_OK) {
+				bEnabled = (enabled != 0);
 				SteamRemoteStorage()->SetCloudEnabledForApp(bEnabled);
 				retVal = (bEnabled == SteamRemoteStorage()->IsCloudEnabledForApp());
 			}
