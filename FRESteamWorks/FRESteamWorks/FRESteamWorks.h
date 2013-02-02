@@ -8,20 +8,19 @@
 #if defined(WIN32)
 	#define _CRT_SECURE_NO_WARNINGS
 	#define EXPORT __declspec(dllexport)
-	#include "FlashRuntimeExtensions.h"
 	#define snprintf _snprintf
 #elif defined(LINUX)
 	// Symbols tagged with EXPORT are externally visible.
 	// Must use the -fvisibility=hidden gcc option.
 	#define EXPORT __attribute__((visibility("default")))
-	#include "FlashRuntimeExtensions.h"
 #else
 	#define EXPORT __attribute__((visibility("default")))
-	#include <Adobe AIR/Adobe AIR.h>
 #endif
 
 #include <stdlib.h>
 #include <string>
+
+#include <FlashRuntimeExtensions.h>
 
 #include <steam_api.h>
 #include <isteamremotestorage.h>
