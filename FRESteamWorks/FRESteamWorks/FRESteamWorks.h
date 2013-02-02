@@ -7,7 +7,7 @@
 //
 #if defined(WIN32)
 	#define _CRT_SECURE_NO_WARNINGS
-	#define EXPORT __declspec( dllexport )
+	#define EXPORT __declspec(dllexport)
 	#include <windows.h>
 	//#include <stdio.h>
 	//#include <stdlib.h>
@@ -30,21 +30,19 @@
 #include <isteamremotestorage.h>
 
 // General result codes
-enum ResponseTypes
-{
+enum ResponseTypes {
 	RESPONSE_OnUserStatsReceived,
 	RESPONSE_OnUserStatsStored,
 	RESPONSE_OnAchievementStored,
 	RESPONSE_OnGameOverlayActivated
 };
-enum ResponseCodes
-{
+
+enum ResponseCodes {
 	RESPONSE_OK,
 	RESPONSE_FAILED,
 };
 
-class CSteam
-{
+class CSteam {
 private:
 	uint64 m_iAppID; // Our current AppID
 	bool m_bInitialized;

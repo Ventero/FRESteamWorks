@@ -15,47 +15,39 @@ FREContext AIRContext;
 CSteam*	g_Steam = NULL;
 
 CSteam::CSteam():
-m_iAppID(0),
-m_bInitialized(false),
-m_CallbackUserStatsReceived(this, &CSteam::OnUserStatsReceived),
-m_CallbackUserStatsStored(this, &CSteam::OnUserStatsStored),
-m_CallbackAchievementStored(this, &CSteam::OnAchievementStored),
-m_CallbackGameOverlayActivated(this, &CSteam::OnGameOverlayActivated)
+    m_CallbackUserStatsReceived(this, &CSteam::OnUserStatsReceived),
+    m_CallbackUserStatsStored(this, &CSteam::OnUserStatsStored),
+    m_CallbackAchievementStored(this, &CSteam::OnAchievementStored),
+    m_CallbackGameOverlayActivated(this, &CSteam::OnGameOverlayActivated)
 {
 	m_iAppID = SteamUtils()->GetAppID();
-	m_bInitialized = !(SteamUserStats() == NULL || SteamUser() == NULL);
+	m_bInitialized = (SteamUserStats() != NULL && SteamUser() != NULL);
 	RequestStats();
 }
 
 bool CSteam::RequestStats() {
 	// Is Steam loaded? If not we can't get stats.
-	if (SteamUserStats() == NULL || SteamUser() == NULL) {
-		return false;
-	}
+	if (!m_bInitialized) return false;
+
 	// Is the user logged on?  If not we can't get stats.
-	if (!SteamUser()->BLoggedOn()) {
-		return false;
-	}
+	if (!SteamUser()->BLoggedOn()) return false;
+
 	// Request user stats.
 	return SteamUserStats()->RequestCurrentStats();
 }
 
 bool CSteam::SetAchievement(const char* ID) {
-	bool result = false;
-	if (m_bInitialized) {
-		SteamUserStats()->SetAchievement(ID);
-		return SteamUserStats()->StoreStats();
-	}
-	return result;
+	if (!m_bInitialized) return false;
+
+	SteamUserStats()->SetAchievement(ID);
+	return SteamUserStats()->StoreStats();
 }
 
 bool CSteam::ClearAchievement(const char* ID) {
-	bool result = false;
-	if (m_bInitialized) {
-		SteamUserStats()->ClearAchievement(ID);
-		return SteamUserStats()->StoreStats();
-	}
-	return result;
+	if (!m_bInitialized) return false;
+
+	SteamUserStats()->ClearAchievement(ID);
+	return SteamUserStats()->StoreStats();
 }
 
 bool CSteam::IsAchievement(const char* ID) {
@@ -65,47 +57,48 @@ bool CSteam::IsAchievement(const char* ID) {
 }
 
 bool CSteam::GetStat(const char* ID, int32 *value) {
-	bool result = false;
-	if (m_bInitialized) result = SteamUserStats()->GetStat(ID, value);
-	return result;
+	if (!m_bInitialized) return false;
+
+	return SteamUserStats()->GetStat(ID, value);
 }
+
 bool CSteam::GetStat(const char* ID, float *value) {
-	bool result = false;
-	if (m_bInitialized) result = SteamUserStats()->GetStat(ID, value);
-	return result;
+	if (!m_bInitialized) return false;
+
+	return SteamUserStats()->GetStat(ID, value);
 }
 
 bool CSteam::SetStat(const char* ID, int32 value) {
-	bool result = false;
-	if (m_bInitialized) result = SteamUserStats()->SetStat(ID, value);
-	return result;
+	if (!m_bInitialized) return false;
+
+	return SteamUserStats()->SetStat(ID, value);
 }
+
 bool CSteam::SetStat(const char* ID, float value) {
-	bool result = false;
-	if (m_bInitialized) result = SteamUserStats()->SetStat(ID, value);
-	return result;
+	if (!m_bInitialized) return false;
+
+	return SteamUserStats()->SetStat(ID, value);
 }
 
 bool CSteam::StoreStats() {
-	bool result = false;
-	if (m_bInitialized) result = SteamUserStats()->StoreStats();
-	return result;
+	if (!m_bInitialized) return false;
+
+	return SteamUserStats()->StoreStats();
 }
 
 bool CSteam::ResetAllStats(bool bAchievementsToo) {
-	if (m_bInitialized) {
-		SteamUserStats()->ResetAllStats(bAchievementsToo);
-		return SteamUserStats()->StoreStats();
-	}
-	return false;
+	if (!m_bInitialized) return false;
+
+	SteamUserStats()->ResetAllStats(bAchievementsToo);
+	return SteamUserStats()->StoreStats();
 }
 
 void CSteam::DispatchEvent(const int req_type, const int response) {
 	char code[5];
 	char level[5];
 
-	sprintf(code,  "%d", req_type);
-	sprintf(level, "%d", response);
+	snprintf(code, sizeof(code), "%d", req_type);
+	snprintf(level, sizeof(level), "%d", response);
 	FREResult res = FREDispatchStatusEventAsync(AIRContext, (const uint8_t*)code, (const uint8_t*)level);
 	if (res != FRE_OK) {
 		return;
@@ -114,25 +107,25 @@ void CSteam::DispatchEvent(const int req_type, const int response) {
 
 void CSteam::OnUserStatsReceived(UserStatsReceived_t *pCallback) {
 	// we may get callbacks for other games' stats arriving, ignore them
-	if (m_iAppID == pCallback->m_nGameID)	{
-		g_Steam->DispatchEvent(RESPONSE_OnUserStatsReceived, pCallback->m_eResult);
-	}
+	if (m_iAppID != pCallback->m_nGameID) return;
+
+	g_Steam->DispatchEvent(RESPONSE_OnUserStatsReceived, pCallback->m_eResult);
 }
 
 
 void CSteam::OnUserStatsStored(UserStatsStored_t *pCallback) {
 	// we may get callbacks for other games' stats arriving, ignore them
-	if (m_iAppID == pCallback->m_nGameID)	{
-		DispatchEvent(RESPONSE_OnUserStatsStored, pCallback->m_eResult);
-	}
+	if (m_iAppID != pCallback->m_nGameID) return;
+
+	DispatchEvent(RESPONSE_OnUserStatsStored, pCallback->m_eResult);
 }
 
 
 void CSteam::OnAchievementStored(UserAchievementStored_t *pCallback) {
   // we may get callbacks for other games' stats arriving, ignore them
-  if (m_iAppID == pCallback->m_nGameID) {
-      g_Steam->DispatchEvent(RESPONSE_OnAchievementStored, RESPONSE_OK);
-  }
+  if (m_iAppID != pCallback->m_nGameID) return;
+
+  g_Steam->DispatchEvent(RESPONSE_OnAchievementStored, RESPONSE_OK);
 }
 
 void CSteam::OnGameOverlayActivated(GameOverlayActivated_t *pCallback) {
