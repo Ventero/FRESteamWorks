@@ -276,7 +276,7 @@ extern "C" {
 		if (FREGetObjectAsBool(argv[0], &achievementsToo) != FRE_OK)
 			return FREBool(false);
 
-		return FREBool(g_Steam->ResetAllStats(achievementsToo));
+		return FREBool(g_Steam->ResetAllStats(achievementsToo != 0));
 	}
 
 	//Steam Cloud
@@ -331,7 +331,7 @@ extern "C" {
 			return FREBool(false);
 
 		uint32 size = SteamRemoteStorage()->GetFileSize(name.c_str());
-		bool ret = false;
+		int32 ret = 0;
 		if (size > 0 && size <= byteArray.length) {
 			char* data = (char*)malloc(size);
 			ret = SteamRemoteStorage()->FileRead(name.c_str(), data, size);
@@ -340,7 +340,7 @@ extern "C" {
 		}
 		FREReleaseByteArray(argv[1]);
 
-		return FREBool(ret);
+		return FREBool(ret != 0);
 	}
 
 	FREObject AIRSteam_FileDelete(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
