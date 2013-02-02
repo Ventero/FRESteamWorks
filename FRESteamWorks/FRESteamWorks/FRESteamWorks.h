@@ -8,20 +8,20 @@
 #if defined(WIN32)
 	#define _CRT_SECURE_NO_WARNINGS
 	#define EXPORT __declspec(dllexport)
-	#include <stdlib.h>
 	#include "FlashRuntimeExtensions.h"
 	#define snprintf _snprintf
 #elif defined(LINUX)
-	#define EXPORT __attribute__((visibility("default")))
-	#include <stdlib.h>
-	#include "FlashRuntimeExtensions.h"
-#else
 	// Symbols tagged with EXPORT are externally visible.
 	// Must use the -fvisibility=hidden gcc option.
 	#define EXPORT __attribute__((visibility("default")))
-	#include <stdlib.h>
+	#include "FlashRuntimeExtensions.h"
+#else
+	#define EXPORT __attribute__((visibility("default")))
 	#include <Adobe AIR/Adobe AIR.h>
 #endif
+
+#include <stdlib.h>
+#include <string>
 
 #include <steam_api.h>
 #include <isteamremotestorage.h>
@@ -71,6 +71,35 @@ public:
 	               m_CallbackGameOverlayActivated);
 
 };
+
+// utility functions for conversion of FRE types
+FREObject FREBool(bool value) {
+	FREObject result;
+	FRENewObjectFromBool(value, &result);
+	return result;
+}
+
+FREObject FREInt(int32 value) {
+	FREObject result;
+	FRENewObjectFromInt32(value, &result);
+	return result;
+}
+
+FREObject FREFloat(float value) {
+	FREObject result;
+	FRENewObjectFromDouble(value, &result);
+	return result;
+}
+
+std::string FREGetString(FREObject object) {
+	uint32_t len;
+	const uint8_t* string;
+	FREResult res = FREGetObjectAsUTF8(object, &len, &string);
+
+	if(res != FRE_OK) return std::string();
+
+	return std::string((const char*)string, len);
+}
 
 extern "C" {
 	FREObject AIRSteam_Init(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
