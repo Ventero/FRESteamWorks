@@ -1,5 +1,5 @@
-FRESteamWorksTest/bin-debug/FRESteamWorksTest
-FRESteamWorksTest/bin-debug/FRESteamWorksTest.app
+test/bin-debug/FRESteamWorksTest
+test/bin-debug/FRESteamWorksTest.app
 
 *.suo
 *.user
