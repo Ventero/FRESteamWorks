@@ -72,33 +72,10 @@ public:
 };
 
 // utility functions for conversion of FRE types
-FREObject FREBool(bool value) {
-	FREObject result;
-	FRENewObjectFromBool(value, &result);
-	return result;
-}
-
-FREObject FREInt(int32 value) {
-	FREObject result;
-	FRENewObjectFromInt32(value, &result);
-	return result;
-}
-
-FREObject FREFloat(float value) {
-	FREObject result;
-	FRENewObjectFromDouble(value, &result);
-	return result;
-}
-
-std::string FREGetString(FREObject object) {
-	uint32_t len;
-	const uint8_t* string;
-	FREResult res = FREGetObjectAsUTF8(object, &len, &string);
-
-	if(res != FRE_OK) return std::string();
-
-	return std::string((const char*)string, len);
-}
+FREObject FREBool(bool);
+FREObject FREInt(int32);
+FREObject FREFloat(float);
+std::string FREGetString(FREObject);
 
 extern "C" {
 	FREObject AIRSteam_Init(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);

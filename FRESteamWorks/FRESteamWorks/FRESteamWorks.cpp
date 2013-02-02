@@ -14,6 +14,35 @@ FREContext AIRContext;
 // Global access to Steam object
 CSteam*	g_Steam = NULL;
 
+// utility functions
+FREObject FREBool(bool value) {
+	FREObject result;
+	FRENewObjectFromBool(value, &result);
+	return result;
+}
+
+FREObject FREInt(int32 value) {
+	FREObject result;
+	FRENewObjectFromInt32(value, &result);
+	return result;
+}
+
+FREObject FREFloat(float value) {
+	FREObject result;
+	FRENewObjectFromDouble(value, &result);
+	return result;
+}
+
+std::string FREGetString(FREObject object) {
+	uint32_t len;
+	const uint8_t* string;
+	FREResult res = FREGetObjectAsUTF8(object, &len, &string);
+
+	if(res != FRE_OK) return std::string();
+
+	return std::string((const char*)string, len);
+}
+
 CSteam::CSteam():
     m_CallbackUserStatsReceived(this, &CSteam::OnUserStatsReceived),
     m_CallbackUserStatsStored(this, &CSteam::OnUserStatsStored),
