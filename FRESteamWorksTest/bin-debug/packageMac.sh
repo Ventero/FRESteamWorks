@@ -5,6 +5,8 @@ AIR_SDK=../../../AdobeAIRSDK
 STEAM_SDK=../../../Steam/sdk
 ANE_PATH=../../FRESteamWorksLib/bin
 
+rm -rf FRESteamWorksTest.app
+
 cp "$STEAM_SDK/redistributable_bin/steam_api.dll" .
 cp "$STEAM_SDK/redistributable_bin/osx32/libsteam_api.dylib" .
 
@@ -15,4 +17,5 @@ cp "$STEAM_SDK/redistributable_bin/osx32/libsteam_api.dylib" .
                    steam_api.dll libsteam_api.dylib steam_appid.txt \
                    -extdir "$ANE_PATH"
 
+cp FRESteamWorksTest.app/Contents/Resources/steam_appid.txt FRESteamWorksTest.app/Contents/MacOS/
 rm -f steam_api.dll libsteam_api.dylib
