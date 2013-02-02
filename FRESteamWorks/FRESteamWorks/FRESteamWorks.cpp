@@ -29,7 +29,7 @@ bool CSteam::RequestStats() {
 	// Is Steam loaded? If not we can't get stats.
 	if (!m_bInitialized) return false;
 
-	// Is the user logged on?  If not we can't get stats.
+	// Is the user logged on? If not we can't get stats.
 	if (!SteamUser()->BLoggedOn()) return false;
 
 	// Request user stats.
@@ -122,10 +122,10 @@ void CSteam::OnUserStatsStored(UserStatsStored_t *pCallback) {
 
 
 void CSteam::OnAchievementStored(UserAchievementStored_t *pCallback) {
-  // we may get callbacks for other games' stats arriving, ignore them
-  if (m_iAppID != pCallback->m_nGameID) return;
+	// we may get callbacks for other games' stats arriving, ignore them
+	if (m_iAppID != pCallback->m_nGameID) return;
 
-  g_Steam->DispatchEvent(RESPONSE_OnAchievementStored, RESPONSE_OK);
+	g_Steam->DispatchEvent(RESPONSE_OnAchievementStored, RESPONSE_OK);
 }
 
 void CSteam::OnGameOverlayActivated(GameOverlayActivated_t *pCallback) {
