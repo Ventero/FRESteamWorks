@@ -19,8 +19,7 @@ class CSteam {
 private:
 	uint64 m_iAppID; // Our current AppID
 	bool m_bInitialized;
-	std::function<void(char*, char*)> dispatcher;
-
+    
 	void DispatchEvent(const int req_type, const int response);
 
 protected:
