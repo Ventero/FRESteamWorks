@@ -113,7 +113,7 @@ extern "C" {
 		std::string name = FREGetString(argv[0]);
 		if (name.empty()) return FREInt(0);
 
-		int32 value;
+		int32 value = 0;
 		g_Steam->GetStat(name.c_str(), &value);
 		return FREInt(value);
 	}
