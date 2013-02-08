@@ -3,7 +3,7 @@ set -x
 
 AIR_SDK=../../../AdobeAIRSDK
 STEAM_SDK=../../../Steam/sdk
-ANE_PATH=../../FRESteamWorksLib/bin
+ANE_PATH=../../lib/bin
 
 rm -rf FRESteamWorksTest.app
 
