@@ -141,7 +141,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "set -ex\nrm -rf \"$PROJECT_DIR/../FRESteamWorksLib/bin/$FULL_PRODUCT_NAME\"\ncp -R \"$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME\" \"$PROJECT_DIR/../FRESteamWorksLib/bin/\"\ncd \"$PROJECT_DIR/../FRESteamWorksLib/bin/\"\necho \"Compiling ANE...\"\n./compileANE.sh\n";
+			shellScript = "set -ex\nrm -rf \"$PROJECT_DIR/../lib/bin/$FULL_PRODUCT_NAME\"\ncp -R \"$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME\" \"$PROJECT_DIR/../lib/bin/\"\ncd \"$PROJECT_DIR/../lib/bin/\"\necho \"Compiling ANE...\"\n./compileANE.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
