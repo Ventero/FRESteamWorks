@@ -17,6 +17,7 @@
 	#define EXPORT __attribute__((visibility("default")))
 #endif
 
+#include <functional>
 #include <stdlib.h>
 #include <string>
 
@@ -25,57 +26,17 @@
 #include <steam_api.h>
 #include <isteamremotestorage.h>
 
-// General result codes
-enum ResponseTypes {
-	RESPONSE_OnUserStatsReceived,
-	RESPONSE_OnUserStatsStored,
-	RESPONSE_OnAchievementStored,
-	RESPONSE_OnGameOverlayActivated
-};
-
-enum ResponseCodes {
-	RESPONSE_OK,
-	RESPONSE_FAILED,
-};
-
-class CSteam {
-private:
-	uint64 m_iAppID; // Our current AppID
-	bool m_bInitialized;
-
-public:
-	CSteam();
-	~CSteam();
-
-	bool RequestStats();
-	bool SetAchievement(const char* ID);
-	bool ClearAchievement(const char* ID);
-	bool IsAchievement(const char* ID);
-	bool GetStat(const char* ID, int32 *value);
-	bool GetStat(const char* ID, float *value);
-	bool SetStat(const char* ID, int32 value);
-	bool SetStat(const char* ID, float value);
-	bool StoreStats();
-	bool ResetAllStats(bool bAchievementsToo);
-
-	void DispatchEvent(const int req_type, const int response);
-
-	STEAM_CALLBACK(CSteam, OnUserStatsReceived, UserStatsReceived_t,
-	               m_CallbackUserStatsReceived);
-	STEAM_CALLBACK(CSteam, OnUserStatsStored, UserStatsStored_t,
-	               m_CallbackUserStatsStored);
-	STEAM_CALLBACK(CSteam, OnAchievementStored,
-	               UserAchievementStored_t, m_CallbackAchievementStored);
-	STEAM_CALLBACK(CSteam, OnGameOverlayActivated, GameOverlayActivated_t,
-	               m_CallbackGameOverlayActivated);
-
-};
+#include "CSteam.h"
 
 // utility functions for conversion of FRE types
 FREObject FREBool(bool);
 FREObject FREInt(int32);
 FREObject FREFloat(float);
 std::string FREGetString(FREObject);
+
+class ANESteam : public CSteam {
+	void DispatchEvent(char* code, char* level);
+};
 
 extern "C" {
 	FREObject AIRSteam_Init(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
