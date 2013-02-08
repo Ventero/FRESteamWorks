@@ -23,7 +23,7 @@ private:
 	void DispatchEvent(const int req_type, const int response);
 
 protected:
-	virtual void DispatchEvent(char* code, char* level);
+	virtual void DispatchEvent(char* code, char* level) = 0;
 
 public:
 	CSteam();
