@@ -6,20 +6,15 @@
 //  Copyright (c) 2012 Amanita Design. All rights reserved.
 //
 #if defined(WIN32)
-	#define _CRT_SECURE_NO_WARNINGS
 	#define EXPORT __declspec(dllexport)
-	#define snprintf _snprintf
-#elif defined(LINUX)
+#else
 	// Symbols tagged with EXPORT are externally visible.
 	// Must use the -fvisibility=hidden gcc option.
 	#define EXPORT __attribute__((visibility("default")))
-#else
-	#define EXPORT __attribute__((visibility("default")))
 #endif
 
-#include <functional>
-#include <stdlib.h>
 #include <string>
+#include <stdlib.h>
 
 #include <FlashRuntimeExtensions.h>
 

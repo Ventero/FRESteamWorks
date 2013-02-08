@@ -1,4 +1,10 @@
+#if defined(WIN32)
+	#define _CRT_SECURE_NO_WARNINGS
+	#define snprintf _snprintf
+#endif
+
 #include <functional>
+#include <stdio.h>
 
 #include <steam_api.h>
 
