@@ -10,6 +10,7 @@
 		1214331015298AAF003FF426 /* FRESteamWorks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1214330F15298AAF003FF426 /* FRESteamWorks.cpp */; };
 		546198A516A8B32100E9B390 /* libsteam_api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1214331815298C47003FF426 /* libsteam_api.dylib */; };
 		54B6962216AB356400CFBD85 /* Adobe AIR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B6962116AB356400CFBD85 /* Adobe AIR.framework */; };
+		54FA319D16C5B28E00BC2F1B /* CSteam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 54FA319B16C5B28E00BC2F1B /* CSteam.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,6 +19,8 @@
 		1214330F15298AAF003FF426 /* FRESteamWorks.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; path = FRESteamWorks.cpp; sourceTree = "<group>"; usesTabs = 1; };
 		1214331815298C47003FF426 /* libsteam_api.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsteam_api.dylib; path = ../../Steam/sdk/redistributable_bin/osx32/libsteam_api.dylib; sourceTree = SOURCE_ROOT; };
 		54B6962116AB356400CFBD85 /* Adobe AIR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Adobe AIR.framework"; path = "../../AdobeAIRSDK/runtimes/air/mac/Adobe AIR.framework"; sourceTree = "<group>"; };
+		54FA319B16C5B28E00BC2F1B /* CSteam.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSteam.cpp; sourceTree = "<group>"; };
+		54FA319C16C5B28E00BC2F1B /* CSteam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSteam.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +65,8 @@
 		1214330715298AAF003FF426 /* FRESteamWorks */ = {
 			isa = PBXGroup;
 			children = (
+				54FA319B16C5B28E00BC2F1B /* CSteam.cpp */,
+				54FA319C16C5B28E00BC2F1B /* CSteam.h */,
 				1214330E15298AAF003FF426 /* FRESteamWorks.h */,
 				1214330F15298AAF003FF426 /* FRESteamWorks.cpp */,
 				1214330815298AAF003FF426 /* Supporting Files */,
@@ -146,6 +151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1214331015298AAF003FF426 /* FRESteamWorks.cpp in Sources */,
+				54FA319D16C5B28E00BC2F1B /* CSteam.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
