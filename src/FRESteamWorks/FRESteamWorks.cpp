@@ -57,7 +57,7 @@ extern "C" {
 		if (g_Steam) return FREBool(true);
 
 		bool ret = SteamAPI_Init();
-		if (ret) g_Steam = new CSteam();
+		if (ret) g_Steam = new ANESteam();
 
 		return FREBool(ret);
 	}
