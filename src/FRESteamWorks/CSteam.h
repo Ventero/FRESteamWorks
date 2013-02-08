@@ -22,9 +22,10 @@ enum ResponseCodes {
 
 class CSteam {
 private:
-	uint64 m_iAppID; // Our current AppID
+	// Our current AppID
+	uint64 m_iAppID;
 	bool m_bInitialized;
-    
+
 	void DispatchEvent(const int req_type, const int response);
 
 protected:
