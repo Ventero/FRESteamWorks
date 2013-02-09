@@ -58,7 +58,8 @@ package
 				}
 			} catch(e:Error) {
 				tf.appendText("*** ERROR ***");
-				tf.appendText(e.message);
+				tf.appendText(e.message + "\n");
+				tf.appendText(e.getStackTrace() + "\n");
 			}
 
 		}
