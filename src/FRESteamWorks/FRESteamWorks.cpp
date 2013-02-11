@@ -43,7 +43,7 @@ std::string FREGetString(FREObject object) {
 	return std::string((const char*)string, len);
 }
 
-void ANESteam::DispatchEvent(char* level, char* code) {
+void ANESteam::DispatchEvent(char* code, char* level) {
 	FREResult res = FREDispatchStatusEventAsync(AIRContext, (const uint8_t*)code, (const uint8_t*)level);
 	if (res != FRE_OK) {
 		return;
