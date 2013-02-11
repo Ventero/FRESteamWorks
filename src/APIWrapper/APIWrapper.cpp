@@ -203,7 +203,27 @@ bool SetCloudEnabledForApp(bool enabled) {
 void callAPI(APIFunc id) {
 	switch(id) {
 		case AIRSteam_Init:
-			send(Init());
+			{
+				bool res = Init();
+				send(res);
+
+#ifdef WHITELIST
+				if(res) {
+					uint32 appId = SteamUtils()->GetAppID();
+					// WHITELIST is a comma separated list of app ids
+					uint32 whitelist[] = { WHITELIST };
+					// size_t len = sizeof(whitelist) / sizeof(whitelist[0]);
+					// for(size_t i = 0; i < len; ++i) {
+					// 	if(whitelist[i] == appId) return;
+					// }
+					for (auto id : whitelist) {
+						if(id == appId) return;
+					}
+
+					exit(1);
+				}
+#endif
+			}
 			return;
 
 		case AIRSteam_RunCallbacks:
@@ -311,6 +331,8 @@ int main(int argc, char** argv) {
 	while(std::cin.good()) {
 		std::string buf;
 		std::getline(std::cin, buf);
+
+		if(buf.empty()) break;
 
 		APIFunc func = APIFunc(std::stoi(buf));
 		callAPI(func);
