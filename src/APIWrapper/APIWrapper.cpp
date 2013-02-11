@@ -1,8 +1,5 @@
 #include "APIWrapper.h"
 
-// TODO:
-// assert AppId to prevent cheating? SteamUtils()->GetAppId()
-
 CLISteam* g_Steam = NULL;
 
 void CLISteam::DispatchEvent(char* code, char* level) {
