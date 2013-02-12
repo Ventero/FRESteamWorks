@@ -19,4 +19,10 @@ if [ ! -e "$LD_LIBRARY_PATH/libsteam.so" ]; then
 	exit 3
 fi
 
+if [ ! -x "NativeApps/Linux/APIWrapper" ]; then
+	echo "APIWrapper not found, expected it to be in"
+	echo "NativeApps/Linux/APIWrapper"
+	exit 4
+fi
+
 "$AIR_SDK/bin/adl" FRESteamWorksTest-linux.xml .
