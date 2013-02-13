@@ -88,7 +88,7 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(SolutionDir)..\FRESteamWorksLib\bin\" /Y &amp;&amp;  cd "$(SolutionDir)..\FRESteamWorksLib\bin\" &amp;&amp; echo Compiling ANE... &amp;&amp; "$(SolutionDir)..\FRESteamWorksLib\bin\compileANE.bat" &amp;&amp; echo done</Command>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)..\lib\bin\" /Y &amp;&amp;  cd "$(SolutionDir)..\lib\bin\" &amp;&amp; echo Compiling ANE... &amp;&amp; "$(SolutionDir)..\lib\bin\compileANE.bat" &amp;&amp; echo done</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
