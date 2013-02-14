@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<application xmlns="http://ns.adobe.com/air/application/2.6">
+	<id>FRESteamWorksTest</id>
+	<filename>FRESteamWorksTest</filename>
+	<name>FRESteamWorksTest</name>
+	<versionNumber>0.0.0</versionNumber>
+	<initialWindow>
+		<content>FRESteamWorksTest_linux.swf</content>
+		<autoOrients>false</autoOrients>
+		<fullScreen>false</fullScreen>
+		<visible>true</visible>
+	</initialWindow>
+	<supportedProfiles>extendedDesktop</supportedProfiles>
+</application>

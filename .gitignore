@@ -1,3 +1,5 @@
+NativeApps
+src/APIWrapper/APIWrapper
 test/bin-debug/FRESteamWorksTest
 test/bin-debug/FRESteamWorksTest.app
 
@@ -14,6 +16,7 @@ project.xcworkspace
 *.dll
 *.exe
 *.swc
+*.swf
 *.dylib
 
 [Dd]ebug/
