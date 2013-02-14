@@ -22,6 +22,7 @@ package com.amanitadesign.steam {
 		private var _file:File;
 		private var _process:NativeProcess;
 		private var _tm:int;
+		private var _error:Boolean = false;
 
 		public var isReady:Boolean = false;
 
@@ -49,6 +50,8 @@ package com.amanitadesign.steam {
 		public function FRESteamWorks (target:IEventDispatcher = null) {
 			_file = File.applicationDirectory.resolvePath(PATH);
 			_process = new NativeProcess();
+			_process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, eventDispatched);
+			_process.addEventListener(IOErrorEvent.STANDARD_INPUT_IO_ERROR, errorCallback);
 			super(target);
 		}
 
@@ -66,8 +69,6 @@ package com.amanitadesign.steam {
 			startupInfo.executable = _file;
 
 			_process.start(startupInfo);
-			_process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, eventDispatched);
-			_process.addEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, errorCallback);
 		}
 
 		public function init():Boolean {
@@ -75,36 +76,56 @@ package com.amanitadesign.steam {
 			startProcess();
 			if(!_process.running) return false;
 
-			callWrapper(AIRSteam_Init);
+			if(!callWrapper(AIRSteam_Init)) return false;
 			isReady = readBoolResponse();
 			if(isReady) _tm = setInterval(runCallbacks, 100);
 			return isReady;
 		}
 
-		private function callWrapper(funcName:int, params:Array = null):void{
-			if(!_process.running) startProcess();
+		private function errorCallback(e:IOErrorEvent):void {
+			_error = true;
+			// the process doesn't accept our input anymore, so just stop it
+			clearInterval(_tm);
+
+			if(_process.running) {
+				try {
+					_process.closeInput();
+				} catch(e:*) {
+					// no-op
+				}
+
+				_process.exit();
+			}
+		}
+
+		private function callWrapper(funcName:int, params:Array = null):Boolean {
+			_error = false;
+			if(!_process.running) return false;
 
 			var stdin:IDataOutput = _process.standardInput;
 			stdin.writeUTFBytes(funcName + "\n");
 
-			if(!params) return;
-
-			for(var i:int = 0; i < params.length; ++i) {
-				if(params[i] is ByteArray) {
-					var length:uint = params[i].length;
-					// length + 1 for the added newline
-					stdin.writeUTFBytes(String(length + 1) + "\n");
-					stdin.writeBytes(params[i]);
-					stdin.writeUTFBytes("\n");
-				} else {
-					stdin.writeUTFBytes(String(params[i]) + "\n");
+			if (params) {
+				for(var i:int = 0; i < params.length; ++i) {
+					if(params[i] is ByteArray) {
+						var length:uint = params[i].length;
+						// length + 1 for the added newline
+						stdin.writeUTFBytes(String(length + 1) + "\n");
+						stdin.writeBytes(params[i]);
+						stdin.writeUTFBytes("\n");
+					} else {
+						stdin.writeUTFBytes(String(params[i]) + "\n");
+					}
 				}
 			}
+
+			return !_error;
 		}
 
 		private function waitForData(output:IDataInput):uint {
 			while(!output.bytesAvailable) {
 				// wait
+				if(!_process.running) return 0;
 			}
 
 			return output.bytesAvailable;
@@ -161,93 +182,83 @@ package com.amanitadesign.steam {
 			}
 		}
 
-		private function errorCallback(e:IOErrorEvent):void {
-			// the process doesn't accept our input anymore, try to restart it
-			if(_process.running) {
-				_process.closeInput();
-				_process.exit();
-			}
-
-			startProcess();
-		}
-
 		public function requestStats():Boolean {
-			callWrapper(AIRSteam_RequestStats);
+			if(!callWrapper(AIRSteam_RequestStats)) return false;
 			return readBoolResponse();
 		}
 
 		public function runCallbacks():Boolean {
-			callWrapper(AIRSteam_RunCallbacks);
+			if(!callWrapper(AIRSteam_RunCallbacks)) return false;
 			return true;
 		}
 
 		public function setAchievement(id:String):Boolean {
-			callWrapper(AIRSteam_SetAchievement, [id]);
+			if(!callWrapper(AIRSteam_SetAchievement, [id])) return false;
 			return readBoolResponse();
 		}
 
 		public function clearAchievement(id:String):Boolean {
-			callWrapper(AIRSteam_ClearAchievement, [id]);
+			if(!callWrapper(AIRSteam_ClearAchievement, [id])) return false;
 			return readBoolResponse();
 		}
 
 		public function isAchievement(id:String):Boolean {
-			callWrapper(AIRSteam_IsAchievement, [id]);
+			if(!callWrapper(AIRSteam_IsAchievement, [id])) return false;
 			return readBoolResponse();
 		}
 
 		public function getStatInt(id:String):int {
-			callWrapper(AIRSteam_GetStatInt, [id]);
+			if(!callWrapper(AIRSteam_GetStatInt, [id])) return 0;
 			return readIntResponse();
 		}
 
 		public function getStatFloat(id:String):Number {
-			callWrapper(AIRSteam_GetStatFloat, [id]);
+			if(!callWrapper(AIRSteam_GetStatFloat, [id])) return 0.0;
 			return readFloatResponse();
 		}
 
 		public function setStatInt(id:String, value:int):Boolean {
-			callWrapper(AIRSteam_SetStatInt, [id, value]);
+			if(!callWrapper(AIRSteam_SetStatInt, [id, value])) return false;
 			return readBoolResponse();
 		}
 
 		public function setStatFloat(id:String, value:Number):Boolean {
-			callWrapper(AIRSteam_SetStatFloat, [id, value]);
+			if(!callWrapper(AIRSteam_SetStatFloat, [id, value])) return false;
 			return readBoolResponse();
 		}
 
 		public function storeStats():Boolean {
-			callWrapper(AIRSteam_StoreStats);
+			if(!callWrapper(AIRSteam_StoreStats)) return false;
 			return readBoolResponse();
 		}
 
 		public function resetAllStats(bAchievementsToo:Boolean):Boolean {
-			callWrapper(AIRSteam_ResetAllStats, [bAchievementsToo]);
+			if(!callWrapper(AIRSteam_ResetAllStats, [bAchievementsToo])) return false;
 			return readBoolResponse();
 		}
 
 		public function getFileCount():int {
-			callWrapper(AIRSteam_GetFileCount);
+			if(!callWrapper(AIRSteam_GetFileCount)) return 0;
 			return readIntResponse();
 		}
 
 		public function getFileSize(fileName:String):int {
-			callWrapper(AIRSteam_GetFileSize, [fileName]);
+			if(!callWrapper(AIRSteam_GetFileSize, [fileName])) return 0;
 			return readIntResponse();
 		}
 
 		public function fileExists(fileName:String):Boolean {
-			callWrapper(AIRSteam_FileExists, [fileName]);
+			if(!callWrapper(AIRSteam_FileExists, [fileName])) return false;
 			return readBoolResponse();
 		}
 
 		public function fileWrite(fileName:String, data:ByteArray):Boolean {
-			callWrapper(AIRSteam_FileWrite, [fileName, data]);
+			if(!callWrapper(AIRSteam_FileWrite, [fileName, data])) return false;
 			return readBoolResponse();
 		}
 
 		public function fileRead(fileName:String, data:ByteArray):Boolean {
-			callWrapper(AIRSteam_FileRead, [fileName]);
+			if(!callWrapper(AIRSteam_FileRead, [fileName])) return false;
 
 			var success:Boolean = readBoolResponse();
 			if(success) {
@@ -260,17 +271,17 @@ package com.amanitadesign.steam {
 		}
 
 		public function fileDelete(fileName:String):Boolean {
-			callWrapper(AIRSteam_FileDelete, [fileName]);
+			if(!callWrapper(AIRSteam_FileDelete, [fileName])) return false;
 			return readBoolResponse();
 		}
 
 		public function isCloudEnabledForApp():Boolean {
-			callWrapper(AIRSteam_IsCloudEnabledForApp);
+			if(!callWrapper(AIRSteam_IsCloudEnabledForApp)) return false;
 			return readBoolResponse();
 		}
 
 		public function setCloudEnabledForApp(enabled:Boolean):Boolean {
-			callWrapper(AIRSteam_SetCloudEnabledForApp, [enabled]);
+			if(!callWrapper(AIRSteam_SetCloudEnabledForApp, [enabled])) return false;
 			return readBoolResponse();
 		}
 	}
