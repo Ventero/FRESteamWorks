@@ -1,7 +1,16 @@
-# Basic AIR native extension to SteamWorks API #
+# Steamworks API for AIR applications #
 
-It's using appId 480, which is example application from the Steamworks SDK. Somehow is not possible to write to cloud with this appId, but it's working with our real one.
-It's everything what we need at this moment, but there are more functions to play with in the SteamWorks SDK. I'm not sure how legal it is to include the Steam libs and headers so these are not included. You can get them at this web https://partner.steamgames.com
+A simple Steamworks API wrapper to be used as native extension for Adobe AIR
+applications (see src/FRESteamWorks). Since the AIR runtime on Linux doesn't
+support native extensions, it also includes a small command line tool which
+can communicate with the AIR application (src/APIWrapper).
+
+The library to be used on the AS3 side can be found in lib/src/ (or lib/src_linux
+for Linux). Scripts to create the ANE/SWC files are in lib/bin/.
+
+It also includes a small test application (in test/src/), which tests the basic
+Steamworks API functions. It uses app id 480, which is the example application from
+the Steamworks SDK.
 
 ---
 
