@@ -8,7 +8,9 @@ It's everything what we need at this moment, but there are more functions to pla
 # License #
 
 Copyright (c) 2012-2013, Level Up Labs, LLC
+
 Copyright (c) 2012, Oldes
+
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted.
