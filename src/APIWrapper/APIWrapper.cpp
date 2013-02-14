@@ -1,3 +1,11 @@
+/*
+ *  APIWrapper.cpp
+ *  This file is part of FRESteamWorks.
+ *
+ *  Created by Ventero <http://github.com/Ventero>
+ *  Copyright (c) 2012-2013 Level Up Labs, LLC. All rights reserved.
+ */
+
 #include "APIWrapper.h"
 
 CLISteam* g_Steam = NULL;

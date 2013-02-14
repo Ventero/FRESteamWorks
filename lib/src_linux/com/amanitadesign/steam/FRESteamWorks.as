@@ -1,3 +1,11 @@
+/*
+ *  FRESteamWorks.as
+ *  This file is part of FRESteamWorks.
+ *
+ *  Created by Ventero <http://github.com/Ventero>
+ *  Copyright (c) 2012-2013 Level Up Labs, LLC. All rights reserved.
+ */
+
 package com.amanitadesign.steam {
 	import flash.desktop.NativeProcess;
 	import flash.desktop.NativeProcessStartupInfo;
