@@ -263,41 +263,40 @@ extern "C" {
 	}
 	//============================
 
+#define FRE_FUNC(fname) \
+		{ (const uint8_t*) #fname, NULL, &fname }
+
+	static FRENamedFunction func[] = {
+		FRE_FUNC(AIRSteam_Init),
+		FRE_FUNC(AIRSteam_RunCallbacks),
+
+		// stats / achievements
+		FRE_FUNC(AIRSteam_RequestStats),
+		FRE_FUNC(AIRSteam_SetAchievement),
+		FRE_FUNC(AIRSteam_ClearAchievement),
+		FRE_FUNC(AIRSteam_IsAchievement),
+		FRE_FUNC(AIRSteam_GetStatInt),
+		FRE_FUNC(AIRSteam_GetStatFloat),
+		FRE_FUNC(AIRSteam_SetStatInt),
+		FRE_FUNC(AIRSteam_SetStatFloat),
+		FRE_FUNC(AIRSteam_StoreStats),
+		FRE_FUNC(AIRSteam_ResetAllStats),
+
+		// remote storage
+		FRE_FUNC(AIRSteam_GetFileCount),
+		FRE_FUNC(AIRSteam_GetFileSize),
+		FRE_FUNC(AIRSteam_FileExists),
+		FRE_FUNC(AIRSteam_FileWrite),
+		FRE_FUNC(AIRSteam_FileRead),
+		FRE_FUNC(AIRSteam_FileDelete),
+		FRE_FUNC(AIRSteam_IsCloudEnabledForApp),
+		FRE_FUNC(AIRSteam_SetCloudEnabledForApp)
+	};
+
 	// A native context instance is created
 	void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
 	                        uint32_t* numFunctions, const FRENamedFunction** functions) {
 		AIRContext = ctx;
-
-#define FRE_FUNC(fname) \
-		{ (const uint8_t*) #fname, NULL, &fname }
-
-		static FRENamedFunction func[] = {
-			FRE_FUNC(AIRSteam_Init),
-			FRE_FUNC(AIRSteam_RunCallbacks),
-
-			// stats / achievements
-			FRE_FUNC(AIRSteam_RequestStats),
-			FRE_FUNC(AIRSteam_SetAchievement),
-			FRE_FUNC(AIRSteam_ClearAchievement),
-			FRE_FUNC(AIRSteam_IsAchievement),
-			FRE_FUNC(AIRSteam_GetStatInt),
-			FRE_FUNC(AIRSteam_GetStatFloat),
-			FRE_FUNC(AIRSteam_SetStatInt),
-			FRE_FUNC(AIRSteam_SetStatFloat),
-			FRE_FUNC(AIRSteam_StoreStats),
-			FRE_FUNC(AIRSteam_ResetAllStats),
-
-			// remote storage
-			FRE_FUNC(AIRSteam_GetFileCount),
-			FRE_FUNC(AIRSteam_GetFileSize),
-			FRE_FUNC(AIRSteam_FileExists),
-			FRE_FUNC(AIRSteam_FileWrite),
-			FRE_FUNC(AIRSteam_FileRead),
-			FRE_FUNC(AIRSteam_FileDelete),
-			FRE_FUNC(AIRSteam_IsCloudEnabledForApp),
-			FRE_FUNC(AIRSteam_SetCloudEnabledForApp)
-		};
-
 		*functions = func;
 		*numFunctions = sizeof(func) / sizeof(func[0]);
 	}
