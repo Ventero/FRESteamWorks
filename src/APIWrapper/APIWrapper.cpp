@@ -102,7 +102,9 @@ std::string GetPersonaName() {
 bool UseCrashHandler(std::string version, std::string date, std::string time) {
 	if (!g_Steam) return false;
 
-	g_Steam->UseCrashHandler(version, date, time);
+	SteamAPI_SetBreakpadAppID(SteamUtils()->GetAppID());
+	SteamAPI_UseBreakpadCrashHandler(version.c_str(), date.c_str(), time.c_str(),
+		false, NULL, NULL);
 
 	return true;
 }

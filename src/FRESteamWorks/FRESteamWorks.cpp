@@ -96,7 +96,9 @@ extern "C" {
 
 		if(version.empty() || date.empty() || time.empty()) return FREBool(false);
 
-		g_Steam->UseCrashHandler(version, date, time);
+		SteamAPI_SetBreakpadAppID(SteamUtils()->GetAppID());
+		SteamAPI_UseBreakpadCrashHandler(version.c_str(), date.c_str(), time.c_str(),
+			false, NULL, NULL);
 		return FREBool(true);
 	}
 

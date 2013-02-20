@@ -49,13 +49,6 @@ std::string CSteam::GetPersonaName() {
 	return std::string(SteamFriends()->GetPersonaName());
 }
 
-void CSteam::UseCrashHandler(std::string version, std::string date, std::string time) {
-	SteamAPI_SetBreakpadAppID(m_iAppID);
-	SteamAPI_UseBreakpadCrashHandler(version.c_str(), date.c_str(), time.c_str(),
-		false, NULL, NULL);
-}
-
-
 bool CSteam::SetAchievement(const char* ID) {
 	if (!m_bInitialized) return false;
 
