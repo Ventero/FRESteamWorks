@@ -21,7 +21,7 @@ CSteam::CSteam():
 	RequestStats();
 }
 
-CSteam::~CSteam() {};
+CSteam::~CSteam() {}
 
 bool CSteam::RequestStats() {
 	// Is Steam loaded? If not we can't get stats.

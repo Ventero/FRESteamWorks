@@ -27,7 +27,7 @@ enum ResponseTypes {
 
 enum ResponseCodes {
 	RESPONSE_OK,
-	RESPONSE_FAILED,
+	RESPONSE_FAILED
 };
 
 class CSteam {
