@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <sstream>
 
 #include <steam_api.h>
 

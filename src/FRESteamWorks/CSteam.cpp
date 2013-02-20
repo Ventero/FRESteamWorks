@@ -38,7 +38,9 @@ std::string CSteam::GetUserID() {
 	if (!m_bInitialized) return "";
 
 	uint64 id = SteamUser()->GetSteamID().ConvertToUint64();
-	return std::to_string(id);
+	std::stringstream stream;
+	stream << id;
+	return stream.str();
 }
 
 std::string CSteam::GetPersonaName() {
