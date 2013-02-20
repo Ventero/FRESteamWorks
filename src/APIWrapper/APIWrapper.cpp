@@ -99,10 +99,10 @@ std::string GetPersonaName() {
 	return g_Steam->GetPersonaName();
 }
 
-bool UseCrashHandler(std::string version, std::string date, std::string time) {
+bool UseCrashHandler(uint32 appID, std::string version, std::string date, std::string time) {
 	if (!g_Steam) return false;
 
-	SteamAPI_SetBreakpadAppID(SteamUtils()->GetAppID());
+	SteamAPI_SetBreakpadAppID(appID);
 	SteamAPI_UseBreakpadCrashHandler(version.c_str(), date.c_str(), time.c_str(),
 		false, NULL, NULL);
 
@@ -357,10 +357,11 @@ void callAPI(APIFunc id) {
 
 		case AIRSteam_UseCrashHandler:
 			{
+				uint32 appID = get_int();
 				std::string version = get_string(false);
 				std::string date = get_string(false);
 				std::string time = get_string(false);
-				send(UseCrashHandler(version, date, time));
+				send(UseCrashHandler(appID, version, date, time));
 			}
 			return;
 

@@ -88,13 +88,16 @@ extern "C" {
 	}
 
 	FREObject AIRSteam_UseCrashHandler(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-		if(!g_Steam) return FREBool(false);
+		int32 appID = 0;
+		if (FREGetObjectAsInt32(argv[0], &appID) != FRE_OK)
+			return FREBool(false);
 
-		std::string version = FREGetString(argv[0]);
-		std::string date = FREGetString(argv[1]);
-		std::string time = FREGetString(argv[2]);
+		std::string version = FREGetString(argv[1]);
+		std::string date = FREGetString(argv[2]);
+		std::string time = FREGetString(argv[3]);
 
-		if(version.empty() || date.empty() || time.empty()) return FREBool(false);
+		if(version.empty() || date.empty() || time.empty())
+			return FREBool(false);
 
 		SteamAPI_SetBreakpadAppID(SteamUtils()->GetAppID());
 		SteamAPI_UseBreakpadCrashHandler(version.c_str(), date.c_str(), time.c_str(),

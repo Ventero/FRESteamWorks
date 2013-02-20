@@ -38,7 +38,7 @@ package
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
 			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
 			try {
-				Steamworks.useCrashHandler("1.0", "Feb 20 2013", "21:42:20");
+				Steamworks.useCrashHandler(480, "1.0", "Feb 20 2013", "21:42:20");
 				if(Steamworks.init()){
 					log("STEAMWORKS API is available\n");
 					log("User ID: " + Steamworks.getUserID());

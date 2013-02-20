@@ -213,8 +213,8 @@ package com.amanitadesign.steam {
 			return readStringResponse();
 		}
 
-		public function useCrashHandler(version:String, date:String, time:String):Boolean {
-			if(!callWrapper(AIRSteam_UseCrashHandler, [version, date, time])) return false;
+		public function useCrashHandler(appID:uint, version:String, date:String, time:String):Boolean {
+			if(!callWrapper(AIRSteam_UseCrashHandler, [appID, version, date, time])) return false;
 			return readBoolResponse();
 		}
 
