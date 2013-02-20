@@ -40,7 +40,7 @@ std::string FREGetString(FREObject object) {
 	const uint8_t* string;
 	FREResult res = FREGetObjectAsUTF8(object, &len, &string);
 
-	if(res != FRE_OK) return std::string();
+	if(res != FRE_OK) return "";
 
 	return std::string((const char*)string, len);
 }
