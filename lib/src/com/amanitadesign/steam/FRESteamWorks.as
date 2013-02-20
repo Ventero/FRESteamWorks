@@ -77,9 +77,9 @@ package com.amanitadesign.steam
 			return _ExtensionContext.call("AIRSteam_GetPersonaName") as String;
 		}
 
-		public function useCrashHandler():Boolean
+		public function useCrashHandler(version:String, date:String, time:String):Boolean
 		{
-			return _ExtensionContext.call("AIRSteam_UseCrashHandler") as Boolean;
+			return _ExtensionContext.call("AIRSteam_UseCrashHandler", version, date, time) as Boolean;
 		}
 
 		public function setAchievement(id:String):Boolean
