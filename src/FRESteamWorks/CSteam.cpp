@@ -34,6 +34,19 @@ bool CSteam::RequestStats() {
 	return SteamUserStats()->RequestCurrentStats();
 }
 
+std::string CSteam::GetUserID() {
+	if (!m_bInitialized) return "";
+
+	uint64 id = SteamUser()->GetSteamID().ConvertToUint64();
+	return std::to_string(id);
+}
+
+std::string CSteam::GetPersonaName() {
+	if (!m_bInitialized) return "";
+
+	return std::string(SteamFriends()->GetPersonaName());
+}
+
 bool CSteam::SetAchievement(const char* ID) {
 	if (!m_bInitialized) return false;
 

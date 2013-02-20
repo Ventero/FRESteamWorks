@@ -67,6 +67,16 @@ package com.amanitadesign.steam
 			return _ExtensionContext.call("AIRSteam_RunCallbacks") as Boolean;
 		}
 
+		public function getUserID():String
+		{
+			return _ExtensionContext.call("AIRSteam_GetUserID") as String;
+		}
+
+		public function getPersonaName():String
+		{
+			return _ExtensionContext.call("AIRSteam_GetPersonaName") as String;
+		}
+
 		public function setAchievement(id:String):Boolean
 		{
 			return _ExtensionContext.call("AIRSteam_SetAchievement", id) as Boolean;

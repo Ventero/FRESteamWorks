@@ -14,6 +14,7 @@
 #endif
 
 #include <stdio.h>
+#include <string>
 
 #include <steam_api.h>
 
@@ -46,6 +47,8 @@ public:
 	~CSteam();
 
 	bool RequestStats();
+	std::string GetUserID();
+	std::string GetPersonaName();
 	bool SetAchievement(const char* ID);
 	bool ClearAchievement(const char* ID);
 	bool IsAchievement(const char* ID);

@@ -40,6 +40,8 @@ package
 			try {
 				if(Steamworks.init()){
 					log("STEAMWORKS API is available\n");
+					log("User ID: " + Steamworks.getUserID());
+					log("Persona name: " + Steamworks.getPersonaName());
 
 					//comment.. current stats and achievement ids are from steam example app which is provided with their SDK
 					log("isAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.isAchievement("ACH_WIN_ONE_GAME"));

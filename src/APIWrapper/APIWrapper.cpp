@@ -87,6 +87,18 @@ bool RequestStats() {
 	return ret;
 }
 
+std::string GetUserID() {
+	if (!g_Steam) return "";
+
+	return g_Steam->GetUserID();
+}
+
+std::string GetPersonaName() {
+	if (!g_Steam) return "";
+
+	return g_Steam->GetPersonaName();
+}
+
 bool SetAchievement(std::string name) {
 	bool ret = false;
 	if (g_Steam && !name.empty()) {
@@ -323,6 +335,14 @@ void callAPI(APIFunc id) {
 
 		case AIRSteam_SetCloudEnabledForApp:
 			send(SetCloudEnabledForApp(get_bool()));
+			return;
+
+		case AIRSteam_GetUserID:
+			send(GetUserID());
+			return;
+
+		case AIRSteam_GetPersonaName:
+			send(GetPersonaName());
 			return;
 
 		default:

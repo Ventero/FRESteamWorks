@@ -39,5 +39,7 @@ enum APIFunc {
 	AIRSteam_FileRead,
 	AIRSteam_FileDelete,
 	AIRSteam_IsCloudEnabledForApp,
-	AIRSteam_SetCloudEnabledForApp
+	AIRSteam_SetCloudEnabledForApp,
+	AIRSteam_GetUserID,
+	AIRSteam_GetPersonaName
 };

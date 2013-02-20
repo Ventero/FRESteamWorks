@@ -35,6 +35,12 @@ FREObject FREFloat(float value) {
 	return result;
 }
 
+FREObject FREString(std::string value) {
+	FREObject result;
+	FRENewObjectFromUTF8(value.size() + 1, (const uint8_t*)value.c_str(), &result);
+	return result;
+}
+
 std::string FREGetString(FREObject object) {
 	uint32_t len;
 	const uint8_t* string;
@@ -62,6 +68,23 @@ extern "C" {
 		if (ret) g_Steam = new ANESteam();
 
 		return FREBool(ret);
+	}
+
+	FREObject AIRSteam_RunCallbacks(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		SteamAPI_RunCallbacks();
+		return NULL;
+	}
+
+	FREObject AIRSteam_GetUserID(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		if(!g_Steam) return FREString("");
+
+		return FREString(g_Steam->GetUserID());
+	}
+
+	FREObject AIRSteam_GetPersonaName(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		if(!g_Steam) return FREString("");
+
+		return FREString(g_Steam->GetPersonaName());
 	}
 
 	FREObject AIRSteam_RequestStats(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
@@ -102,11 +125,6 @@ extern "C" {
 		if (name.empty()) return FREBool(false);
 
 		return FREBool(g_Steam->IsAchievement(name.c_str()));
-	}
-
-	FREObject AIRSteam_RunCallbacks(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-		SteamAPI_RunCallbacks();
-		return NULL;
 	}
 
 	FREObject AIRSteam_GetStatInt(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
@@ -269,6 +287,8 @@ extern "C" {
 	static FRENamedFunction func[] = {
 		FRE_FUNC(AIRSteam_Init),
 		FRE_FUNC(AIRSteam_RunCallbacks),
+		FRE_FUNC(AIRSteam_GetUserID),
+		FRE_FUNC(AIRSteam_GetPersonaName),
 
 		// stats / achievements
 		FRE_FUNC(AIRSteam_RequestStats),

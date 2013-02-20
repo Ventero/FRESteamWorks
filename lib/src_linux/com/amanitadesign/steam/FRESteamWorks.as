@@ -54,6 +54,8 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_FileDelete:int = 17;
 		private static const AIRSteam_IsCloudEnabledForApp:int = 18;
 		private static const AIRSteam_SetCloudEnabledForApp:int = 19;
+		private static const AIRSteam_GetUserID:int = 20;
+		private static const AIRSTeam_GetPersonaName:int = 21;
 
 		public function FRESteamWorks (target:IEventDispatcher = null) {
 			_file = File.applicationDirectory.resolvePath(PATH);
@@ -198,6 +200,16 @@ package com.amanitadesign.steam {
 		public function runCallbacks():Boolean {
 			if(!callWrapper(AIRSteam_RunCallbacks)) return false;
 			return true;
+		}
+
+		public function getUserID():String {
+			if(!callWrapper(AIRSteam_GetUserID)) return "";
+			return readStringResponse();
+		}
+
+		public function getPersonaName():String {
+			if(!callWrapper(AIRSTeam_GetPersonaName)) return "";
+			return readStringResponse();
 		}
 
 		public function setAchievement(id:String):Boolean {
