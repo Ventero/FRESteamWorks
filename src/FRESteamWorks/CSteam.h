@@ -35,7 +35,7 @@ enum ResponseCodes {
 class CSteam {
 private:
 	// Our current AppID
-	uint64 m_iAppID;
+	uint32 m_iAppID;
 	bool m_bInitialized;
 
 	void DispatchEvent(const int req_type, const int response);
