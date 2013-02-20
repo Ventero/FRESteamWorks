@@ -303,6 +303,7 @@ extern "C" {
 		FRE_FUNC(AIRSteam_RunCallbacks),
 		FRE_FUNC(AIRSteam_GetUserID),
 		FRE_FUNC(AIRSteam_GetPersonaName),
+		FRE_FUNC(AIRSteam_UseCrashHandler),
 
 		// stats / achievements
 		FRE_FUNC(AIRSteam_RequestStats),
