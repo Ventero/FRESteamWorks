@@ -41,5 +41,6 @@ enum APIFunc {
 	AIRSteam_IsCloudEnabledForApp,
 	AIRSteam_SetCloudEnabledForApp,
 	AIRSteam_GetUserID,
-	AIRSteam_GetPersonaName
+	AIRSteam_GetPersonaName,
+	AIRSteam_UseCrashHandler
 };

@@ -42,6 +42,7 @@ extern "C" {
 	FREObject AIRSteam_RunCallbacks(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
 	FREObject AIRSteam_GetUserID(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
 	FREObject AIRSteam_GetPersonaName(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
+	FREObject AIRSteam_UseCrashHandler(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
 	FREObject AIRSteam_RequestStats(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
 	FREObject AIRSteam_SetAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
 	FREObject AIRSteam_ClearAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);

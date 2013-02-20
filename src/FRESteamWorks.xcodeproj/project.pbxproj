@@ -180,6 +180,7 @@
 				GCC_PREFIX_HEADER = "FRESteamWorks/FRESteamWorks-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
+					"STEAM_API_EXPORTS",
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
@@ -230,6 +231,10 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FRESteamWorks/FRESteamWorks-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"STEAM_API_EXPORTS",
+					"$(inherited)",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

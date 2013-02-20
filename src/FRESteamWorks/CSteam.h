@@ -50,6 +50,7 @@ public:
 	bool RequestStats();
 	std::string GetUserID();
 	std::string GetPersonaName();
+	void UseCrashHandler(std::string version, std::string date, std::string time);
 	bool SetAchievement(const char* ID);
 	bool ClearAchievement(const char* ID);
 	bool IsAchievement(const char* ID);

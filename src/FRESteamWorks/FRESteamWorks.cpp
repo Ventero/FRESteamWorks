@@ -87,6 +87,20 @@ extern "C" {
 		return FREString(g_Steam->GetPersonaName());
 	}
 
+	FREObject AIRSteam_UseCrashHandler(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		if(!g_Steam) return FREBool(false);
+
+		std::string version = FREGetString(argv[0]);
+		std::string date = FREGetString(argv[1]);
+		std::string time = FREGetString(argv[2]);
+
+		if(version.empty() || date.empty() || time.empty()) return FREBool(false);
+
+		g_Steam->UseCrashHandler(version, date, time);
+		return FREBool(true);
+	}
+
+
 	FREObject AIRSteam_RequestStats(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		bool ret = false;
 		if (g_Steam) ret = g_Steam->RequestStats();

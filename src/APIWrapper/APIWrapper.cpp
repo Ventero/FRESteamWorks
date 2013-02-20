@@ -99,6 +99,14 @@ std::string GetPersonaName() {
 	return g_Steam->GetPersonaName();
 }
 
+bool UseCrashHandler(std::string version, std::string date, std::string time) {
+	if (!g_Steam) return false;
+
+	g_Steam->UseCrashHandler(version, date, time);
+
+	return true;
+}
+
 bool SetAchievement(std::string name) {
 	bool ret = false;
 	if (g_Steam && !name.empty()) {
@@ -343,6 +351,15 @@ void callAPI(APIFunc id) {
 
 		case AIRSteam_GetPersonaName:
 			send(GetPersonaName());
+			return;
+
+		case AIRSteam_UseCrashHandler:
+			{
+				std::string version = get_string(false);
+				std::string date = get_string(false);
+				std::string time = get_string(false);
+				send(UseCrashHandler(version, date, time));
+			}
 			return;
 
 		default:

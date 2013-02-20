@@ -1,7 +1,7 @@
 INC = -I../../AdobeAIRSDK/include -I../../SteamSDK/public/steam
 LIB = -L../../SteamSDK/redistributable_bin/linux32
 LINK = -m32 -lsteam_api
-CXXFLAGS = -std=c++0x -m32 -fvisibility=hidden -Wall -Wextra -Wno-unused-parameter
+CXXFLAGS = -std=c++0x -m32 -fvisibility=hidden -Wall -Wextra -Wno-unused-parameter -DSTEAM_API_EXPORTS
 
 # comma separated list of whitelisted app ids
 ifneq ($(APPIDS),)
