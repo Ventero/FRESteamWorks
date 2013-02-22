@@ -8,6 +8,7 @@ test/bin-debug/FRESteamWorksTest.app
 *.sln.docstates
 xcuserdata
 project.xcworkspace
+*.sublime-*
 
 # build files
 *.o
