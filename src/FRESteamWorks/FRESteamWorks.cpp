@@ -41,14 +41,14 @@ FREObject FREString(std::string value) {
 	return result;
 }
 
-std::string FREGetString(FREObject object) {
+bool FREGetString(FREObject object, std::string& str) {
 	uint32_t len;
-	const uint8_t* string;
-	FREResult res = FREGetObjectAsUTF8(object, &len, &string);
+	const uint8_t* data;
+	FREResult res = FREGetObjectAsUTF8(object, &len, &data);
+	if(res != FRE_OK) return false;
 
-	if(res != FRE_OK) return "";
-
-	return std::string((const char*)string, len);
+	str = std::string((const char*)data, len);
+	return true;
 }
 
 void ANESteam::DispatchEvent(char* code, char* level) {
@@ -92,12 +92,10 @@ extern "C" {
 		if (FREGetObjectAsInt32(argv[0], &appID) != FRE_OK)
 			return FREBool(false);
 
-		std::string version = FREGetString(argv[1]);
-		std::string date = FREGetString(argv[2]);
-		std::string time = FREGetString(argv[3]);
-
-		if(version.empty() || date.empty() || time.empty())
-			return FREBool(false);
+		std::string version, date, time;
+		if(FREGetString(argv[1], version) != FRE_OK) return FREBool(false);
+		if(FREGetString(argv[2], date) != FRE_OK) return FREBool(false);
+		if(FREGetString(argv[3], time) != FRE_OK) return FREBool(false);
 
 		SteamAPI_SetBreakpadAppID(SteamUtils()->GetAppID());
 		SteamAPI_UseBreakpadCrashHandler(version.c_str(), date.c_str(), time.c_str(),
@@ -115,13 +113,16 @@ extern "C" {
 	}
 
 	FREObject AIRSteam_SetAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-		bool ret = false;
+		if (!g_Steam || argc != 1) {
+			// TODO: necessary to call this here?
+			SteamAPI_RunCallbacks();
+			return FREBool(false);
+		}
 
-		if (g_Steam && argc == 1) {
-			std::string name = FREGetString(argv[0]);
-			if (!name.empty()) {
-				ret = g_Steam->SetAchievement(name.c_str());
-			}
+		bool ret = false;
+		std::string name;
+		if(FREGetString(argv[0], name) == FRE_OK) {
+			ret = g_Steam->SetAchievement(name.c_str());
 		}
 
 		SteamAPI_RunCallbacks();
@@ -131,8 +132,8 @@ extern "C" {
 	FREObject AIRSteam_ClearAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		if (!g_Steam || argc != 1) return FREBool(false);
 
-		std::string name = FREGetString(argv[0]);
-		if (name.empty()) return FREBool(false);
+		std::string name;
+		if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
 
 		return FREBool(g_Steam->ClearAchievement(name.c_str()));
 	}
@@ -140,8 +141,8 @@ extern "C" {
 	FREObject AIRSteam_IsAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		if (!g_Steam || argc != 1) return FREBool(false);
 
-		std::string name = FREGetString(argv[0]);
-		if (name.empty()) return FREBool(false);
+		std::string name;
+		if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
 
 		return FREBool(g_Steam->IsAchievement(name.c_str()));
 	}
@@ -149,8 +150,8 @@ extern "C" {
 	FREObject AIRSteam_GetStatInt(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		if (!g_Steam || argc != 1) return FREInt(0);
 
-		std::string name = FREGetString(argv[0]);
-		if (name.empty()) return FREInt(0);
+		std::string name;
+		if(FREGetString(argv[0], name) != FRE_OK) return FREInt(0);
 
 		int32 value = 0;
 		g_Steam->GetStat(name.c_str(), &value);
@@ -160,8 +161,8 @@ extern "C" {
 	FREObject AIRSteam_GetStatFloat(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		if (!g_Steam || argc != 1) return FREFloat(0.0);
 
-		std::string name = FREGetString(argv[0]);
-		if (name.empty()) return FREFloat(0.0);
+		std::string name;
+		if(FREGetString(argv[0], name) != FRE_OK) return FREFloat(0.0);
 
 		float value = 0.0f;
 		g_Steam->GetStat(name.c_str(), &value);
@@ -171,8 +172,8 @@ extern "C" {
 	FREObject AIRSteam_SetStatInt(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		if (!g_Steam || argc != 2) return FREBool(false);
 
-		std::string name = FREGetString(argv[0]);
-		if (name.empty()) return FREBool(false);
+		std::string name;
+		if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
 
 		int32 value;
 		if (FREGetObjectAsInt32(argv[1], &value) != FRE_OK) return FREBool(false);
@@ -182,8 +183,8 @@ extern "C" {
 	FREObject AIRSteam_SetStatFloat(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		if (!g_Steam || argc != 2) return FREBool(false);
 
-		std::string name = FREGetString(argv[0]);
-		if (name.empty()) return FREBool(false);
+		std::string name;
+		if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
 
 		double value;
 		if (FREGetObjectAsDouble(argv[1], &value) != FRE_OK) return FREBool(false);
@@ -217,8 +218,8 @@ extern "C" {
 	FREObject AIRSteam_GetFileSize(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		if (!g_Steam || argc != 1) return FREInt(0);
 
-		std::string name = FREGetString(argv[0]);
-		if (name.empty()) return FREInt(0);
+		std::string name;
+		if(FREGetString(argv[0], name) != FRE_OK) return FREInt(0);
 
 		return FREInt(SteamRemoteStorage()->GetFileSize(name.c_str()));
 	}
@@ -226,8 +227,8 @@ extern "C" {
 	FREObject AIRSteam_FileExists(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		if (!g_Steam || argc != 1) return FREBool(false);
 
-		std::string name = FREGetString(argv[0]);
-		if (name.empty()) return FREBool(false);
+		std::string name;
+		if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
 
 		return FREBool(SteamRemoteStorage()->FileExists(name.c_str()));
 	}
@@ -251,8 +252,8 @@ extern "C" {
 	FREObject AIRSteam_FileRead(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		if (!g_Steam || argc != 2) return FREBool(false);
 
-		std::string name = FREGetString(argv[0]);
-		if (name.empty()) return FREBool(false);
+		std::string name;
+		if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
 
 		FREByteArray byteArray;
 		if (FREAcquireByteArray(argv[1], &byteArray) != FRE_OK)
@@ -274,8 +275,8 @@ extern "C" {
 	FREObject AIRSteam_FileDelete(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		if (!g_Steam || argc != 1) return FREBool(false);
 
-		std::string name = FREGetString(argv[0]);
-		if (name.empty()) return FREBool(false);
+		std::string name;
+		if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
 
 		return FREBool(SteamRemoteStorage()->FileDelete(name.c_str()));
 	}
