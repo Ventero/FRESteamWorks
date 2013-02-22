@@ -52,10 +52,8 @@ std::string FREGetString(FREObject object) {
 }
 
 void ANESteam::DispatchEvent(char* code, char* level) {
-	FREResult res = FREDispatchStatusEventAsync(AIRContext, (const uint8_t*)code, (const uint8_t*)level);
-	if (res != FRE_OK) {
-		return;
-	}
+	// ignore unsuccessful dispatches
+	FREDispatchStatusEventAsync(AIRContext, (const uint8_t*)code, (const uint8_t*)level);
 }
 
 extern "C" {
@@ -88,6 +86,8 @@ extern "C" {
 	}
 
 	FREObject AIRSteam_UseCrashHandler(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		if (argc != 4) return false;
+
 		int32 appID = 0;
 		if (FREGetObjectAsInt32(argv[0], &appID) != FRE_OK)
 			return FREBool(false);
@@ -298,6 +298,7 @@ extern "C" {
 
 		return FREBool(bEnabled == SteamRemoteStorage()->IsCloudEnabledForApp());
 	}
+
 	//============================
 
 #define FRE_FUNC(fname) \
