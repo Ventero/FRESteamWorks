@@ -234,8 +234,8 @@ FREObject AIRSteam_FileExists(FREContext ctx, void* funcData, uint32_t argc, FRE
 FREObject AIRSteam_FileWrite(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 	if (!g_Steam || argc != 2) return FREBool(false);
 
-	std::string name = FREGetString(argv[0]);
-	if (name.empty()) return FREBool(false);
+	std::string name;
+	if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
 
 	FREByteArray byteArray;
 	if (FREAcquireByteArray(argv[1], &byteArray) != FRE_OK)
