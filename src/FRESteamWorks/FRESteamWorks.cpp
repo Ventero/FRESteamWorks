@@ -349,6 +349,7 @@ extern "C" {
 		// Shutdown Steam
 		SteamAPI_Shutdown();
 		// Delete the SteamAchievements object
+		delete g_Steam;
 		if (g_Steam) g_Steam = NULL;
 	}
 

@@ -379,4 +379,5 @@ int main(int argc, char** argv) {
 		callAPI(func);
 	}
 	SteamAPI_Shutdown();
+	delete g_Steam;
 }
