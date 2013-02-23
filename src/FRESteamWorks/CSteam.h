@@ -13,7 +13,7 @@
 	#define snprintf _snprintf
 #endif
 
-#include <cstdio>
+#include <stdio.h>
 #include <string>
 #include <sstream>
 
