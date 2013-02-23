@@ -112,7 +112,7 @@ bool UseCrashHandler(uint32 appID, std::string version, std::string date, std::s
 bool SetAchievement(std::string name) {
 	bool ret = false;
 	if (g_Steam && !name.empty()) {
-		ret = g_Steam->SetAchievement(name.c_str());
+		ret = g_Steam->SetAchievement(name);
 	}
 
 	SteamAPI_RunCallbacks();
@@ -122,20 +122,20 @@ bool SetAchievement(std::string name) {
 bool ClearAchievement(std::string name) {
 	if(!g_Steam || name.empty()) return false;
 
-	return g_Steam->ClearAchievement(name.c_str());
+	return g_Steam->ClearAchievement(name);
 }
 
 bool IsAchievement(std::string name) {
 	if(!g_Steam || name.empty()) return false;
 
-	return g_Steam->IsAchievement(name.c_str());
+	return g_Steam->IsAchievement(name);
 }
 
 int32 GetStatInt(std::string name) {
 	if(!g_Steam || name.empty()) return 0;
 
 	int32 value;
-	g_Steam->GetStat(name.c_str(), &value);
+	g_Steam->GetStat(name, &value);
 	return value;
 }
 
@@ -143,20 +143,20 @@ float GetStatFloat(std::string name) {
 	if(!g_Steam || name.empty()) return 0.0f;
 
 	float value = 0.0f;
-	g_Steam->GetStat(name.c_str(), &value);
+	g_Steam->GetStat(name, &value);
 	return value;
 }
 
 bool SetStatInt(std::string name, int32 value) {
 	if(!g_Steam || name.empty()) return false;;
 
-	return g_Steam->SetStat(name.c_str(), value);
+	return g_Steam->SetStat(name, value);
 }
 
 bool SetStatFloat(std::string name, float value) {
 	if(!g_Steam || name.empty()) return false;
 
-	return g_Steam->SetStat(name.c_str(), value);
+	return g_Steam->SetStat(name, value);
 }
 
 bool StoreStats() {

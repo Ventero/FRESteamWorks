@@ -120,7 +120,7 @@ FREObject AIRSteam_SetAchievement(FREContext ctx, void* funcData, uint32_t argc,
 	bool ret = false;
 	std::string name;
 	if(FREGetString(argv[0], name) == FRE_OK) {
-		ret = g_Steam->SetAchievement(name.c_str());
+		ret = g_Steam->SetAchievement(name);
 	}
 
 	SteamAPI_RunCallbacks();
@@ -133,7 +133,7 @@ FREObject AIRSteam_ClearAchievement(FREContext ctx, void* funcData, uint32_t arg
 	std::string name;
 	if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
 
-	return FREBool(g_Steam->ClearAchievement(name.c_str()));
+	return FREBool(g_Steam->ClearAchievement(name));
 }
 
 FREObject AIRSteam_IsAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
@@ -142,7 +142,7 @@ FREObject AIRSteam_IsAchievement(FREContext ctx, void* funcData, uint32_t argc, 
 	std::string name;
 	if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
 
-	return FREBool(g_Steam->IsAchievement(name.c_str()));
+	return FREBool(g_Steam->IsAchievement(name));
 }
 
 FREObject AIRSteam_GetStatInt(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
@@ -152,7 +152,7 @@ FREObject AIRSteam_GetStatInt(FREContext ctx, void* funcData, uint32_t argc, FRE
 	if(FREGetString(argv[0], name) != FRE_OK) return FREInt(0);
 
 	int32 value = 0;
-	g_Steam->GetStat(name.c_str(), &value);
+	g_Steam->GetStat(name, &value);
 	return FREInt(value);
 }
 
@@ -163,7 +163,7 @@ FREObject AIRSteam_GetStatFloat(FREContext ctx, void* funcData, uint32_t argc, F
 	if(FREGetString(argv[0], name) != FRE_OK) return FREFloat(0.0);
 
 	float value = 0.0f;
-	g_Steam->GetStat(name.c_str(), &value);
+	g_Steam->GetStat(name, &value);
 	return FREFloat(value);
 }
 
@@ -176,7 +176,7 @@ FREObject AIRSteam_SetStatInt(FREContext ctx, void* funcData, uint32_t argc, FRE
 	int32 value;
 	if (FREGetObjectAsInt32(argv[1], &value) != FRE_OK) return FREBool(false);
 
-	return FREBool(g_Steam->SetStat(name.c_str(), value));
+	return FREBool(g_Steam->SetStat(name, value));
 }
 FREObject AIRSteam_SetStatFloat(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 	if (!g_Steam || argc != 2) return FREBool(false);
@@ -187,7 +187,7 @@ FREObject AIRSteam_SetStatFloat(FREContext ctx, void* funcData, uint32_t argc, F
 	double value;
 	if (FREGetObjectAsDouble(argv[1], &value) != FRE_OK) return FREBool(false);
 
-	return FREBool(g_Steam->SetStat(name.c_str(), (float)value));
+	return FREBool(g_Steam->SetStat(name, (float)value));
 }
 
 FREObject AIRSteam_StoreStats(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {

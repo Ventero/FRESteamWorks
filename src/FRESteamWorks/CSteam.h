@@ -50,13 +50,13 @@ public:
 	bool RequestStats();
 	std::string GetUserID();
 	std::string GetPersonaName();
-	bool SetAchievement(const char* ID);
-	bool ClearAchievement(const char* ID);
-	bool IsAchievement(const char* ID);
-	bool GetStat(const char* ID, int32 *value);
-	bool GetStat(const char* ID, float *value);
-	bool SetStat(const char* ID, int32 value);
-	bool SetStat(const char* ID, float value);
+	bool SetAchievement(std::string name);
+	bool ClearAchievement(std::string name);
+	bool IsAchievement(std::string name);
+	bool GetStat(std::string name, int32 *value);
+	bool GetStat(std::string name, float *value);
+	bool SetStat(std::string name, int32 value);
+	bool SetStat(std::string name, float value);
 	bool StoreStats();
 	bool ResetAllStats(bool bAchievementsToo);
 

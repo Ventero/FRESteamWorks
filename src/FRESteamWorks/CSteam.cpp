@@ -49,48 +49,50 @@ std::string CSteam::GetPersonaName() {
 	return std::string(SteamFriends()->GetPersonaName());
 }
 
-bool CSteam::SetAchievement(const char* ID) {
+// stats/achievements
+
+bool CSteam::SetAchievement(std::string name) {
 	if (!m_bInitialized) return false;
 
-	SteamUserStats()->SetAchievement(ID);
+	SteamUserStats()->SetAchievement(name.c_str());
 	return SteamUserStats()->StoreStats();
 }
 
-bool CSteam::ClearAchievement(const char* ID) {
+bool CSteam::ClearAchievement(std::string name) {
 	if (!m_bInitialized) return false;
 
-	SteamUserStats()->ClearAchievement(ID);
+	SteamUserStats()->ClearAchievement(name.c_str());
 	return SteamUserStats()->StoreStats();
 }
 
-bool CSteam::IsAchievement(const char* ID) {
+bool CSteam::IsAchievement(std::string name) {
 	bool result = false;
-	if (m_bInitialized) SteamUserStats()->GetAchievement(ID, &result);
+	if (m_bInitialized) SteamUserStats()->GetAchievement(name.c_str(), &result);
 	return result;
 }
 
-bool CSteam::GetStat(const char* ID, int32 *value) {
+bool CSteam::GetStat(std::string name, int32 *value) {
 	if (!m_bInitialized) return false;
 
-	return SteamUserStats()->GetStat(ID, value);
+	return SteamUserStats()->GetStat(name.c_str(), value);
 }
 
-bool CSteam::GetStat(const char* ID, float *value) {
+bool CSteam::GetStat(std::string name, float *value) {
 	if (!m_bInitialized) return false;
 
-	return SteamUserStats()->GetStat(ID, value);
+	return SteamUserStats()->GetStat(name.c_str(), value);
 }
 
-bool CSteam::SetStat(const char* ID, int32 value) {
+bool CSteam::SetStat(std::string name, int32 value) {
 	if (!m_bInitialized) return false;
 
-	return SteamUserStats()->SetStat(ID, value);
+	return SteamUserStats()->SetStat(name.c_str(), value);
 }
 
-bool CSteam::SetStat(const char* ID, float value) {
+bool CSteam::SetStat(std::string name, float value) {
 	if (!m_bInitialized) return false;
 
-	return SteamUserStats()->SetStat(ID, value);
+	return SteamUserStats()->SetStat(name.c_str(), value);
 }
 
 bool CSteam::StoreStats() {
