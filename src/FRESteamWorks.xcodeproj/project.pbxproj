@@ -180,7 +180,7 @@
 				GCC_PREFIX_HEADER = "FRESteamWorks/FRESteamWorks-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
-					"STEAM_API_EXPORTS",
+					STEAM_API_EXPORTS,
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
@@ -208,6 +208,11 @@
 				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_STYLE = debugging;
 				VALID_ARCHS = i386;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wextra",
+					"-Wno-unused-parameter",
+				);
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -232,7 +237,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FRESteamWorks/FRESteamWorks-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"STEAM_API_EXPORTS",
+					STEAM_API_EXPORTS,
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
@@ -259,6 +264,11 @@
 				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_STYLE = debugging;
 				VALID_ARCHS = i386;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wextra",
+					"-Wno-unused-parameter",
+				);
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
