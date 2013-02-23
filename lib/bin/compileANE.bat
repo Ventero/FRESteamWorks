@@ -6,7 +6,9 @@ set UNZIP_DIR=%ProgramFiles(x86)%\GnuWin32\bin
                        -include-classes com.amanitadesign.steam.FRESteamWorks ^
                                         com.amanitadesign.steam.SteamConstants ^
                        -swf-version=11 -output FRESteamWorksLib.swc
+
 "%UNZIP_DIR%\unzip" -o FRESteamWorksLib.swc
+
 call "%AIR_SDK%\bin\adt" -package -target ane FRESteamWorks.ane descriptor.xml ^
                          -swc FRESteamWorksLib.swc ^
                          -platform Windows-x86 library.swf FRESteamWorks.dll ^
@@ -15,3 +17,5 @@ call "%AIR_SDK%\bin\adt" -package -target ane FRESteamWorks.ane descriptor.xml ^
 
 del library.swf
 del catalog.xml
+
+"%UNZIP_DIR%\unzip" -o FRESteamWorks.ane -d FRESteamWorks.Unpacked.ane
