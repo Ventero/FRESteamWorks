@@ -175,8 +175,8 @@ void CSteam::DispatchEvent(const int req_type, const int response) {
 	char code[5];
 	char level[5];
 
-	snprintf(code, sizeof(code), "%d", req_type);
-	snprintf(level, sizeof(level), "%d", response);
+	std::snprintf(code, sizeof(code), "%d", req_type);
+	std::snprintf(level, sizeof(level), "%d", response);
 	DispatchEvent(code, level);
 }
 
