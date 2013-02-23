@@ -210,7 +210,7 @@ FREObject AIRSteam_ResetAllStats(FREContext ctx, void* funcData, uint32_t argc, 
 FREObject AIRSteam_GetFileCount(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 	if (!g_Steam) return FREInt(0);
 
-	return FREInt(SteamRemoteStorage()->GetFileCount());
+	return FREInt(g_Steam->GetFileCount());
 }
 
 FREObject AIRSteam_GetFileSize(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
@@ -219,7 +219,7 @@ FREObject AIRSteam_GetFileSize(FREContext ctx, void* funcData, uint32_t argc, FR
 	std::string name;
 	if(FREGetString(argv[0], name) != FRE_OK) return FREInt(0);
 
-	return FREInt(SteamRemoteStorage()->GetFileSize(name.c_str()));
+	return FREInt(g_Steam->GetFileSize(name));
 }
 
 FREObject AIRSteam_FileExists(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
@@ -228,7 +228,7 @@ FREObject AIRSteam_FileExists(FREContext ctx, void* funcData, uint32_t argc, FRE
 	std::string name;
 	if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
 
-	return FREBool(SteamRemoteStorage()->FileExists(name.c_str()));
+	return FREBool(g_Steam->FileExists(name));
 }
 
 FREObject AIRSteam_FileWrite(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
@@ -241,7 +241,7 @@ FREObject AIRSteam_FileWrite(FREContext ctx, void* funcData, uint32_t argc, FREO
 	if (FREAcquireByteArray(argv[1], &byteArray) != FRE_OK)
 		return false;
 
-	bool ret = SteamRemoteStorage()->FileWrite(name.c_str(), byteArray.bytes, byteArray.length);
+	bool ret = g_Steam->FileWrite(name, byteArray.bytes, byteArray.length);
 	FREReleaseByteArray(argv[1]);
 
 	return FREBool(ret);
@@ -257,17 +257,17 @@ FREObject AIRSteam_FileRead(FREContext ctx, void* funcData, uint32_t argc, FREOb
 	if (FREAcquireByteArray(argv[1], &byteArray) != FRE_OK)
 		return FREBool(false);
 
-	uint32 size = SteamRemoteStorage()->GetFileSize(name.c_str());
-	int32 ret = 0;
+	bool ret = false;
+	char* data = NULL;
+	uint32 size = g_Steam->FileRead(name, data);
 	if (size > 0 && size <= byteArray.length) {
-		char* data = new char[size];
-		ret = SteamRemoteStorage()->FileRead(name.c_str(), data, size);
+		ret = true;
 		memcpy(byteArray.bytes, data, size);
 		delete data;
 	}
 	FREReleaseByteArray(argv[1]);
 
-	return FREBool(ret != 0);
+	return FREBool(ret);
 }
 
 FREObject AIRSteam_FileDelete(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
@@ -276,7 +276,7 @@ FREObject AIRSteam_FileDelete(FREContext ctx, void* funcData, uint32_t argc, FRE
 	std::string name;
 	if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
 
-	return FREBool(SteamRemoteStorage()->FileDelete(name.c_str()));
+	return FREBool(g_Steam->FileDelete(name));
 }
 
 FREObject AIRSteam_IsCloudEnabledForApp(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
@@ -292,10 +292,7 @@ FREObject AIRSteam_SetCloudEnabledForApp(FREContext ctx, void* funcData, uint32_
 	if (FREGetObjectAsBool(argv[0], &enabled) != FRE_OK)
 		return FREBool(false);
 
-	bool bEnabled = (enabled != 0);
-	SteamRemoteStorage()->SetCloudEnabledForApp(bEnabled);
-
-	return FREBool(bEnabled == SteamRemoteStorage()->IsCloudEnabledForApp());
+	return FREBool(g_Steam->SetCloudEnabledForApp(enabled != 0));
 }
 
 	//============================

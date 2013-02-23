@@ -108,6 +108,69 @@ bool CSteam::ResetAllStats(bool bAchievementsToo) {
 	return SteamUserStats()->StoreStats();
 }
 
+// remote storage
+
+int32 CSteam::GetFileCount() {
+	if (!m_bInitialized) return 0;
+
+	return SteamRemoteStorage()->GetFileCount();
+}
+
+int32 CSteam::GetFileSize(std::string name) {
+	if (!m_bInitialized) return 0;
+
+	return SteamRemoteStorage()->GetFileSize(name.c_str());
+}
+
+bool CSteam::FileExists(std::string name) {
+	if (!m_bInitialized) return false;
+
+	return SteamRemoteStorage()->FileExists(name.c_str());
+}
+
+bool CSteam::FileWrite(std::string name, const void* data, int32 length) {
+	if (!m_bInitialized) return false;
+
+	return SteamRemoteStorage()->FileWrite(name.c_str(), data, length);
+}
+
+// caller is responsible of deleting data when return value is != 0
+int32 CSteam::FileRead(std::string name, char* data) {
+	if (!m_bInitialized) return 0;
+
+	int32 size = SteamRemoteStorage()->GetFileSize(name.c_str());
+	if (size == 0) return 0;
+
+	data = new char[size];
+	int32 read = SteamRemoteStorage()->FileRead(name.c_str(), data, size);
+	if(read == 0) {
+		delete data;
+		return 0;
+	}
+
+	return read;
+}
+
+bool CSteam::FileDelete(std::string name) {
+	if (!m_bInitialized) return false;
+
+	return SteamRemoteStorage()->FileDelete(name.c_str());
+}
+
+bool CSteam::IsCloudEnabledForApp() {
+	if (!m_bInitialized) return false;
+
+	return SteamRemoteStorage()->IsCloudEnabledForApp();
+}
+
+bool CSteam::SetCloudEnabledForApp(bool enabled) {
+	if (!m_bInitialized) return false;
+
+	SteamRemoteStorage()->SetCloudEnabledForApp(enabled);
+	return enabled == SteamRemoteStorage()->IsCloudEnabledForApp();
+}
+
+
 void CSteam::DispatchEvent(const int req_type, const int response) {
 	char code[5];
 	char level[5];

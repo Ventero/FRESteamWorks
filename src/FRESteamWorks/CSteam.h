@@ -47,9 +47,12 @@ public:
 	CSteam();
 	~CSteam();
 
+	// general stuff
 	bool RequestStats();
 	std::string GetUserID();
 	std::string GetPersonaName();
+
+	// stats/achievements
 	bool SetAchievement(std::string name);
 	bool ClearAchievement(std::string name);
 	bool IsAchievement(std::string name);
@@ -60,6 +63,17 @@ public:
 	bool StoreStats();
 	bool ResetAllStats(bool bAchievementsToo);
 
+	// remote storage
+	int32 GetFileCount();
+	int32 GetFileSize(std::string name);
+	bool FileExists(std::string name);
+	bool FileWrite(std::string name, const void* data, int32 length);
+	int32 FileRead(std::string name, char* data);
+	bool FileDelete(std::string name);
+	bool IsCloudEnabledForApp();
+	bool SetCloudEnabledForApp(bool enabled);
+
+	// callbacks
 	STEAM_CALLBACK(CSteam, OnUserStatsReceived, UserStatsReceived_t,
 	               m_CallbackUserStatsReceived);
 	STEAM_CALLBACK(CSteam, OnUserStatsStored, UserStatsStored_t,

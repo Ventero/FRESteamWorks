@@ -174,57 +174,54 @@ bool ResetAllStats(bool achievementsToo) {
 int32 GetFileCount() {
 	if(!g_Steam) return 0;
 
-	return SteamRemoteStorage()->GetFileCount();
+	return g_Steam->GetFileCount();
 }
 
 int32 GetFileSize(std::string name) {
 	if(!g_Steam || name.empty()) return 0;
 
-	return SteamRemoteStorage()->GetFileSize(name.c_str());
+	return g_Steam->GetFileSize(name);
 }
 
 bool FileExists(std::string name) {
 	if(!g_Steam || name.empty()) return false;
 
-	return SteamRemoteStorage()->FileExists(name.c_str());
+	return g_Steam->FileExists(name);
 }
 
 bool FileWrite(std::string name, const void* data, size_t length) {
 	if(!g_Steam || name.empty()) return false;
 
-	return SteamRemoteStorage()->FileWrite(name.c_str(), data, length);
+	return g_Steam->FileWrite(name, data, length);
 }
 
 bool FileRead(std::string name, std::string& result) {
 	if(!g_Steam || name.empty()) return false;
 
-	uint32 size = SteamRemoteStorage()->GetFileSize(name.c_str());
-	char* data = new char[size];
-	bool ret = SteamRemoteStorage()->FileRead(name.c_str(), data, size);
+	char* data = NULL;
+	bool size = g_Steam->FileRead(name, data);
 	result = std::string(data, size);
 	delete data;
 
-	return ret;
+	return (size != 0);
 }
 
 bool FileDelete(std::string name) {
 	if(!g_Steam || name.empty()) return false;
 
-	return SteamRemoteStorage()->FileDelete(name.c_str());
+	return g_Steam->FileDelete(name);
 }
 
 bool IsCloudEnabledForApp() {
 	if(!g_Steam) return false;
 
-	return SteamRemoteStorage()->IsCloudEnabledForApp();
+	return g_Steam->IsCloudEnabledForApp();
 }
 
 bool SetCloudEnabledForApp(bool enabled) {
 	if(!g_Steam) return false;
 
-	SteamRemoteStorage()->SetCloudEnabledForApp(enabled);
-
-	return (enabled == SteamRemoteStorage()->IsCloudEnabledForApp());
+	return g_Steam->SetCloudEnabledForApp(enabled);
 }
 
 void callAPI(APIFunc id) {
