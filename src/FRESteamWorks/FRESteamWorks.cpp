@@ -91,9 +91,9 @@ FREObject AIRSteam_UseCrashHandler(FREContext ctx, void* funcData, uint32_t argc
 		return FREBool(false);
 
 	std::string version, date, time;
-	if(FREGetString(argv[1], version) != FRE_OK) return FREBool(false);
-	if(FREGetString(argv[2], date) != FRE_OK) return FREBool(false);
-	if(FREGetString(argv[3], time) != FRE_OK) return FREBool(false);
+	if(!FREGetString(argv[1], version)) return FREBool(false);
+	if(!FREGetString(argv[2], date)) return FREBool(false);
+	if(!FREGetString(argv[3], time)) return FREBool(false);
 
 	SteamAPI_SetBreakpadAppID(SteamUtils()->GetAppID());
 	SteamAPI_UseBreakpadCrashHandler(version.c_str(), date.c_str(), time.c_str(),
@@ -119,9 +119,8 @@ FREObject AIRSteam_SetAchievement(FREContext ctx, void* funcData, uint32_t argc,
 
 	bool ret = false;
 	std::string name;
-	if(FREGetString(argv[0], name) == FRE_OK) {
+	if(FREGetString(argv[0], name))
 		ret = g_Steam->SetAchievement(name);
-	}
 
 	SteamAPI_RunCallbacks();
 	return FREBool(ret);
@@ -131,7 +130,7 @@ FREObject AIRSteam_ClearAchievement(FREContext ctx, void* funcData, uint32_t arg
 	if (!g_Steam || argc != 1) return FREBool(false);
 
 	std::string name;
-	if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
+	if(!FREGetString(argv[0], name)) return FREBool(false);
 
 	return FREBool(g_Steam->ClearAchievement(name));
 }
@@ -140,7 +139,7 @@ FREObject AIRSteam_IsAchievement(FREContext ctx, void* funcData, uint32_t argc, 
 	if (!g_Steam || argc != 1) return FREBool(false);
 
 	std::string name;
-	if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
+	if(!FREGetString(argv[0], name)) return FREBool(false);
 
 	return FREBool(g_Steam->IsAchievement(name));
 }
@@ -149,7 +148,7 @@ FREObject AIRSteam_GetStatInt(FREContext ctx, void* funcData, uint32_t argc, FRE
 	if (!g_Steam || argc != 1) return FREInt(0);
 
 	std::string name;
-	if(FREGetString(argv[0], name) != FRE_OK) return FREInt(0);
+	if(!FREGetString(argv[0], name)) return FREInt(0);
 
 	int32 value = 0;
 	g_Steam->GetStat(name, &value);
@@ -160,7 +159,7 @@ FREObject AIRSteam_GetStatFloat(FREContext ctx, void* funcData, uint32_t argc, F
 	if (!g_Steam || argc != 1) return FREFloat(0.0);
 
 	std::string name;
-	if(FREGetString(argv[0], name) != FRE_OK) return FREFloat(0.0);
+	if(!FREGetString(argv[0], name)) return FREFloat(0.0);
 
 	float value = 0.0f;
 	g_Steam->GetStat(name, &value);
@@ -182,7 +181,7 @@ FREObject AIRSteam_SetStatFloat(FREContext ctx, void* funcData, uint32_t argc, F
 	if (!g_Steam || argc != 2) return FREBool(false);
 
 	std::string name;
-	if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
+	if(!FREGetString(argv[0], name)) return FREBool(false);
 
 	double value;
 	if (FREGetObjectAsDouble(argv[1], &value) != FRE_OK) return FREBool(false);
@@ -217,7 +216,7 @@ FREObject AIRSteam_GetFileSize(FREContext ctx, void* funcData, uint32_t argc, FR
 	if (!g_Steam || argc != 1) return FREInt(0);
 
 	std::string name;
-	if(FREGetString(argv[0], name) != FRE_OK) return FREInt(0);
+	if(!FREGetString(argv[0], name)) return FREInt(0);
 
 	return FREInt(g_Steam->GetFileSize(name));
 }
@@ -226,7 +225,7 @@ FREObject AIRSteam_FileExists(FREContext ctx, void* funcData, uint32_t argc, FRE
 	if (!g_Steam || argc != 1) return FREBool(false);
 
 	std::string name;
-	if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
+	if(!FREGetString(argv[0], name)) return FREBool(false);
 
 	return FREBool(g_Steam->FileExists(name));
 }
@@ -235,7 +234,7 @@ FREObject AIRSteam_FileWrite(FREContext ctx, void* funcData, uint32_t argc, FREO
 	if (!g_Steam || argc != 2) return FREBool(false);
 
 	std::string name;
-	if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
+	if(!FREGetString(argv[0], name)) return FREBool(false);
 
 	FREByteArray byteArray;
 	if (FREAcquireByteArray(argv[1], &byteArray) != FRE_OK)
@@ -251,7 +250,7 @@ FREObject AIRSteam_FileRead(FREContext ctx, void* funcData, uint32_t argc, FREOb
 	if (!g_Steam || argc != 2) return FREBool(false);
 
 	std::string name;
-	if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
+	if(!FREGetString(argv[0], name)) return FREBool(false);
 
 	FREByteArray byteArray;
 	if (FREAcquireByteArray(argv[1], &byteArray) != FRE_OK)
@@ -274,7 +273,7 @@ FREObject AIRSteam_FileDelete(FREContext ctx, void* funcData, uint32_t argc, FRE
 	if (!g_Steam || argc != 1) return FREBool(false);
 
 	std::string name;
-	if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
+	if(!FREGetString(argv[0], name)) return FREBool(false);
 
 	return FREBool(g_Steam->FileDelete(name));
 }

@@ -28,7 +28,7 @@ FREObject FREBool(bool);
 FREObject FREInt(int32);
 FREObject FREFloat(float);
 FREObject FREString(std::string);
-bool FREGetString(FREObject);
+bool FREGetString(FREObject, std::string&);
 
 class ANESteam : public CSteam {
 	void DispatchEvent(char* code, char* level);
