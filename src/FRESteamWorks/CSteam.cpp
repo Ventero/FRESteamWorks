@@ -135,19 +135,20 @@ bool CSteam::FileWrite(std::string name, const void* data, int32 length) {
 }
 
 // caller is responsible of deleting data when return value is != 0
-int32 CSteam::FileRead(std::string name, char* data) {
+int32 CSteam::FileRead(std::string name, char** content) {
 	if (!m_bInitialized) return 0;
 
 	int32 size = SteamRemoteStorage()->GetFileSize(name.c_str());
 	if (size == 0) return 0;
 
-	data = new char[size];
+	char* data = new char[size];
 	int32 read = SteamRemoteStorage()->FileRead(name.c_str(), data, size);
 	if(read == 0) {
 		delete data;
 		return 0;
 	}
 
+	*content = data;
 	return read;
 }
 

@@ -258,7 +258,7 @@ FREObject AIRSteam_FileRead(FREContext ctx, void* funcData, uint32_t argc, FREOb
 
 	bool ret = false;
 	char* data = NULL;
-	uint32 size = g_Steam->FileRead(name, data);
+	uint32 size = g_Steam->FileRead(name, &data);
 	if (size > 0 && size <= byteArray.length) {
 		ret = true;
 		memcpy(byteArray.bytes, data, size);

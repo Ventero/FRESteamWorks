@@ -199,11 +199,15 @@ bool FileRead(std::string name, std::string& result) {
 	if(!g_Steam || name.empty()) return false;
 
 	char* data = NULL;
-	bool size = g_Steam->FileRead(name, data);
+	int32 size = g_Steam->FileRead(name, &data);
+	if (size == 0) {
+		result = "";
+		return false;
+	}
+
 	result = std::string(data, size);
 	delete data;
-
-	return (size != 0);
+	return true;
 }
 
 bool FileDelete(std::string name) {

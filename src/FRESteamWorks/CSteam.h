@@ -68,7 +68,7 @@ public:
 	int32 GetFileSize(std::string name);
 	bool FileExists(std::string name);
 	bool FileWrite(std::string name, const void* data, int32 length);
-	int32 FileRead(std::string name, char* data);
+	int32 FileRead(std::string name, char** data);
 	bool FileDelete(std::string name);
 	bool IsCloudEnabledForApp();
 	bool SetCloudEnabledForApp(bool enabled);
