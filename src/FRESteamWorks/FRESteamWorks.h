@@ -19,9 +19,7 @@
 #include <string>
 
 #include <FlashRuntimeExtensions.h>
-
 #include <steam_api.h>
-#include <isteamremotestorage.h>
 
 #include "CSteam.h"
 
