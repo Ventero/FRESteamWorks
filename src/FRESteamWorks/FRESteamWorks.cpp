@@ -84,7 +84,7 @@ FREObject AIRSteam_GetPersonaName(FREContext ctx, void* funcData, uint32_t argc,
 }
 
 FREObject AIRSteam_UseCrashHandler(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-	if (argc != 4) return false;
+	if (argc != 4) return FREBool(false);
 
 	int32 appID = 0;
 	if (FREGetObjectAsInt32(argv[0], &appID) != FRE_OK)
@@ -238,7 +238,7 @@ FREObject AIRSteam_FileWrite(FREContext ctx, void* funcData, uint32_t argc, FREO
 
 	FREByteArray byteArray;
 	if (FREAcquireByteArray(argv[1], &byteArray) != FRE_OK)
-		return false;
+		return FREBool(false);
 
 	bool ret = g_Steam->FileWrite(name, byteArray.bytes, byteArray.length);
 	FREReleaseByteArray(argv[1]);
