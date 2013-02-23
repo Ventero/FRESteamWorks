@@ -17,7 +17,6 @@
 #endif
 
 #include <string>
-#include <stdlib.h>
 
 #include <FlashRuntimeExtensions.h>
 

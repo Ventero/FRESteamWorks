@@ -260,10 +260,10 @@ FREObject AIRSteam_FileRead(FREContext ctx, void* funcData, uint32_t argc, FREOb
 	uint32 size = SteamRemoteStorage()->GetFileSize(name.c_str());
 	int32 ret = 0;
 	if (size > 0 && size <= byteArray.length) {
-		char* data = (char*)malloc(size);
+		char* data = new char[size];
 		ret = SteamRemoteStorage()->FileRead(name.c_str(), data, size);
 		memcpy(byteArray.bytes, data, size);
-		free(data);
+		delete data;
 	}
 	FREReleaseByteArray(argv[1]);
 

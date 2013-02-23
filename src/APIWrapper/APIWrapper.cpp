@@ -199,10 +199,10 @@ bool FileRead(std::string name, std::string& result) {
 	if(!g_Steam || name.empty()) return false;
 
 	int32 size = SteamRemoteStorage()->GetFileSize(name.c_str());
-	char* data = (char*)malloc(size);
+	char* data = new char[size];
 	bool ret = SteamRemoteStorage()->FileRead(name.c_str(), data, size);
 	result = std::string(data, size);
-	free(data);
+	delete data;
 
 	return ret;
 }
