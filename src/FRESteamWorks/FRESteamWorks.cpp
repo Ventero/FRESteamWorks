@@ -95,7 +95,7 @@ FREObject AIRSteam_UseCrashHandler(FREContext ctx, void* funcData, uint32_t argc
 	if(!FREGetString(argv[2], date)) return FREBool(false);
 	if(!FREGetString(argv[3], time)) return FREBool(false);
 
-	SteamAPI_SetBreakpadAppID(SteamUtils()->GetAppID());
+	SteamAPI_SetBreakpadAppID(appID);
 	SteamAPI_UseBreakpadCrashHandler(version.c_str(), date.c_str(), time.c_str(),
 		false, NULL, NULL);
 	return FREBool(true);
