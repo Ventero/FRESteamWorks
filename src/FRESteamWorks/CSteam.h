@@ -45,7 +45,7 @@ protected:
 
 public:
 	CSteam();
-	~CSteam();
+	virtual ~CSteam();
 
 	// general stuff
 	bool RequestStats();
