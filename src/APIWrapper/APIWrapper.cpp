@@ -198,7 +198,7 @@ bool FileWrite(std::string name, const void* data, size_t length) {
 bool FileRead(std::string name, std::string& result) {
 	if(!g_Steam || name.empty()) return false;
 
-	int32 size = SteamRemoteStorage()->GetFileSize(name.c_str());
+	uint32 size = SteamRemoteStorage()->GetFileSize(name.c_str());
 	char* data = new char[size];
 	bool ret = SteamRemoteStorage()->FileRead(name.c_str(), data, size);
 	result = std::string(data, size);
