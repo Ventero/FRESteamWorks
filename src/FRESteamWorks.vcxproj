@@ -93,12 +93,12 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CSteam.cpp" />
-    <ClCompile Include="FRESteamWorks.cpp" />
+    <ClCompile Include="FRESteamWorks\CSteam.cpp" />
+    <ClCompile Include="FRESteamWorks\FRESteamWorks.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CSteam.h" />
-    <ClInclude Include="FRESteamWorks.h" />
+    <ClInclude Include="FRESteamWorks\CSteam.h" />
+    <ClInclude Include="FRESteamWorks\FRESteamWorks.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
