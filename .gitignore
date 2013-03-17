@@ -2,6 +2,7 @@ NativeApps
 src/APIWrapper/APIWrapper
 test/bin-debug/FRESteamWorksTest
 test/bin-debug/FRESteamWorksTest.app
+test/bin-debug/adt*.tmp
 
 *.suo
 *.user
