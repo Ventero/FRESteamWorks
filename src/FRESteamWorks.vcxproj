@@ -64,6 +64,9 @@
       <AdditionalLibraryDirectories>$(USERPROFILE)\Documents\AdobeAIRSDK\lib\win;$(USERPROFILE)\Documents\Steam\sdk\redistributable_bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>steam_api.lib;FlashRuntimeExtensions.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(TargetPath)" "$(SolutionDir)..\lib\bin\" /Y &amp;&amp;  cd "$(SolutionDir)..\lib\bin\" &amp;&amp; echo Compiling ANE... &amp;&amp; "$(SolutionDir)..\lib\bin\compileANE.bat" &amp;&amp; echo done</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
