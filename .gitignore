@@ -1,4 +1,5 @@
 NativeApps
+builds
 src/APIWrapper/APIWrapper
 test/bin-debug/FRESteamWorksTest
 test/bin-debug/FRESteamWorksTest.app

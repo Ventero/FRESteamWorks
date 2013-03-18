@@ -12,6 +12,15 @@ It also includes a small test application (in test/src/), which tests the basic
 Steamworks API functions. It uses app id 480, which is the example application from
 the Steamworks SDK.
 
+# Download #
+
+A pre-built ANE (containing the Windows dll and OS X dylib) as well as the
+Linux SWC can be found on http://dump.ventero.de/FRESteamWorks/
+
+# Documentation #
+
+Coming soon!
+
 ---
 
 # License #
