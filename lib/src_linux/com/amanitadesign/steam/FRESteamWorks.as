@@ -30,7 +30,9 @@ package com.amanitadesign.steam {
 		private var _file:File;
 		private var _process:NativeProcess;
 		private var _tm:int;
+		private var _init:Boolean = false;
 		private var _error:Boolean = false;
+		private var _crashHandlerArgs:Array = null;
 
 		public var isReady:Boolean = false;
 
@@ -106,6 +108,18 @@ package com.amanitadesign.steam {
 			}
 			if(!_process.running) return false;
 			if(_process.standardError.bytesAvailable > 0) return false;
+
+			// initialization seems to be successful
+			_init = true;
+
+			// UseCrashHandler has to be called before Steam_Init
+			// but we still have to make sure the process is actually running
+			// so FRESteamWorks#useCrashHandler just sets _crashHandlerArgs
+			// and the actual call is handled here
+			if(_crashHandlerArgs) {
+				if(!callWrapper(AIRSteam_UseCrashHandler, _crashHandlerArgs))
+					return false;
+			}
 
 			if(!callWrapper(AIRSteam_Init)) return false;
 			isReady = readBoolResponse();
@@ -234,8 +248,10 @@ package com.amanitadesign.steam {
 		}
 
 		public function useCrashHandler(appID:uint, version:String, date:String, time:String):Boolean {
-			if(!callWrapper(AIRSteam_UseCrashHandler, [appID, version, date, time])) return false;
-			return readBoolResponse();
+			// only allow calls before SteamAPI_Init was called
+			if(_init) return false;
+			_crashHandlerArgs = [appID, version, date, time];
+			return true;
 		}
 
 		public function setAchievement(id:String):Boolean {

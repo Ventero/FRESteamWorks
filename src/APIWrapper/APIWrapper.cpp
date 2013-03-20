@@ -99,14 +99,12 @@ std::string GetPersonaName() {
 	return g_Steam->GetPersonaName();
 }
 
-bool UseCrashHandler(uint32 appID, std::string version, std::string date, std::string time) {
-	if (!g_Steam) return false;
+void UseCrashHandler(uint32 appID, std::string version, std::string date, std::string time) {
+	if (!g_Steam) return;
 
 	SteamAPI_SetBreakpadAppID(appID);
 	SteamAPI_UseBreakpadCrashHandler(version.c_str(), date.c_str(), time.c_str(),
 		false, NULL, NULL);
-
-	return true;
 }
 
 bool SetAchievement(std::string name) {
@@ -358,7 +356,7 @@ void callAPI(APIFunc id) {
 				std::string version = get_string(false);
 				std::string date = get_string(false);
 				std::string time = get_string(false);
-				send(UseCrashHandler(appID, version, date, time));
+				UseCrashHandler(appID, version, date, time);
 			}
 			return;
 
@@ -381,4 +379,5 @@ int main(int argc, char** argv) {
 	}
 	SteamAPI_Shutdown();
 	delete g_Steam;
+	return 0;
 }
