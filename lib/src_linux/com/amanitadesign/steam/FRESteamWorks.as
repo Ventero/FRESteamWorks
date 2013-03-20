@@ -84,8 +84,28 @@ package com.amanitadesign.steam {
 
 		public function init():Boolean {
 			if(!_file.exists) return false;
-			startProcess();
+
+			try {
+				startProcess();
+			} catch(e:Error) {
+				return false;
+			}
+
+			// try to start the process a second time, but this time ignoring any
+			// potential errors. this seems to give the runtime enough time to check
+			// for any stderr output of the initial call to startProcess(), so that we
+			// now can check if it actually started. process.running is unreliable,
+			// in that it's always set to true, even if the process didn't start at all
+			// in case it couldn't load one of the libraries it depends on, it prints
+			// something like "error while loading shared libraries" to stderr,
+			// which we're trying to detect here
+			try {
+				startProcess();
+			} catch(e:Error) {
+				// no-op
+			}
 			if(!_process.running) return false;
+			if(_process.standardError.bytesAvailable > 0) return false;
 
 			if(!callWrapper(AIRSteam_Init)) return false;
 			isReady = readBoolResponse();
