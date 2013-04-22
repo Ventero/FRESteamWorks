@@ -39,36 +39,37 @@ package
 			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
 			try {
 				Steamworks.useCrashHandler(480, "1.0", "Feb 20 2013", "21:42:20");
-				if(Steamworks.init()){
-					log("STEAMWORKS API is available\n");
-					log("User ID: " + Steamworks.getUserID());
-					log("Persona name: " + Steamworks.getPersonaName());
-
-					//comment.. current stats and achievement ids are from steam example app which is provided with their SDK
-					log("isAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.isAchievement("ACH_WIN_ONE_GAME"));
-					log("isAchievement('ACH_TRAVEL_FAR_SINGLE') == "+Steamworks.isAchievement("ACH_TRAVEL_FAR_SINGLE"));
-					log("setStatFloat('FeetTraveled') == "+Steamworks.setStatFloat('FeetTraveled', 21.3));
-					log("setStatInt('NumGames', 2) == "+Steamworks.setStatInt('NumGames', 2));
-					Steamworks.storeStats();
-					log("getStatInt('NumGames') == "+Steamworks.getStatInt('NumGames'));
-					log("getStatFloat('FeetTraveled') == "+Steamworks.getStatFloat('FeetTraveled'));
-
-					log("setCloudEnabledForApp(false) == "+Steamworks.setCloudEnabledForApp(false) );
-					log("setCloudEnabledForApp(true) == "+Steamworks.setCloudEnabledForApp(true) );
-					log("isCloudEnabledForApp() == "+Steamworks.isCloudEnabledForApp() );
-					log("getFileCount() == "+Steamworks.getFileCount() );
-					log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt') );
-
-					//comment.. writing to app with id 480 is somehow not working, but works with our real appId
-					log("writeFileToCloud('test.txt','hello steam') == "+writeFileToCloud('test.txt','hello steam'));
-					log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
-					//-----------
-
-					//Steamworks.requestStats();
-					Steamworks.resetAllStats(true);
-				}else {
+				if(!Steamworks.init()){
 					tf.appendText("STEAMWORKS API is NOT available\n");
+					return;
 				}
+
+				log("STEAMWORKS API is available\n");
+				log("User ID: " + Steamworks.getUserID());
+				log("Persona name: " + Steamworks.getPersonaName());
+
+				//comment.. current stats and achievement ids are from steam example app which is provided with their SDK
+				log("isAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.isAchievement("ACH_WIN_ONE_GAME"));
+				log("isAchievement('ACH_TRAVEL_FAR_SINGLE') == "+Steamworks.isAchievement("ACH_TRAVEL_FAR_SINGLE"));
+				log("setStatFloat('FeetTraveled') == "+Steamworks.setStatFloat('FeetTraveled', 21.3));
+				log("setStatInt('NumGames', 2) == "+Steamworks.setStatInt('NumGames', 2));
+				Steamworks.storeStats();
+				log("getStatInt('NumGames') == "+Steamworks.getStatInt('NumGames'));
+				log("getStatFloat('FeetTraveled') == "+Steamworks.getStatFloat('FeetTraveled'));
+
+				log("setCloudEnabledForApp(false) == "+Steamworks.setCloudEnabledForApp(false) );
+				log("setCloudEnabledForApp(true) == "+Steamworks.setCloudEnabledForApp(true) );
+				log("isCloudEnabledForApp() == "+Steamworks.isCloudEnabledForApp() );
+				log("getFileCount() == "+Steamworks.getFileCount() );
+				log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt') );
+
+				//comment.. writing to app with id 480 is somehow not working, but works with our real appId
+				log("writeFileToCloud('test.txt','hello steam') == "+writeFileToCloud('test.txt','hello steam'));
+				log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
+				//-----------
+
+				//Steamworks.requestStats();
+				Steamworks.resetAllStats(true);
 			} catch(e:Error) {
 				tf.appendText("*** ERROR ***");
 				tf.appendText(e.message + "\n");
@@ -100,22 +101,23 @@ package
 
 		public function onClick(e:MouseEvent):void{
 			log("--click--");
-			if(Steamworks.isReady){
-				if(!Steamworks.isAchievement("ACH_WIN_ONE_GAME")) {
-					log("setAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.setAchievement("ACH_WIN_ONE_GAME"));
-				} else {
-					log("clearAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.clearAchievement("ACH_WIN_ONE_GAME"));
-				}
-				if(Steamworks.fileExists('test.txt')){
-					log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
-					log("Steamworks.fileDelete('test.txt') == "+Steamworks.fileDelete('test.txt'));
-				} else {
-					log("writeFileToCloud('test.txt','click') == "+writeFileToCloud('test.txt','click'));
-				}
-				//Steamworks.storeStats();
-			} else {
+			if(!Steamworks.isReady){
 				log("not able to set achievement\n");
+				return;
 			}
+
+			if(!Steamworks.isAchievement("ACH_WIN_ONE_GAME")) {
+				log("setAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.setAchievement("ACH_WIN_ONE_GAME"));
+			} else {
+				log("clearAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.clearAchievement("ACH_WIN_ONE_GAME"));
+			}
+			if(Steamworks.fileExists('test.txt')){
+				log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
+				log("Steamworks.fileDelete('test.txt') == "+Steamworks.fileDelete('test.txt'));
+			} else {
+				log("writeFileToCloud('test.txt','click') == "+writeFileToCloud('test.txt','click'));
+			}
+			//Steamworks.storeStats();
 		}
 
 		public function onSteamResponse(e:SteamEvent):void{
