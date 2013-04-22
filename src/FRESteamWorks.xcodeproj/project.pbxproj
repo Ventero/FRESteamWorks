@@ -181,7 +181,7 @@
 				GCC_PREFIX_HEADER = "FRESteamWorks/FRESteamWorks-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
-					STEAM_API_EXPORTS,
+					USE_BREAKPAD_HANDLER,
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
@@ -239,7 +239,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FRESteamWorks/FRESteamWorks-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					STEAM_API_EXPORTS,
+					USE_BREAKPAD_HANDLER,
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;

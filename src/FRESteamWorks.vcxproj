@@ -54,7 +54,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>STEAM_API_EXPORTS;WIN32;_DEBUG;_WINDOWS;_USRDLL;AIRICUEXTENSION_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_BREAKPAD_HANDLER;WIN32;_DEBUG;_WINDOWS;_USRDLL;AIRICUEXTENSION_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(USERPROFILE)\Documents\AdobeAIRSDK\include;$(USERPROFILE)\Documents\Steam\sdk\public\steam;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -76,7 +76,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>STEAM_API_EXPORTS;WIN32;NDEBUG;_WINDOWS;_USRDLL;AIRICUEXTENSION_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_BREAKPAD_HANDLER;WIN32;NDEBUG;_WINDOWS;_USRDLL;AIRICUEXTENSION_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(USERPROFILE)\Documents\AdobeAIRSDK\include;$(USERPROFILE)\Documents\Steam\sdk\public\steam;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
