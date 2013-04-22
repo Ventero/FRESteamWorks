@@ -94,13 +94,14 @@ package com.amanitadesign.steam {
 			}
 
 			// try to start the process a second time, but this time ignoring any
-			// potential errors. this seems to give the runtime enough time to check
+			// potential errors since we will definitely get one about the process
+			// already running. this seems to give the runtime enough time to check
 			// for any stderr output of the initial call to startProcess(), so that we
-			// now can check if it actually started. process.running is unreliable,
-			// in that it's always set to true, even if the process didn't start at all
-			// in case it couldn't load one of the libraries it depends on, it prints
-			// something like "error while loading shared libraries" to stderr,
-			// which we're trying to detect here
+			// now can check if it actually started: in case it couldn't one of the
+			// libraries it depends on, it prints something like "error while loading
+			// shared libraries" to stderr, which we're trying to detect here.
+			// process.running is unreliable, in that it's always set to true,
+			// even if the process didn't start at all
 			try {
 				startProcess();
 			} catch(e:Error) {
