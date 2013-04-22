@@ -63,6 +63,10 @@ package
 				log("getFileCount() == "+Steamworks.getFileCount() );
 				log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt') );
 
+				if(Steamworks.fileExists('test.txt')) {
+					log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
+				}
+
 				//comment.. writing to app with id 480 is somehow not working, but works with our real appId
 				log("writeFileToCloud('test.txt','hello steam') == "+writeFileToCloud('test.txt','hello steam'));
 				log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
@@ -111,6 +115,7 @@ package
 			} else {
 				log("clearAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.clearAchievement("ACH_WIN_ONE_GAME"));
 			}
+
 			if(Steamworks.fileExists('test.txt')){
 				log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
 				log("Steamworks.fileDelete('test.txt') == "+Steamworks.fileDelete('test.txt'));
