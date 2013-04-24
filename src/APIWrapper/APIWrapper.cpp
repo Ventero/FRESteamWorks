@@ -29,6 +29,7 @@ void send(float value) {
 }
 
 void send(std::string value) {
+	std::cout << value.length() << std::endl;
 	std::cout << value << std::flush;
 }
 
@@ -368,6 +369,7 @@ void callAPI(APIFunc id) {
 }
 
 int main(int argc, char** argv) {
+	std::ios::sync_with_stdio(false);
 	while(std::cin.good()) {
 		std::string buf;
 		std::getline(std::cin, buf);

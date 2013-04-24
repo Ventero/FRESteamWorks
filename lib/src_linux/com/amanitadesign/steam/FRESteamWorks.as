@@ -206,11 +206,22 @@ package com.amanitadesign.steam {
 
 		private function readStringResponse():String {
 			if(!_process.running) return "";
+
 			var stdout:IDataInput = _process.standardOutput;
 			var avail:uint = waitForData(stdout);
 
-			var response:String = stdout.readUTFBytes(avail)
-			return response;
+			var data:String = stdout.readUTFBytes(avail)
+			var newline:uint = data.indexOf("\n");
+			var buf:String = data.substring(newline);
+			var length:uint = parseInt(data.substring(0, newline), 10);
+			trace("Waiting for " + length + " bytes");
+
+			while(buf.length < length) {
+				avail = waitForData(stdout);
+				buf += stdout.readUTFBytes(avail);
+			}
+
+			return buf;
 		}
 
 		private function eventDispatched(e:ProgressEvent):void {
