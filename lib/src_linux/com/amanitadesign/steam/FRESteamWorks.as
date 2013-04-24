@@ -212,7 +212,7 @@ package com.amanitadesign.steam {
 
 			var data:String = stdout.readUTFBytes(avail)
 			var newline:uint = data.indexOf("\n");
-			var buf:String = data.substring(newline);
+			var buf:String = data.substring(newline + 1);
 			var length:uint = parseInt(data.substring(0, newline), 10);
 
 			while(buf.length < length) {
