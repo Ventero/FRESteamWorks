@@ -214,7 +214,6 @@ package com.amanitadesign.steam {
 			var newline:uint = data.indexOf("\n");
 			var buf:String = data.substring(newline);
 			var length:uint = parseInt(data.substring(0, newline), 10);
-			trace("Waiting for " + length + " bytes");
 
 			while(buf.length < length) {
 				avail = waitForData(stdout);
