@@ -8,8 +8,7 @@ install_name_tool -change \
     ./FRESteamWorks.framework/FRESteamWorks
 
 "$FLEX_SDK/bin/compc" +configname=air -source-path ../src -optimize \
-                      -include-classes com.amanitadesign.steam.FRESteamWorks \
-                                       com.amanitadesign.steam.SteamConstants \
+                      -include-sources ../src/ \
                       -swf-version=11 -output FRESteamWorksLib.swc
 
 unzip -o FRESteamWorksLib.swc

@@ -13,6 +13,7 @@ package
 	import com.amanitadesign.steam.FRESteamWorks;
 	import com.amanitadesign.steam.SteamConstants;
 	import com.amanitadesign.steam.SteamEvent;
+	import com.amanitadesign.steam.WorkshopConstants;
 
 	import flash.desktop.NativeApplication;
 	import flash.display.SimpleButton;
@@ -63,14 +64,24 @@ package
 				log("getFileCount() == "+Steamworks.getFileCount() );
 				log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt') );
 
-				if(Steamworks.fileExists('test.txt')) {
-					log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
+				/*
+				if(Steamworks.fileExists('SAVE_SLOT_1.dfq')) {
+					var str:String = readFileFromCloud('SAVE_SLOT_1.dfq');
+					log("readFileFromCloud('test.txt') == "+ str.length + " - " + str);
+					log("Xml? " + XML(str).children().length());
 				}
+				*/
 
 				//comment.. writing to app with id 480 is somehow not working, but works with our real appId
 				log("writeFileToCloud('test.txt','hello steam') == "+writeFileToCloud('test.txt','hello steam'));
 				log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
 				//-----------
+
+				// UGC / workshop stuff
+				var res:Boolean = Steamworks.publishWorkshopFile("test.txt", null, 480,
+					"Test.txt", "Test.txt", WorkshopConstants.VISIBILITY_Private,
+					WorkshopConstants.FILETYPE_Community);
+				log("publishWorkshopFile('test.txt' ...) == " + res);
 
 				//Steamworks.requestStats();
 				Steamworks.resetAllStats(true);

@@ -29,6 +29,12 @@ FREObject FREInt(int32 value) {
 	return result;
 }
 
+FREObject FREUint(uint32 value) {
+	FREObject result;
+	FRENewObjectFromUint32(value, &result);
+	return result;
+}
+
 FREObject FREFloat(float value) {
 	FREObject result;
 	FRENewObjectFromDouble(value, &result);
@@ -41,6 +47,24 @@ FREObject FREString(std::string value) {
 	return result;
 }
 
+FREObject FREString(const char* value) {
+	return FREString(std::string(value));
+}
+
+FREObject FREUint64(uint64 value) {
+	std::stringstream stream;
+	stream << value;
+	return FREString(stream.str());
+}
+
+FREObject FREArray(uint32_t length) {
+	FREObject array;
+	FRENewObject((const uint8_t*)"Array", 0, NULL, &array, NULL);
+	FRESetArrayLength(array, length);
+
+	return array;
+}
+
 bool FREGetString(FREObject object, std::string& str) {
 	uint32_t len;
 	const uint8_t* data;
@@ -51,12 +75,74 @@ bool FREGetString(FREObject object, std::string& str) {
 	return true;
 }
 
+bool FREGetBool(FREObject object, uint32* val) {
+	return (FREGetObjectAsBool(object, val) == FRE_OK);
+}
+
+bool FREGetDouble(FREObject object, double* val) {
+	return (FREGetObjectAsDouble(object, val) == FRE_OK);
+}
+
+bool FREGetInt32(FREObject object, int32* val) {
+	return (FREGetObjectAsInt32(object, val) == FRE_OK);
+}
+
+bool FREGetUint32(FREObject object, uint32* val) {
+	// really, Adobe ...?
+#ifdef LINUX
+	return (FREGetObjectAsUInt32(object, val) == FRE_OK);
+#else
+	return (FREGetObjectAsUint32(object, val) == FRE_OK);
+#endif
+}
+
+bool FREGetUint64(FREObject object, uint64* val) {
+	std::string str;
+	if(!FREGetString(object, str)) return false;
+
+	// Clang doesn't support std::stoull yet...
+	std::istringstream ss(str);
+	if(!(ss >> *val)) return false;
+
+	return true;
+}
+
+// extracts a SteamParamStringArray_t out of an FREObject
+// remember to delete[] tagArray->m_ppStrings afterwards
+bool extractParamStringArray(FREObject object, SteamParamStringArray_t* tagArray) {
+	uint32 arrayLength;
+	if (FREGetArrayLength(object, &arrayLength) != FRE_OK) return false;
+
+	std::vector<std::string> tags;
+	tags.reserve(arrayLength);
+	for (uint32 i = 0; i < arrayLength; ++i) {
+		FREObject value;
+		if (FREGetArrayElementAt(object, i, &value) != FRE_OK)
+			return false;
+
+		std::string strval;
+		if (!FREGetString(value, strval)) return false;
+
+		tags.push_back(strval);
+	}
+
+	const char** tagstrings = new const char*[arrayLength];
+	for (uint32 i = 0; i < arrayLength; ++i) {
+		tagstrings[i] = tags[i].c_str();
+	}
+
+	tagArray->m_nNumStrings = arrayLength;
+	tagArray->m_ppStrings = tagstrings;
+
+	return true;
+}
+
 void ANESteam::DispatchEvent(char* code, char* level) {
 	// ignore unsuccessful dispatches
 	FREDispatchStatusEventAsync(AIRContext, (const uint8_t*)code, (const uint8_t*)level);
 }
 
-FREObject AIRSteam_Init(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_Init) {
 	// check if already initialized
 	if (g_Steam) return FREBool(true);
 
@@ -66,34 +152,33 @@ FREObject AIRSteam_Init(FREContext ctx, void* funcData, uint32_t argc, FREObject
 	return FREBool(ret);
 }
 
-FREObject AIRSteam_RunCallbacks(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_RunCallbacks) {
 	SteamAPI_RunCallbacks();
-	return NULL;
+	return FREBool(true);
 }
 
-FREObject AIRSteam_GetUserID(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_GetUserID) {
 	if(!g_Steam) return FREString("");
 
 	return FREString(g_Steam->GetUserID());
 }
 
-FREObject AIRSteam_GetPersonaName(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_GetPersonaName) {
 	if(!g_Steam) return FREString("");
 
 	return FREString(g_Steam->GetPersonaName());
 }
 
-FREObject AIRSteam_UseCrashHandler(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_UseCrashHandler) {
 	if (argc != 4) return FREBool(false);
 
-	int32 appID = 0;
-	if (FREGetObjectAsInt32(argv[0], &appID) != FRE_OK)
-		return FREBool(false);
+	uint32 appID = 0;
+	if (!FREGetUint32(argv[0], &appID)) return FREBool(false);
 
 	std::string version, date, time;
-	if(!FREGetString(argv[1], version)) return FREBool(false);
-	if(!FREGetString(argv[2], date)) return FREBool(false);
-	if(!FREGetString(argv[3], time)) return FREBool(false);
+	if (!FREGetString(argv[1], version)) return FREBool(false);
+	if (!FREGetString(argv[2], date)) return FREBool(false);
+	if (!FREGetString(argv[3], time)) return FREBool(false);
 
 	SteamAPI_SetBreakpadAppID(appID);
 	SteamAPI_UseBreakpadCrashHandler(version.c_str(), date.c_str(), time.c_str(),
@@ -102,7 +187,7 @@ FREObject AIRSteam_UseCrashHandler(FREContext ctx, void* funcData, uint32_t argc
 }
 
 
-FREObject AIRSteam_RequestStats(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_RequestStats) {
 	bool ret = false;
 	if (g_Steam) ret = g_Steam->RequestStats();
 
@@ -110,12 +195,8 @@ FREObject AIRSteam_RequestStats(FREContext ctx, void* funcData, uint32_t argc, F
 	return FREBool(ret);
 }
 
-FREObject AIRSteam_SetAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-	if (!g_Steam || argc != 1) {
-		// TODO: necessary to call this here?
-		SteamAPI_RunCallbacks();
-		return FREBool(false);
-	}
+AIR_FUNC(AIRSteam_SetAchievement) {
+	if (!g_Steam || argc != 1) return FREBool(false);
 
 	bool ret = false;
 	std::string name;
@@ -126,7 +207,7 @@ FREObject AIRSteam_SetAchievement(FREContext ctx, void* funcData, uint32_t argc,
 	return FREBool(ret);
 }
 
-FREObject AIRSteam_ClearAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_ClearAchievement) {
 	if (!g_Steam || argc != 1) return FREBool(false);
 
 	std::string name;
@@ -135,7 +216,7 @@ FREObject AIRSteam_ClearAchievement(FREContext ctx, void* funcData, uint32_t arg
 	return FREBool(g_Steam->ClearAchievement(name));
 }
 
-FREObject AIRSteam_IsAchievement(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_IsAchievement) {
 	if (!g_Steam || argc != 1) return FREBool(false);
 
 	std::string name;
@@ -144,7 +225,7 @@ FREObject AIRSteam_IsAchievement(FREContext ctx, void* funcData, uint32_t argc, 
 	return FREBool(g_Steam->IsAchievement(name));
 }
 
-FREObject AIRSteam_GetStatInt(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_GetStatInt) {
 	if (!g_Steam || argc != 1) return FREInt(0);
 
 	std::string name;
@@ -155,7 +236,7 @@ FREObject AIRSteam_GetStatInt(FREContext ctx, void* funcData, uint32_t argc, FRE
 	return FREInt(value);
 }
 
-FREObject AIRSteam_GetStatFloat(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_GetStatFloat) {
 	if (!g_Steam || argc != 1) return FREFloat(0.0);
 
 	std::string name;
@@ -166,53 +247,52 @@ FREObject AIRSteam_GetStatFloat(FREContext ctx, void* funcData, uint32_t argc, F
 	return FREFloat(value);
 }
 
-FREObject AIRSteam_SetStatInt(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_SetStatInt) {
 	if (!g_Steam || argc != 2) return FREBool(false);
 
 	std::string name;
-	if(FREGetString(argv[0], name) != FRE_OK) return FREBool(false);
+	if (!FREGetString(argv[0], name)) return FREBool(false);
 
 	int32 value;
-	if (FREGetObjectAsInt32(argv[1], &value) != FRE_OK) return FREBool(false);
+	if (!FREGetInt32(argv[1], &value)) return FREBool(false);
 
 	return FREBool(g_Steam->SetStat(name, value));
 }
-FREObject AIRSteam_SetStatFloat(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_SetStatFloat) {
 	if (!g_Steam || argc != 2) return FREBool(false);
 
 	std::string name;
 	if(!FREGetString(argv[0], name)) return FREBool(false);
 
 	double value;
-	if (FREGetObjectAsDouble(argv[1], &value) != FRE_OK) return FREBool(false);
+	if (!FREGetDouble(argv[1], &value)) return FREBool(false);
 
 	return FREBool(g_Steam->SetStat(name, (float)value));
 }
 
-FREObject AIRSteam_StoreStats(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_StoreStats) {
 	if (!g_Steam) return FREBool(false);
 
 	return FREBool(g_Steam->StoreStats());
 }
 
-FREObject AIRSteam_ResetAllStats(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_ResetAllStats) {
 	if (!g_Steam || argc != 1) return FREBool(false);
 
 	uint32_t achievementsToo;
-	if (FREGetObjectAsBool(argv[0], &achievementsToo) != FRE_OK)
-		return FREBool(false);
+	if (!FREGetBool(argv[0], &achievementsToo)) return FREBool(false);
 
 	return FREBool(g_Steam->ResetAllStats(achievementsToo != 0));
 }
 
 //Steam Cloud
-FREObject AIRSteam_GetFileCount(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_GetFileCount) {
 	if (!g_Steam) return FREInt(0);
 
 	return FREInt(g_Steam->GetFileCount());
 }
 
-FREObject AIRSteam_GetFileSize(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_GetFileSize) {
 	if (!g_Steam || argc != 1) return FREInt(0);
 
 	std::string name;
@@ -221,7 +301,7 @@ FREObject AIRSteam_GetFileSize(FREContext ctx, void* funcData, uint32_t argc, FR
 	return FREInt(g_Steam->GetFileSize(name));
 }
 
-FREObject AIRSteam_FileExists(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_FileExists) {
 	if (!g_Steam || argc != 1) return FREBool(false);
 
 	std::string name;
@@ -230,7 +310,7 @@ FREObject AIRSteam_FileExists(FREContext ctx, void* funcData, uint32_t argc, FRE
 	return FREBool(g_Steam->FileExists(name));
 }
 
-FREObject AIRSteam_FileWrite(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_FileWrite) {
 	if (!g_Steam || argc != 2) return FREBool(false);
 
 	std::string name;
@@ -246,7 +326,7 @@ FREObject AIRSteam_FileWrite(FREContext ctx, void* funcData, uint32_t argc, FREO
 	return FREBool(ret);
 }
 
-FREObject AIRSteam_FileRead(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_FileRead) {
 	if (!g_Steam || argc != 2) return FREBool(false);
 
 	std::string name;
@@ -269,7 +349,7 @@ FREObject AIRSteam_FileRead(FREContext ctx, void* funcData, uint32_t argc, FREOb
 	return FREBool(ret);
 }
 
-FREObject AIRSteam_FileDelete(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_FileDelete) {
 	if (!g_Steam || argc != 1) return FREBool(false);
 
 	std::string name;
@@ -278,20 +358,584 @@ FREObject AIRSteam_FileDelete(FREContext ctx, void* funcData, uint32_t argc, FRE
 	return FREBool(g_Steam->FileDelete(name));
 }
 
-FREObject AIRSteam_IsCloudEnabledForApp(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_FileShare) {
+	if (!g_Steam || argc != 1) return FREBool(false);
+
+	std::string name;
+	if(!FREGetString(argv[0], name)) return FREBool(false);
+
+	return FREBool(g_Steam->FileShare(name));
+}
+
+AIR_FUNC(AIRSteam_FileShareResult) {
+	ARG_CHECK(0, FREUint64(k_UGCHandleInvalid));
+
+	return FREUint64(g_Steam->FileShareResult());
+}
+
+AIR_FUNC(AIRSteam_IsCloudEnabledForApp) {
 	if (!g_Steam) return FREBool(false);
 
 	return FREBool(SteamRemoteStorage()->IsCloudEnabledForApp());
 }
 
-FREObject AIRSteam_SetCloudEnabledForApp(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+AIR_FUNC(AIRSteam_SetCloudEnabledForApp) {
 	if (!g_Steam || argc != 1) return FREBool(false);
 
 	uint32_t enabled = 0;
-	if (FREGetObjectAsBool(argv[0], &enabled) != FRE_OK)
-		return FREBool(false);
+	if (!FREGetBool(argv[0], &enabled)) return FREBool(false);
 
 	return FREBool(g_Steam->SetCloudEnabledForApp(enabled != 0));
+}
+
+AIR_FUNC(AIRSteam_GetQuota) {
+	if (!g_Steam) return FREObject();
+
+	int32 total, avail;
+	if(!g_Steam->GetQuota(&total, &avail)) return FREObject();
+
+	FREObject array = FREArray(2);
+	FRESetArrayElementAt(array, 0, FREInt(total));
+	FRESetArrayElementAt(array, 1, FREInt(avail));
+
+	return array;
+}
+
+AIR_FUNC(AIRSteam_UGCDownload) {
+	ARG_CHECK(2, FREBool(false));
+	if (!g_Steam || argc != 2) return FREBool(false);
+
+	UGCHandle_t handle;
+	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+
+	int32 priority;
+	if(!FREGetInt32(argv[1], &priority)) return FREBool(false);
+
+	return FREBool(g_Steam->UGCDownload(handle, priority));
+}
+
+AIR_FUNC(AIRSteam_UGCRead) {
+	ARG_CHECK(4, FREBool(false));
+
+	UGCHandle_t handle;
+	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+
+	int32 _size;
+	if(!FREGetInt32(argv[1], &_size)) return FREBool(false);
+	if(_size < 0) return FREBool(false);
+	uint32 size = _size;
+
+	uint32 offset;
+	if(!FREGetUint32(argv[2], &offset)) return FREBool(false);
+
+	FREByteArray byteArray;
+	if (FREAcquireByteArray(argv[3], &byteArray) != FRE_OK)
+		return FREBool(false);
+
+	bool ret = false;
+	char* data = NULL;
+	if (size > 0 && size <= byteArray.length) {
+		int32 result = g_Steam->UGCRead(handle, size, offset, &data);
+		if (result != 0) {
+			ret = true;
+			memcpy(byteArray.bytes, data, result);
+		}
+
+		delete data;
+	}
+	FREReleaseByteArray(argv[3]);
+
+	return FREBool(ret);
+}
+
+AIR_FUNC(AIRSteam_GetUGCDownloadProgress) {
+	ARG_CHECK(1, FREObject());
+
+	UGCHandle_t handle;
+	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+
+	int32 downloaded, expected;
+	if(!g_Steam->GetUGCDownloadProgress(handle, &downloaded, &expected))
+		return FREObject();
+
+	FREObject array = FREArray(2);
+	FRESetArrayElementAt(array, 0, FREInt(downloaded));
+	FRESetArrayElementAt(array, 1, FREInt(expected));
+
+	return array;
+}
+
+AIR_FUNC(AIRSteam_GetUGCDownloadResult) {
+	FREObject result;
+	FRENewObject((const uint8_t*)"com.amanitadesign.steam.DownloadUGCResult", 0, NULL, &result, NULL);
+
+	ARG_CHECK(1, result);
+
+	UGCHandle_t handle;
+	if (!FREGetUint64(argv[1], &handle)) return result;
+
+	auto details = g_Steam->GetUGCDownloadResult(handle);
+	if(!details) return result;
+
+	SET_PROP(result, "result", FREInt(details->m_eResult));
+	SET_PROP(result, "fileHandle", FREUint64(details->m_hFile));
+	SET_PROP(result, "appID", FREUint(details->m_nAppID));
+	SET_PROP(result, "size", FREInt(details->m_nSizeInBytes));
+	SET_PROP(result, "fileName", FREString(details->m_pchFileName));
+	SET_PROP(result, "owner", FREUint64(details->m_ulSteamIDOwner));
+
+	return result;
+}
+
+AIR_FUNC(AIRSteam_PublishWorkshopFile) {
+	ARG_CHECK(8, FREBool(false));
+
+	std::string name, preview, title, description;
+	uint32 appId, visibility, fileType;
+	if (!FREGetString(argv[0], name) ||
+	    !FREGetString(argv[1], preview) ||
+	    !FREGetUint32(argv[2], &appId) ||
+	    !FREGetString(argv[3], title) ||
+	    !FREGetString(argv[4], description) ||
+	    !FREGetUint32(argv[5], &visibility) ||
+	    !FREGetUint32(argv[7], &fileType)) return FREBool(false);
+
+	SteamParamStringArray_t tagArray;
+	if(!extractParamStringArray(argv[6], &tagArray)) return FREBool(false);
+
+	bool ret = g_Steam->PublishWorkshopFile(name, preview, appId, title, description,
+		ERemoteStoragePublishedFileVisibility(visibility), &tagArray,
+		EWorkshopFileType(fileType));
+
+	delete[] tagArray.m_ppStrings;
+
+	return FREBool(ret);
+}
+
+AIR_FUNC(AIRSteam_PublishWorkshopFileResult) {
+	ARG_CHECK(0, FREUint64(0));
+
+	return FREUint64(g_Steam->PublishWorkshopFileResult());
+}
+
+AIR_FUNC(AIRSteam_DeletePublishedFile) {
+	ARG_CHECK(1, FREBool(false));
+
+	PublishedFileId_t handle;
+	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+
+	return FREBool(g_Steam->DeletePublishedFile(handle));
+}
+
+AIR_FUNC(AIRSteam_GetPublishedFileDetails) {
+	ARG_CHECK(1, FREBool(false));
+
+	PublishedFileId_t handle;
+	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+
+	return FREBool(g_Steam->GetPublishedFileDetails(handle));
+}
+
+AIR_FUNC(AIRSteam_GetPublishedFileDetailsResult) {
+	FREObject result;
+	FRENewObject((const uint8_t*)"com.amanitadesign.steam.FileDetailsResult", 0, NULL, &result, NULL);
+
+	ARG_CHECK(1, result);
+
+	PublishedFileId_t file;
+	if (!FREGetUint64(argv[1], &file)) return result;
+
+	auto details = g_Steam->GetPublishedFileDetailsResult(file);
+	if(!details) return result;
+
+	SET_PROP(result, "result", FREInt(details->m_eResult));
+	SET_PROP(result, "file", FREUint64(details->m_nPublishedFileId));
+	SET_PROP(result, "creatorAppID", FREInt(details->m_nCreatorAppID));
+	SET_PROP(result, "consumerAppID", FREInt(details->m_nConsumerAppID));
+	SET_PROP(result, "title", FREString(details->m_rgchTitle));
+	SET_PROP(result, "description", FREString(details->m_rgchDescription));
+	SET_PROP(result, "fileHandle", FREUint64(details->m_hFile));
+	SET_PROP(result, "previewFileHandle", FREUint64(details->m_hPreviewFile));
+	SET_PROP(result, "owner", FREUint64(details->m_ulSteamIDOwner));
+	SET_PROP(result, "timeCreated", FREUint(details->m_rtimeCreated));
+	SET_PROP(result, "timeUpdated", FREUint(details->m_rtimeUpdated));
+	SET_PROP(result, "visibility", FREInt(details->m_eVisibility));
+	SET_PROP(result, "banned", FREBool(details->m_bBanned));
+	SET_PROP(result, "tags", FREString(details->m_rgchTags));
+	SET_PROP(result, "tagsTruncated", FREBool(details->m_bTagsTruncated));
+	SET_PROP(result, "fileName", FREString(details->m_pchFileName));
+	SET_PROP(result, "fileSize", FREInt(details->m_nFileSize));
+	SET_PROP(result, "previewFileSize", FREInt(details->m_nPreviewFileSize));
+	SET_PROP(result, "url", FREString(details->m_rgchURL));
+	SET_PROP(result, "fileType", FREInt(details->m_eFileType));
+
+	return result;
+}
+
+AIR_FUNC(AIRSteam_EnumerateUserPublishedFiles) {
+	ARG_CHECK(1, FREBool(false));
+
+	uint32 startIndex;
+	if(!FREGetUint32(argv[0], &startIndex)) return FREBool(false);
+
+	return FREBool(g_Steam->EnumerateUserPublishedFiles(startIndex));
+}
+
+AIR_FUNC(AIRSteam_EnumerateUserPublishedFilesResult) {
+	FREObject result;
+	FRENewObject((const uint8_t*)"com.amanitadesign.steam.WorkshopFilesResult", 0, NULL, &result, NULL);
+
+	ARG_CHECK(0, result);
+	auto details = g_Steam->EnumerateUserPublishedFilesResult();
+	if(!details) return result;
+
+	SET_PROP(result, "result", FREInt(details->m_eResult));
+	SET_PROP(result, "resultsReturned", FREInt(details->m_nResultsReturned));
+	SET_PROP(result, "totalResults", FREInt(details->m_nTotalResultCount));
+
+	FREObject ids = FREArray(details->m_nResultsReturned);
+	for (int32 i = 0; i < details->m_nResultsReturned; ++i) {
+		FRESetArrayElementAt(ids, 0, FREUint64(details->m_rgPublishedFileId[i]));
+	}
+	SET_PROP(result, "publishedFileId", ids);
+
+	return result;
+}
+
+AIR_FUNC(AIRSteam_EnumeratePublishedWorkshopFiles) {
+	ARG_CHECK(6, FREBool(false));
+
+	uint32 type, start, count, days;
+	if (!FREGetUint32(argv[0], &type) ||
+	    !FREGetUint32(argv[1], &start) ||
+	    !FREGetUint32(argv[2], &count) ||
+	    !FREGetUint32(argv[3], &days)) return FREBool(false);
+
+	SteamParamStringArray_t tags, userTags;
+	if (!extractParamStringArray(argv[4], &tags) ||
+	    !extractParamStringArray(argv[5], &userTags)) return FREBool(false);
+
+	bool ret = g_Steam->EnumeratePublishedWorkshopFiles(
+		EWorkshopEnumerationType(type), start, count, days, &tags, &userTags);
+
+	delete[] tags.m_ppStrings;
+	delete[] userTags.m_ppStrings;
+
+	return FREBool(ret);
+}
+
+AIR_FUNC(AIRSteam_EnumeratePublishedWorkshopFilesResult) {
+	FREObject result;
+	FRENewObject((const uint8_t*)"com.amanitadesign.steam.WorkshopFilesResult", 0, NULL, &result, NULL);
+
+	ARG_CHECK(0, result);
+	auto details = g_Steam->EnumeratePublishedWorkshopFilesResult();
+	if(!details) return result;
+
+	SET_PROP(result, "result", FREInt(details->m_eResult));
+	SET_PROP(result, "resultsReturned", FREInt(details->m_nResultsReturned));
+	SET_PROP(result, "totalResults", FREInt(details->m_nTotalResultCount));
+
+	FREObject ids = FREArray(details->m_nResultsReturned);
+	FREObject scores = FREArray(details->m_nResultsReturned);
+	for (int32 i = 0; i < details->m_nResultsReturned; ++i) {
+		FRESetArrayElementAt(ids, i, FREUint64(details->m_rgPublishedFileId[i]));
+		FRESetArrayElementAt(scores, i, FREFloat(details->m_rgScore[i]));
+	}
+	SET_PROP(result, "publishedFileId", ids);
+	SET_PROP(result, "score", scores);
+
+	return result;
+}
+
+AIR_FUNC(AIRSteam_EnumerateUserSubscribedFiles) {
+	ARG_CHECK(1, FREBool(false));
+
+	uint32 startIndex;
+	if(!FREGetUint32(argv[0], &startIndex)) return FREBool(false);
+
+	return FREBool(g_Steam->EnumerateUserSubscribedFiles(startIndex));
+}
+
+AIR_FUNC(AIRSteam_EnumerateUserSubscribedFilesResult) {
+	FREObject result;
+	FRENewObject((const uint8_t*)"com.amanitadesign.steam.SubscribedFilesResult", 0, NULL, &result, NULL);
+
+	ARG_CHECK(0, result);
+	auto details = g_Steam->EnumerateUserSubscribedFilesResult();
+	if(!details) return result;
+
+	SET_PROP(result, "result", FREInt(details->m_eResult));
+	SET_PROP(result, "resultsReturned", FREInt(details->m_nResultsReturned));
+	SET_PROP(result, "totalResults", FREInt(details->m_nTotalResultCount));
+
+	FREObject ids = FREArray(details->m_nResultsReturned);
+	FREObject timesSubscribed = FREArray(details->m_nResultsReturned);
+	for (int32 i = 0; i < details->m_nResultsReturned; ++i) {
+		FRESetArrayElementAt(ids, i, FREUint64(details->m_rgPublishedFileId[i]));
+		FRESetArrayElementAt(timesSubscribed, i, FREUint(details->m_rgRTimeSubscribed[i]));
+	}
+	SET_PROP(result, "publishedFileId", ids);
+	SET_PROP(result, "timeSubscribed", timesSubscribed);
+
+	return result;
+}
+
+AIR_FUNC(AIRSteam_EnumerateUserSharedWorkshopFiles) {
+	ARG_CHECK(4, FREBool(false));
+
+	uint64 steamID;
+	uint32 start;
+	if (!FREGetUint64(argv[0], &steamID) ||
+	    !FREGetUint32(argv[1], &start)) return FREBool(false);
+
+	SteamParamStringArray_t required, excluded;
+	if (!extractParamStringArray(argv[2], &required) ||
+	    !extractParamStringArray(argv[3], &excluded)) return FREBool(false);
+
+	bool ret = g_Steam->EnumerateUserSharedWorkshopFiles(steamID, start,
+		&required, &excluded);
+
+	delete[] required.m_ppStrings;
+	delete[] excluded.m_ppStrings;
+
+	return FREBool(ret);
+}
+
+AIR_FUNC(AIRSteam_EnumerateUserSharedWorkshopFilesResult) {
+	FREObject result;
+	FRENewObject((const uint8_t*)"com.amanitadesign.steam.WorkshopFilesResult", 0, NULL, &result, NULL);
+
+	ARG_CHECK(0, result);
+	auto details = g_Steam->EnumerateUserSharedWorkshopFilesResult();
+	if(!details) return result;
+
+	SET_PROP(result, "result", FREInt(details->m_eResult));
+	SET_PROP(result, "resultsReturned", FREInt(details->m_nResultsReturned));
+	SET_PROP(result, "totalResults", FREInt(details->m_nTotalResultCount));
+
+	FREObject ids = FREArray(details->m_nResultsReturned);
+	for (int32 i = 0; i < details->m_nResultsReturned; ++i) {
+		FRESetArrayElementAt(ids, i, FREUint64(details->m_rgPublishedFileId[i]));
+	}
+	SET_PROP(result, "publishedFileId", ids);
+
+	return result;
+}
+
+AIR_FUNC(AIRSteam_EnumeratePublishedFilesByUserAction) {
+	ARG_CHECK(2, FREBool(false));
+
+	uint32 action, startIndex;
+	if (!FREGetUint32(argv[0], &action) ||
+	    !FREGetUint32(argv[1], &startIndex)) return FREBool(false);
+
+	return FREBool(g_Steam->EnumeratePublishedFilesByUserAction(
+		EWorkshopFileAction(action), startIndex));
+}
+
+AIR_FUNC(AIRSteam_EnumeratePublishedFilesByUserActionResult) {
+	FREObject result;
+	FRENewObject((const uint8_t*)"com.amanitadesign.steam.FilesByActionResult", 0, NULL, &result, NULL);
+
+	ARG_CHECK(0, result);
+	auto details = g_Steam->EnumeratePublishedFilesByUserActionResult();
+	if(!details) return result;
+
+	SET_PROP(result, "result", FREInt(details->m_eResult));
+	SET_PROP(result, "action", FREInt(details->m_eAction));
+	SET_PROP(result, "resultsReturned", FREInt(details->m_nResultsReturned));
+	SET_PROP(result, "totalResults", FREInt(details->m_nTotalResultCount));
+
+	FREObject ids = FREArray(details->m_nResultsReturned);
+	FREObject timeUpdated = FREArray(details->m_nResultsReturned);
+	for (int32 i = 0; i < details->m_nResultsReturned; ++i) {
+		FRESetArrayElementAt(ids, i, FREUint64(details->m_rgPublishedFileId[i]));
+		FRESetArrayElementAt(timeUpdated, i, FREUint(details->m_rgRTimeUpdated[i]));
+	}
+
+	SET_PROP(result, "publishedFileId", ids);
+	SET_PROP(result, "timeUpdated", timeUpdated);
+
+	return result;
+}
+
+AIR_FUNC(AIRSteam_SubscribePublishedFile) {
+	ARG_CHECK(1, FREBool(false));
+
+	PublishedFileId_t file;
+	if(!FREGetUint64(argv[0], &file)) return FREBool(false);
+
+	return FREBool(g_Steam->SubscribePublishedFile(file));
+}
+
+AIR_FUNC(AIRSteam_UnsubscribePublishedFile) {
+	ARG_CHECK(1, FREBool(false));
+
+	PublishedFileId_t file;
+	if(!FREGetUint64(argv[0], &file)) return FREBool(false);
+
+	return FREBool(g_Steam->UnsubscribePublishedFile(file));
+}
+
+AIR_FUNC(AIRSteam_CreatePublishedFileUpdateRequest) {
+	ARG_CHECK(1, FREUint64(k_PublishedFileUpdateHandleInvalid));
+
+	PublishedFileId_t file;
+	if(!FREGetUint64(argv[0], &file))
+		return FREUint64(k_PublishedFileUpdateHandleInvalid);
+
+	return FREUint64(g_Steam->CreatePublishedFileUpdateRequest(file));
+}
+
+AIR_FUNC(AIRSteam_UpdatePublishedFileFile) {
+	ARG_CHECK(2, FREBool(false));
+
+	PublishedFileUpdateHandle_t handle;
+	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+
+	std::string file;
+	if(!FREGetString(argv[1], file)) return FREBool(false);
+
+	return FREBool(g_Steam->UpdatePublishedFileFile(handle, file));
+}
+
+AIR_FUNC(AIRSteam_UpdatePublishedFilePreviewFile) {
+	ARG_CHECK(2, FREBool(false));
+
+	PublishedFileUpdateHandle_t handle;
+	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+
+	std::string preview;
+	if(!FREGetString(argv[1], preview)) return FREBool(false);
+
+	return FREBool(g_Steam->UpdatePublishedFilePreviewFile(handle, preview));
+}
+
+AIR_FUNC(AIRSteam_UpdatePublishedFileTitle) {
+	ARG_CHECK(2, FREBool(false));
+
+	PublishedFileUpdateHandle_t handle;
+	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+
+	std::string title;
+	if(!FREGetString(argv[1], title)) return FREBool(false);
+
+	return FREBool(g_Steam->UpdatePublishedFileTitle(handle, title));
+}
+
+AIR_FUNC(AIRSteam_UpdatePublishedFileDescription) {
+	ARG_CHECK(2, FREBool(false));
+
+	PublishedFileUpdateHandle_t handle;
+	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+
+	std::string description;
+	if(!FREGetString(argv[1], description)) return FREBool(false);
+
+	return FREBool(g_Steam->UpdatePublishedFileDescription(handle, description));
+}
+
+AIR_FUNC(AIRSteam_UpdatePublishedFileSetChangeDescription) {
+	ARG_CHECK(2, FREBool(false));
+
+	PublishedFileUpdateHandle_t handle;
+	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+
+	std::string changeDesc;
+	if(!FREGetString(argv[1], changeDesc)) return FREBool(false);
+
+	return FREBool(g_Steam->UpdatePublishedFileSetChangeDescription(handle, changeDesc));
+}
+
+AIR_FUNC(AIRSteam_UpdatePublishedFileVisibility) {
+	ARG_CHECK(2, FREBool(false));
+
+	PublishedFileUpdateHandle_t handle;
+	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+
+	uint32 visibility;
+	if(!FREGetUint32(argv[1], &visibility)) return FREBool(false);
+
+	return FREBool(g_Steam->UpdatePublishedFileVisibility(handle,
+		ERemoteStoragePublishedFileVisibility(visibility)));
+}
+
+AIR_FUNC(AIRSteam_UpdatePublishedFileTags) {
+	ARG_CHECK(2, FREBool(false));
+
+	PublishedFileUpdateHandle_t handle;
+	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+
+	SteamParamStringArray_t tags;
+	if(!extractParamStringArray(argv[1], &tags)) return FREBool(false);
+
+	bool ret = g_Steam->UpdatePublishedFileTags(handle, &tags);
+
+	delete[] tags.m_ppStrings;
+
+	return FREBool(ret);
+}
+
+AIR_FUNC(AIRSteam_CommitPublishedFileUpdate) {
+	ARG_CHECK(1, FREBool(false));
+
+	PublishedFileUpdateHandle_t handle;
+	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+
+	return FREBool(g_Steam->CommitPublishedFileUpdate(handle));
+}
+
+AIR_FUNC(AIRSteam_GetPublishedItemVoteDetails) {
+	ARG_CHECK(1, FREBool(false));
+
+	PublishedFileId_t file;
+	if(!FREGetUint64(argv[0], &file)) return FREBool(false);
+
+	return FREBool(g_Steam->GetPublishedItemVoteDetails(file));
+}
+
+AIR_FUNC(AIRSteam_GetPublishedItemVoteDetailsResult) {
+	FREObject result;
+	FRENewObject((const uint8_t*)"com.amanitadesign.steam.ItemVoteDetailsResult", 0, NULL, &result, NULL);
+
+	ARG_CHECK(0, result);
+	auto details = g_Steam->GetPublishedItemVoteDetailsResult();
+	if(!details) return result;
+
+	SET_PROP(result, "result", FREInt(details->m_eResult));
+	SET_PROP(result, "publishedFileId", FREUint64(details->m_unPublishedFileId));
+	SET_PROP(result, "votesFor", FREInt(details->m_nVotesFor));
+	SET_PROP(result, "votesAgainst", FREInt(details->m_nVotesAgainst));
+	SET_PROP(result, "reports", FREInt(details->m_nReports));
+	SET_PROP(result, "score", FREFloat(details->m_fScore));
+
+	return result;
+}
+
+AIR_FUNC(AIRSteam_UpdateUserPublishedItemVote) {
+	ARG_CHECK(2, FREBool(false));
+
+	PublishedFileId_t file;
+	if(!FREGetUint64(argv[0], &file)) return FREBool(false);
+
+	uint32_t upvote;
+	if (!FREGetBool(argv[0], &upvote)) return FREBool(false);
+
+	return FREBool(g_Steam->UpdateUserPublishedItemVote(file, upvote));
+}
+
+AIR_FUNC(AIRSteam_SetUserPublishedFileAction) {
+	ARG_CHECK(2, FREBool(false));
+
+	PublishedFileId_t file;
+	if(!FREGetUint64(argv[0], &file)) return FREBool(false);
+
+	uint32_t action;
+	if (!FREGetUint32(argv[0], &action)) return FREBool(false);
+
+	return FREBool(g_Steam->SetUserPublishedFileAction(file,
+		EWorkshopFileAction(action)));
 }
 
 	//============================
@@ -327,8 +971,43 @@ extern "C" {
 		FRE_FUNC(AIRSteam_FileWrite),
 		FRE_FUNC(AIRSteam_FileRead),
 		FRE_FUNC(AIRSteam_FileDelete),
+		FRE_FUNC(AIRSteam_FileShare),
 		FRE_FUNC(AIRSteam_IsCloudEnabledForApp),
-		FRE_FUNC(AIRSteam_SetCloudEnabledForApp)
+		FRE_FUNC(AIRSteam_SetCloudEnabledForApp),
+		FRE_FUNC(AIRSteam_GetQuota),
+
+		// ugc / workshop
+		FRE_FUNC(AIRSteam_UGCDownload),
+		FRE_FUNC(AIRSteam_UGCRead),
+		FRE_FUNC(AIRSteam_GetUGCDownloadProgress),
+		FRE_FUNC(AIRSteam_GetUGCDownloadResult),
+		FRE_FUNC(AIRSteam_PublishWorkshopFile),
+		FRE_FUNC(AIRSteam_DeletePublishedFile),
+		FRE_FUNC(AIRSteam_GetPublishedFileDetails),
+		FRE_FUNC(AIRSteam_GetPublishedFileDetailsResult),
+		FRE_FUNC(AIRSteam_EnumerateUserPublishedFiles),
+		FRE_FUNC(AIRSteam_EnumerateUserPublishedFilesResult),
+		FRE_FUNC(AIRSteam_EnumerateUserSubscribedFiles),
+		FRE_FUNC(AIRSteam_EnumerateUserSubscribedFilesResult),
+		FRE_FUNC(AIRSteam_EnumerateUserSharedWorkshopFiles),
+		FRE_FUNC(AIRSteam_EnumerateUserSharedWorkshopFilesResult),
+		FRE_FUNC(AIRSteam_EnumeratePublishedFilesByUserAction),
+		FRE_FUNC(AIRSteam_EnumeratePublishedFilesByUserActionResult),
+		FRE_FUNC(AIRSteam_SubscribePublishedFile),
+		FRE_FUNC(AIRSteam_UnsubscribePublishedFile),
+		FRE_FUNC(AIRSteam_CreatePublishedFileUpdateRequest),
+		FRE_FUNC(AIRSteam_UpdatePublishedFileFile),
+		FRE_FUNC(AIRSteam_UpdatePublishedFilePreviewFile),
+		FRE_FUNC(AIRSteam_UpdatePublishedFileTitle),
+		FRE_FUNC(AIRSteam_UpdatePublishedFileDescription),
+		FRE_FUNC(AIRSteam_UpdatePublishedFileSetChangeDescription),
+		FRE_FUNC(AIRSteam_UpdatePublishedFileVisibility),
+		FRE_FUNC(AIRSteam_UpdatePublishedFileTags),
+		FRE_FUNC(AIRSteam_CommitPublishedFileUpdate),
+		FRE_FUNC(AIRSteam_GetPublishedItemVoteDetails),
+		FRE_FUNC(AIRSteam_GetPublishedItemVoteDetailsResult),
+		FRE_FUNC(AIRSteam_UpdateUserPublishedItemVote),
+		FRE_FUNC(AIRSteam_SetUserPublishedFileAction)
 	};
 
 	// A native context instance is created

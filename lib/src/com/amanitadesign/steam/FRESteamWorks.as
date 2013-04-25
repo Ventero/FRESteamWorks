@@ -57,10 +57,6 @@ package com.amanitadesign.steam
 			if(isReady)	_tm = setInterval(runCallbacks, 100);
 			return isReady;
 		}
-		public function requestStats():Boolean
-		{
-			return _ExtensionContext.call("AIRSteam_RequestStats") as Boolean;
-		}
 
 		public function runCallbacks():Boolean
 		{
@@ -82,39 +78,45 @@ package com.amanitadesign.steam
 			return _ExtensionContext.call("AIRSteam_UseCrashHandler", appID, version, date, time) as Boolean;
 		}
 
-		public function setAchievement(id:String):Boolean
+		/* stats/achievements */
+		public function requestStats():Boolean
 		{
-			return _ExtensionContext.call("AIRSteam_SetAchievement", id) as Boolean;
+			return _ExtensionContext.call("AIRSteam_RequestStats") as Boolean;
 		}
 
-		public function clearAchievement(id:String):Boolean
+		public function setAchievement(name:String):Boolean
 		{
-			return _ExtensionContext.call("AIRSteam_ClearAchievement", id) as Boolean;
+			return _ExtensionContext.call("AIRSteam_SetAchievement", name) as Boolean;
 		}
 
-		public function isAchievement(id:String):Boolean
+		public function clearAchievement(name:String):Boolean
 		{
-			return _ExtensionContext.call("AIRSteam_IsAchievement", id) as Boolean;
+			return _ExtensionContext.call("AIRSteam_ClearAchievement", name) as Boolean;
 		}
 
-		public function getStatInt(id:String):int
+		public function isAchievement(name:String):Boolean
 		{
-			return _ExtensionContext.call("AIRSteam_GetStatInt", id) as int;
+			return _ExtensionContext.call("AIRSteam_IsAchievement", name) as Boolean;
 		}
 
-		public function getStatFloat(id:String):Number
+		public function getStatInt(name:String):int
 		{
-			return _ExtensionContext.call("AIRSteam_GetStatFloat", id) as Number;
+			return _ExtensionContext.call("AIRSteam_GetStatInt", name) as int;
 		}
 
-		public function setStatInt(id:String, value:int):Boolean
+		public function getStatFloat(name:String):Number
 		{
-			return _ExtensionContext.call("AIRSteam_SetStatInt", id, value) as Boolean;
+			return _ExtensionContext.call("AIRSteam_GetStatFloat", name) as Number;
 		}
 
-		public function setStatFloat(id:String, value:Number):Boolean
+		public function setStatInt(name:String, value:int):Boolean
 		{
-			return _ExtensionContext.call("AIRSteam_SetStatFloat", id, value) as Boolean;
+			return _ExtensionContext.call("AIRSteam_SetStatInt", name, value) as Boolean;
+		}
+
+		public function setStatFloat(name:String, value:Number):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_SetStatFloat", name, value) as Boolean;
 		}
 
 		public function storeStats():Boolean
@@ -122,40 +124,50 @@ package com.amanitadesign.steam
 			return _ExtensionContext.call("AIRSteam_StoreStats") as Boolean;
 		}
 
-		public function resetAllStats(bAchievementsToo:Boolean):Boolean
+		public function resetAllStats(achievementsToo:Boolean):Boolean
 		{
-			return _ExtensionContext.call("AIRSteam_ResetAllStats", bAchievementsToo) as Boolean;
+			return _ExtensionContext.call("AIRSteam_ResetAllStats", achievementsToo) as Boolean;
 		}
 
-
+		/* cloud */
 		public function getFileCount():int
 		{
 			return _ExtensionContext.call("AIRSteam_GetFileCount") as int;
 		}
 
-		public function getFileSize(fileName:String):int
+		public function getFileSize(name:String):int
 		{
-			return _ExtensionContext.call("AIRSteam_GetFileSize", fileName) as int;
+			return _ExtensionContext.call("AIRSteam_GetFileSize", name) as int;
 		}
 
-		public function fileExists(fileName:String):Boolean
+		public function fileExists(name:String):int
 		{
-			return _ExtensionContext.call("AIRSteam_FileExists", fileName) as Boolean;
+			return _ExtensionContext.call("AIRSteam_FileExists", name) as int;
 		}
 
-		public function fileWrite(fileName:String, data:ByteArray):Boolean
+		public function fileWrite(name:String, data:ByteArray):Boolean
 		{
-			return _ExtensionContext.call("AIRSteam_FileWrite", fileName, data) as Boolean;
+			return _ExtensionContext.call("AIRSteam_FileWrite", name, data) as Boolean;
 		}
 
-		public function fileRead(fileName:String, data:ByteArray):Boolean
+		public function fileRead(name:String, data:ByteArray):Boolean
 		{
-			return _ExtensionContext.call("AIRSteam_FileRead", fileName, data) as Boolean;
+			return _ExtensionContext.call("AIRSteam_FileRead", name, data) as Boolean;
 		}
 
-		public function fileDelete(fileName:String):Boolean
+		public function fileDelete(name:String):Boolean
 		{
-			return _ExtensionContext.call("AIRSteam_FileDelete", fileName) as Boolean;
+			return _ExtensionContext.call("AIRSteam_FileDelete", name) as Boolean;
+		}
+
+		public function fileShare(name:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_FileShare", name) as Boolean;
+		}
+
+		public function fileShareResult():String
+		{
+			return _ExtensionContext.call("AIRSteam_FileShareResult") as String;
 		}
 
 		public function isCloudEnabledForApp():Boolean
@@ -166,6 +178,182 @@ package com.amanitadesign.steam
 		public function setCloudEnabledForApp(enabled:Boolean):Boolean
 		{
 			return _ExtensionContext.call("AIRSteam_SetCloudEnabledForApp", enabled) as Boolean;
+		}
+
+		public function getQuota():Array
+		{
+			return _ExtensionContext.call("AIRSteam_GetQuota") as Array;
+		}
+
+		/* ugc/workshop */
+		public function uGCDownload(handle:String, priority:int):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_UGCDownload", handle, priority) as Boolean;
+		}
+
+		public function uGCRead(handle:String, size:int, offset:uint, data:ByteArray):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_UGCRead", handle, size, offset, data) as Boolean;
+		}
+
+		public function getUGCDownloadProgress(handle:String):Array
+		{
+			return _ExtensionContext.call("AIRSteam_GetUGCDownloadProgress", handle) as Array;
+		}
+
+		public function getUGCDownloadResult(handle:String):DownloadUGCResult
+		{
+			return _ExtensionContext.call("AIRSteam_GetUGCDownloadResult", handle) as DownloadUGCResult;
+		}
+
+		public function publishWorkshopFile(name:String, preview:String, appId:uint, title:String, description:String, visibility:uint, tags:Array, fileType:uint):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_PublishWorkshopFile", name, preview, appId, title, description, visibility, tags, fileType) as Boolean;
+		}
+
+		public function publishWorkshopFileResult():String
+		{
+			return _ExtensionContext.call("AIRSteam_PublishWorkshopFileResult") as String;
+		}
+
+		public function deletePublishedFile(file:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_DeletePublishedFile", file) as Boolean;
+		}
+
+		public function getPublishedFileDetails(file:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_GetPublishedFileDetails", file) as Boolean;
+		}
+
+		public function getPublishedFileDetailsResult(file:String):FileDetailsResult
+		{
+			return _ExtensionContext.call("AIRSteam_GetPublishedFileDetailsResult", file) as FileDetailsResult;
+		}
+
+		public function enumerateUserPublishedFiles(startIndex:uint):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_EnumerateUserPublishedFiles", startIndex) as Boolean;
+		}
+
+		public function enumerateUserPublishedFilesResult():WorkshopFilesResult
+		{
+			return _ExtensionContext.call("AIRSteam_EnumerateUserPublishedFilesResult") as WorkshopFilesResult;
+		}
+
+		public function enumeratePublishedWorkshopFiles(type:uint, start:uint, count:uint, days:uint, tags:Array, userTags:Array):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_EnumeratePublishedWorkshopFiles", type, start, count, days, tags, userTags) as Boolean;
+		}
+
+		public function enumeratePublishedWorkshopFilesResult():WorkshopFileResult
+		{
+			return _ExtensionContext.call("AIRSteam_EnumeratePublishedWorkshopFilesResult") as WorkshopFileResult;
+		}
+
+		public function enumerateUserSubscribedFiles(startIndex:uint):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_EnumerateUserSubscribedFiles", startIndex) as Boolean;
+		}
+
+		public function enumerateUserSubscribedFilesResult():SubscribedFilesResult
+		{
+			return _ExtensionContext.call("AIRSteam_EnumerateUserSubscribedFilesResult") as SubscribedFilesResult;
+		}
+
+		public function enumerateUserSharedWorkshopFiles(steamID:String, start:uint, required:Array, excluded:Array):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_EnumerateUserSharedWorkshopFiles", steamID, start, required, excluded) as Boolean;
+		}
+
+		public function enumerateUserSharedWorkshopFilesResult():WorkshopFilesResult
+		{
+			return _ExtensionContext.call("AIRSteam_EnumerateUserSharedWorkshopFilesResult") as WorkshopFilesResult;
+		}
+
+		public function enumeratePublishedFilesByUserAction(action:uint, startIndex:uint):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_EnumeratePublishedFilesByUserAction", action, startIndex) as Boolean;
+		}
+
+		public function enumeratePublishedFilesByUserActionResult():FilesByUserActionResult
+		{
+			return _ExtensionContext.call("AIRSteam_EnumeratePublishedFilesByUserActionResult") as FilesByUserActionResult;
+		}
+
+		public function subscribePublishedFile(file:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_SubscribePublishedFile", file) as Boolean;
+		}
+
+		public function unsubscribePublishedFile(file:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_UnsubscribePublishedFile", file) as Boolean;
+		}
+
+		public function createPublishedFileUpdateRequest(file:String):String
+		{
+			return _ExtensionContext.call("AIRSteam_CreatePublishedFileUpdateRequest", file) as String;
+		}
+
+		public function updatePublishedFileFile(handle:String, file:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_UpdatePublishedFileFile", handle, file) as Boolean;
+		}
+
+		public function updatePublishedFilePreviewFile(handle:String, preview:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_UpdatePublishedFilePreviewFile", handle, preview) as Boolean;
+		}
+
+		public function updatePublishedFileTitle(handle:String, title:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_UpdatePublishedFileTitle", handle, title) as Boolean;
+		}
+
+		public function updatePublishedFileDescription(handle:String, description:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_UpdatePublishedFileDescription", handle, description) as Boolean;
+		}
+
+		public function updatePublishedFileSetChangeDescription(handle:String, changeDesc:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_UpdatePublishedFileSetChangeDescription", handle, changeDesc) as Boolean;
+		}
+
+		public function updatePublishedFileVisibility(handle:String, visibility:uint):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_UpdatePublishedFileVisibility", handle, visibility) as Boolean;
+		}
+
+		public function updatePublishedFileTags(handle:String, tags:Array):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_UpdatePublishedFileTags", handle, tags) as Boolean;
+		}
+
+		public function commitPublishedFileUpdate(handle:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_CommitPublishedFileUpdate", handle) as Boolean;
+		}
+
+		public function getPublishedItemVoteDetails(file:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_GetPublishedItemVoteDetails", file) as Boolean;
+		}
+
+		public function getPublishedItemVoteDetailsResult():ItemVoteDetailsResult
+		{
+			return _ExtensionContext.call("AIRSteam_GetPublishedItemVoteDetailsResult") as ItemVoteDetailsResult;
+		}
+
+		public function updateUserPublishedItemVote(file:String, upvote:Boolean):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_UpdateUserPublishedItemVote", file, upvote) as Boolean;
+		}
+
+		public function setUserPublishedFileAction(file:String, action:uint):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_SetUserPublishedFileAction", file, action) as Boolean;
 		}
 	}
 }
