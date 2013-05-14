@@ -154,7 +154,7 @@ private:
 	 * callbacks / call results
 	 */
 
-	#define STEAM_CALLRESULT(thisclass, func, param, var) \
+#define STEAM_CALLRESULT(thisclass, func, param, var) \
 		CCallResult<thisclass, param> var; \
 		void func(param*, bool)
 
@@ -167,37 +167,53 @@ private:
 	               UserAchievementStored_t, m_CallbackAchievementStored);
 
 	// workshop
-	STEAM_CALLRESULT(CSteam, OnFileShare, RemoteStorageFileShareResult_t,
+	STEAM_CALLRESULT(CSteam, OnFileShare,
+	                 RemoteStorageFileShareResult_t,
 	                 m_CallbackFileShare);
-	STEAM_CALLRESULT(CSteam, OnUGCDownload, RemoteStorageDownloadUGCResult_t,
+	STEAM_CALLRESULT(CSteam, OnUGCDownload,
+	                 RemoteStorageDownloadUGCResult_t,
 	                 m_CallbackUGCDownload);
-	STEAM_CALLRESULT(CSteam, OnPublishWorkshopFile, RemoteStoragePublishFileResult_t,
+	STEAM_CALLRESULT(CSteam, OnPublishWorkshopFile,
+	                 RemoteStoragePublishFileResult_t,
 	                 m_CallbackPublishWorkshopFile);
-	STEAM_CALLRESULT(CSteam, OnDeletePublishedFile, RemoteStorageDeletePublishedFileResult_t,
+	STEAM_CALLRESULT(CSteam, OnDeletePublishedFile,
+	                 RemoteStorageDeletePublishedFileResult_t,
 	                 m_CallbackDeletePublishedFile);
-	STEAM_CALLRESULT(CSteam, OnGetPublishedFileDetails, RemoteStorageGetPublishedFileDetailsResult_t,
+	STEAM_CALLRESULT(CSteam, OnGetPublishedFileDetails,
+	                 RemoteStorageGetPublishedFileDetailsResult_t,
 	                 m_CallbackGetPublishedFileDetails);
-	STEAM_CALLRESULT(CSteam, OnEnumerateUserPublishedFiles, RemoteStorageEnumerateUserPublishedFilesResult_t,
+	STEAM_CALLRESULT(CSteam, OnEnumerateUserPublishedFiles,
+	                 RemoteStorageEnumerateUserPublishedFilesResult_t,
 	                 m_CallbackEnumerateUserPublishedFiles);
-	STEAM_CALLRESULT(CSteam, OnEnumeratePublishedWorkshopFiles, RemoteStorageEnumerateWorkshopFilesResult_t,
+	STEAM_CALLRESULT(CSteam, OnEnumeratePublishedWorkshopFiles,
+	                 RemoteStorageEnumerateWorkshopFilesResult_t,
 	                 m_CallbackEnumeratePublishedWorkshopFiles);
-	STEAM_CALLRESULT(CSteam, OnEnumerateUserSubscribedFiles, RemoteStorageEnumerateUserSubscribedFilesResult_t,
+	STEAM_CALLRESULT(CSteam, OnEnumerateUserSubscribedFiles,
+	                 RemoteStorageEnumerateUserSubscribedFilesResult_t,
 	                 m_CallbackEnumerateUserSubscribedFiles);
-	STEAM_CALLRESULT(CSteam, OnEnumerateUserSharedWorkshopFiles, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t,
+	STEAM_CALLRESULT(CSteam, OnEnumerateUserSharedWorkshopFiles,
+	                 RemoteStorageEnumerateUserSharedWorkshopFilesResult_t,
 	                 m_CallbackEnumerateUserSharedWorkshopFiles);
-	STEAM_CALLRESULT(CSteam, OnEnumeratePublishedFilesByUserAction, RemoteStorageEnumeratePublishedFilesByUserActionResult_t,
+	STEAM_CALLRESULT(CSteam, OnEnumeratePublishedFilesByUserAction,
+	                 RemoteStorageEnumeratePublishedFilesByUserActionResult_t,
 	                 m_CallbackEnumeratePublishedFilesByUserAction);
-	STEAM_CALLRESULT(CSteam, OnCommitPublishedFileUpdate, RemoteStorageUpdatePublishedFileResult_t,
+	STEAM_CALLRESULT(CSteam, OnCommitPublishedFileUpdate,
+	                 RemoteStorageUpdatePublishedFileResult_t,
 	                 m_CallbackCommitPublishedFileUpdate);
-	STEAM_CALLRESULT(CSteam, OnSubscribePublishedFile, RemoteStorageSubscribePublishedFileResult_t,
+	STEAM_CALLRESULT(CSteam, OnSubscribePublishedFile,
+	                 RemoteStorageSubscribePublishedFileResult_t,
 	                 m_CallbackSubscribePublishedFile);
-	STEAM_CALLRESULT(CSteam, OnUnsubscribePublishedFile, RemoteStorageUnsubscribePublishedFileResult_t,
+	STEAM_CALLRESULT(CSteam, OnUnsubscribePublishedFile,
+	                 RemoteStorageUnsubscribePublishedFileResult_t,
 	                 m_CallbackUnsubscribePublishedFile);
-	STEAM_CALLRESULT(CSteam, OnGetPublishedItemVoteDetails, RemoteStorageGetPublishedItemVoteDetailsResult_t,
+	STEAM_CALLRESULT(CSteam, OnGetPublishedItemVoteDetails,
+	                 RemoteStorageGetPublishedItemVoteDetailsResult_t,
 	                 m_CallbackGetPublishedItemVoteDetails);
-	STEAM_CALLRESULT(CSteam, OnUpdateUserPublishedItemVote, RemoteStorageUpdateUserPublishedItemVoteResult_t,
+	STEAM_CALLRESULT(CSteam, OnUpdateUserPublishedItemVote,
+	                 RemoteStorageUpdateUserPublishedItemVoteResult_t,
 	                 m_CallbackUpdateUserPublishedItemVote);
-	STEAM_CALLRESULT(CSteam, OnSetUserPublishedFileAction, RemoteStorageSetUserPublishedFileActionResult_t,
+	STEAM_CALLRESULT(CSteam, OnSetUserPublishedFileAction,
+	                 RemoteStorageSetUserPublishedFileActionResult_t,
 	                 m_CallbackSetUserPublishedFileAction);
 
 	// overlay
