@@ -1,5 +1,7 @@
-AIR_SDK=../../../AdobeAIRSDK
-STEAM_SDK=../../../SteamSDK
+#!/bin/bash
+
+[ ! -e ../../config.sh ] && die "FRESteamWorks/config.sh is not set up!"
+. ../../config.sh
 
 export LD_PRELOAD="$STEAM_SDK/redistributable_bin/linux32/libsteam_api.so"
 export LD_LIBRARY_PATH="$HOME/.steam/bin"

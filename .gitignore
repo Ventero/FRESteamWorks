@@ -1,5 +1,7 @@
 NativeApps
 builds
+config.bat
+config.sh
 src/APIWrapper/APIWrapper
 test/bin-debug/FRESteamWorksTest
 test/bin-debug/FRESteamWorksTest.app

@@ -1,8 +1,9 @@
 #!/bin/sh
 set -x
 
-AIR_SDK=../../../AdobeAIRSDK
-STEAM_SDK=../../../Steam/sdk
+[ ! -e ../../config.sh ] && die "FRESteamWorks/config.sh is not set up!"
+. ../../config.sh
+
 ANE_PATH=../../lib/bin
 
 rm -rf FRESteamWorksTest.app

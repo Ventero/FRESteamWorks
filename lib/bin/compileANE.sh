@@ -1,7 +1,8 @@
 #!/bin/sh
 set -xe
-AIR_SDK=../../../AdobeAIRSDK
-FLEX_SDK=../../../FlexSDK
+
+[ ! -e ../../config.sh ] && die "FRESteamWorks/config.sh is not set up!"
+. ../../config.sh
 
 install_name_tool -change \
     "@loader_path/libsteam_api.dylib" "@rpath/../Resources/libsteam_api.dylib" \

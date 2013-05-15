@@ -1,6 +1,9 @@
-SET AIR_SDK=%USERPROFILE%\Documents\AdobeAIRSDK
-set FLEX_SDK=%ProgramFiles(x86)%\FlashDevelop\Tools\flexsdk
-set UNZIP_DIR=%ProgramFiles(x86)%\GnuWin32\bin
+@echo off
+if not exist ..\..\config.bat (
+    echo "FRESteamWorks/config.bat is not set up!"
+    goto :eof
+)
+call ..\..\config.bat
 
 "%FLEX_SDK%\bin\compc" +configname=air -source-path ..\src -optimize ^
                        -include-sources ..\src\ ^

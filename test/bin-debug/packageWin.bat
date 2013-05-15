@@ -1,6 +1,11 @@
-SET "AIR_SDK=%USERPROFILE%\Documents\AdobeAIRSDK"
-set "STEAM_SDK=%USERPROFILE%\Documents\Steam\sdk"
-SET ANE_PATH=..\..\lib\bin
+@echo off
+if not exist ..\..\config.bat (
+    echo "FRESteamWorks/config.bat is not set up!"
+    goto :eof
+)
+call ..\..\config.bat
+
+set ANE_PATH=..\..\lib\bin
 
 copy "%STEAM_SDK%\redistributable_bin\steam_api.dll" .
 copy "%STEAM_SDK%\redistributable_bin\osx32\libsteam_api.dylib" .
