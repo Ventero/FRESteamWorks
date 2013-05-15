@@ -3,8 +3,7 @@ set FLEX_SDK=%ProgramFiles(x86)%\FlashDevelop\Tools\flexsdk
 set UNZIP_DIR=%ProgramFiles(x86)%\GnuWin32\bin
 
 "%FLEX_SDK%\bin\compc" +configname=air -source-path ..\src -optimize ^
-                       -include-classes com.amanitadesign.steam.FRESteamWorks ^
-                                        com.amanitadesign.steam.SteamConstants ^
+                       -include-sources ..\src\
                        -swf-version=11 -output FRESteamWorksLib.swc
 
 "%UNZIP_DIR%\unzip" -o FRESteamWorksLib.swc
