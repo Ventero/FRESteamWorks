@@ -13,9 +13,9 @@ contents.each do |line|
 	args = line[/\(([^)]*)\)/, 1]
 	arg_names = args.split(/,\s*/).map do |arg|
 		arg.split(":")[0]
-	end.unshift("\"AIRSteam_#{func}\"")
+	end.unshift("\"AIRSteam_#{func[0].upcase + func[1,func.size]}\"")
 	puts <<EOD
-		#{line.sub(/[A-Z]/){|i|i.downcase}}
+		#{line}
 		{
 			return _ExtensionContext.call(#{arg_names.join(", ")}) as #{ret};
 		}

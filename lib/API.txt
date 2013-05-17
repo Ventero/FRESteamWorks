@@ -1,69 +1,69 @@
-public function RunCallbacks():Boolean
-public function GetUserID():String
-public function GetAppID():String
-public function GetPersonaName():String
-public function UseCrashHandler(appID:uint, version:String, date:String, time:String):Boolean
+public function runCallbacks():Boolean
+public function getUserID():String
+public function getAppID():String
+public function getPersonaName():String
+public function useCrashHandler(appID:uint, version:String, date:String, time:String):Boolean
 /* stats/achievements */
-public function RequestStats():Boolean
-public function SetAchievement(name:String):Boolean
-public function ClearAchievement(name:String):Boolean
-public function IsAchievement(name:String):Boolean
-public function GetStatInt(name:String):int
-public function GetStatFloat(name:String):Number
-public function SetStatInt(name:String, value:int):Boolean
-public function SetStatFloat(name:String, value:Number):Boolean
-public function StoreStats():Boolean
-public function ResetAllStats(achievementsToo:Boolean):Boolean
+public function requestStats():Boolean
+public function setAchievement(name:String):Boolean
+public function clearAchievement(name:String):Boolean
+public function isAchievement(name:String):Boolean
+public function getStatInt(name:String):int
+public function getStatFloat(name:String):Number
+public function setStatInt(name:String, value:int):Boolean
+public function setStatFloat(name:String, value:Number):Boolean
+public function storeStats():Boolean
+public function resetAllStats(achievementsToo:Boolean):Boolean
 /* cloud */
-public function GetFileCount():int
-public function GetFileSize(name:String):int
-public function FileExists(name:String):Boolean
-public function FileWrite(name:String, data:ByteArray):Boolean
-public function FileRead(name:String, data:ByteArray):Boolean
-public function FileDelete(name:String):Boolean
-public function FileShare(name:String):Boolean
-public function FileShareResult():String
-public function IsCloudEnabledForApp():Boolean
-public function SetCloudEnabledForApp(enabled:Boolean):Boolean
-public function GetQuota():Array
+public function getFileCount():int
+public function getFileSize(name:String):int
+public function fileExists(name:String):Boolean
+public function fileWrite(name:String, data:ByteArray):Boolean
+public function fileRead(name:String, data:ByteArray):Boolean
+public function fileDelete(name:String):Boolean
+public function fileShare(name:String):Boolean
+public function fileShareResult():String
+public function isCloudEnabledForApp():Boolean
+public function setCloudEnabledForApp(enabled:Boolean):Boolean
+public function getQuota():Array
 /* ugc/workshop */
-public function UGCDownload(handle:String, priority:int):Boolean
-public function UGCRead(handle:String, size:int, offset:uint, data:ByteArray):Boolean
-public function GetUGCDownloadProgress(handle:String):Array
-public function GetUGCDownloadResult(handle:String):DownloadUGCResult
-public function PublishWorkshopFile(name:String, preview:String, appId:uint, title:String, description:String, visibility:uint, tags:Array, fileType:uint):Boolean
-public function PublishWorkshopFileResult():String
-public function DeletePublishedFile(file:String):Boolean
-public function GetPublishedFileDetails(file:String):Boolean
-public function GetPublishedFileDetailsResult(file:String):FileDetailsResult
-public function EnumerateUserPublishedFiles(startIndex:uint):Boolean
-public function EnumerateUserPublishedFilesResult():WorkshopFilesResult
-public function EnumeratePublishedWorkshopFiles(type:uint, start:uint, count:uint, days:uint, tags:Array, userTags:Array):Boolean
-public function EnumeratePublishedWorkshopFilesResult():WorkshopFileResult
-public function EnumerateUserSubscribedFiles(startIndex:uint):Boolean
-public function EnumerateUserSubscribedFilesResult():SubscribedFilesResult
-public function EnumerateUserSharedWorkshopFiles(steamID:String, start:uint, required:Array, excluded:Array):Boolean
-public function EnumerateUserSharedWorkshopFilesResult():WorkshopFilesResult
-public function EnumeratePublishedFilesByUserAction(action:uint, startIndex:uint):Boolean
-public function EnumeratePublishedFilesByUserActionResult():FilesByUserActionResult
-public function SubscribePublishedFile(file:String):Boolean
-public function UnsubscribePublishedFile(file:String):Boolean
-public function CreatePublishedFileUpdateRequest(file:String):String
-public function UpdatePublishedFileFile(handle:String, file:String):Boolean
-public function UpdatePublishedFilePreviewFile(handle:String, preview:String):Boolean
-public function UpdatePublishedFileTitle(handle:String, title:String):Boolean
-public function UpdatePublishedFileDescription(handle:String, description:String):Boolean
-public function UpdatePublishedFileSetChangeDescription(handle:String, changeDesc:String):Boolean
-public function UpdatePublishedFileVisibility(handle:String, visibility:uint):Boolean
-public function UpdatePublishedFileTags(handle:String, tags:Array):Boolean
-public function CommitPublishedFileUpdate(handle:String):Boolean
-public function GetPublishedItemVoteDetails(file:String):Boolean
-public function GetPublishedItemVoteDetailsResult():ItemVoteDetailsResult
-public function UpdateUserPublishedItemVote(file:String, upvote:Boolean):Boolean
-public function SetUserPublishedFileAction(file:String, action:uint):Boolean
+public function uGCDownload(handle:String, priority:int):Boolean
+public function uGCRead(handle:String, size:int, offset:uint, data:ByteArray):Boolean
+public function getUGCDownloadProgress(handle:String):Array
+public function getUGCDownloadResult(handle:String):DownloadUGCResult
+public function publishWorkshopFile(name:String, preview:String, appId:uint, title:String, description:String, visibility:uint, tags:Array, fileType:uint):Boolean
+public function publishWorkshopFileResult():String
+public function deletePublishedFile(file:String):Boolean
+public function getPublishedFileDetails(file:String):Boolean
+public function getPublishedFileDetailsResult(file:String):FileDetailsResult
+public function enumerateUserPublishedFiles(startIndex:uint):Boolean
+public function enumerateUserPublishedFilesResult():WorkshopFilesResult
+public function enumeratePublishedWorkshopFiles(type:uint, start:uint, count:uint, days:uint, tags:Array, userTags:Array):Boolean
+public function enumeratePublishedWorkshopFilesResult():WorkshopFileResult
+public function enumerateUserSubscribedFiles(startIndex:uint):Boolean
+public function enumerateUserSubscribedFilesResult():SubscribedFilesResult
+public function enumerateUserSharedWorkshopFiles(steamID:String, start:uint, required:Array, excluded:Array):Boolean
+public function enumerateUserSharedWorkshopFilesResult():WorkshopFilesResult
+public function enumeratePublishedFilesByUserAction(action:uint, startIndex:uint):Boolean
+public function enumeratePublishedFilesByUserActionResult():FilesByUserActionResult
+public function subscribePublishedFile(file:String):Boolean
+public function unsubscribePublishedFile(file:String):Boolean
+public function createPublishedFileUpdateRequest(file:String):String
+public function updatePublishedFileFile(handle:String, file:String):Boolean
+public function updatePublishedFilePreviewFile(handle:String, preview:String):Boolean
+public function updatePublishedFileTitle(handle:String, title:String):Boolean
+public function updatePublishedFileDescription(handle:String, description:String):Boolean
+public function updatePublishedFileSetChangeDescription(handle:String, changeDesc:String):Boolean
+public function updatePublishedFileVisibility(handle:String, visibility:uint):Boolean
+public function updatePublishedFileTags(handle:String, tags:Array):Boolean
+public function commitPublishedFileUpdate(handle:String):Boolean
+public function getPublishedItemVoteDetails(file:String):Boolean
+public function getPublishedItemVoteDetailsResult():ItemVoteDetailsResult
+public function updateUserPublishedItemVote(file:String, upvote:Boolean):Boolean
+public function setUserPublishedFileAction(file:String, action:uint):Boolean
 /* overlay */
-public function ActivateGameOverlay(dialog:String):Boolean
-public function ActivateGameOverlayToUser(dialog:String, steamId:String):Boolean
-public function ActivateGameOverlayToWebPage(url:String):Boolean
-public function ActivateGameOverlayToStore(appId:String, flag:uint):Boolean
-public function ActivateGameOverlayInviteDialog(steamIdLobby:String):Boolean
+public function activateGameOverlay(dialog:String):Boolean
+public function activateGameOverlayToUser(dialog:String, steamId:String):Boolean
+public function activateGameOverlayToWebPage(url:String):Boolean
+public function activateGameOverlayToStore(appId:String, flag:uint):Boolean
+public function activateGameOverlayInviteDialog(steamIdLobby:String):Boolean
