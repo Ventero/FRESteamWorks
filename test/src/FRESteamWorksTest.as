@@ -27,68 +27,44 @@ package
 	{
 		public var Steamworks:FRESteamWorks = new FRESteamWorks();
 		public var tf:TextField;
+
+		private var _buttonPos:int = 5;
+
 		public function FRESteamWorksTest()
 		{
 			tf = new TextField();
-			tf.width = stage.stageWidth;
+			tf.x = 160;
+			tf.width = stage.stageWidth - tf.x;
 			tf.height = stage.stageHeight;
 			addChild(tf);
 
-			tf.addEventListener(MouseEvent.MOUSE_DOWN, onClick);
+			addButton("Check stats/achievements", checkAchievements);
+			addButton("Toggle achievement", toggleAchievement);
+			addButton("Toggle cloud enabled", toggleCloudEnabled);
+			addButton("Toggle file", toggleFile);
+			addButton("Publish file", publishFile);
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
 			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
 			try {
 				Steamworks.useCrashHandler(480, "1.0", "Feb 20 2013", "21:42:20");
 				if(!Steamworks.init()){
-					tf.appendText("STEAMWORKS API is NOT available\n");
+					log("STEAMWORKS API is NOT available");
 					return;
 				}
 
 				log("STEAMWORKS API is available\n");
 				log("User ID: " + Steamworks.getUserID());
 				log("Persona name: " + Steamworks.getPersonaName());
-
-				//comment.. current stats and achievement ids are from steam example app which is provided with their SDK
-				log("isAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.isAchievement("ACH_WIN_ONE_GAME"));
-				log("isAchievement('ACH_TRAVEL_FAR_SINGLE') == "+Steamworks.isAchievement("ACH_TRAVEL_FAR_SINGLE"));
-				log("setStatFloat('FeetTraveled') == "+Steamworks.setStatFloat('FeetTraveled', 21.3));
-				log("setStatInt('NumGames', 2) == "+Steamworks.setStatInt('NumGames', 2));
-				Steamworks.storeStats();
-				log("getStatInt('NumGames') == "+Steamworks.getStatInt('NumGames'));
-				log("getStatFloat('FeetTraveled') == "+Steamworks.getStatFloat('FeetTraveled'));
-
-				log("setCloudEnabledForApp(false) == "+Steamworks.setCloudEnabledForApp(false) );
-				log("setCloudEnabledForApp(true) == "+Steamworks.setCloudEnabledForApp(true) );
 				log("isCloudEnabledForApp() == "+Steamworks.isCloudEnabledForApp() );
 				log("getFileCount() == "+Steamworks.getFileCount() );
 				log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt') );
 
-				/*
-				if(Steamworks.fileExists('SAVE_SLOT_1.dfq')) {
-					var str:String = readFileFromCloud('SAVE_SLOT_1.dfq');
-					log("readFileFromCloud('test.txt') == "+ str.length + " - " + str);
-					log("Xml? " + XML(str).children().length());
-				}
-				*/
-
-				//comment.. writing to app with id 480 is somehow not working, but works with our real appId
-				log("writeFileToCloud('test.txt','hello steam') == "+writeFileToCloud('test.txt','hello steam'));
-				log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
-				//-----------
-
-				// UGC / workshop stuff
-				var res:Boolean = Steamworks.publishWorkshopFile("test.txt", null, 480,
-					"Test.txt", "Test.txt", WorkshopConstants.VISIBILITY_Private,
-					WorkshopConstants.FILETYPE_Community);
-				log("publishWorkshopFile('test.txt' ...) == " + res);
-
-				//Steamworks.requestStats();
 				Steamworks.resetAllStats(true);
 			} catch(e:Error) {
-				tf.appendText("*** ERROR ***");
-				tf.appendText(e.message + "\n");
-				tf.appendText(e.getStackTrace() + "\n");
+				log("*** ERROR ***");
+				log(e.message);
+				log(e.getStackTrace());
 			}
 
 		}
@@ -96,6 +72,7 @@ package
 			tf.appendText(value+"\n");
 			tf.scrollV = tf.maxScrollV;
 		}
+
 		public function writeFileToCloud(fileName:String, data:String):Boolean {
 			var dataOut:ByteArray = new ByteArray();
 			dataOut.writeUTFBytes(data);
@@ -114,26 +91,58 @@ package
 			return result;
 		}
 
-		public function onClick(e:MouseEvent):void{
-			log("--click--");
-			if(!Steamworks.isReady){
-				log("not able to set achievement\n");
-				return;
-			}
+		private function checkAchievements(e:Event = null):void {
+			if(!Steamworks.isReady) return;
 
-			if(!Steamworks.isAchievement("ACH_WIN_ONE_GAME")) {
+			// current stats and achievement ids are from steam example app
+			log("isAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.isAchievement("ACH_WIN_ONE_GAME"));
+			log("isAchievement('ACH_TRAVEL_FAR_SINGLE') == "+Steamworks.isAchievement("ACH_TRAVEL_FAR_SINGLE"));
+			log("setStatFloat('FeetTraveled') == "+Steamworks.setStatFloat('FeetTraveled', 21.3));
+			log("setStatInt('NumGames', 2) == "+Steamworks.setStatInt('NumGames', 2));
+			Steamworks.storeStats();
+			log("getStatInt('NumGames') == "+Steamworks.getStatInt('NumGames'));
+			log("getStatFloat('FeetTraveled') == "+Steamworks.getStatFloat('FeetTraveled'));
+		}
+
+		private function toggleAchievement(e:Event = null):void{
+			if(!Steamworks.isReady) return;
+
+			var result:Boolean = Steamworks.isAchievement("ACH_WIN_ONE_GAME");
+			log("isAchievement('ACH_WIN_ONE_GAME') == " + result);
+			if(!result) {
 				log("setAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.setAchievement("ACH_WIN_ONE_GAME"));
 			} else {
 				log("clearAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.clearAchievement("ACH_WIN_ONE_GAME"));
 			}
+		}
 
-			if(Steamworks.fileExists('test.txt')){
+		private function toggleCloudEnabled(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			var enabled:Boolean = Steamworks.isCloudEnabledForApp();
+			log("isCloudEnabledForApp() == " + enabled);
+			log("setCloudEnabledForApp(" + !enabled + ") == " + Steamworks.setCloudEnabledForApp(!enabled));
+			log("isCloudEnabledForApp() == " + Steamworks.isCloudEnabledForApp());
+		}
+
+		private function toggleFile(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			var result:Boolean = Steamworks.fileExists('test.txt');
+			log("fileExists('test.txt') == " + result);
+			if(result){
 				log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
-				log("Steamworks.fileDelete('test.txt') == "+Steamworks.fileDelete('test.txt'));
+				log("fileDelete('test.txt') == "+Steamworks.fileDelete('test.txt'));
 			} else {
 				log("writeFileToCloud('test.txt','click') == "+writeFileToCloud('test.txt','click'));
 			}
-			//Steamworks.storeStats();
+		}
+
+		private function publishFile(e:Event = null):void {
+			var res:Boolean = Steamworks.publishWorkshopFile("test.txt", "", 480,
+				"Test.txt", "Test.txt", WorkshopConstants.VISIBILITY_Private,
+				["TestTag"], WorkshopConstants.FILETYPE_Community);
+			log("publishWorkshopFile('test.txt' ...) == " + res);
 		}
 
 		public function onSteamResponse(e:SteamEvent):void{
@@ -155,6 +164,30 @@ package
 		public function onExit(e:Event):void{
 			log("Exiting application, cleaning up");
 			Steamworks.dispose();
+		}
+
+		private function addButton(label:String, callback:Function):void {
+			var button:Sprite = new Sprite();
+			button.graphics.beginFill(0xaaaaaa);
+			button.graphics.drawRoundRect(0, 0, 150, 30, 5, 5);
+			button.graphics.endFill();
+			button.buttonMode = true;
+			button.useHandCursor = true;
+			button.addEventListener(MouseEvent.CLICK, callback);
+			button.x = 5;
+			button.y = _buttonPos;
+			_buttonPos += button.height + 5;
+
+			var text:TextField = new TextField();
+			text.text = label;
+			text.width = 140;
+			text.height = 25;
+			text.x = 5;
+			text.y = 5;
+			text.mouseEnabled = false;
+
+			button.addChild(text);
+			addChild(button);
 		}
 	}
 }
