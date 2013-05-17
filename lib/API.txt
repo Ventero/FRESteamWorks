@@ -16,7 +16,7 @@ public function ResetAllStats(achievementsToo:Boolean):Boolean
 /* cloud */
 public function GetFileCount():int
 public function GetFileSize(name:String):int
-public function FileExists(name:String):int
+public function FileExists(name:String):Boolean
 public function FileWrite(name:String, data:ByteArray):Boolean
 public function FileRead(name:String, data:ByteArray):Boolean
 public function FileDelete(name:String):Boolean

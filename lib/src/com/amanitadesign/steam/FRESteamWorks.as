@@ -58,6 +58,7 @@ package com.amanitadesign.steam
 			return isReady;
 		}
 
+		// automatically generated from API_to_lib.rb
 		public function runCallbacks():Boolean
 		{
 			return _ExtensionContext.call("AIRSteam_RunCallbacks") as Boolean;
@@ -140,9 +141,9 @@ package com.amanitadesign.steam
 			return _ExtensionContext.call("AIRSteam_GetFileSize", name) as int;
 		}
 
-		public function fileExists(name:String):int
+		public function fileExists(name:String):Boolean
 		{
-			return _ExtensionContext.call("AIRSteam_FileExists", name) as int;
+			return _ExtensionContext.call("AIRSteam_FileExists", name) as Boolean;
 		}
 
 		public function fileWrite(name:String, data:ByteArray):Boolean
