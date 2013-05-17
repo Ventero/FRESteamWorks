@@ -942,7 +942,7 @@ AIR_FUNC(AIRSteam_UpdateUserPublishedItemVote) {
 	uint32_t upvote;
 	if (!FREGetBool(argv[0], &upvote)) return FREBool(false);
 
-	return FREBool(g_Steam->UpdateUserPublishedItemVote(file, upvote) != 0);
+	return FREBool(g_Steam->UpdateUserPublishedItemVote(file, upvote != 0));
 }
 
 AIR_FUNC(AIRSteam_SetUserPublishedFileAction) {
