@@ -222,6 +222,20 @@ package
 			button.y = _buttonPos;
 			_buttonPos += button.height + 5;
 
+			button.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void {
+				button.graphics.clear();
+				button.graphics.beginFill(0xccccccc);
+				button.graphics.drawRoundRect(0, 0, 150, 30, 5, 5);
+				button.graphics.endFill();
+			});
+
+			button.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void {
+				button.graphics.clear();
+				button.graphics.beginFill(0xaaaaaa);
+				button.graphics.drawRoundRect(0, 0, 150, 30, 5, 5);
+				button.graphics.endFill();
+			});
+
 			var text:TextField = new TextField();
 			text.text = label;
 			text.width = 140;
