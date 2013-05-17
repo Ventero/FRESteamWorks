@@ -51,6 +51,14 @@ std::string CSteam::GetUserID() {
 	return stream.str();
 }
 
+std::string CSteam::GetAppID() {
+	if (!m_bInitialized) return "";
+
+	std::stringstream stream;
+	stream << m_iAppID;
+	return stream.str();
+}
+
 std::string CSteam::GetPersonaName() {
 	if (!m_bInitialized) return "";
 

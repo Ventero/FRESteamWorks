@@ -60,6 +60,7 @@ extern "C" {
 	AIR_FUNC(AIRSteam_Init);
 	AIR_FUNC(AIRSteam_RunCallbacks);
 	AIR_FUNC(AIRSteam_GetUserID);
+	AIR_FUNC(AIRSteam_GetAppID);
 	AIR_FUNC(AIRSteam_GetPersonaName);
 	AIR_FUNC(AIRSteam_UseCrashHandler);
 

@@ -162,13 +162,19 @@ AIR_FUNC(AIRSteam_RunCallbacks) {
 }
 
 AIR_FUNC(AIRSteam_GetUserID) {
-	if(!g_Steam) return FREString("");
+	if (!g_Steam) return FREString("");
 
 	return FREString(g_Steam->GetUserID());
 }
 
+AIR_FUNC(AIRSteam_GetAppID) {
+	if (!g_Steam) return FREString("");
+
+	return FREString(g_Steam->GetAppID());
+}
+
 AIR_FUNC(AIRSteam_GetPersonaName) {
-	if(!g_Steam) return FREString("");
+	if (!g_Steam) return FREString("");
 
 	return FREString(g_Steam->GetPersonaName());
 }
@@ -1017,6 +1023,7 @@ extern "C" {
 		FRE_FUNC(AIRSteam_Init),
 		FRE_FUNC(AIRSteam_RunCallbacks),
 		FRE_FUNC(AIRSteam_GetUserID),
+		FRE_FUNC(AIRSteam_GetAppID),
 		FRE_FUNC(AIRSteam_GetPersonaName),
 		FRE_FUNC(AIRSteam_UseCrashHandler),
 

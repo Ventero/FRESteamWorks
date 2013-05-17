@@ -1,5 +1,6 @@
 public function RunCallbacks():Boolean
 public function GetUserID():String
+public function GetAppID():String
 public function GetPersonaName():String
 public function UseCrashHandler(appID:uint, version:String, date:String, time:String):Boolean
 /* stats/achievements */

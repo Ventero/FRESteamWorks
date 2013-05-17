@@ -58,6 +58,7 @@ package
 
 				log("STEAMWORKS API is available\n");
 				log("User ID: " + Steamworks.getUserID());
+				log("App ID: " + Steamworks.getAppID());
 				log("Persona name: " + Steamworks.getPersonaName());
 				log("isCloudEnabledForApp() == "+Steamworks.isCloudEnabledForApp() );
 				log("getFileCount() == "+Steamworks.getFileCount() );
