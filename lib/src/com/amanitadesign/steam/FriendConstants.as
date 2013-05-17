@@ -2,7 +2,7 @@
  *  FriendConstants.as
  *  This file is part of FRESteamWorks.
  *
- *  Created by Ventero <http://github.com/Ventero> on 2013-04-24
+ *  Created by Ventero <http://github.com/Ventero> on 2013-05-17
  *  Copyright (c) 2013 Level Up Labs, LLC. All rights reserved.
  */
 
