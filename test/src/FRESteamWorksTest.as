@@ -177,6 +177,9 @@ package
 				case SteamConstants.RESPONSE_OnAchievementStored:
 					log("RESPONSE_OnAchievementStored: "+e.response);
 					break;
+				case SteamConstants.RESPONSE_OnPublishWorkshopFile:
+					log("RESPONSE_OnPublishWorkshopFile: " + e.response);
+					log("File published as " + Steamworks.publishWorkshopFileResult());
 				default:
 					log("STEAMresponse type:"+e.req_type+" response:"+e.response);
 			}
