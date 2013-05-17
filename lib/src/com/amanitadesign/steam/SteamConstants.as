@@ -12,10 +12,6 @@ package com.amanitadesign.steam
 {
 	public class SteamConstants
 	{
-		/* response values */
-		public static const RESPONSE_OK:int = 0;
-		public static const RESPONSE_FAILED:int = 1;
-
 		/* response types */
 		public static const RESPONSE_OnUserStatsReceived:int = 0;
 		public static const RESPONSE_OnUserStatsStored:int = 1;
