@@ -378,7 +378,7 @@ package com.amanitadesign.steam
 			return _ExtensionContext.call("AIRSteam_ActivateGameOverlayToWebPage", url) as Boolean;
 		}
 
-		public function activateGameOverlayToStore(appId:String, flag:uint):Boolean
+		public function activateGameOverlayToStore(appId:uint, flag:uint):Boolean
 		{
 			return _ExtensionContext.call("AIRSteam_ActivateGameOverlayToStore", appId, flag) as Boolean;
 		}
@@ -394,12 +394,12 @@ package com.amanitadesign.steam
 		}
 
 		/* DLC / subscriptions */
-		public function isSubscribedApp(appId:String):Boolean
+		public function isSubscribedApp(appId:uint):Boolean
 		{
 			return _ExtensionContext.call("AIRSteam_IsSubscribedApp", appId) as Boolean;
 		}
 
-		public function isDLCInstalled(appId:String):Boolean
+		public function isDLCInstalled(appId:uint):Boolean
 		{
 			return _ExtensionContext.call("AIRSteam_IsDLCInstalled", appId) as Boolean;
 		}
@@ -409,12 +409,12 @@ package com.amanitadesign.steam
 			return _ExtensionContext.call("AIRSteam_GetDLCCount") as int;
 		}
 
-		public function installDLC(appId:String):Boolean
+		public function installDLC(appId:uint):Boolean
 		{
 			return _ExtensionContext.call("AIRSteam_InstallDLC", appId) as Boolean;
 		}
 
-		public function uninstallDLC(appId):Boolean
+		public function uninstallDLC(appId:uint):Boolean
 		{
 			return _ExtensionContext.call("AIRSteam_UninstallDLC", appId) as Boolean;
 		}
