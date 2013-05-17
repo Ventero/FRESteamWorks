@@ -392,7 +392,7 @@ AIR_FUNC(AIRSteam_FileShareResult) {
 AIR_FUNC(AIRSteam_IsCloudEnabledForApp) {
 	if (!g_Steam) return FREBool(false);
 
-	return FREBool(SteamRemoteStorage()->IsCloudEnabledForApp());
+	return FREBool(g_Steam->IsCloudEnabledForApp());
 }
 
 AIR_FUNC(AIRSteam_SetCloudEnabledForApp) {
