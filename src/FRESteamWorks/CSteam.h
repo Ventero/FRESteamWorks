@@ -146,15 +146,15 @@ private:
 
 	// the most recent received UGCResult
 	UGCHandle_t m_FileHandle;
-	std::map<UGCHandle_t, RemoteStorageDownloadUGCResult_t*> m_DownloadResults;
+	std::map<UGCHandle_t, RemoteStorageDownloadUGCResult_t> m_DownloadResults;
 	PublishedFileId_t m_PublishedFileId;
-	std::map<PublishedFileId_t, RemoteStorageGetPublishedFileDetailsResult_t*> m_PublishedFileDetails;
-	RemoteStorageEnumerateUserPublishedFilesResult_t *m_UserPublishedFiles;
-	RemoteStorageEnumerateWorkshopFilesResult_t *m_WorkshopFiles;
-	RemoteStorageEnumerateUserSubscribedFilesResult_t *m_SubscribedFiles;
-	RemoteStorageEnumerateUserSharedWorkshopFilesResult_t *m_UserSharedFiles;
-	RemoteStorageEnumeratePublishedFilesByUserActionResult_t *m_PublishedFilesByAction;
-	RemoteStorageGetPublishedItemVoteDetailsResult_t *m_PublishedItemVoteDetails;
+	std::map<PublishedFileId_t, RemoteStorageGetPublishedFileDetailsResult_t> m_PublishedFileDetails;
+	RemoteStorageEnumerateUserPublishedFilesResult_t m_UserPublishedFiles;
+	RemoteStorageEnumerateWorkshopFilesResult_t m_WorkshopFiles;
+	RemoteStorageEnumerateUserSubscribedFilesResult_t m_SubscribedFiles;
+	RemoteStorageEnumerateUserSharedWorkshopFilesResult_t m_UserSharedFiles;
+	RemoteStorageEnumeratePublishedFilesByUserActionResult_t m_PublishedFilesByAction;
+	RemoteStorageGetPublishedItemVoteDetailsResult_t m_PublishedItemVoteDetails;
 
 	void DispatchEvent(const int req_type, const int response);
 

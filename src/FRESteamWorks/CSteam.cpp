@@ -13,12 +13,6 @@
 CSteam::CSteam():
 	m_FileHandle(k_UGCHandleInvalid),
 	m_PublishedFileId(0),
-	m_UserPublishedFiles(nullptr),
-	m_WorkshopFiles(nullptr),
-	m_SubscribedFiles(nullptr),
-	m_UserSharedFiles(nullptr),
-	m_PublishedFilesByAction(nullptr),
-	m_PublishedItemVoteDetails(nullptr),
 	m_CallbackUserStatsReceived(this, &CSteam::OnUserStatsReceived),
 	m_CallbackUserStatsStored(this, &CSteam::OnUserStatsStored),
 	m_CallbackAchievementStored(this, &CSteam::OnAchievementStored),
@@ -236,7 +230,7 @@ bool CSteam::GetUGCDownloadProgress(UGCHandle_t handle, int32 *downloaded, int32
 RemoteStorageDownloadUGCResult_t* CSteam::GetUGCDownloadResult(UGCHandle_t handle) {
 	if (!m_bInitialized) return nullptr;
 
-	return m_DownloadResults[handle];
+	return &m_DownloadResults[handle];
 }
 
 bool CSteam::PublishWorkshopFile(std::string name, std::string preview,
@@ -281,7 +275,7 @@ bool CSteam::GetPublishedFileDetails(PublishedFileId_t file) {
 RemoteStorageGetPublishedFileDetailsResult_t* CSteam::GetPublishedFileDetailsResult(PublishedFileId_t file) {
 	if (!m_bInitialized) return nullptr;
 
-	return m_PublishedFileDetails[file];
+	return &m_PublishedFileDetails[file];
 }
 
 bool CSteam::EnumerateUserPublishedFiles(uint32 startIndex) {
@@ -296,7 +290,7 @@ bool CSteam::EnumerateUserPublishedFiles(uint32 startIndex) {
 RemoteStorageEnumerateUserPublishedFilesResult_t* CSteam::EnumerateUserPublishedFilesResult() {
 	if (!m_bInitialized) return nullptr;
 
-	return m_UserPublishedFiles;
+	return &m_UserPublishedFiles;
 }
 
 bool CSteam::EnumeratePublishedWorkshopFiles(EWorkshopEnumerationType type, uint32 start, uint32 count,
@@ -313,7 +307,7 @@ bool CSteam::EnumeratePublishedWorkshopFiles(EWorkshopEnumerationType type, uint
 RemoteStorageEnumerateWorkshopFilesResult_t* CSteam::EnumeratePublishedWorkshopFilesResult() {
 	if (!m_bInitialized) return nullptr;
 
-	return m_WorkshopFiles;
+	return &m_WorkshopFiles;
 }
 
 bool CSteam::EnumerateUserSubscribedFiles(uint32 startIndex) {
@@ -328,7 +322,7 @@ bool CSteam::EnumerateUserSubscribedFiles(uint32 startIndex) {
 RemoteStorageEnumerateUserSubscribedFilesResult_t* CSteam::EnumerateUserSubscribedFilesResult() {
 	if (!m_bInitialized) return nullptr;
 
-	return m_SubscribedFiles;
+	return &m_SubscribedFiles;
 }
 
 bool CSteam::EnumerateUserSharedWorkshopFiles(uint64 steamId, uint32 startIndex,
@@ -347,7 +341,7 @@ bool CSteam::EnumerateUserSharedWorkshopFiles(uint64 steamId, uint32 startIndex,
 RemoteStorageEnumerateUserSharedWorkshopFilesResult_t* CSteam::EnumerateUserSharedWorkshopFilesResult() {
 	if (!m_bInitialized) return nullptr;
 
-	return m_UserSharedFiles;
+	return &m_UserSharedFiles;
 }
 
 bool CSteam::EnumeratePublishedFilesByUserAction(EWorkshopFileAction action, uint32 startIndex) {
@@ -363,7 +357,7 @@ bool CSteam::EnumeratePublishedFilesByUserAction(EWorkshopFileAction action, uin
 RemoteStorageEnumeratePublishedFilesByUserActionResult_t* CSteam::EnumeratePublishedFilesByUserActionResult() {
 	if(!m_bInitialized) return false;
 
-	return m_PublishedFilesByAction;
+	return &m_PublishedFilesByAction;
 }
 
 bool CSteam::SubscribePublishedFile(PublishedFileId_t file) {
@@ -453,7 +447,7 @@ bool CSteam::GetPublishedItemVoteDetails(PublishedFileId_t file) {
 RemoteStorageGetPublishedItemVoteDetailsResult_t* CSteam::GetPublishedItemVoteDetailsResult() {
 	if (!m_bInitialized) return false;
 
-	return m_PublishedItemVoteDetails;
+	return &m_PublishedItemVoteDetails;
 }
 
 bool CSteam::UpdateUserPublishedItemVote(PublishedFileId_t file, bool upvote) {
@@ -546,7 +540,7 @@ void CSteam::OnFileShare(RemoteStorageFileShareResult_t *result, bool failure) {
 
 void CSteam::OnUGCDownload(RemoteStorageDownloadUGCResult_t *result, bool failure) {
 	// TODO: needs to be a map?
-	if (!failure) m_DownloadResults[result->m_hFile] = result;
+	if (!failure) m_DownloadResults[result->m_hFile] = *result;
 	DispatchEvent(RESPONSE_OnUGCDownload, result->m_eResult);
 }
 
@@ -563,32 +557,32 @@ void CSteam::OnDeletePublishedFile(RemoteStorageDeletePublishedFileResult_t *res
 
 void CSteam::OnGetPublishedFileDetails(RemoteStorageGetPublishedFileDetailsResult_t *result, bool failure) {
 	// TODO: needs to be a map?
-	if (!failure) m_PublishedFileDetails[result->m_nPublishedFileId] = result;
+	if (!failure) m_PublishedFileDetails[result->m_nPublishedFileId] = *result;
 	DispatchEvent(RESPONSE_OnGetPublishedFileDetails, result->m_eResult);
 }
 
 void CSteam::OnEnumerateUserPublishedFiles(RemoteStorageEnumerateUserPublishedFilesResult_t *result, bool failure) {
-	if (!failure) m_UserPublishedFiles = result;
+	if (!failure) m_UserPublishedFiles = *result;
 	DispatchEvent(RESPONSE_OnEnumerateUserPublishedFiles, result->m_eResult);
 }
 
 void CSteam::OnEnumeratePublishedWorkshopFiles(RemoteStorageEnumerateWorkshopFilesResult_t *result, bool failure) {
-	if (!failure) m_WorkshopFiles = result;
+	if (!failure) m_WorkshopFiles = *result;
 	DispatchEvent(RESPONSE_OnEnumeratePublishedWorkshopFiles, result->m_eResult);
 }
 
 void CSteam::OnEnumerateUserSubscribedFiles(RemoteStorageEnumerateUserSubscribedFilesResult_t *result, bool failure) {
-	if (!failure) m_SubscribedFiles = result;
+	if (!failure) m_SubscribedFiles = *result;
 	DispatchEvent(RESPONSE_OnEnumerateUserSubscribedFiles, result->m_eResult);
 }
 
 void CSteam::OnEnumerateUserSharedWorkshopFiles(RemoteStorageEnumerateUserSharedWorkshopFilesResult_t *result, bool failure) {
-	if (!failure) m_UserSharedFiles = result;
+	if (!failure) m_UserSharedFiles = *result;
 	DispatchEvent(RESPONSE_OnEnumerateUserSharedWorkshopFiles, result->m_eResult);
 }
 
 void CSteam::OnEnumeratePublishedFilesByUserAction(RemoteStorageEnumeratePublishedFilesByUserActionResult_t *result, bool failure) {
-	if (!failure) m_PublishedFilesByAction = result;
+	if (!failure) m_PublishedFilesByAction = *result;
 	DispatchEvent(RESPONSE_OnEnumeratePublishedFilesByUserAction, result->m_eResult);
 }
 
@@ -608,7 +602,7 @@ void CSteam::OnUnsubscribePublishedFile(RemoteStorageUnsubscribePublishedFileRes
 }
 
 void CSteam::OnGetPublishedItemVoteDetails(RemoteStorageGetPublishedItemVoteDetailsResult_t *result, bool failure) {
-	if (!failure) m_PublishedItemVoteDetails = result;
+	if (!failure) m_PublishedItemVoteDetails = *result;
 	DispatchEvent(RESPONSE_OnGetPublishedItemVoteDetails, result->m_eResult);
 }
 
