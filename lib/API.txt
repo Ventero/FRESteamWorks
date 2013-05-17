@@ -67,3 +67,4 @@ public function activateGameOverlayToUser(dialog:String, steamId:String):Boolean
 public function activateGameOverlayToWebPage(url:String):Boolean
 public function activateGameOverlayToStore(appId:String, flag:uint):Boolean
 public function activateGameOverlayInviteDialog(steamIdLobby:String):Boolean
+public function isOverlayEnabled():Boolean

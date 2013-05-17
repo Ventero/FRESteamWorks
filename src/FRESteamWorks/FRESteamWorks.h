@@ -131,6 +131,7 @@ extern "C" {
 	AIR_FUNC(AIRSteam_ActivateGameOverlayToWebPage);
 	AIR_FUNC(AIRSteam_ActivateGameOverlayToStore);
 	AIR_FUNC(AIRSteam_ActivateGameOverlayInviteDialog);
+	AIR_FUNC(AIRSteam_IsOverlayEnabled);
 
 	// A native context instance is created
 	void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,

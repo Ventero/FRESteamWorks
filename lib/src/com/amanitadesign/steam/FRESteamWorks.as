@@ -387,5 +387,10 @@ package com.amanitadesign.steam
 		{
 			return _ExtensionContext.call("AIRSteam_ActivateGameOverlayInviteDialog", steamIdLobby) as Boolean;
 		}
+
+		public function isOverlayEnabled():Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_IsOverlayEnabled") as Boolean;
+		}
 	}
 }

@@ -1012,6 +1012,12 @@ AIR_FUNC(AIRSteam_ActivateGameOverlayInviteDialog) {
 	return FREBool(g_Steam->ActivateGameOverlayInviteDialog(CSteamID(lobbyId)));
 }
 
+AIR_FUNC(AIRSteam_IsOverlayEnabled) {
+	ARG_CHECK(0, FREBool(false));
+
+	return FREBool(g_Steam->IsOverlayEnabled());
+}
+
 	//============================
 
 extern "C" {
@@ -1092,7 +1098,8 @@ extern "C" {
 		FRE_FUNC(AIRSteam_ActivateGameOverlayToUser),
 		FRE_FUNC(AIRSteam_ActivateGameOverlayToWebPage),
 		FRE_FUNC(AIRSteam_ActivateGameOverlayToStore),
-		FRE_FUNC(AIRSteam_ActivateGameOverlayInviteDialog)
+		FRE_FUNC(AIRSteam_ActivateGameOverlayInviteDialog),
+		FRE_FUNC(AIRSteam_IsOverlayEnabled)
 	};
 
 	// A native context instance is created

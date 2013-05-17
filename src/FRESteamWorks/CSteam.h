@@ -135,6 +135,7 @@ public:
 	bool ActivateGameOverlayToWebPage(std::string url);
 	bool ActivateGameOverlayToStore(AppId_t appId, EOverlayToStoreFlag flag);
 	bool ActivateGameOverlayInviteDialog(CSteamID lobbyId);
+	bool IsOverlayEnabled();
 
 protected:
 	virtual void DispatchEvent(char* code, char* level) = 0;

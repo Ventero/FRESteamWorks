@@ -503,6 +503,12 @@ bool CSteam::ActivateGameOverlayInviteDialog(CSteamID lobbyId) {
 	return true;
 }
 
+bool CSteam::IsOverlayEnabled() {
+	if (!m_bInitialized) return false;
+
+	return SteamUtils()->IsOverlayEnabled();
+}
+
 void CSteam::DispatchEvent(const int req_type, const int response) {
 	char type[5];
 	char value[5];
