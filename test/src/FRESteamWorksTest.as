@@ -47,6 +47,7 @@ package
 			addButton("Publish file", publishFile);
 			addButton("Toggle fullscreen", toggleFullscreen);
 			addButton("Show Friends overlay", activateOverlay);
+			addButton("List subscribed files", enumerateSubscribedFiles);
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
 			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
@@ -166,6 +167,12 @@ package
 			log("activateGameOverlay('Friends') == " + Steamworks.activateGameOverlay("Friends"));
 		}
 
+		private function enumerateSubscribedFiles(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			log("enumerateUserSubscribedFiles(0) == " + Steamworks.enumerateUserSubscribedFiles(0));
+		}
+
 		private function onSteamResponse(e:SteamEvent):void{
 			switch(e.req_type){
 				case SteamConstants.RESPONSE_OnUserStatsStored:
@@ -179,7 +186,17 @@ package
 					break;
 				case SteamConstants.RESPONSE_OnPublishWorkshopFile:
 					log("RESPONSE_OnPublishWorkshopFile: " + e.response);
-					log("File published as " + Steamworks.publishWorkshopFileResult());
+					var file:String = Steamworks.publishWorkshopFileResult();
+					log("File published as " + file);
+					log("subscribePublishedFile(...) == " + Steamworks.subscribePublishedFile(file));
+					break;
+				case SteamConstants.RESPONSE_OnEnumerateUserSubscribedFiles:
+					log("RESPONSE_OnEnumerateUserSubscribedFiles: " + e.response);
+					var result:SubscribedFilesResult = Steamworks.enumerateUserSubscribedFilesResult();
+					log("User subscribed files: " + result.resultsReturned + "/" + result.totalResults);
+					for(var i:int = 0; i < result.resultsReturned; i++)
+						log(i + ": " + result.publishedFileId[i] + " (" + result.timeSubscribed[i] + ")");
+					break;
 				default:
 					log("STEAMresponse type:"+e.req_type+" response:"+e.response);
 			}
