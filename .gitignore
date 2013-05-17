@@ -23,6 +23,7 @@ project.xcworkspace
 *.swc
 *.swf
 *.dylib
+*.framework
 
 [Dd]ebug/
 [Rr]elease/
