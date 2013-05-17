@@ -168,9 +168,9 @@ AIR_FUNC(AIRSteam_GetUserID) {
 }
 
 AIR_FUNC(AIRSteam_GetAppID) {
-	if (!g_Steam) return FREString("");
+	if (!g_Steam) return FREUint(0);
 
-	return FREString(g_Steam->GetAppID());
+	return FREUint(g_Steam->GetAppID());
 }
 
 AIR_FUNC(AIRSteam_GetPersonaName) {

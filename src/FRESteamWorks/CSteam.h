@@ -51,7 +51,7 @@ public:
 
 	// general stuff
 	std::string GetUserID();
-	std::string GetAppID();
+	uint32 GetAppID();
 	std::string GetPersonaName();
 
 	// stats/achievements

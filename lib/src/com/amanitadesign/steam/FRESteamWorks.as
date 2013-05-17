@@ -69,9 +69,9 @@ package com.amanitadesign.steam
 			return _ExtensionContext.call("AIRSteam_GetUserID") as String;
 		}
 
-		public function getAppID():String
+		public function getAppID():uint
 		{
-			return _ExtensionContext.call("AIRSteam_GetAppID") as String;
+			return _ExtensionContext.call("AIRSteam_GetAppID") as uint;
 		}
 
 		public function getPersonaName():String
