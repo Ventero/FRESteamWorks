@@ -1018,6 +1018,55 @@ AIR_FUNC(AIRSteam_IsOverlayEnabled) {
 	return FREBool(g_Steam->IsOverlayEnabled());
 }
 
+AIR_FUNC(AIRSteam_IsSubscribedApp) {
+	ARG_CHECK(1, FREBool(false));
+
+	uint32_t appId;
+	if (!FREGetUint32(argv[0], &appId)) return FREBool(false);
+
+	return FREBool(g_Steam->IsSubscribedApp(appId));
+}
+
+AIR_FUNC(AIRSteam_IsDLCInstalled) {
+	ARG_CHECK(1, FREBool(false));
+
+	uint32_t appId;
+	if (!FREGetUint32(argv[0], &appId)) return FREBool(false);
+
+	return FREBool(g_Steam->IsDLCInstalled(appId));
+}
+
+AIR_FUNC(AIRSteam_GetDLCCount) {
+	ARG_CHECK(0, FREInt(0));
+
+	return FREInt(g_Steam->GetDLCCount());
+}
+
+AIR_FUNC(AIRSteam_InstallDLC) {
+	ARG_CHECK(1, FREBool(false));
+
+	uint32_t appId;
+	if (!FREGetUint32(argv[0], &appId)) return FREBool(false);
+
+	return FREBool(g_Steam->InstallDLC(appId));
+}
+
+AIR_FUNC(AIRSteam_UninstallDLC) {
+	ARG_CHECK(1, FREBool(false));
+
+	uint32_t appId;
+	if (!FREGetUint32(argv[0], &appId)) return FREBool(false);
+
+	return FREBool(g_Steam->UninstallDLC(appId));
+}
+
+AIR_FUNC(AIRSteam_DLCInstalledResult) {
+	ARG_CHECK(0, FREUint(0));
+
+	return FREUint(g_Steam->DLCInstalledResult());
+}
+
+
 	//============================
 
 extern "C" {
@@ -1099,7 +1148,15 @@ extern "C" {
 		FRE_FUNC(AIRSteam_ActivateGameOverlayToWebPage),
 		FRE_FUNC(AIRSteam_ActivateGameOverlayToStore),
 		FRE_FUNC(AIRSteam_ActivateGameOverlayInviteDialog),
-		FRE_FUNC(AIRSteam_IsOverlayEnabled)
+		FRE_FUNC(AIRSteam_IsOverlayEnabled),
+
+		// DLC / subscription
+		FRE_FUNC(AIRSteam_IsSubscribedApp),
+		FRE_FUNC(AIRSteam_IsDLCInstalled),
+		FRE_FUNC(AIRSteam_GetDLCCount),
+		FRE_FUNC(AIRSteam_InstallDLC),
+		FRE_FUNC(AIRSteam_UninstallDLC),
+		FRE_FUNC(AIRSteam_DLCInstalledResult),
 	};
 
 	// A native context instance is created

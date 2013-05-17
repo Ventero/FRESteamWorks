@@ -133,6 +133,14 @@ extern "C" {
 	AIR_FUNC(AIRSteam_ActivateGameOverlayInviteDialog);
 	AIR_FUNC(AIRSteam_IsOverlayEnabled);
 
+	// DLC / subscription
+	AIR_FUNC(AIRSteam_IsSubscribedApp);
+	AIR_FUNC(AIRSteam_IsDLCInstalled);
+	AIR_FUNC(AIRSteam_GetDLCCount);
+	AIR_FUNC(AIRSteam_InstallDLC);
+	AIR_FUNC(AIRSteam_UninstallDLC);
+	AIR_FUNC(AIRSteam_DLCInstalledResult);
+
 	// A native context instance is created
 	void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
 	                        uint32_t* numFunctions, const FRENamedFunction** functions);

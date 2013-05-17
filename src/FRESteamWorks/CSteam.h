@@ -41,7 +41,8 @@ enum ResponseTypes {
 	RESPONSE_OnUnsubscribePublishedFile,
 	RESPONSE_OnGetPublishedItemVoteDetails,
 	RESPONSE_OnUpdateUserPublishedItemVote,
-	RESPONSE_OnSetUserPublishedFileAction
+	RESPONSE_OnSetUserPublishedFileAction,
+	RESPONSE_OnDLCInstalled
 };
 
 class CSteam {
@@ -137,15 +138,23 @@ public:
 	bool ActivateGameOverlayInviteDialog(CSteamID lobbyId);
 	bool IsOverlayEnabled();
 
+	// DLC / subscriptions
+	bool IsSubscribedApp(AppId_t appId);
+	bool IsDLCInstalled(AppId_t appId);
+	int32 GetDLCCount();
+	bool InstallDLC(AppId_t appId);
+	bool UninstallDLC(AppId_t appId);
+	AppId_t DLCInstalledResult();
+
 protected:
 	virtual void DispatchEvent(char* code, char* level) = 0;
 
 private:
-	// Our current AppID
+	// Our current appId
 	uint32 m_iAppID;
 	bool m_bInitialized;
 
-	// the most recent received UGCResult
+	// the most recently received *Result
 	UGCHandle_t m_FileHandle;
 	std::map<UGCHandle_t, RemoteStorageDownloadUGCResult_t> m_DownloadResults;
 	PublishedFileId_t m_PublishedFileId;
@@ -156,6 +165,7 @@ private:
 	RemoteStorageEnumerateUserSharedWorkshopFilesResult_t m_UserSharedFiles;
 	RemoteStorageEnumeratePublishedFilesByUserActionResult_t m_PublishedFilesByAction;
 	RemoteStorageGetPublishedItemVoteDetailsResult_t m_PublishedItemVoteDetails;
+	AppId_t m_DLCInstalled;
 
 	void DispatchEvent(const int req_type, const int response);
 
@@ -228,5 +238,9 @@ private:
 	// overlay
 	STEAM_CALLBACK(CSteam, OnGameOverlayActivated, GameOverlayActivated_t,
 	               m_CallbackGameOverlayActivated);
+
+	// DLC / subscription
+	STEAM_CALLBACK(CSteam, OnDLCInstalled, DlcInstalled_t,
+	               m_CallbackDLCInstalled);
 
 };

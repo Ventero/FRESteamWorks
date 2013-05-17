@@ -68,3 +68,10 @@ public function activateGameOverlayToWebPage(url:String):Boolean
 public function activateGameOverlayToStore(appId:String, flag:uint):Boolean
 public function activateGameOverlayInviteDialog(steamIdLobby:String):Boolean
 public function isOverlayEnabled():Boolean
+/* DLC / subscriptions */
+public function isSubscribedApp(appId:String):Boolean
+public function isDLCInstalled(appId:String):Boolean
+public function getDLCCount():int
+public function installDLC(appId:String):Boolean
+public function uninstallDLC(appId):Boolean
+public function DLCInstalledResult():uint

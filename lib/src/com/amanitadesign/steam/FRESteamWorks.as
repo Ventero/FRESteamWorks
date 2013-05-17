@@ -392,5 +392,36 @@ package com.amanitadesign.steam
 		{
 			return _ExtensionContext.call("AIRSteam_IsOverlayEnabled") as Boolean;
 		}
+
+		/* DLC / subscriptions */
+		public function isSubscribedApp(appId:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_IsSubscribedApp", appId) as Boolean;
+		}
+
+		public function isDLCInstalled(appId:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_IsDLCInstalled", appId) as Boolean;
+		}
+
+		public function getDLCCount():int
+		{
+			return _ExtensionContext.call("AIRSteam_GetDLCCount") as int;
+		}
+
+		public function installDLC(appId:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_InstallDLC", appId) as Boolean;
+		}
+
+		public function uninstallDLC(appId):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_UninstallDLC", appId) as Boolean;
+		}
+
+		public function DLCInstalledResult():uint
+		{
+			return _ExtensionContext.call("AIRSteam_DLCInstalledResult") as uint;
+		}
 	}
 }

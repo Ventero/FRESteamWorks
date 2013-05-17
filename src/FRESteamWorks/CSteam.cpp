@@ -13,10 +13,12 @@
 CSteam::CSteam():
 	m_FileHandle(k_UGCHandleInvalid),
 	m_PublishedFileId(0),
+	m_DLCInstalled(0),
 	m_CallbackUserStatsReceived(this, &CSteam::OnUserStatsReceived),
 	m_CallbackUserStatsStored(this, &CSteam::OnUserStatsStored),
 	m_CallbackAchievementStored(this, &CSteam::OnAchievementStored),
-	m_CallbackGameOverlayActivated(this, &CSteam::OnGameOverlayActivated)
+	m_CallbackGameOverlayActivated(this, &CSteam::OnGameOverlayActivated),
+	m_CallbackDLCInstalled(this, &CSteam::OnDLCInstalled)
 {
 	m_iAppID = SteamUtils()->GetAppID();
 	m_bInitialized = (SteamUserStats() != NULL && SteamUser() != NULL);
@@ -509,6 +511,42 @@ bool CSteam::IsOverlayEnabled() {
 	return SteamUtils()->IsOverlayEnabled();
 }
 
+bool CSteam::IsSubscribedApp(AppId_t appId) {
+	if (!m_bInitialized) return false;
+
+	return SteamApps()->BIsSubscribedApp(appId);
+}
+
+bool CSteam::IsDLCInstalled(AppId_t appId) {
+	if (!m_bInitialized) return false;
+
+	return SteamApps()->BIsDlcInstalled(appId);
+}
+
+int32 CSteam::GetDLCCount() {
+	if (!m_bInitialized) return 0;
+
+	return SteamApps()->GetDLCCount();
+}
+
+bool CSteam::InstallDLC(AppId_t appId) {
+	if (!m_bInitialized) return false;
+
+	SteamApps()->InstallDLC(appId);
+	return true;
+}
+
+bool CSteam::UninstallDLC(AppId_t appId) {
+	if (!m_bInitialized) return false;
+
+	SteamApps()->UninstallDLC(appId);
+	return true;
+}
+
+AppId_t CSteam::DLCInstalledResult() {
+	return m_DLCInstalled;
+}
+
 void CSteam::DispatchEvent(const int req_type, const int response) {
 	char type[5];
 	char value[5];
@@ -624,4 +662,9 @@ void CSteam::OnSetUserPublishedFileAction(RemoteStorageSetUserPublishedFileActio
 
 void CSteam::OnGameOverlayActivated(GameOverlayActivated_t *pCallback) {
 	DispatchEvent(RESPONSE_OnGameOverlayActivated, pCallback->m_bActive);
+}
+
+void CSteam::OnDLCInstalled(DlcInstalled_t *pCallback) {
+	m_DLCInstalled = pCallback->m_nAppID;
+	DispatchEvent(RESPONSE_OnDLCInstalled, k_EResultOK);
 }
