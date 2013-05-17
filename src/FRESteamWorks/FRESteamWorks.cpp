@@ -1007,7 +1007,7 @@ AIR_FUNC(AIRSteam_ActivateGameOverlayInviteDialog) {
 	ARG_CHECK(1, FREBool(false));
 
 	uint64 lobbyId;
-	if (!FREGetUint64(argv[1], &lobbyId)) return FREBool(false);
+	if (!FREGetUint64(argv[0], &lobbyId)) return FREBool(false);
 
 	return FREBool(g_Steam->ActivateGameOverlayInviteDialog(CSteamID(lobbyId)));
 }
