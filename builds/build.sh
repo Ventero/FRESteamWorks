@@ -1,7 +1,7 @@
 #!/bin/sh
 set -xe
-[ ! -e ../../config.sh ] && die "FRESteamWorks/config.sh is not set up!"
-. ../../config.sh
+[ ! -e ../config.sh ] && die "FRESteamWorks/config.sh is not set up!"
+. ../config.sh
 
 target="$(git describe --tags --always)"
 
