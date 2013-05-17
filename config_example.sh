@@ -6,4 +6,7 @@ AIR_SDK="$HOME/Coding/AdobeAIRSDK"
 FLEX_SDK="$HOME/Coding/FlexSDK"
 # path to the Steam SDK, so that $STEAM_SDK/redistributable_bin exists
 STEAM_SDK="$HOME/Coding/SteamSKD"
+# ftp path to upload the built binaries to when running builds/build.sh
+# version number gets appended to the path
+UPLOAD_URL="ftp://example.org/FRESteamWorks"
 

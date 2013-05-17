@@ -1,5 +1,5 @@
 NativeApps
-builds
+builds/v*
 config.bat
 config.sh
 src/APIWrapper/APIWrapper
