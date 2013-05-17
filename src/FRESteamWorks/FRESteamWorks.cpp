@@ -936,7 +936,7 @@ AIR_FUNC(AIRSteam_UpdateUserPublishedItemVote) {
 	uint32_t upvote;
 	if (!FREGetBool(argv[0], &upvote)) return FREBool(false);
 
-	return FREBool(g_Steam->UpdateUserPublishedItemVote(file, upvote));
+	return FREBool(g_Steam->UpdateUserPublishedItemVote(file, upvote) != 0);
 }
 
 AIR_FUNC(AIRSteam_SetUserPublishedFileAction) {
@@ -971,7 +971,7 @@ AIR_FUNC(AIRSteam_ActivateGameOverlayToUser) {
 	std::string dialog;
 	if (!FREGetString(argv[0], dialog)) return FREBool(false);
 
-	uint64_t steamId;
+	uint64 steamId;
 	if (!FREGetUint64(argv[1], &steamId)) return FREBool(false);
 
 	return FREBool(g_Steam->ActivateGameOverlayToUser(dialog, CSteamID(steamId)));
@@ -1000,7 +1000,7 @@ AIR_FUNC(AIRSteam_ActivateGameOverlayToStore) {
 AIR_FUNC(AIRSteam_ActivateGameOverlayInviteDialog) {
 	ARG_CHECK(1, FREBool(false));
 
-	uint64_t lobbyId;
+	uint64 lobbyId;
 	if (!FREGetUint64(argv[1], &lobbyId)) return FREBool(false);
 
 	return FREBool(g_Steam->ActivateGameOverlayInviteDialog(CSteamID(lobbyId)));
