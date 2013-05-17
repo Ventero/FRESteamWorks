@@ -30,6 +30,7 @@ package
 		public var tf:TextField;
 
 		private var _buttonPos:int = 5;
+		private var _appId:uint;
 
 		public function FRESteamWorksTest()
 		{
@@ -50,7 +51,7 @@ package
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
 			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
 			try {
-				Steamworks.useCrashHandler(480, "1.0", "Feb 20 2013", "21:42:20");
+				//Steamworks.useCrashHandler(480, "1.0", "Feb 20 2013", "21:42:20");
 				if(!Steamworks.init()){
 					log("STEAMWORKS API is NOT available");
 					return;
@@ -58,7 +59,8 @@ package
 
 				log("STEAMWORKS API is available\n");
 				log("User ID: " + Steamworks.getUserID());
-				log("App ID: " + Steamworks.getAppID());
+				_appId = Steamworks.getAppID();
+				log("App ID: " + _appId);
 				log("Persona name: " + Steamworks.getPersonaName());
 				log("isCloudEnabledForApp() == "+Steamworks.isCloudEnabledForApp() );
 				log("getFileCount() == "+Steamworks.getFileCount() );
@@ -145,7 +147,7 @@ package
 		private function publishFile(e:Event = null):void {
 			if(!Steamworks.isReady) return;
 
-			var res:Boolean = Steamworks.publishWorkshopFile("test.txt", "", 480,
+			var res:Boolean = Steamworks.publishWorkshopFile("test.txt", "", _appId,
 				"Test.txt", "Test.txt", WorkshopConstants.VISIBILITY_Private,
 				["TestTag"], WorkshopConstants.FILETYPE_Community);
 			log("publishWorkshopFile('test.txt' ...) == " + res);
