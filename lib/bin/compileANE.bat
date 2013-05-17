@@ -9,7 +9,7 @@ call ..\..\config.bat
                        -include-sources ..\src\ ^
                        -swf-version=11 -output FRESteamWorksLib.swc
 
-"%UNZIP%" -o FRESteamWorksLib.swc
+"%UNZIP_BIN%" -o FRESteamWorksLib.swc
 
 call "%AIR_SDK%\bin\adt" -package -target ane FRESteamWorks.ane descriptor.xml ^
                          -swc FRESteamWorksLib.swc ^
@@ -20,4 +20,4 @@ call "%AIR_SDK%\bin\adt" -package -target ane FRESteamWorks.ane descriptor.xml ^
 del library.swf
 del catalog.xml
 
-"%UNZIP%" -o FRESteamWorks.ane -d FRESteamWorks.Unpacked.ane
+"%UNZIP_BIN%" -o FRESteamWorks.ane -d FRESteamWorks.Unpacked.ane

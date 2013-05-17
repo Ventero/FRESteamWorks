@@ -8,4 +8,4 @@ set "FLEX_SDK=%ProgramFiles(x86)%\FlashDevelop\Tools\flexsdk"
 REM path to the Steam SDK directory, so that %STEAM_SDK%\redistributable_bin exist
 set "STEAM_SDK=%USERPROFILE%\Documents\Steam\sdk"
 REM path to the unzip binary
-set "UNZIP=%ProgramFiles(x86)%\GnuWin32\bin\unzip"
+set "UNZIP_BIN=%ProgramFiles(x86)%\GnuWin32\bin\unzip"
