@@ -192,12 +192,12 @@ package com.amanitadesign.steam
 		}
 
 		/* ugc/workshop */
-		public function uGCDownload(handle:String, priority:int):Boolean
+		public function UGCDownload(handle:String, priority:int):Boolean
 		{
 			return _ExtensionContext.call("AIRSteam_UGCDownload", handle, priority) as Boolean;
 		}
 
-		public function uGCRead(handle:String, size:int, offset:uint, data:ByteArray):Boolean
+		public function UGCRead(handle:String, size:int, offset:uint, data:ByteArray):Boolean
 		{
 			return _ExtensionContext.call("AIRSteam_UGCRead", handle, size, offset, data) as Boolean;
 		}
