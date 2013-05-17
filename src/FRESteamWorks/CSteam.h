@@ -128,6 +128,13 @@ public:
 
 	bool SetUserPublishedFileAction(PublishedFileId_t file, EWorkshopFileAction action);
 
+	// overlay
+	bool ActivateGameOverlay(std::string dialog);
+	bool ActivateGameOverlayToUser(std::string dialog, CSteamID steamId);
+	bool ActivateGameOverlayToWebPage(std::string url);
+	bool ActivateGameOverlayToStore(AppId_t appId, EOverlayToStoreFlag flag);
+	bool ActivateGameOverlayInviteDialog(CSteamID lobbyId);
+
 protected:
 	virtual void DispatchEvent(char* code, char* level) = 0;
 

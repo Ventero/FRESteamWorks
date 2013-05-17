@@ -43,6 +43,7 @@ package
 			addButton("Toggle cloud enabled", toggleCloudEnabled);
 			addButton("Toggle file", toggleFile);
 			addButton("Publish file", publishFile);
+			addButton("Show Friends overlay", activateOverlay);
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
 			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
@@ -139,13 +140,21 @@ package
 		}
 
 		private function publishFile(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
 			var res:Boolean = Steamworks.publishWorkshopFile("test.txt", "", 480,
 				"Test.txt", "Test.txt", WorkshopConstants.VISIBILITY_Private,
 				["TestTag"], WorkshopConstants.FILETYPE_Community);
 			log("publishWorkshopFile('test.txt' ...) == " + res);
 		}
 
-		public function onSteamResponse(e:SteamEvent):void{
+		private function activateOverlay(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			log("activateGameOverlay('Friends') == " + Steamworks.activateGameOverlay("Friends"));
+		}
+
+		private function onSteamResponse(e:SteamEvent):void{
 			switch(e.req_type){
 				case SteamConstants.RESPONSE_OnUserStatsStored:
 					log("RESPONSE_OnUserStatsStored: "+e.response);
@@ -161,7 +170,7 @@ package
 			}
 		}
 
-		public function onExit(e:Event):void{
+		private function onExit(e:Event):void{
 			log("Exiting application, cleaning up");
 			Steamworks.dispose();
 		}

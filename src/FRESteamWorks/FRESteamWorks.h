@@ -124,6 +124,13 @@ extern "C" {
 	AIR_FUNC(AIRSteam_UpdateUserPublishedItemVote);
 	AIR_FUNC(AIRSteam_SetUserPublishedFileAction);
 
+	// overlay
+	AIR_FUNC(AIRSteam_ActivateGameOverlay);
+	AIR_FUNC(AIRSteam_ActivateGameOverlayToUser);
+	AIR_FUNC(AIRSteam_ActivateGameOverlayToWebPage);
+	AIR_FUNC(AIRSteam_ActivateGameOverlayToStore);
+	AIR_FUNC(AIRSteam_ActivateGameOverlayInviteDialog);
+
 	// A native context instance is created
 	void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
 	                        uint32_t* numFunctions, const FRENamedFunction** functions);

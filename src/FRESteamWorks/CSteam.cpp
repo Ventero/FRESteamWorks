@@ -468,6 +468,41 @@ bool CSteam::SetUserPublishedFileAction(PublishedFileId_t file, EWorkshopFileAct
 	return true;
 }
 
+bool CSteam::ActivateGameOverlay(std::string dialog) {
+	if (!m_bInitialized) return false;
+
+	SteamFriends()->ActivateGameOverlay(dialog.c_str());
+	return true;
+}
+
+bool CSteam::ActivateGameOverlayToUser(std::string dialog, CSteamID steamId) {
+	if (!m_bInitialized) return false;
+
+	SteamFriends()->ActivateGameOverlayToUser(dialog.c_str(), steamId);
+	return true;
+}
+
+bool CSteam::ActivateGameOverlayToWebPage(std::string url) {
+	if (!m_bInitialized) return false;
+
+	SteamFriends()->ActivateGameOverlayToWebPage(url.c_str());
+	return true;
+}
+
+bool CSteam::ActivateGameOverlayToStore(AppId_t appId, EOverlayToStoreFlag flag) {
+	if (!m_bInitialized) return false;
+
+	SteamFriends()->ActivateGameOverlayToStore(appId, flag);
+	return true;
+}
+
+bool CSteam::ActivateGameOverlayInviteDialog(CSteamID lobbyId) {
+	if (!m_bInitialized) return false;
+
+	SteamFriends()->ActivateGameOverlayInviteDialog(lobbyId);
+	return true;
+}
+
 void CSteam::DispatchEvent(const int req_type, const int response) {
 	char type[5];
 	char value[5];

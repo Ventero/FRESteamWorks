@@ -356,5 +356,31 @@ package com.amanitadesign.steam
 		{
 			return _ExtensionContext.call("AIRSteam_SetUserPublishedFileAction", file, action) as Boolean;
 		}
+
+		/* overlay */
+		public function activateGameOverlay(dialog:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_ActivateGameOverlay", dialog) as Boolean;
+		}
+
+		public function activateGameOverlayToUser(dialog:String, steamId:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_ActivateGameOverlayToUser", dialog, steamId) as Boolean;
+		}
+
+		public function activateGameOverlayToWebPage(url:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_ActivateGameOverlayToWebPage", url) as Boolean;
+		}
+
+		public function activateGameOverlayToStore(appId:String, flag:uint):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_ActivateGameOverlayToStore", appId, flag) as Boolean;
+		}
+
+		public function activateGameOverlayInviteDialog(steamIdLobby:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_ActivateGameOverlayInviteDialog", steamIdLobby) as Boolean;
+		}
 	}
 }

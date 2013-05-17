@@ -60,3 +60,9 @@ public function GetPublishedItemVoteDetails(file:String):Boolean
 public function GetPublishedItemVoteDetailsResult():ItemVoteDetailsResult
 public function UpdateUserPublishedItemVote(file:String, upvote:Boolean):Boolean
 public function SetUserPublishedFileAction(file:String, action:uint):Boolean
+/* overlay */
+public function ActivateGameOverlay(dialog:String):Boolean
+public function ActivateGameOverlayToUser(dialog:String, steamId:String):Boolean
+public function ActivateGameOverlayToWebPage(url:String):Boolean
+public function ActivateGameOverlayToStore(appId:String, flag:uint):Boolean
+public function ActivateGameOverlayInviteDialog(steamIdLobby:String):Boolean

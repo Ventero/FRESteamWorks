@@ -142,6 +142,10 @@ void ANESteam::DispatchEvent(char* code, char* level) {
 	FREDispatchStatusEventAsync(AIRContext, (const uint8_t*)code, (const uint8_t*)level);
 }
 
+/*
+ * general function
+ */
+
 AIR_FUNC(AIRSteam_Init) {
 	// check if already initialized
 	if (g_Steam) return FREBool(true);
@@ -186,6 +190,9 @@ AIR_FUNC(AIRSteam_UseCrashHandler) {
 	return FREBool(true);
 }
 
+/*
+ * stats / achievements
+ */
 
 AIR_FUNC(AIRSteam_RequestStats) {
 	bool ret = false;
@@ -285,7 +292,10 @@ AIR_FUNC(AIRSteam_ResetAllStats) {
 	return FREBool(g_Steam->ResetAllStats(achievementsToo != 0));
 }
 
-//Steam Cloud
+/*
+ * cloud storage
+ */
+
 AIR_FUNC(AIRSteam_GetFileCount) {
 	if (!g_Steam) return FREInt(0);
 
@@ -400,6 +410,10 @@ AIR_FUNC(AIRSteam_GetQuota) {
 
 	return array;
 }
+
+/*
+ * ugc / workshop
+ */
 
 AIR_FUNC(AIRSteam_UGCDownload) {
 	ARG_CHECK(2, FREBool(false));
@@ -929,13 +943,67 @@ AIR_FUNC(AIRSteam_SetUserPublishedFileAction) {
 	ARG_CHECK(2, FREBool(false));
 
 	PublishedFileId_t file;
-	if(!FREGetUint64(argv[0], &file)) return FREBool(false);
+	if (!FREGetUint64(argv[0], &file)) return FREBool(false);
 
 	uint32_t action;
 	if (!FREGetUint32(argv[0], &action)) return FREBool(false);
 
 	return FREBool(g_Steam->SetUserPublishedFileAction(file,
 		EWorkshopFileAction(action)));
+}
+
+/*
+ * overlay
+ */
+
+AIR_FUNC(AIRSteam_ActivateGameOverlay) {
+	ARG_CHECK(1, FREBool(false));
+
+	std::string dialog;
+	if (!FREGetString(argv[0], dialog)) return FREBool(false);
+
+	return FREBool(g_Steam->ActivateGameOverlay(dialog));
+}
+
+AIR_FUNC(AIRSteam_ActivateGameOverlayToUser) {
+	ARG_CHECK(2, FREBool(false));
+
+	std::string dialog;
+	if (!FREGetString(argv[0], dialog)) return FREBool(false);
+
+	uint64_t steamId;
+	if (!FREGetUint64(argv[1], &steamId)) return FREBool(false);
+
+	return FREBool(g_Steam->ActivateGameOverlayToUser(dialog, CSteamID(steamId)));
+}
+
+AIR_FUNC(AIRSteam_ActivateGameOverlayToWebPage) {
+	ARG_CHECK(1, FREBool(false));
+
+	std::string url;
+	if(!FREGetString(argv[0], url)) return FREBool(false);
+
+	return FREBool(g_Steam->ActivateGameOverlayToWebPage(url));
+}
+
+AIR_FUNC(AIRSteam_ActivateGameOverlayToStore) {
+	ARG_CHECK(2, FREBool(false));
+
+	uint32_t appId, flag;
+	if(!FREGetUint32(argv[0], &appId)) return FREBool(false);
+	if(!FREGetUint32(argv[1], &flag)) return FREBool(false);
+
+	return FREBool(g_Steam->ActivateGameOverlayToStore(appId,
+		EOverlayToStoreFlag(flag)));
+}
+
+AIR_FUNC(AIRSteam_ActivateGameOverlayInviteDialog) {
+	ARG_CHECK(1, FREBool(false));
+
+	uint64_t lobbyId;
+	if (!FREGetUint64(argv[1], &lobbyId)) return FREBool(false);
+
+	return FREBool(g_Steam->ActivateGameOverlayInviteDialog(CSteamID(lobbyId)));
 }
 
 	//============================
@@ -1007,7 +1075,14 @@ extern "C" {
 		FRE_FUNC(AIRSteam_GetPublishedItemVoteDetails),
 		FRE_FUNC(AIRSteam_GetPublishedItemVoteDetailsResult),
 		FRE_FUNC(AIRSteam_UpdateUserPublishedItemVote),
-		FRE_FUNC(AIRSteam_SetUserPublishedFileAction)
+		FRE_FUNC(AIRSteam_SetUserPublishedFileAction),
+
+		// overlay
+		FRE_FUNC(AIRSteam_ActivateGameOverlay),
+		FRE_FUNC(AIRSteam_ActivateGameOverlayToUser),
+		FRE_FUNC(AIRSteam_ActivateGameOverlayToWebPage),
+		FRE_FUNC(AIRSteam_ActivateGameOverlayToStore),
+		FRE_FUNC(AIRSteam_ActivateGameOverlayInviteDialog)
 	};
 
 	// A native context instance is created
