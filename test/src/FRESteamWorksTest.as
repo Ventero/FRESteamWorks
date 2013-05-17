@@ -164,7 +164,9 @@ package
 		private function activateOverlay(e:Event = null):void {
 			if(!Steamworks.isReady) return;
 
+			log("isOverlayEnabled() == " + Steamworks.isOverlayEnabled());
 			log("activateGameOverlay('Friends') == " + Steamworks.activateGameOverlay("Friends"));
+			log("isOverlayEnabled() == " + Steamworks.isOverlayEnabled());
 		}
 
 		private function enumerateSubscribedFiles(e:Event = null):void {
