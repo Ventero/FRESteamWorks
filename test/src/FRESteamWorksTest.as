@@ -18,6 +18,7 @@ package
 	import flash.desktop.NativeApplication;
 	import flash.display.SimpleButton;
 	import flash.display.Sprite;
+	import flash.display.StageDisplayState;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
@@ -43,6 +44,7 @@ package
 			addButton("Toggle cloud enabled", toggleCloudEnabled);
 			addButton("Toggle file", toggleFile);
 			addButton("Publish file", publishFile);
+			addButton("Toggle fullscreen", toggleFullscreen);
 			addButton("Show Friends overlay", activateOverlay);
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
@@ -146,6 +148,13 @@ package
 				"Test.txt", "Test.txt", WorkshopConstants.VISIBILITY_Private,
 				["TestTag"], WorkshopConstants.FILETYPE_Community);
 			log("publishWorkshopFile('test.txt' ...) == " + res);
+		}
+
+		private function toggleFullscreen(e:Event = null):void {
+			if(stage.displayState == StageDisplayState.NORMAL)
+				stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+			else
+				stage.displayState = StageDisplayState.NORMAL;
 		}
 
 		private function activateOverlay(e:Event = null):void {
