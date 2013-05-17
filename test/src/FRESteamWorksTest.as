@@ -63,9 +63,10 @@ package
 				_appId = Steamworks.getAppID();
 				log("App ID: " + _appId);
 				log("Persona name: " + Steamworks.getPersonaName());
-				log("isCloudEnabledForApp() == "+Steamworks.isCloudEnabledForApp() );
-				log("getFileCount() == "+Steamworks.getFileCount() );
-				log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt') );
+				log("isCloudEnabledForApp() == "+Steamworks.isCloudEnabledForApp());
+				log("getFileCount() == "+Steamworks.getFileCount());
+				log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt'));
+				log("getDLCCount() == " + Steamworks.getDLCCount());
 
 				Steamworks.resetAllStats(true);
 			} catch(e:Error) {
