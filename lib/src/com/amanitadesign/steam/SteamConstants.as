@@ -37,6 +37,7 @@ package com.amanitadesign.steam
 		public static const RESPONSE_OnGetPublishedItemVoteDetails:int = 17;
 		public static const RESPONSE_OnUpdateUserPublishedItemVote:int = 18;
 		public static const RESPONSE_OnSetUserPublishedFileAction:int = 19;
+		public static const RESPONSE_OnDLCInstalled:int = 20;
 	}
 
 }
