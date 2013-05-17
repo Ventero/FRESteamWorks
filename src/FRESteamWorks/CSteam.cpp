@@ -661,7 +661,7 @@ void CSteam::OnSetUserPublishedFileAction(RemoteStorageSetUserPublishedFileActio
 }
 
 void CSteam::OnGameOverlayActivated(GameOverlayActivated_t *pCallback) {
-	DispatchEvent(RESPONSE_OnGameOverlayActivated, pCallback->m_bActive);
+	DispatchEvent(RESPONSE_OnGameOverlayActivated, pCallback->m_bActive ? k_EResultOK : k_EResultFail);
 }
 
 void CSteam::OnDLCInstalled(DlcInstalled_t *pCallback) {
