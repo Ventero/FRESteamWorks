@@ -18,7 +18,7 @@ void CLISteam::DispatchEvent(char* code, char* level) {
 
 void send(bool value) {
 	std::cout << (value ? "t" : "f") << std::flush;
-};
+}
 
 void send(int32 value) {
 	std::cout << value << std::flush;
