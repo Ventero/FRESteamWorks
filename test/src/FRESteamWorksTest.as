@@ -176,6 +176,7 @@ package
 			log("enumerateUserSubscribedFiles(0) == " + Steamworks.enumerateUserSubscribedFiles(0));
 		}
 
+		private var id:String;
 		private function onSteamResponse(e:SteamEvent):void{
 			switch(e.req_type){
 				case SteamConstants.RESPONSE_OnUserStatsStored:
@@ -197,8 +198,18 @@ package
 					log("RESPONSE_OnEnumerateUserSubscribedFiles: " + e.response);
 					var result:SubscribedFilesResult = Steamworks.enumerateUserSubscribedFilesResult();
 					log("User subscribed files: " + result.resultsReturned + "/" + result.totalResults);
-					for(var i:int = 0; i < result.resultsReturned; i++)
-						log(i + ": " + result.publishedFileId[i] + " (" + result.timeSubscribed[i] + ")");
+					for(var i:int = 0; i < result.resultsReturned; i++) {
+						id = result.publishedFileId[i];
+						var apiCall:Boolean = Steamworks.getPublishedFileDetails(result.publishedFileId[i]);
+						log(i + ": " + result.publishedFileId[i] + " (" + result.timeSubscribed[i] + ") - " + apiCall);
+					}
+					break;
+				case SteamConstants.RESPONSE_OnGetPublishedFileDetails:
+					log("RESPONSE_OnGetPublishedFileDetails: " + e.response);
+					var res:FileDetailsResult = Steamworks.getPublishedFileDetailsResult(id);
+					log("Result for " + id + ": " + res);
+					if(res)
+						log("File: " + res.fileName + ", handle: " + res.fileHandle);
 					break;
 				default:
 					log("STEAMresponse type:"+e.req_type+" response:"+e.response);
