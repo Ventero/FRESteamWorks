@@ -563,7 +563,7 @@ AIR_FUNC(AIRSteam_GetPublishedFileDetailsResult) {
 	ARG_CHECK(1, result);
 
 	PublishedFileId_t file;
-	if (!FREGetUint64(argv[1], &file)) return result;
+	if (!FREGetUint64(argv[0], &file)) return result;
 
 	auto details = g_Steam->GetPublishedFileDetailsResult(file);
 	if(!details) return result;
