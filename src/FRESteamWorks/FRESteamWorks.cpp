@@ -492,7 +492,7 @@ AIR_FUNC(AIRSteam_GetUGCDownloadResult) {
 	ARG_CHECK(1, result);
 
 	UGCHandle_t handle;
-	if (!FREGetUint64(argv[1], &handle)) return result;
+	if (!FREGetUint64(argv[0], &handle)) return result;
 
 	auto details = g_Steam->GetUGCDownloadResult(handle);
 	if(!details) return result;
@@ -940,7 +940,7 @@ AIR_FUNC(AIRSteam_UpdateUserPublishedItemVote) {
 	if(!FREGetUint64(argv[0], &file)) return FREBool(false);
 
 	uint32_t upvote;
-	if (!FREGetBool(argv[0], &upvote)) return FREBool(false);
+	if (!FREGetBool(argv[1], &upvote)) return FREBool(false);
 
 	return FREBool(g_Steam->UpdateUserPublishedItemVote(file, upvote != 0));
 }
@@ -952,7 +952,7 @@ AIR_FUNC(AIRSteam_SetUserPublishedFileAction) {
 	if (!FREGetUint64(argv[0], &file)) return FREBool(false);
 
 	uint32_t action;
-	if (!FREGetUint32(argv[0], &action)) return FREBool(false);
+	if (!FREGetUint32(argv[1], &action)) return FREBool(false);
 
 	return FREBool(g_Steam->SetUserPublishedFileAction(file,
 		EWorkshopFileAction(action)));
