@@ -177,7 +177,9 @@ package
 		}
 
 		private var id:String;
+		private var handle:String;
 		private function onSteamResponse(e:SteamEvent):void{
+			var apiCall:Boolean;
 			switch(e.req_type){
 				case SteamConstants.RESPONSE_OnUserStatsStored:
 					log("RESPONSE_OnUserStatsStored: "+e.response);
@@ -200,7 +202,7 @@ package
 					log("User subscribed files: " + result.resultsReturned + "/" + result.totalResults);
 					for(var i:int = 0; i < result.resultsReturned; i++) {
 						id = result.publishedFileId[i];
-						var apiCall:Boolean = Steamworks.getPublishedFileDetails(result.publishedFileId[i]);
+						apiCall = Steamworks.getPublishedFileDetails(result.publishedFileId[i]);
 						log(i + ": " + result.publishedFileId[i] + " (" + result.timeSubscribed[i] + ") - " + apiCall);
 					}
 					break;
@@ -208,9 +210,29 @@ package
 					log("RESPONSE_OnGetPublishedFileDetails: " + e.response);
 					var res:FileDetailsResult = Steamworks.getPublishedFileDetailsResult(id);
 					log("Result for " + id + ": " + res);
-					if(res)
+					if(res) {
 						log("File: " + res.fileName + ", handle: " + res.fileHandle);
+						handle = res.fileHandle;
+						apiCall = Steamworks.UGCDownload(res.fileHandle, 0);
+						log("UGCDownload(...) == " + apiCall);
+					}
 					break;
+				case SteamConstants.RESPONSE_OnUGCDownload:
+					log("RESPONSE_OnUGCDownload: " + e.response);
+					var ugcResult:DownloadUGCResult = Steamworks.getUGCDownloadResult(handle);
+					log("Result for " + handle + ": " + ugcResult);
+					if(ugcResult) {
+						log("File: " + ugcResult.fileName + ", handle: " + ugcResult.fileHandle + ", size: " + ugcResult.size);
+						var ba:ByteArray = new ByteArray();
+						ba.length = ugcResult.size;
+						apiCall = Steamworks.UGCRead(ugcResult.fileHandle, ba.length, 0, ba);
+						log("UGCRead(...) == " + apiCall);
+						if(apiCall) {
+							log("Result length: " + ba.position + "//" + ba.length);
+							log("Result: " + ba.readUTFBytes(ugcResult.size));
+						}
+						break;
+					}
 				default:
 					log("STEAMresponse type:"+e.req_type+" response:"+e.response);
 			}
