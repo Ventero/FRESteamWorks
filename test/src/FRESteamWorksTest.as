@@ -50,6 +50,7 @@ package
 			addButton("List subscribed files", enumerateSubscribedFiles);
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
+			Steamworks.redrawContainer = stage;
 			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
 			try {
 				//Steamworks.useCrashHandler(480, "1.0", "Feb 20 2013", "21:42:20");
@@ -225,7 +226,7 @@ package
 						log("File: " + ugcResult.fileName + ", handle: " + ugcResult.fileHandle + ", size: " + ugcResult.size);
 						var ba:ByteArray = new ByteArray();
 						ba.length = ugcResult.size;
-						apiCall = Steamworks.UGCRead(ugcResult.fileHandle, ba.length, 0, ba);
+						apiCall = Steamworks.UGCRead(ugcResult.fileHandle, ugcResult.size, 0, ba);
 						log("UGCRead(...) == " + apiCall);
 						if(apiCall) {
 							log("Result length: " + ba.position + "//" + ba.length);

@@ -10,14 +10,18 @@
 
 package com.amanitadesign.steam
 {
+	import flash.display.DisplayObjectContainer;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.events.StatusEvent;
 	import flash.external.ExtensionContext;
+	import flash.text.TextField;
 	import flash.utils.ByteArray;
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
+	import flash.utils.setTimeout;
 
 	public class FRESteamWorks extends EventDispatcher
 	{
@@ -25,8 +29,10 @@ package com.amanitadesign.steam
 
 		private var _ExtensionContext:ExtensionContext;
 		private var _tm:int;
+		private var _redrawPixel:Sprite = null;
 
 		public var isReady:Boolean = false;
+		public var redrawContainer:DisplayObjectContainer = null;
 
 		public function FRESteamWorks(target:IEventDispatcher=null)
 		{
@@ -36,12 +42,49 @@ package com.amanitadesign.steam
 		}
 
 		private function handleStatusEvent(event:StatusEvent):void{
-			//_ExtensionContext.removeEventListener(StatusEvent.STATUS, handleStatusEvent);
 			var req_type:int = new int(event.code);
 			var response:int = new int(event.level);
 			var sEvent:SteamEvent = new SteamEvent(SteamEvent.STEAM_RESPONSE, req_type, response);
-			trace("handleStatusEvent: "+req_type+" "+response);
+
+			// add or remove a small rotating sprite to the display list to force
+			// a redraw
+			if (req_type == SteamConstants.RESPONSE_OnGameOverlayActivated) {
+				if (response == SteamResults.OK && !_redrawPixel) {
+					addRedrawPixel();
+				} else if (response == SteamResults.Fail && _redrawPixel) {
+					// wait a few seconds for the overlay to fully disappear
+					// otherwise it might get stuck in the hiding animation
+					setTimeout(removeRedrawPixel, 3000);
+				}
+			}
+
 			dispatchEvent(sEvent);
+		}
+
+		private function addRedrawPixel():void {
+			if (!redrawContainer) return;
+			_redrawPixel = new Sprite();
+			_redrawPixel.name = "redrawPixel";
+			_redrawPixel.width = 1;
+			_redrawPixel.height = 1;
+			// we need to draw something in the pixel for it to actually trigger
+			// a re-render
+			_redrawPixel.graphics.beginFill(0xffffff);
+			_redrawPixel.graphics.drawRect(0, 0, 1, 1);
+			_redrawPixel.graphics.endFill();
+			_redrawPixel.addEventListener(Event.ENTER_FRAME, redrawPixel);
+			redrawContainer.addChild(_redrawPixel);
+		}
+
+		private function removeRedrawPixel():void {
+			if (!redrawContainer || !_redrawPixel) return;
+			_redrawPixel.removeEventListener(Event.ENTER_FRAME, redrawPixel);
+			redrawContainer.removeChild(_redrawPixel);
+			_redrawPixel = null;
+		}
+
+		private function redrawPixel(e:Event = null):void {
+			_redrawPixel.rotation += 1;
 		}
 
 		public function dispose():void
