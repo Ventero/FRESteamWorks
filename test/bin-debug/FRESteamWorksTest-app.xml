@@ -9,6 +9,7 @@
 		<autoOrients>false</autoOrients>
 		<fullScreen>false</fullScreen>
 		<visible>true</visible>
+		<renderMode>direct</renderMode>
 	</initialWindow>
 	<supportedProfiles>extendedDesktop</supportedProfiles>
 	<extensions>
