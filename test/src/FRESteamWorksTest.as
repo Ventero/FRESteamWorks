@@ -50,7 +50,7 @@ package
 			addButton("List subscribed files", enumerateSubscribedFiles);
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
-			Steamworks.redrawContainer = stage;
+			Steamworks.addOverlayWorkaround(stage, true);
 			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
 			try {
 				//Steamworks.useCrashHandler(480, "1.0", "Feb 20 2013", "21:42:20");
