@@ -39,7 +39,7 @@ public function getPublishedFileDetailsResult(file:String):FileDetailsResult
 public function enumerateUserPublishedFiles(startIndex:uint):Boolean
 public function enumerateUserPublishedFilesResult():WorkshopFilesResult
 public function enumeratePublishedWorkshopFiles(type:uint, start:uint, count:uint, days:uint, tags:Array, userTags:Array):Boolean
-public function enumeratePublishedWorkshopFilesResult():WorkshopFileResult
+public function enumeratePublishedWorkshopFilesResult():WorkshopFilesResult
 public function enumerateUserSubscribedFiles(startIndex:uint):Boolean
 public function enumerateUserSubscribedFilesResult():SubscribedFilesResult
 public function enumerateUserSharedWorkshopFiles(steamID:String, start:uint, required:Array, excluded:Array):Boolean

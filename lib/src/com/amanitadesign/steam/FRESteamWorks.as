@@ -307,9 +307,9 @@ package com.amanitadesign.steam
 			return _ExtensionContext.call("AIRSteam_EnumeratePublishedWorkshopFiles", type, start, count, days, tags, userTags) as Boolean;
 		}
 
-		public function enumeratePublishedWorkshopFilesResult():WorkshopFileResult
+		public function enumeratePublishedWorkshopFilesResult():WorkshopFilesResult
 		{
-			return _ExtensionContext.call("AIRSteam_EnumeratePublishedWorkshopFilesResult") as WorkshopFileResult;
+			return _ExtensionContext.call("AIRSteam_EnumeratePublishedWorkshopFilesResult") as WorkshopFilesResult;
 		}
 
 		public function enumerateUserSubscribedFiles(startIndex:uint):Boolean
