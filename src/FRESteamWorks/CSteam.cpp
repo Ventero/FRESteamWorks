@@ -357,7 +357,7 @@ bool CSteam::EnumeratePublishedFilesByUserAction(EWorkshopFileAction action, uin
 }
 
 RemoteStorageEnumeratePublishedFilesByUserActionResult_t* CSteam::EnumeratePublishedFilesByUserActionResult() {
-	if(!m_bInitialized) return false;
+	if(!m_bInitialized) return nullptr;
 
 	return &m_PublishedFilesByAction;
 }
@@ -447,7 +447,7 @@ bool CSteam::GetPublishedItemVoteDetails(PublishedFileId_t file) {
 }
 
 RemoteStorageGetPublishedItemVoteDetailsResult_t* CSteam::GetPublishedItemVoteDetailsResult() {
-	if (!m_bInitialized) return false;
+	if (!m_bInitialized) return nullptr;
 
 	return &m_PublishedItemVoteDetails;
 }
