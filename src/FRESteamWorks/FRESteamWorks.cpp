@@ -1102,6 +1102,7 @@ extern "C" {
 		FRE_FUNC(AIRSteam_FileRead),
 		FRE_FUNC(AIRSteam_FileDelete),
 		FRE_FUNC(AIRSteam_FileShare),
+		FRE_FUNC(AIRSteam_FileShareResult),
 		FRE_FUNC(AIRSteam_IsCloudEnabledForApp),
 		FRE_FUNC(AIRSteam_SetCloudEnabledForApp),
 		FRE_FUNC(AIRSteam_GetQuota),
