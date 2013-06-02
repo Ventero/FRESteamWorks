@@ -2,7 +2,8 @@
 
 contents = open("API.txt", "r").read.split("\n")
 
-contents.each do |line|
+# skip first line (init)
+contents[1,contents.size].each do |line|
 	if line.empty? or line[0].chr == "/"
 		puts "\t\t#{line}".rstrip
 		next
