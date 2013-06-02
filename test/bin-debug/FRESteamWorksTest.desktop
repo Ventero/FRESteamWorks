@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=FRESteamWorksTest
+Comment=FRESteamWorksTest
+Exec=./runLinux.sh
+Type=Application
+Categories=Network;
+#Categories=Network;RemoteAccess;
+
