@@ -1175,7 +1175,7 @@ extern "C" {
 		SteamAPI_Shutdown();
 		// Delete the SteamAchievements object
 		delete g_Steam;
-		if (g_Steam) g_Steam = NULL;
+		g_Steam = NULL;
 	}
 
 	// Initialization function of each extension
