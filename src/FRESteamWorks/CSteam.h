@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <string>
 #include <sstream>
+#include <vector>
 
 #include <steam_api.h>
 
@@ -244,3 +245,7 @@ private:
 	               m_CallbackDLCInstalled);
 
 };
+
+// utility functions
+void createParamStringArray(std::vector<std::string> tags,
+	SteamParamStringArray_t* tagArray);

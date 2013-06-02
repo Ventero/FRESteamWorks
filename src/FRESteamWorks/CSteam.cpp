@@ -668,3 +668,25 @@ void CSteam::OnDLCInstalled(DlcInstalled_t *pCallback) {
 	m_DLCInstalled = pCallback->m_nAppID;
 	DispatchEvent(RESPONSE_OnDLCInstalled, k_EResultOK);
 }
+
+/*
+ * utility functions
+ */
+void createParamStringArray(std::vector<std::string> tags,
+	SteamParamStringArray_t* tagArray) {
+
+	if (tags.empty()) {
+		tagArray->m_nNumStrings = 0;
+		tagArray->m_ppStrings = nullptr;
+		return;
+	}
+
+	size_t arrayLength = tags.size();
+	const char** tagstrings = new const char*[arrayLength];
+	for (uint32 i = 0; i < arrayLength; ++i) {
+		tagstrings[i] = tags[i].c_str();
+	}
+
+	tagArray->m_nNumStrings = arrayLength;
+	tagArray->m_ppStrings = tagstrings;
+}

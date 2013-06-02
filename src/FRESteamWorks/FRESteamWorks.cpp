@@ -107,34 +107,28 @@ bool FREGetUint64(FREObject object, uint64* val) {
 	return true;
 }
 
-// extracts a SteamParamStringArray_t out of an FREObject
-// remember to delete[] tagArray->m_ppStrings afterwards
-bool extractParamStringArray(FREObject object, SteamParamStringArray_t* tagArray) {
-	uint32 arrayLength;
-	if (FREGetArrayLength(object, &arrayLength) != FRE_OK) return false;
-
+// converts a FREObject string-array to a std::vector
+std::vector<std::string> extractStringArray(FREObject object) {
 	std::vector<std::string> tags;
+
+	uint32 arrayLength;
+	if (FREGetArrayLength(object, &arrayLength) != FRE_OK)
+		return tags;
+
 	tags.reserve(arrayLength);
 	for (uint32 i = 0; i < arrayLength; ++i) {
 		FREObject value;
 		if (FREGetArrayElementAt(object, i, &value) != FRE_OK)
-			return false;
+			continue;
 
 		std::string strval;
-		if (!FREGetString(value, strval)) return false;
+		if (!FREGetString(value, strval))
+			continue;
 
 		tags.push_back(strval);
 	}
 
-	const char** tagstrings = new const char*[arrayLength];
-	for (uint32 i = 0; i < arrayLength; ++i) {
-		tagstrings[i] = tags[i].c_str();
-	}
-
-	tagArray->m_nNumStrings = arrayLength;
-	tagArray->m_ppStrings = tagstrings;
-
-	return true;
+	return tags;
 }
 
 void ANESteam::DispatchEvent(char* code, char* level) {
@@ -520,8 +514,9 @@ AIR_FUNC(AIRSteam_PublishWorkshopFile) {
 	    !FREGetUint32(argv[5], &visibility) ||
 	    !FREGetUint32(argv[7], &fileType)) return FREBool(false);
 
+	std::vector<std::string> tags = extractStringArray(argv[6]);
 	SteamParamStringArray_t tagArray;
-	if(!extractParamStringArray(argv[6], &tagArray)) return FREBool(false);
+	createParamStringArray(tags, &tagArray);
 
 	bool ret = g_Steam->PublishWorkshopFile(name, preview, appId, title, description,
 		ERemoteStoragePublishedFileVisibility(visibility), &tagArray,
@@ -631,15 +626,17 @@ AIR_FUNC(AIRSteam_EnumeratePublishedWorkshopFiles) {
 	    !FREGetUint32(argv[2], &count) ||
 	    !FREGetUint32(argv[3], &days)) return FREBool(false);
 
-	SteamParamStringArray_t tags, userTags;
-	if (!extractParamStringArray(argv[4], &tags) ||
-	    !extractParamStringArray(argv[5], &userTags)) return FREBool(false);
+	std::vector<std::string> tags = extractStringArray(argv[4]);
+	std::vector<std::string> userTags = extractStringArray(argv[5]);
+	SteamParamStringArray_t tagArray, userTagArray;
+	createParamStringArray(tags, &tagArray);
+	createParamStringArray(userTags, &userTagArray);
 
 	bool ret = g_Steam->EnumeratePublishedWorkshopFiles(
-		EWorkshopEnumerationType(type), start, count, days, &tags, &userTags);
+		EWorkshopEnumerationType(type), start, count, days, &tagArray, &userTagArray);
 
-	delete[] tags.m_ppStrings;
-	delete[] userTags.m_ppStrings;
+	delete[] tagArray.m_ppStrings;
+	delete[] userTagArray.m_ppStrings;
 
 	return FREBool(ret);
 }
@@ -709,15 +706,17 @@ AIR_FUNC(AIRSteam_EnumerateUserSharedWorkshopFiles) {
 	if (!FREGetUint64(argv[0], &steamID) ||
 	    !FREGetUint32(argv[1], &start)) return FREBool(false);
 
-	SteamParamStringArray_t required, excluded;
-	if (!extractParamStringArray(argv[2], &required) ||
-	    !extractParamStringArray(argv[3], &excluded)) return FREBool(false);
+	std::vector<std::string> required = extractStringArray(argv[2]);
+	std::vector<std::string> excluded = extractStringArray(argv[3]);
+	SteamParamStringArray_t requiredArray, excludedArray;
+	createParamStringArray(required, &requiredArray);
+	createParamStringArray(excluded, &excludedArray);
 
 	bool ret = g_Steam->EnumerateUserSharedWorkshopFiles(steamID, start,
-		&required, &excluded);
+		&requiredArray, &excludedArray);
 
-	delete[] required.m_ppStrings;
-	delete[] excluded.m_ppStrings;
+	delete[] requiredArray.m_ppStrings;
+	delete[] excludedArray.m_ppStrings;
 
 	return FREBool(ret);
 }
@@ -887,12 +886,13 @@ AIR_FUNC(AIRSteam_UpdatePublishedFileTags) {
 	PublishedFileUpdateHandle_t handle;
 	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
 
-	SteamParamStringArray_t tags;
-	if(!extractParamStringArray(argv[1], &tags)) return FREBool(false);
+	std::vector<std::string> tags = extractStringArray(argv[1]);
+	SteamParamStringArray_t tagArray;
+	createParamStringArray(tags, &tagArray);
 
-	bool ret = g_Steam->UpdatePublishedFileTags(handle, &tags);
+	bool ret = g_Steam->UpdatePublishedFileTags(handle, &tagArray);
 
-	delete[] tags.m_ppStrings;
+	delete[] tagArray.m_ppStrings;
 
 	return FREBool(ret);
 }
