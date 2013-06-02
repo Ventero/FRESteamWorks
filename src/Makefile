@@ -22,11 +22,14 @@ wrapper: $(wdir)/APIWrapper
 $(dir)/FRESteamWorks.so: $(obj)
 	$(CXX) -shared $(LIB) $^ $(LINK) -o $@
 
-$(wdir)/APIWrapper: $(wdir)/APIWrapper.o $(dir)/CSteam.o
+$(wdir)/APIWrapper: $(wdir)/APIWrapper.o $(dir)/CSteam.o $(wdir)/amf-cpp/libamf.a
 	$(CXX) $(LIB) $^ $(LINK) -o $@
 
 $(wdir)/APIWrapper.o: $(wdir)/APIWrapper.cpp $(wdir)/APIWrapper.h
-	$(CXX) $(CXXFLAGS) -c -DLINUX $(WHITELIST) $(INC) -IFRESteamWorks $< -o $@
+	$(CXX) $(CXXFLAGS) -c -DLINUX $(WHITELIST) $(INC) -isystem $(wdir)/amf-cpp -IFRESteamWorks $< -o $@
+
+$(wdir)/amf-cpp/libamf.a:
+	$(MAKE) -C $(wdir)/amf-cpp 32bit
 
 %.o: %.cpp %.h
 	$(CXX) $(CXXFLAGS) -c -DLINUX $(INC) $< -o $@

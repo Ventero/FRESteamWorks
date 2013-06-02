@@ -10,29 +10,70 @@
 
 CLISteam* g_Steam = NULL;
 
+Serializer serializer;
+
 void CLISteam::DispatchEvent(char* code, char* level) {
 	// we abuse std::cerr for event dispatching, that way it doesn't interfere
 	// with the normal communication on stdout
 	std::cerr << "__event__<" << code << "," << level << ">" << std::endl;
 }
 
+void sendData(Serializer& serializer) {
+	std::vector<u8> data = serializer.data();
+	serializer.clear();
+
+	// first, send a length prefix
+	std::vector<u8> length = AmfInteger(data.size()).serialize();
+	std::copy(length.begin(), length.end(), std::ostream_iterator<u8>(std::cout));
+
+	// if we have "too much" data to send at once, use a tempfile instead
+	if(data.size() > 16384) {
+		std::string filename = std::tmpnam(nullptr);
+		std::fstream tmpfile(filename, std::ios::out | std::ios::binary);
+		std::copy(data.begin(), data.end(), std::ostream_iterator<u8>(tmpfile));
+		tmpfile.close();
+		send(filename);
+	} else {
+		std::copy(data.begin(), data.end(), std::ostream_iterator<u8>(std::cout));
+	}
+}
+
+template<class T>
+void sendItem(T item) {
+	Serializer serializer;
+	serializer << item;
+	sendData(serializer);
+}
+
 void send(bool value) {
-	std::cout << (value ? "t" : "f") << std::flush;
+	sendItem(AmfBool(value));
 }
 
 void send(int32 value) {
-	std::cout << value << std::flush;
+	sendItem(AmfInteger(value));
+}
+
+void send(uint32 value) {
+	sendItem(AmfInteger(value));
+}
+
+void send(uint64 value) {
+	sendItem(AmfString(std::to_string(value)));
 }
 
 void send(float value) {
-	std::cout << value << std::flush;
+	sendItem(AmfDouble(value));
 }
 
 void send(std::string value) {
-	std::cout << value.length() << std::endl;
-	std::cout << value << std::flush;
+	sendItem(AmfString(value));
 }
 
+void send(std::nullptr_t) {
+	sendItem(AmfNull());
+}
+
+// TODO: replace this mess with AMF
 bool get_bool() {
 	std::string item;
 	std::getline(std::cin, item);
@@ -51,56 +92,98 @@ float get_float() {
 	return std::stof(item);
 }
 
-std::string get_string(bool all) {
-	std::string result;
-	if(all) {
-		std::string item;
-		std::getline(std::cin, item);
+std::string get_string() {
+	std::string item;
+	std::getline(std::cin, item);
 
-		size_t length = std::stoi(item);
-		char* buf = new char[length];
-		std::cin.read(buf, length);
-		// remove trailing newline
-		result = std::string(buf, length - 1);
-		delete buf;
-	} else {
-		std::getline(std::cin, result);
-	}
+	size_t length = std::stoi(item);
+	char* buf = new char[length];
+	std::cin.read(buf, length);
+	// remove trailing newline
+	std::string result(buf, length - 1);
 
+	delete buf;
 	return result;
 }
 
-bool Init() {
-	if(g_Steam) return true;
+uint64 get_uint64() {
+	std::string str = get_string();
+	std::istringstream ss(str);
 
-	if(!SteamAPI_Init()) return false;
+	uint64 val;
+	if(!(ss >> val)) return 0;
+
+	return val;
+}
+
+std::vector<std::string> get_array() {
+	int length = get_int();
+	std::vector<std::string> v;
+	for(int i = 0; i < length; ++i) {
+		std::string val = get_string();
+		v.push_back(val);
+	}
+
+	return v;
+}
+
+/*
+ * general functions
+ */
+
+void AIRSteam_Init() {
+	if (g_Steam) {
+		send(true);
+		return;
+	}
+
+	if (!SteamAPI_Init()) {
+		send(false);
+		return;
+	}
 
 	g_Steam = new CLISteam();
-	return true;
+	send(true);
+
+#ifdef WHITELIST
+	uint32 appId = SteamUtils()->GetAppID();
+	// WHITELIST is a comma separated list of app ids
+	uint32 whitelist[] = { WHITELIST };
+	for (auto id : whitelist) {
+		if(id == appId) return;
+	}
+
+	exit(1);
+#endif
 }
 
-bool RequestStats() {
-	bool ret = false;
-
-	if (g_Steam) ret = g_Steam->RequestStats();
+void AIRSteam_RunCallbacks() {
 	SteamAPI_RunCallbacks();
-
-	return ret;
 }
 
-std::string GetUserID() {
-	if (!g_Steam) return "";
+void AIRSteam_GetUserID() {
+	if (!g_Steam) return send("");
 
-	return g_Steam->GetUserID();
+	send(g_Steam->GetUserID());
 }
 
-std::string GetPersonaName() {
-	if (!g_Steam) return "";
+void AIRSteam_GetAppID() {
+	if (!g_Steam) return send("");
 
-	return g_Steam->GetPersonaName();
+	send(g_Steam->GetAppID());
 }
 
-void UseCrashHandler(uint32 appID, std::string version, std::string date, std::string time) {
+void AIRSteam_GetPersonaName() {
+	if (!g_Steam) return send("");
+
+	send(g_Steam->GetPersonaName());
+}
+
+void AIRSteam_UseCrashHandler() {
+	uint32 appID = get_int();
+	std::string version = get_string();
+	std::string date = get_string();
+	std::string time = get_string();
 	if (!g_Steam) return;
 
 	SteamAPI_SetBreakpadAppID(appID);
@@ -108,277 +191,776 @@ void UseCrashHandler(uint32 appID, std::string version, std::string date, std::s
 		false, NULL, NULL);
 }
 
-bool SetAchievement(std::string name) {
+/*
+ * stats / achievements
+ */
+
+void AIRSteam_RequestStats() {
+	bool ret = false;
+
+	if (g_Steam) ret = g_Steam->RequestStats();
+	SteamAPI_RunCallbacks();
+
+	send(ret);
+}
+
+void AIRSteam_SetAchievement() {
+	std::string name = get_string();
 	bool ret = false;
 	if (g_Steam && !name.empty()) {
 		ret = g_Steam->SetAchievement(name);
 	}
 
 	SteamAPI_RunCallbacks();
-	return ret;
+	send(ret);
 }
 
-bool ClearAchievement(std::string name) {
-	if(!g_Steam || name.empty()) return false;
+void AIRSteam_ClearAchievement() {
+	std::string name = get_string();
+	if(!g_Steam || name.empty()) return send(false);
 
-	return g_Steam->ClearAchievement(name);
+	send(g_Steam->ClearAchievement(name));
 }
 
-bool IsAchievement(std::string name) {
-	if(!g_Steam || name.empty()) return false;
+void AIRSteam_IsAchievement() {
+	std::string name = get_string();
+	if (!g_Steam || name.empty()) return send(false);
 
-	return g_Steam->IsAchievement(name);
+	send(g_Steam->IsAchievement(name));
 }
 
-int32 GetStatInt(std::string name) {
-	if(!g_Steam || name.empty()) return 0;
+void AIRSteam_GetStatInt() {
+	std::string name = get_string();
+	if(g_Steam || name.empty()) return send(0);
 
 	int32 value;
 	g_Steam->GetStat(name, &value);
-	return value;
+	send(value);
 }
 
-float GetStatFloat(std::string name) {
-	if(!g_Steam || name.empty()) return 0.0f;
+void AIRSteam_GetStatFloat() {
+	std::string name = get_string();
+	if (g_Steam || name.empty()) return send(0.0f);
 
 	float value = 0.0f;
 	g_Steam->GetStat(name, &value);
-	return value;
+	send(value);
 }
 
-bool SetStatInt(std::string name, int32 value) {
-	if(!g_Steam || name.empty()) return false;;
+void AIRSteam_SetStatInt() {
+	std::string name = get_string();
+	int32 value = get_int();
+	if (!g_Steam || name.empty()) return send(false);
 
-	return g_Steam->SetStat(name, value);
+	send(g_Steam->SetStat(name, value));
 }
 
-bool SetStatFloat(std::string name, float value) {
-	if(!g_Steam || name.empty()) return false;
+void AIRSteam_SetStatFloat() {
+	std::string name = get_string();
+	float value = get_float();
+	if(!g_Steam || name.empty()) return send(false);
 
-	return g_Steam->SetStat(name, value);
+	send(g_Steam->SetStat(name, value));
 }
 
-bool StoreStats() {
-	if(!g_Steam) return false;
+void AIRSteam_StoreStats() {
+	if(!g_Steam) return send(false);
 
-	return g_Steam->StoreStats();
+	send(g_Steam->StoreStats());
 }
 
-bool ResetAllStats(bool achievementsToo) {
-	if(!g_Steam) return false;
+void AIRSteam_ResetAllStats() {
+	bool achievementsToo = get_bool();
+	if(!g_Steam) return send(false);
 
-	return g_Steam->ResetAllStats(achievementsToo);
+	send(g_Steam->ResetAllStats(achievementsToo));
 }
 
-int32 GetFileCount() {
-	if(!g_Steam) return 0;
+/*
+ * remote storage
+ */
 
-	return g_Steam->GetFileCount();
+void AIRSteam_GetFileCount() {
+	if(!g_Steam) return send(0);
+
+	send(g_Steam->GetFileCount());
 }
 
-int32 GetFileSize(std::string name) {
-	if(!g_Steam || name.empty()) return 0;
+void AIRSteam_GetFileSize() {
+	std::string name = get_string();
+	if(!g_Steam || name.empty()) return send(0);
 
-	return g_Steam->GetFileSize(name);
+	send(g_Steam->GetFileSize(name));
 }
 
-bool FileExists(std::string name) {
-	if(!g_Steam || name.empty()) return false;
+void AIRSteam_FileExists() {
+	std::string name = get_string();
+	if(!g_Steam || name.empty()) return send(false);
 
-	return g_Steam->FileExists(name);
+	send(g_Steam->FileExists(name));
 }
 
-bool FileWrite(std::string name, const void* data, size_t length) {
-	if(!g_Steam || name.empty()) return false;
+void AIRSteam_FileWrite() {
+	std::string name = get_string();
+	std::string data = get_string();
+	if(!g_Steam || name.empty()) return send(false);
 
-	return g_Steam->FileWrite(name, data, length);
+	send(g_Steam->FileWrite(name, data.c_str(), data.length()));
 }
 
-bool FileRead(std::string name, std::string& result) {
-	if(!g_Steam || name.empty()) return false;
+void AIRSteam_FileRead() {
+	std::string name = get_string();
+	if(!g_Steam || name.empty()) return send(false);
 
 	char* data = NULL;
 	int32 size = g_Steam->FileRead(name, &data);
-	if (size == 0) {
-		result = "";
-		return false;
-	}
+	if (size == 0) return send(false);
 
-	result = std::string(data, size);
+	send(true);
+	Serializer serializer;
+	serializer << AmfByteArray(data, data + size);
+	sendData(serializer);
 	delete data;
-	return true;
 }
 
-bool FileDelete(std::string name) {
-	if(!g_Steam || name.empty()) return false;
+void AIRSteam_FileDelete() {
+	std::string name = get_string();
+	if(!g_Steam || name.empty()) return send(false);
 
-	return g_Steam->FileDelete(name);
+	send(g_Steam->FileDelete(name));
 }
 
-bool IsCloudEnabledForApp() {
-	if(!g_Steam) return false;
+void AIRSteam_FileShare() {
+	std::string name = get_string();
+	if(!g_Steam || name.empty()) return send(false);
 
-	return g_Steam->IsCloudEnabledForApp();
+	send(g_Steam->FileShare(name));
 }
 
-bool SetCloudEnabledForApp(bool enabled) {
-	if(!g_Steam) return false;
+void AIRSteam_FileShareResult() {
+	if(!g_Steam) return send(k_UGCHandleInvalid);
 
-	return g_Steam->SetCloudEnabledForApp(enabled);
+	send(g_Steam->FileShareResult());
 }
 
-void callAPI(APIFunc id) {
-	switch(id) {
-		case AIRSteam_Init:
-			{
-				bool res = Init();
-				send(res);
+void AIRSteam_IsCloudEnabledForApp() {
+	if(!g_Steam) return send(false);
 
-#ifdef WHITELIST
-				if(res) {
-					uint32 appId = SteamUtils()->GetAppID();
-					// WHITELIST is a comma separated list of app ids
-					uint32 whitelist[] = { WHITELIST };
-					for (auto id : whitelist) {
-						if(id == appId) return;
-					}
+	send(g_Steam->IsCloudEnabledForApp());
+}
 
-					exit(1);
-				}
-#endif
-			}
-			return;
+void AIRSteam_SetCloudEnabledForApp() {
+	bool enabled = get_bool();
+	if(!g_Steam) return send(false);
 
-		case AIRSteam_RunCallbacks:
-			SteamAPI_RunCallbacks();
-			return;
+	send(g_Steam->SetCloudEnabledForApp(enabled));
+}
 
-		case AIRSteam_RequestStats:
-			send(RequestStats());
-			return;
+void AIRSteam_GetQuota() {
+	if(!g_Steam) return send(nullptr);
 
-		case AIRSteam_SetAchievement:
-			send(SetAchievement(get_string(false)));
-			return;
+	int32 total, avail;
+	if(!g_Steam->GetQuota(&total, &avail)) return send(nullptr);
 
-		case AIRSteam_ClearAchievement:
-			send(ClearAchievement(get_string(false)));
-			return;
+	AmfArray array;
+	array.push_back(AmfInteger(total));
+	array.push_back(AmfInteger(avail));
 
-		case AIRSteam_IsAchievement:
-			send(IsAchievement(get_string(false)));
-			return;
+	Serializer serializer;
+	serializer << array;
+	sendData(serializer);
+}
 
-		case AIRSteam_GetStatInt:
-			send(GetStatInt(get_string(false)));
-			return;
+/*
+ * ugc / workshop
+ */
+void AIRSteam_UGCDownload() {
+	UGCHandle_t handle = get_uint64();
+	int32 priority = get_int();
+	if(!g_Steam || handle == 0) return send(false);
 
-		case AIRSteam_GetStatFloat:
-			send(GetStatFloat(get_string(false)));
-			return;
+	send(g_Steam->UGCDownload(handle, priority));
+}
 
-		case AIRSteam_SetStatInt:
-			{
-				std::string name = get_string(false);
-				int32 value = get_int();
-				send(SetStatInt(name, value));
-			}
-			return;
+void AIRSteam_UGCRead() {
+	UGCHandle_t handle = get_uint64();
+	int32 size = get_int();
+	uint32 offset = get_int();
 
-		case AIRSteam_SetStatFloat:
-			{
-				std::string name = get_string(false);
-				float value = get_float();
-				send(SetStatFloat(name, value));
-			}
-			return;
+	if (!g_Steam || handle == 0 || size < 0) return send(false);
 
-		case AIRSteam_StoreStats:
-			send(StoreStats());
-			return;
-
-		case AIRSteam_ResetAllStats:
-			send(ResetAllStats(get_bool()));
-			return;
-
-		// remote storage
-		case AIRSteam_GetFileCount:
-			send(GetFileCount());
-			return;
-
-		case AIRSteam_GetFileSize:
-			send(GetFileSize(get_string(false)));
-			return;
-
-		case AIRSteam_FileExists:
-			send(FileExists(get_string(false)));
-			return;
-
-		case AIRSteam_FileWrite:
-			{
-				std::string name = get_string(false);
-				std::string data = get_string(true);
-				send(FileWrite(name, data.c_str(), data.length()));
-			}
-			return;
-
-		case AIRSteam_FileRead:
-			{
-				std::string data;
-				bool res = FileRead(get_string(false), data);
-				send(res);
-				if (res) send(data);
-			}
-			return;
-
-		case AIRSteam_FileDelete:
-			send(FileDelete(get_string(false)));
-			return;
-
-		case AIRSteam_IsCloudEnabledForApp:
-			send(IsCloudEnabledForApp());
-			return;
-
-		case AIRSteam_SetCloudEnabledForApp:
-			send(SetCloudEnabledForApp(get_bool()));
-			return;
-
-		case AIRSteam_GetUserID:
-			send(GetUserID());
-			return;
-
-		case AIRSteam_GetPersonaName:
-			send(GetPersonaName());
-			return;
-
-		case AIRSteam_UseCrashHandler:
-			{
-				uint32 appID = get_int();
-				std::string version = get_string(false);
-				std::string date = get_string(false);
-				std::string time = get_string(false);
-				UseCrashHandler(appID, version, date, time);
-			}
-			return;
-
-		default:
-			// silently ignore, can't print to stderr because it'd interfere
-			// with the event handling ...
-			break;
+	char* data = nullptr;
+	int32 result = 0;
+	if (size > 0) {
+		result = g_Steam->UGCRead(handle, size, offset, &data);
 	}
+
+	if(result == 0) return send(false);
+
+	send(true);
+
+	Serializer serializer;
+	serializer << AmfByteArray(data, data + result);
+	sendData(serializer);
+	delete data;
 }
+
+void AIRSteam_GetUGCDownloadProgress() {
+	UGCHandle_t handle = get_uint64();
+	if (!g_Steam || handle == 0) return send(nullptr);
+
+	int32 downloaded, expected;
+	if(!g_Steam->GetUGCDownloadProgress(handle, &downloaded, &expected))
+		return send(nullptr);
+
+	AmfArray array;
+	array.push_back(AmfInteger(downloaded));
+	array.push_back(AmfInteger(expected));
+
+	Serializer serializer;
+	serializer << array;
+	sendData(serializer);
+}
+
+void AIRSteam_GetUGCDownloadResult() {
+	UGCHandle_t handle = get_uint64();
+	if (!g_Steam || handle == 0) return send(nullptr);
+
+	auto details = g_Steam->GetUGCDownloadResult(handle);
+	if (!details) return send(nullptr);
+
+	AmfObjectTraits traits("com.amanitadesign.steam.DownloadUGCResult", false, false);
+	AmfObject obj(traits);
+
+	obj.addSealedProperty("result", AmfInteger(details->m_eResult));
+	obj.addSealedProperty("fileHandle", AmfString(std::to_string(details->m_hFile)));
+	obj.addSealedProperty("appID", AmfInteger(details->m_nAppID));
+	obj.addSealedProperty("size", AmfInteger(details->m_nSizeInBytes));
+	obj.addSealedProperty("fileName", AmfString(details->m_pchFileName));
+	obj.addSealedProperty("owner", AmfString(std::to_string(details->m_ulSteamIDOwner)));
+
+	sendItem(obj);
+}
+
+void AIRSteam_PublishWorkshopFile() {
+	std::string name = get_string();
+	std::string preview = get_string();
+	uint32 appId = get_int();
+	std::string title = get_string();
+	std::string description = get_string();
+	uint32 visibility = get_int();
+
+	std::vector<std::string> tags = get_array();
+	SteamParamStringArray_t tagArray;
+	createParamStringArray(tags, &tagArray);
+
+	uint32 fileType = get_int();
+
+	send(g_Steam->PublishWorkshopFile(name, preview, appId, title, description,
+		ERemoteStoragePublishedFileVisibility(visibility), &tagArray,
+		EWorkshopFileType(fileType)));
+
+	delete[] tagArray.m_ppStrings;
+}
+
+void AIRSteam_PublishWorkshopFileResult() {
+	if (!g_Steam) return send("0");
+
+	send(g_Steam->PublishWorkshopFileResult());
+}
+
+void AIRSteam_DeletePublishedFile() {
+	PublishedFileId_t handle = get_uint64();
+	if (!g_Steam || handle == 0) return send(false);
+
+	send(g_Steam->DeletePublishedFile(handle));
+}
+
+void AIRSteam_GetPublishedFileDetails() {
+	PublishedFileId_t handle = get_uint64();
+	if (!g_Steam || handle == 0) return send(false);
+
+	send(g_Steam->GetPublishedFileDetails(handle));
+}
+
+void AIRSteam_GetPublishedFileDetailsResult() {
+	PublishedFileId_t file = get_uint64();
+	if (!g_Steam || file == 0) return send(nullptr);
+
+	auto details = g_Steam->GetPublishedFileDetailsResult(file);
+	if (!details) return send(nullptr);
+
+	AmfObjectTraits traits("com.amanitadesign.steam.FileDetailsResult", false, false);
+	AmfObject obj(traits);
+
+	obj.addSealedProperty("result", AmfInteger(details->m_eResult));
+	obj.addSealedProperty("file", AmfString(std::to_string(details->m_nPublishedFileId)));
+	obj.addSealedProperty("creatorAppID", AmfInteger(details->m_nCreatorAppID));
+	obj.addSealedProperty("consumerAppID", AmfInteger(details->m_nConsumerAppID));
+	obj.addSealedProperty("title", AmfString(details->m_rgchTitle));
+	obj.addSealedProperty("description", AmfString(details->m_rgchDescription));
+	obj.addSealedProperty("fileHandle", AmfString(std::to_string(details->m_hFile)));
+	obj.addSealedProperty("previewFileHandle", AmfString(std::to_string(details->m_hPreviewFile)));
+	obj.addSealedProperty("owner", AmfString(std::to_string(details->m_ulSteamIDOwner)));
+	obj.addSealedProperty("timeCreated", AmfInteger(details->m_rtimeCreated));
+	obj.addSealedProperty("timeUpdated", AmfInteger(details->m_rtimeUpdated));
+	obj.addSealedProperty("visibility", AmfInteger(details->m_eVisibility));
+	obj.addSealedProperty("banned", AmfBool(details->m_bBanned));
+	obj.addSealedProperty("tags", AmfString(details->m_rgchTags));
+	obj.addSealedProperty("tagsTruncated", AmfBool(details->m_bTagsTruncated));
+	obj.addSealedProperty("fileName", AmfString(details->m_pchFileName));
+	obj.addSealedProperty("fileSize", AmfInteger(details->m_nFileSize));
+	obj.addSealedProperty("previewFileSize", AmfInteger(details->m_nPreviewFileSize));
+	obj.addSealedProperty("url", AmfString(details->m_rgchURL));
+	obj.addSealedProperty("fileType", AmfInteger(details->m_eFileType));
+
+	sendItem(obj);
+}
+
+void AIRSteam_EnumerateUserPublishedFiles() {
+	uint32 startIndex = get_int();
+	if (!g_Steam) return send(false);
+
+	return send(g_Steam->EnumerateUserPublishedFiles(startIndex));
+}
+
+void AIRSteam_EnumerateUserPublishedFilesResult() {
+	if (!g_Steam) return send(nullptr);
+
+	auto details = g_Steam->EnumerateUserPublishedFilesResult();
+	if (!details) return send(nullptr);
+
+	AmfObjectTraits traits("com.amanitadesign.steam.UserFilesResult", false, false);
+	AmfObject obj(traits);
+
+	obj.addSealedProperty("result", AmfInteger(details->m_eResult));
+	obj.addSealedProperty("resultsReturned", AmfInteger(details->m_nResultsReturned));
+	obj.addSealedProperty("totalResults", AmfInteger(details->m_nTotalResultCount));
+
+	AmfArray ids;
+	for (int32 i = 0; i < details->m_nResultsReturned; ++i)
+		ids.push_back(AmfString(std::to_string(details->m_rgPublishedFileId[i])));
+
+	obj.addSealedProperty("publishedFileId", ids);
+
+	sendItem(obj);
+}
+
+void AIRSteam_EnumeratePublishedWorkshopFiles() {
+	uint32 type = get_int();
+	uint32 start = get_int();
+	uint32 count = get_int();
+	uint32 days = get_int();
+
+	std::vector<std::string> tags = get_array();
+	std::vector<std::string> userTags = get_array();
+
+	SteamParamStringArray_t tagArray, userTagArray;
+	createParamStringArray(tags, &tagArray);
+	createParamStringArray(userTags, &userTagArray);
+
+	if (!g_Steam) return send(false);
+
+	send(g_Steam->EnumeratePublishedWorkshopFiles(
+		EWorkshopEnumerationType(type), start, count, days, &tagArray, &userTagArray));
+
+	delete[] tagArray.m_ppStrings;
+	delete[] userTagArray.m_ppStrings;
+}
+
+void AIRSteam_EnumeratePublishedWorkshopFilesResult() {
+	if (!g_Steam) return send(nullptr);
+
+	auto details = g_Steam->EnumeratePublishedWorkshopFilesResult();
+	if (!details) return send(nullptr);
+
+	AmfObjectTraits traits("com.amanitadesign.steam.WorkshopFilesResult", false, false);
+	AmfObject obj(traits);
+
+	obj.addSealedProperty("result", AmfInteger(details->m_eResult));
+	obj.addSealedProperty("resultsReturned", AmfInteger(details->m_nResultsReturned));
+	obj.addSealedProperty("totalResults", AmfInteger(details->m_nTotalResultCount));
+
+	AmfArray ids, scores;
+	for (int32 i = 0; i < details->m_nResultsReturned; ++i) {
+		ids.push_back(AmfString(std::to_string(details->m_rgPublishedFileId[i])));
+		scores.push_back(AmfDouble(details->m_rgScore[i]));
+	}
+
+	obj.addSealedProperty("publishedFileId", ids);
+	obj.addSealedProperty("score", scores);
+
+	sendItem(obj);
+}
+
+void AIRSteam_EnumerateUserSubscribedFiles() {
+	uint32 startIndex = get_int();
+	if (!g_Steam) return send(false);
+
+	return send(g_Steam->EnumerateUserSubscribedFiles(startIndex));
+}
+
+void AIRSteam_EnumerateUserSubscribedFilesResult() {
+	if (!g_Steam) return send(nullptr);
+
+	auto details = g_Steam->EnumerateUserSubscribedFilesResult();
+	if (!details) return send(nullptr);
+
+	AmfObjectTraits traits("com.amanitadesign.steam.SubscribedFilesResult", false, false);
+	AmfObject obj(traits);
+
+	obj.addSealedProperty("result", AmfInteger(details->m_eResult));
+	obj.addSealedProperty("resultsReturned", AmfInteger(details->m_nResultsReturned));
+	obj.addSealedProperty("totalResults", AmfInteger(details->m_nTotalResultCount));
+
+	AmfArray ids, timesSubscribed;
+	for (int32 i = 0; i < details->m_nResultsReturned; ++i) {
+		ids.push_back(AmfString(std::to_string(details->m_rgPublishedFileId[i])));
+		timesSubscribed.push_back(AmfDouble(details->m_rgRTimeSubscribed[i]));
+	}
+
+	obj.addSealedProperty("publishedFileId", ids);
+	obj.addSealedProperty("timeSubscribed", timesSubscribed);
+
+	sendItem(obj);
+}
+
+void AIRSteam_EnumerateUserSharedWorkshopFiles() {
+	uint64 steamID = get_uint64();
+	uint32 start = get_int();
+
+	std::vector<std::string> required = get_array();
+	std::vector<std::string> excluded = get_array();
+
+	SteamParamStringArray_t requiredArray, excludedArray;
+	createParamStringArray(required, &requiredArray);
+	createParamStringArray(excluded, &excludedArray);
+
+	if (!g_Steam) return send(false);
+
+	send(g_Steam->EnumerateUserSharedWorkshopFiles(steamID, start,
+		&requiredArray, &excludedArray));
+
+	delete[] requiredArray.m_ppStrings;
+	delete[] excludedArray.m_ppStrings;
+}
+
+void AIRSteam_EnumerateUserSharedWorkshopFilesResult() {
+	if (!g_Steam) return send(nullptr);
+
+	auto details = g_Steam->EnumerateUserSharedWorkshopFilesResult();
+	if (!details) return send(nullptr);
+
+	AmfObjectTraits traits("com.amanitadesign.steam.UserFilesResult", false, false);
+	AmfObject obj(traits);
+
+	obj.addSealedProperty("result", AmfInteger(details->m_eResult));
+	obj.addSealedProperty("resultsReturned", AmfInteger(details->m_nResultsReturned));
+	obj.addSealedProperty("totalResults", AmfInteger(details->m_nTotalResultCount));
+
+	AmfArray ids;
+	for (int32 i = 0; i < details->m_nResultsReturned; ++i) {
+		ids.push_back(AmfString(std::to_string(details->m_rgPublishedFileId[i])));
+	}
+
+	obj.addSealedProperty("publishedFileId", ids);
+
+	sendItem(obj);
+}
+
+void AIRSteam_EnumeratePublishedFilesByUserAction() {
+	uint32 action = get_int();
+	uint32 startIndex = get_int();
+	if (!g_Steam) return send(false);
+
+	return send(g_Steam->EnumeratePublishedFilesByUserAction(
+		EWorkshopFileAction(action), startIndex));
+}
+
+void AIRSteam_EnumeratePublishedFilesByUserActionResult() {
+	if (!g_Steam) return send(nullptr);
+
+	auto details = g_Steam->EnumeratePublishedFilesByUserActionResult();
+	if (!details) return send(nullptr);
+
+	AmfObjectTraits traits("com.amanitadesign.steam.FilesByActionResult", false, false);
+	AmfObject obj(traits);
+
+	obj.addSealedProperty("result", AmfInteger(details->m_eResult));
+	obj.addSealedProperty("action", AmfInteger(details->m_eAction));
+	obj.addSealedProperty("resultsReturned", AmfInteger(details->m_nResultsReturned));
+	obj.addSealedProperty("totalResults", AmfInteger(details->m_nTotalResultCount));
+
+	AmfArray ids, timesUpdated;
+	for (int32 i = 0; i < details->m_nResultsReturned; ++i) {
+		ids.push_back(AmfString(std::to_string(details->m_rgPublishedFileId[i])));
+		timesUpdated.push_back(AmfInteger(details->m_rgRTimeUpdated[i]));
+	}
+
+	obj.addSealedProperty("publishedFileId", ids);
+	obj.addSealedProperty("timeUpdated", timesUpdated);
+
+	sendItem(obj);
+}
+
+void AIRSteam_SubscribePublishedFile() {
+	PublishedFileId_t handle = get_uint64();
+	if (!g_Steam || handle == 0)
+		return send(false);
+
+	send(g_Steam->SubscribePublishedFile(handle));
+}
+
+void AIRSteam_UnsubscribePublishedFile() {
+	PublishedFileId_t handle = get_uint64();
+	if (!g_Steam || handle == 0)
+		return send(false);
+
+	send(g_Steam->UnsubscribePublishedFile(handle));
+}
+
+void AIRSteam_CreatePublishedFileUpdateRequest() {
+	PublishedFileId_t file = get_uint64();
+	if (!g_Steam || file == 0)
+		return send(k_PublishedFileUpdateHandleInvalid);
+
+	send(g_Steam->CreatePublishedFileUpdateRequest(file));
+}
+
+void AIRSteam_UpdatePublishedFileFile() {
+	PublishedFileId_t handle = get_uint64();
+	std::string file = get_string();
+	if (!g_Steam || handle == k_PublishedFileUpdateHandleInvalid || file.empty())
+		return send(false);
+
+	send(g_Steam->UpdatePublishedFileFile(handle, file));
+}
+
+void AIRSteam_UpdatePublishedFilePreviewFile() {
+	PublishedFileId_t handle = get_uint64();
+	std::string preview = get_string();
+	if (!g_Steam || handle == k_PublishedFileUpdateHandleInvalid || preview.empty())
+		return send(false);
+
+	send(g_Steam->UpdatePublishedFilePreviewFile(handle, preview));
+}
+
+void AIRSteam_UpdatePublishedFileTitle() {
+	PublishedFileId_t handle = get_uint64();
+	std::string title = get_string();
+	if (!g_Steam || handle == k_PublishedFileUpdateHandleInvalid || title.empty())
+		return send(false);
+
+	send(g_Steam->UpdatePublishedFileTitle(handle, title));
+}
+
+void AIRSteam_UpdatePublishedFileDescription() {
+	PublishedFileId_t handle = get_uint64();
+	std::string description = get_string();
+	if (!g_Steam || handle == k_PublishedFileUpdateHandleInvalid || description.empty())
+		return send(false);
+
+	send(g_Steam->UpdatePublishedFileDescription(handle, description));
+}
+
+void AIRSteam_UpdatePublishedFileSetChangeDescription() {
+	PublishedFileId_t handle = get_uint64();
+	std::string changeDesc = get_string();
+	if (!g_Steam || handle == k_PublishedFileUpdateHandleInvalid || changeDesc.empty())
+		return send(false);
+
+	send(g_Steam->UpdatePublishedFileSetChangeDescription(handle, changeDesc));
+}
+
+void AIRSteam_UpdatePublishedFileVisibility() {
+	PublishedFileId_t handle = get_uint64();
+	uint32 visibility = get_int();
+	if (!g_Steam || handle == k_PublishedFileUpdateHandleInvalid)
+		return send(false);
+
+	send(g_Steam->UpdatePublishedFileVisibility(handle,
+		ERemoteStoragePublishedFileVisibility(visibility)));
+}
+
+void AIRSteam_UpdatePublishedFileTags() {
+	PublishedFileUpdateHandle_t handle = get_uint64();
+
+	std::vector<std::string> tags = get_array();
+	SteamParamStringArray_t tagArray;
+	createParamStringArray(tags, &tagArray);
+
+	if (!g_Steam) return send(false);
+
+	send(g_Steam->UpdatePublishedFileTags(handle, &tagArray));
+
+	delete[] tagArray.m_ppStrings;
+}
+
+void AIRSteam_CommitPublishedFileUpdate() {
+	PublishedFileId_t handle = get_uint64();
+	if (!g_Steam || handle == k_PublishedFileUpdateHandleInvalid)
+		return send(false);
+
+	send(g_Steam->CommitPublishedFileUpdate(handle));
+}
+
+void AIRSteam_GetPublishedItemVoteDetails() {
+	PublishedFileId_t file = get_uint64();
+	if (!g_Steam || file == 0) return send(false);
+
+	return send(g_Steam->GetPublishedItemVoteDetails(file));
+}
+
+void AIRSteam_GetPublishedItemVoteDetailsResult() {
+	if (!g_Steam) return send(nullptr);
+
+	auto details = g_Steam->GetPublishedItemVoteDetailsResult();
+	if (!details) return send(nullptr);
+
+	AmfObjectTraits traits("com.amanitadesign.steam.ItemVoteDetailsResult", false, false);
+	AmfObject obj(traits);
+
+	obj.addSealedProperty("result", AmfInteger(details->m_eResult));
+	obj.addSealedProperty("publishedFileId", AmfString(std::to_string(details->m_unPublishedFileId)));
+	obj.addSealedProperty("votesFor", AmfInteger(details->m_nVotesFor));
+	obj.addSealedProperty("votesAgainst", AmfInteger(details->m_nVotesAgainst));
+	obj.addSealedProperty("reports", AmfInteger(details->m_nReports));
+	obj.addSealedProperty("score", AmfDouble(details->m_fScore));
+
+	sendItem(obj);
+}
+
+void AIRSteam_UpdateUserPublishedItemVote() {
+	PublishedFileId_t file = get_uint64();
+	uint32 upvote = get_int();
+	if (!g_Steam || file == 0) return send(false);
+
+	return send(g_Steam->UpdateUserPublishedItemVote(file, upvote != 0));
+}
+
+void AIRSteam_SetUserPublishedFileAction() {
+	PublishedFileId_t file = get_uint64();
+	uint32 action = get_int();
+	if (!g_Steam || file == 0) return send(false);
+
+	return send(g_Steam->SetUserPublishedFileAction(file,
+		EWorkshopFileAction(action)));
+}
+
+/*
+ * overlay
+ */
+void AIRSteam_ActivateGameOverlay() {
+	std::string dialog = get_string();
+	if (!g_Steam || dialog.empty()) return send(false);
+
+	send(g_Steam->ActivateGameOverlay(dialog));
+}
+
+void AIRSteam_ActivateGameOverlayToUser() {
+	std::string dialog = get_string();
+	uint64 steamId = get_uint64();
+	if (!g_Steam || dialog.empty() || steamId == 0) return send(false);
+
+	send(g_Steam->ActivateGameOverlayToUser(dialog, CSteamID(steamId)));
+}
+
+void AIRSteam_ActivateGameOverlayToWebPage() {
+	std::string url = get_string();
+	if (!g_Steam || url.empty()) return send(false);
+
+	send(g_Steam->ActivateGameOverlayToWebPage(url));
+}
+
+void AIRSteam_ActivateGameOverlayToStore() {
+	uint32 appId = get_int();
+	uint32 flag = get_int();
+	if (!g_Steam) return send(false);
+
+	send(g_Steam->ActivateGameOverlayToStore(appId,
+		EOverlayToStoreFlag(flag)));
+}
+
+void AIRSteam_ActivateGameOverlayInviteDialog() {
+	uint64 lobbyId = get_uint64();
+	if (!g_Steam || lobbyId == 0) return send(false);
+
+	send(g_Steam->ActivateGameOverlayInviteDialog(CSteamID(lobbyId)));
+}
+
+void AIRSteam_IsOverlayEnabled() {
+	if (!g_Steam) return send(false);
+
+	send(g_Steam->IsOverlayEnabled());
+}
+
+/*
+ * DLC / subscription
+ */
+void AIRSteam_IsSubscribedApp() {
+	uint32 appId = get_int();
+	if (!g_Steam || appId == 0) return send(false);
+
+	send(g_Steam->IsSubscribedApp(appId));
+}
+
+void AIRSteam_IsDLCInstalled() {
+	uint32 appId = get_int();
+	if (!g_Steam || appId == 0) return send(false);
+
+	send(g_Steam->IsDLCInstalled(appId));
+}
+
+void AIRSteam_GetDLCCount() {
+	if (!g_Steam) return send(0);
+
+	send(g_Steam->GetDLCCount());
+}
+
+void AIRSteam_InstallDLC() {
+	uint32 appId = get_int();
+	if (!g_Steam || appId == 0) return send(false);
+
+	send(g_Steam->InstallDLC(appId));
+}
+
+void AIRSteam_UninstallDLC() {
+	uint32 appId = get_int();
+	if (!g_Steam || appId == 0) return send(false);
+
+	send(g_Steam->UninstallDLC(appId));
+}
+
+void AIRSteam_DLCInstalledResult() {
+	if (!g_Steam) return send(0);
+
+	send(g_Steam->DLCInstalledResult());
+}
+
 
 int main(int argc, char** argv) {
 	std::ios::sync_with_stdio(false);
+
 	while(std::cin.good()) {
 		std::string buf;
 		std::getline(std::cin, buf);
 
 		if(buf.empty()) break;
 
-		APIFunc func = APIFunc(std::stoi(buf));
-		callAPI(func);
+		unsigned int func;
+		try {
+			func = std::stoi(buf);
+		} catch (...) {
+			// just read on and hope for the best
+			continue;
+		}
+
+		if (func >= apiFunctions.size())
+			continue;
+
+		apiFunctions[func]();
 	}
+
 	SteamAPI_Shutdown();
 	delete g_Steam;
 	return 0;
