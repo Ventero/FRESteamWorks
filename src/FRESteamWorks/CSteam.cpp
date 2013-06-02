@@ -154,7 +154,7 @@ int32 CSteam::FileRead(std::string name, char** content) {
 	char* data = new char[size];
 	int32 read = SteamRemoteStorage()->FileRead(name.c_str(), data, size);
 	if(read == 0) {
-		delete data;
+		delete[] data;
 		return 0;
 	}
 
@@ -215,7 +215,7 @@ int32 CSteam::UGCRead(UGCHandle_t handle, int32 size, uint32 offset, char **cont
 	char *data = new char[size];
 	int32 read = SteamRemoteStorage()->UGCRead(handle, data, size, offset);
 	if (read == 0) {
-		delete data;
+		delete[] data;
 		return 0;
 	}
 
