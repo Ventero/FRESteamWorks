@@ -1,0 +1,3 @@
+[submodule "src/APIWrapper/amf-cpp"]
+	path = src/APIWrapper/amf-cpp
+	url = https://github.com/Ventero/amf-cpp
