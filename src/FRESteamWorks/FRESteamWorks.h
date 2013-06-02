@@ -50,7 +50,7 @@ bool FREGetInt32(FREObject, int32* val);
 bool FREGetUint32(FREObject, uint32* val);
 bool FREGetUint64(FREObject, uint64* val);
 
-bool extractParamStringArray(FREObject, SteamParamStringArray_t*);
+std::vector<std::string> extractStringArray(FREObject object);
 
 class ANESteam : public CSteam {
 	void DispatchEvent(char* code, char* level);
