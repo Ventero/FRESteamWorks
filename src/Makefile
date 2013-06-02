@@ -35,4 +35,5 @@ $(wdir)/amf-cpp/libamf.a:
 	$(CXX) $(CXXFLAGS) -c -DLINUX $(INC) $< -o $@
 
 clean:
-	rm -f $(dir)/*.o $(dir)/*.so $(wdir)/*.o $(wdir)/APIWrapper
+	rm -f $(dir)/*.o $(dir)/*.so $(wdir)/*.o $(wdir)/APIWrapper $(wdir)/amf-cpp/libamf.a
+	$(MAKE) -C $(wdir)/amf-cpp clean
