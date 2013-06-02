@@ -102,7 +102,7 @@ std::string get_string() {
 	// remove trailing newline
 	std::string result(buf, length - 1);
 
-	delete buf;
+	delete[] buf;
 	return result;
 }
 
