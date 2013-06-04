@@ -12,6 +12,8 @@ It also includes a small test application (in test/src/), which tests the basic
 Steamworks API functions. It uses app id 480, which is the example application from
 the Steamworks SDK.
 
+This project initially started as a fork of [FRESteamWorks by Oldes/amanitadesign](https://github.com/Oldes/FRESteamWorks/).
+
 # Download #
 
 A pre-built ANE (containing the Windows dll and OS X dylib) as well as the
@@ -25,8 +27,8 @@ Coming soon!
 
 # License #
 
-Copyright (c) 2012-2013, Level Up Labs, LLC  
-Copyright (c) 2012, Oldes  
+Copyright (c) 2012-2013, Level Up Labs, LLC
+Copyright (c) 2012, Oldes
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted.
