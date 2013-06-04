@@ -23,6 +23,10 @@ Linux SWC can be found on http://dump.ventero.de/FRESteamWorks/
 
 Coming soon!
 
+In the meantime, if you have any problems setting this up, feature requests or
+other questions, feel free to send me an email (email address see profile) or
+create an issue in the [bug tracker](https://github.com/Ventero/FRESteamWorks/issues).
+
 ---
 
 # License #
