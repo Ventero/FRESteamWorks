@@ -12,7 +12,7 @@ It also includes a small test application (in test/src/), which tests the basic
 Steamworks API functions. It uses app id 480, which is the example application from
 the Steamworks SDK.
 
-This project initially started as a fork of [FRESteamWorks by Oldes/amanitadesign](https://github.com/Oldes/FRESteamWorks/).
+This project initially started as a fork of [FRESteamWorks by Oldes/Amanita Design](https://github.com/Oldes/FRESteamWorks/).
 
 # Download #
 
