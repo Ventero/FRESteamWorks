@@ -38,13 +38,13 @@ public function deletePublishedFile(file:String):Boolean
 public function getPublishedFileDetails(file:String):Boolean
 public function getPublishedFileDetailsResult(file:String):FileDetailsResult
 public function enumerateUserPublishedFiles(startIndex:uint):Boolean
-public function enumerateUserPublishedFilesResult():WorkshopFilesResult
+public function enumerateUserPublishedFilesResult():UserFilesResult
 public function enumeratePublishedWorkshopFiles(type:uint, start:uint, count:uint, days:uint, tags:Array, userTags:Array):Boolean
 public function enumeratePublishedWorkshopFilesResult():WorkshopFilesResult
 public function enumerateUserSubscribedFiles(startIndex:uint):Boolean
 public function enumerateUserSubscribedFilesResult():SubscribedFilesResult
 public function enumerateUserSharedWorkshopFiles(steamID:String, start:uint, required:Array, excluded:Array):Boolean
-public function enumerateUserSharedWorkshopFilesResult():WorkshopFilesResult
+public function enumerateUserSharedWorkshopFilesResult():UserFilesResult
 public function enumeratePublishedFilesByUserAction(action:uint, startIndex:uint):Boolean
 public function enumeratePublishedFilesByUserActionResult():FilesByUserActionResult
 public function subscribePublishedFile(file:String):Boolean

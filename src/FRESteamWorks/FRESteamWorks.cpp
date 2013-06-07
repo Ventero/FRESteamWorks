@@ -598,7 +598,7 @@ AIR_FUNC(AIRSteam_EnumerateUserPublishedFiles) {
 
 AIR_FUNC(AIRSteam_EnumerateUserPublishedFilesResult) {
 	FREObject result;
-	FRENewObject((const uint8_t*)"com.amanitadesign.steam.WorkshopFilesResult", 0, NULL, &result, NULL);
+	FRENewObject((const uint8_t*)"com.amanitadesign.steam.UserFilesResult", 0, NULL, &result, NULL);
 
 	ARG_CHECK(0, result);
 	auto details = g_Steam->EnumerateUserPublishedFilesResult();
@@ -723,7 +723,7 @@ AIR_FUNC(AIRSteam_EnumerateUserSharedWorkshopFiles) {
 
 AIR_FUNC(AIRSteam_EnumerateUserSharedWorkshopFilesResult) {
 	FREObject result;
-	FRENewObject((const uint8_t*)"com.amanitadesign.steam.WorkshopFilesResult", 0, NULL, &result, NULL);
+	FRENewObject((const uint8_t*)"com.amanitadesign.steam.UserFilesResult", 0, NULL, &result, NULL);
 
 	ARG_CHECK(0, result);
 	auto details = g_Steam->EnumerateUserSharedWorkshopFilesResult();

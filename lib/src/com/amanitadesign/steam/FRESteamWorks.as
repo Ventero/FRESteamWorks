@@ -297,9 +297,9 @@ package com.amanitadesign.steam
 			return _ExtensionContext.call("AIRSteam_EnumerateUserPublishedFiles", startIndex) as Boolean;
 		}
 
-		public function enumerateUserPublishedFilesResult():WorkshopFilesResult
+		public function enumerateUserPublishedFilesResult():UserFilesResult
 		{
-			return _ExtensionContext.call("AIRSteam_EnumerateUserPublishedFilesResult") as WorkshopFilesResult;
+			return _ExtensionContext.call("AIRSteam_EnumerateUserPublishedFilesResult") as UserFilesResult;
 		}
 
 		public function enumeratePublishedWorkshopFiles(type:uint, start:uint, count:uint, days:uint, tags:Array, userTags:Array):Boolean
@@ -327,9 +327,9 @@ package com.amanitadesign.steam
 			return _ExtensionContext.call("AIRSteam_EnumerateUserSharedWorkshopFiles", steamID, start, required, excluded) as Boolean;
 		}
 
-		public function enumerateUserSharedWorkshopFilesResult():WorkshopFilesResult
+		public function enumerateUserSharedWorkshopFilesResult():UserFilesResult
 		{
-			return _ExtensionContext.call("AIRSteam_EnumerateUserSharedWorkshopFilesResult") as WorkshopFilesResult;
+			return _ExtensionContext.call("AIRSteam_EnumerateUserSharedWorkshopFilesResult") as UserFilesResult;
 		}
 
 		public function enumeratePublishedFilesByUserAction(action:uint, startIndex:uint):Boolean

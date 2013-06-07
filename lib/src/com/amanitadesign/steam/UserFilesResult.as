@@ -1,5 +1,5 @@
 /*
- *  WorkshopFilesResult.as
+ *  UserFilesResult.as
  *  This file is part of FRESteamWorks.
  *
  *  Created by Ventero <http://github.com/Ventero> on 2013-04-24
@@ -8,12 +8,11 @@
 
 package com.amanitadesign.steam
 {
-	public class WorkshopFilesResult
+	public class UserFilesResult
 	{
 		public var result:int;
 		public var resultsReturned:int;
 		public var totalResults:int;
 		public var publishedFileId:Array;
-		public var score:Array;
 	}
 }
