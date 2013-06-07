@@ -48,6 +48,8 @@ package
 			addButton("Toggle fullscreen", toggleFullscreen);
 			addButton("Show Friends overlay", activateOverlay);
 			addButton("List subscribed files", enumerateSubscribedFiles);
+			addButton("List shared files", enumerateSharedFiles);
+			addButton("List workshop files", enumerateWorkshopFiles);
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
 			Steamworks.addOverlayWorkaround(stage, true);
@@ -177,10 +179,27 @@ package
 			log("enumerateUserSubscribedFiles(0) == " + Steamworks.enumerateUserSubscribedFiles(0));
 		}
 
+		private function enumerateSharedFiles(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			var userID:String = Steamworks.getUserID();
+			var res:Boolean = Steamworks.enumerateUserSharedWorkshopFiles(userID, 0, [], []);
+			log("enumerateSharedFiles(" + userID + ", 0, [], []) == " + res);
+		}
+
+		private function enumerateWorkshopFiles(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			var res:Boolean = Steamworks.enumeratePublishedWorkshopFiles(
+				WorkshopConstants.ENUMTYPE_RankedByVote, 0, 10, 0, [], []);
+			log("enumerateSharedFiles(...) == " + res);
+		}
+
 		private var id:String;
 		private var handle:String;
 		private function onSteamResponse(e:SteamEvent):void{
 			var apiCall:Boolean;
+			var i:int;
 			switch(e.req_type){
 				case SteamConstants.RESPONSE_OnUserStatsStored:
 					log("RESPONSE_OnUserStatsStored: "+e.response);
@@ -199,12 +218,28 @@ package
 					break;
 				case SteamConstants.RESPONSE_OnEnumerateUserSubscribedFiles:
 					log("RESPONSE_OnEnumerateUserSubscribedFiles: " + e.response);
-					var result:SubscribedFilesResult = Steamworks.enumerateUserSubscribedFilesResult();
-					log("User subscribed files: " + result.resultsReturned + "/" + result.totalResults);
-					for(var i:int = 0; i < result.resultsReturned; i++) {
-						id = result.publishedFileId[i];
-						apiCall = Steamworks.getPublishedFileDetails(result.publishedFileId[i]);
-						log(i + ": " + result.publishedFileId[i] + " (" + result.timeSubscribed[i] + ") - " + apiCall);
+					var subRes:SubscribedFilesResult = Steamworks.enumerateUserSubscribedFilesResult();
+					log("User subscribed files: " + subRes.resultsReturned + "/" + subRes.totalResults);
+					for(i = 0; i < subRes.resultsReturned; i++) {
+						id = subRes.publishedFileId[i];
+						apiCall = Steamworks.getPublishedFileDetails(subRes.publishedFileId[i]);
+						log(i + ": " + subRes.publishedFileId[i] + " (" + subRes.timeSubscribed[i] + ") - " + apiCall);
+					}
+					break;
+				case SteamConstants.RESPONSE_OnEnumerateUserSharedWorkshopFiles:
+					log("RESPONSE_OnEnumerateUserSharedWorkshopFiles: " + e.response);
+					var userRes:UserFilesResult = Steamworks.enumerateUserSharedWorkshopFilesResult();
+					log("User shared files: " + userRes.resultsReturned + "/" + userRes.totalResults);
+					for(i = 0; i < userRes.resultsReturned; i++) {
+						log(i + ": " + userRes.publishedFileId[i]);
+					}
+					break;
+				case SteamConstants.RESPONSE_OnEnumeratePublishedWorkshopFiles:
+					log("RESPONSE_OnEnumeratePublishedWorkshopFiles: " + e.response);
+					var fileRes:WorkshopFilesResult = Steamworks.enumeratePublishedWorkshopFilesResult();
+					log("Workshop files: " + fileRes.resultsReturned + "/" + fileRes.totalResults);
+					for(i = 0; i < fileRes.resultsReturned; i++) {
+						log(i + ": " + fileRes.publishedFileId[i] + " - " + fileRes.score[i]);
 					}
 					break;
 				case SteamConstants.RESPONSE_OnGetPublishedFileDetails:
@@ -232,8 +267,8 @@ package
 							log("Result length: " + ba.position + "//" + ba.length);
 							log("Result: " + ba.readUTFBytes(ugcResult.size));
 						}
-						break;
 					}
+					break;
 				default:
 					log("STEAMresponse type:"+e.req_type+" response:"+e.response);
 			}
