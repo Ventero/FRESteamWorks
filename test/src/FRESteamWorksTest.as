@@ -200,6 +200,7 @@ package
 		private function onSteamResponse(e:SteamEvent):void{
 			var apiCall:Boolean;
 			var i:int;
+			var file:String;
 			switch(e.req_type){
 				case SteamConstants.RESPONSE_OnUserStatsStored:
 					log("RESPONSE_OnUserStatsStored: "+e.response);
@@ -212,7 +213,7 @@ package
 					break;
 				case SteamConstants.RESPONSE_OnPublishWorkshopFile:
 					log("RESPONSE_OnPublishWorkshopFile: " + e.response);
-					var file:String = Steamworks.publishWorkshopFileResult();
+					file = Steamworks.publishWorkshopFileResult();
 					log("File published as " + file);
 					log("subscribePublishedFile(...) == " + Steamworks.subscribePublishedFile(file));
 					break;
@@ -240,6 +241,12 @@ package
 					log("Workshop files: " + fileRes.resultsReturned + "/" + fileRes.totalResults);
 					for(i = 0; i < fileRes.resultsReturned; i++) {
 						log(i + ": " + fileRes.publishedFileId[i] + " - " + fileRes.score[i]);
+					}
+					if(fileRes.resultsReturned > 0) {
+						file = fileRes.publishedFileId[0];
+						log("updateUserPublishedItemVote(" + file + ", true)");
+						apiCall = Steamworks.updateUserPublishedItemVote(file, true);
+						log("updateUserPublishedItemVote(" + file + ", true) == " + apiCall);
 					}
 					break;
 				case SteamConstants.RESPONSE_OnGetPublishedFileDetails:
