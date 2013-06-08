@@ -832,10 +832,10 @@ void AIRSteam_GetPublishedItemVoteDetailsResult() {
 
 void AIRSteam_UpdateUserPublishedItemVote() {
 	PublishedFileId_t file = get_uint64();
-	uint32 upvote = get_int();
+	bool upvote = get_bool();
 	if (!g_Steam || file == 0) return send(false);
 
-	return send(g_Steam->UpdateUserPublishedItemVote(file, upvote != 0));
+	return send(g_Steam->UpdateUserPublishedItemVote(file, upvote));
 }
 
 void AIRSteam_SetUserPublishedFileAction() {
