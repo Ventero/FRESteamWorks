@@ -266,7 +266,13 @@ package com.amanitadesign.steam {
 			while(_buf.length < length) {
 				// basically just wait for data
 				if(!_process.running) return 0;
-				output.readBytes(_buf);
+				try{
+					output.readBytes(_buf);
+				} catch(e:Error) {
+					// for some reason, sometimes the .running check passes even though
+					// the process isn't running anymore, leading to an exception here
+					return 0;
+				}
 			}
 
 			_buf.position = 0;
