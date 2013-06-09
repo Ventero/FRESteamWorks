@@ -50,6 +50,7 @@ package
 			addButton("List subscribed files", enumerateSubscribedFiles);
 			addButton("List shared files", enumerateSharedFiles);
 			addButton("List workshop files", enumerateWorkshopFiles);
+			addButton("Change file description", updateFile);
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
 			Steamworks.addOverlayWorkaround(stage, true);
@@ -195,12 +196,28 @@ package
 			log("enumerateSharedFiles(...) == " + res);
 		}
 
+		private function updateFile(e:Event = null):void {
+			if(!file) {
+				log("No file handle set, publish or enumerate first");
+				return;
+			}
+
+			var handle:String = Steamworks.createPublishedFileUpdateRequest(file);
+			var res:Boolean = Steamworks.updatePublishedFileDescription(handle,
+				"Test updated description");
+			log("updatePublishedFileDescription(" + handle + ", ...) == " + res);
+			if(!res) return;
+
+			res = Steamworks.commitPublishedFileUpdate(handle);
+			log("commitPublishedFileUpdate(...) == " + res);
+		}
+
 		private var id:String;
 		private var handle:String;
+		private var file:String;
 		private function onSteamResponse(e:SteamEvent):void{
 			var apiCall:Boolean;
 			var i:int;
-			var file:String;
 			switch(e.req_type){
 				case SteamConstants.RESPONSE_OnUserStatsStored:
 					log("RESPONSE_OnUserStatsStored: "+e.response);
@@ -289,7 +306,7 @@ package
 		private function addButton(label:String, callback:Function):void {
 			var button:Sprite = new Sprite();
 			button.graphics.beginFill(0xaaaaaa);
-			button.graphics.drawRoundRect(0, 0, 150, 30, 5, 5);
+			button.graphics.drawRoundRect(0, 0, 150, 25, 5, 5);
 			button.graphics.endFill();
 			button.buttonMode = true;
 			button.useHandCursor = true;
@@ -301,14 +318,14 @@ package
 			button.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void {
 				button.graphics.clear();
 				button.graphics.beginFill(0xccccccc);
-				button.graphics.drawRoundRect(0, 0, 150, 30, 5, 5);
+				button.graphics.drawRoundRect(0, 0, 150, 25, 5, 5);
 				button.graphics.endFill();
 			});
 
 			button.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void {
 				button.graphics.clear();
 				button.graphics.beginFill(0xaaaaaa);
-				button.graphics.drawRoundRect(0, 0, 150, 30, 5, 5);
+				button.graphics.drawRoundRect(0, 0, 150, 25, 5, 5);
 				button.graphics.endFill();
 			});
 
