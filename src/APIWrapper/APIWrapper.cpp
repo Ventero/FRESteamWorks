@@ -320,7 +320,7 @@ void AIRSteam_FileRead() {
 	Serializer serializer;
 	serializer << AmfByteArray(data, data + size);
 	sendData(serializer);
-	delete data;
+	delete[] data;
 }
 
 void AIRSteam_FileDelete() {
@@ -402,7 +402,7 @@ void AIRSteam_UGCRead() {
 	Serializer serializer;
 	serializer << AmfByteArray(data, data + result);
 	sendData(serializer);
-	delete data;
+	delete[] data;
 }
 
 void AIRSteam_GetUGCDownloadProgress() {

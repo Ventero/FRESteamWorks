@@ -352,7 +352,7 @@ AIR_FUNC(AIRSteam_FileRead) {
 	if (size > 0 && size <= byteArray.length) {
 		ret = true;
 		memcpy(byteArray.bytes, data, size);
-		delete data;
+		delete[] data;
 	}
 	FREReleaseByteArray(argv[1]);
 
@@ -455,7 +455,7 @@ AIR_FUNC(AIRSteam_UGCRead) {
 			memcpy(byteArray.bytes, data, result);
 		}
 
-		delete data;
+		delete[] data;
 	}
 	FREReleaseByteArray(argv[3]);
 
