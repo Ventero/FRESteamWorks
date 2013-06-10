@@ -50,7 +50,7 @@ package
 			addButton("List subscribed files", enumerateSubscribedFiles);
 			addButton("List shared files", enumerateSharedFiles);
 			addButton("List workshop files", enumerateWorkshopFiles);
-			addButton("Change file description", updateFile);
+			addButton("Update file", updateFile);
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
 			Steamworks.addOverlayWorkaround(stage, true);
@@ -203,9 +203,28 @@ package
 			}
 
 			var handle:String = Steamworks.createPublishedFileUpdateRequest(file);
+			log("createPublishedFileUpdateRequest() == " + handle);
+			if(handle == WorkshopConstants.FILEUPDATEHANDLE_Invalid) return;
+
 			var res:Boolean = Steamworks.updatePublishedFileDescription(handle,
 				"Test updated description");
-			log("updatePublishedFileDescription(" + handle + ", ...) == " + res);
+			log("updatePublishedFileDescription(...) == " + res);
+			if(!res) return;
+
+			res = Steamworks.updatePublishedFileTitle(handle, "Updated test title");
+			log("updatePublishedFileTitle(...) == " + res);
+			if(!res) return;
+
+			res = Steamworks.updatePublishedFileTags(handle, ["TestTag", "Updated TestTag"]);
+			log("updatePublishedFileTags(...) = " + res);
+			if(!res) return;
+
+			res = Steamworks.updatePublishedFileSetChangeDescription(handle, "Test update!");
+			log("updatePublishedFileSetChangeDescription(...) == " + res);
+			if(!res) return;
+
+			res = Steamworks.updatePublishedFileVisibility(handle, WorkshopConstants.VISIBILITY_Public);
+			log("updatePublishedFileVisibility(Public) == " + res);
 			if(!res) return;
 
 			res = Steamworks.commitPublishedFileUpdate(handle);
@@ -213,7 +232,7 @@ package
 		}
 
 		private var id:String;
-		private var handle:String;
+		private var ugcHandle:String;
 		private var file:String;
 		private function onSteamResponse(e:SteamEvent):void{
 			var apiCall:Boolean;
@@ -251,6 +270,10 @@ package
 					for(i = 0; i < userRes.resultsReturned; i++) {
 						log(i + ": " + userRes.publishedFileId[i]);
 					}
+
+					if(userRes.resultsReturned > 0)
+						file = userRes.publishedFileId[0];
+
 					break;
 				case SteamConstants.RESPONSE_OnEnumeratePublishedWorkshopFiles:
 					log("RESPONSE_OnEnumeratePublishedWorkshopFiles: " + e.response);
@@ -260,10 +283,10 @@ package
 						log(i + ": " + fileRes.publishedFileId[i] + " - " + fileRes.score[i]);
 					}
 					if(fileRes.resultsReturned > 0) {
-						file = fileRes.publishedFileId[0];
-						log("updateUserPublishedItemVote(" + file + ", true)");
-						apiCall = Steamworks.updateUserPublishedItemVote(file, true);
-						log("updateUserPublishedItemVote(" + file + ", true) == " + apiCall);
+						var f:String = fileRes.publishedFileId[0];
+						log("updateUserPublishedItemVote(" + f + ", true)");
+						apiCall = Steamworks.updateUserPublishedItemVote(f, true);
+						log("updateUserPublishedItemVote(" + f + ", true) == " + apiCall);
 					}
 					break;
 				case SteamConstants.RESPONSE_OnGetPublishedFileDetails:
@@ -272,15 +295,15 @@ package
 					log("Result for " + id + ": " + res);
 					if(res) {
 						log("File: " + res.fileName + ", handle: " + res.fileHandle);
-						handle = res.fileHandle;
+						ugcHandle = res.fileHandle;
 						apiCall = Steamworks.UGCDownload(res.fileHandle, 0);
 						log("UGCDownload(...) == " + apiCall);
 					}
 					break;
 				case SteamConstants.RESPONSE_OnUGCDownload:
 					log("RESPONSE_OnUGCDownload: " + e.response);
-					var ugcResult:DownloadUGCResult = Steamworks.getUGCDownloadResult(handle);
-					log("Result for " + handle + ": " + ugcResult);
+					var ugcResult:DownloadUGCResult = Steamworks.getUGCDownloadResult(ugcHandle);
+					log("Result for " + ugcHandle + ": " + ugcResult);
 					if(ugcResult) {
 						log("File: " + ugcResult.fileName + ", handle: " + ugcResult.fileHandle + ", size: " + ugcResult.size);
 						var ba:ByteArray = new ByteArray();
