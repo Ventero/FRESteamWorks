@@ -13,6 +13,7 @@ package
 	import com.amanitadesign.steam.FRESteamWorks;
 	import com.amanitadesign.steam.SteamConstants;
 	import com.amanitadesign.steam.SteamEvent;
+	import com.amanitadesign.steam.SteamResults;
 	import com.amanitadesign.steam.WorkshopConstants;
 
 	import flash.desktop.NativeApplication;
@@ -257,12 +258,14 @@ package
 					break;
 				case SteamConstants.RESPONSE_OnPublishWorkshopFile:
 					log("RESPONSE_OnPublishWorkshopFile: " + e.response);
+					if(e.response != SteamResults.OK) return;
 					file = Steamworks.publishWorkshopFileResult();
 					log("File published as " + file);
 					log("subscribePublishedFile(...) == " + Steamworks.subscribePublishedFile(file));
 					break;
 				case SteamConstants.RESPONSE_OnEnumerateUserSubscribedFiles:
 					log("RESPONSE_OnEnumerateUserSubscribedFiles: " + e.response);
+					if(e.response != SteamResults.OK) return;
 					var subRes:SubscribedFilesResult = Steamworks.enumerateUserSubscribedFilesResult();
 					log("User subscribed files: " + subRes.resultsReturned + "/" + subRes.totalResults);
 					for(i = 0; i < subRes.resultsReturned; i++) {
@@ -273,6 +276,7 @@ package
 					break;
 				case SteamConstants.RESPONSE_OnEnumerateUserSharedWorkshopFiles:
 					log("RESPONSE_OnEnumerateUserSharedWorkshopFiles: " + e.response);
+					if(e.response != SteamResults.OK) return;
 					var userRes:UserFilesResult = Steamworks.enumerateUserSharedWorkshopFilesResult();
 					log("User shared files: " + userRes.resultsReturned + "/" + userRes.totalResults);
 					for(i = 0; i < userRes.resultsReturned; i++) {
@@ -285,6 +289,7 @@ package
 					break;
 				case SteamConstants.RESPONSE_OnEnumeratePublishedWorkshopFiles:
 					log("RESPONSE_OnEnumeratePublishedWorkshopFiles: " + e.response);
+					if(e.response != SteamResults.OK) return;
 					var fileRes:WorkshopFilesResult = Steamworks.enumeratePublishedWorkshopFilesResult();
 					log("Workshop files: " + fileRes.resultsReturned + "/" + fileRes.totalResults);
 					for(i = 0; i < fileRes.resultsReturned; i++) {
@@ -299,6 +304,7 @@ package
 					break;
 				case SteamConstants.RESPONSE_OnGetPublishedFileDetails:
 					log("RESPONSE_OnGetPublishedFileDetails: " + e.response);
+					if(e.response != SteamResults.OK) return;
 					var res:FileDetailsResult = Steamworks.getPublishedFileDetailsResult(id);
 					log("Result for " + id + ": " + res);
 					if(res) {
@@ -310,6 +316,7 @@ package
 					break;
 				case SteamConstants.RESPONSE_OnUGCDownload:
 					log("RESPONSE_OnUGCDownload: " + e.response);
+					if(e.response != SteamResults.OK) return;
 					var ugcResult:DownloadUGCResult = Steamworks.getUGCDownloadResult(ugcHandle);
 					log("Result for " + ugcHandle + ": " + ugcResult);
 					if(ugcResult) {
