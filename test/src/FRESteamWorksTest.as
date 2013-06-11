@@ -145,8 +145,10 @@ package
 			if(result){
 				log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
 				log("fileDelete('test.txt') == "+Steamworks.fileDelete('test.txt'));
+				log("fileDelete('updated_test.txt') == "+Steamworks.fileDelete('updated_test.txt'));
 			} else {
 				log("writeFileToCloud('test.txt','click') == "+writeFileToCloud('test.txt','click'));
+				log("writeFileToCloud('updated_test.txt',...) == "+writeFileToCloud('updated_test.txt','updated content'));
 			}
 		}
 
@@ -210,6 +212,12 @@ package
 				"Test updated description");
 			log("updatePublishedFileDescription(...) == " + res);
 			if(!res) return;
+
+			if(Steamworks.fileExists("updated_test.txt")) {
+				res = Steamworks.updatePublishedFileFile(handle, "updated_test.txt");
+				log("updatePublishedFileFile(...) == " + res);
+				if(!res) return;
+			}
 
 			res = Steamworks.updatePublishedFileTitle(handle, "Updated test title");
 			log("updatePublishedFileTitle(...) == " + res);
