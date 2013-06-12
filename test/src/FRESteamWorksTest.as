@@ -73,6 +73,9 @@ package
 				log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt'));
 				log("getDLCCount() == " + Steamworks.getDLCCount());
 
+				var quota:Array = Steamworks.getQuota();
+				log("getQuota() == " + (quota ? "[" + quota.join(", ") + "]" : "null"));
+
 				Steamworks.resetAllStats(true);
 			} catch(e:Error) {
 				log("*** ERROR ***");
