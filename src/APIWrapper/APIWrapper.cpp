@@ -179,6 +179,11 @@ void AIRSteam_GetPersonaName() {
 	send(g_Steam->GetPersonaName());
 }
 
+// this is a void function even though the actual API function is a bool,
+// because it's not immediately called when FRESteamWorks.useCrashHandler
+// is called, as the APIWrapper process is not actually be running at that
+// point in time. instead, this function is called as soon as the binary
+// has started.
 void AIRSteam_UseCrashHandler() {
 	uint32 appID = get_int();
 	std::string version = get_string();
