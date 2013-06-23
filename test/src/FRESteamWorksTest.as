@@ -72,6 +72,8 @@ package
 				log("getFileCount() == "+Steamworks.getFileCount());
 				log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt'));
 				log("getDLCCount() == " + Steamworks.getDLCCount());
+				log("isSubscribedApp(" + _appId + ") == " + Steamworks.isSubscribedApp(_appId));
+				log("isSubscribedApp(999999) == " + Steamworks.isSubscribedApp(999999));
 
 				var quota:Array = Steamworks.getQuota();
 				log("getQuota() == " + (quota ? "[" + quota.join(", ") + "]" : "null"));
