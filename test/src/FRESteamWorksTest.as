@@ -366,6 +366,8 @@ package
 						ugcHandle = res.fileHandle;
 						apiCall = Steamworks.UGCDownload(res.fileHandle, 0);
 						log("UGCDownload(...) == " + apiCall);
+						var progress:Array = Steamworks.getUGCDownloadProgress(res.fileHandle);
+						log("getUGCDownloadProgress(...) == " + progress);
 					}
 					break;
 				case SteamConstants.RESPONSE_OnUGCDownload:
