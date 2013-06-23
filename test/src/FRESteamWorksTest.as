@@ -30,7 +30,7 @@ package
 		public var Steamworks:FRESteamWorks = new FRESteamWorks();
 		public var tf:TextField;
 
-		private var _buttonPos:int = 5;
+		private var _buttonPos:int = 0;
 		private var _appId:uint;
 
 		public function FRESteamWorksTest()
@@ -46,6 +46,7 @@ package
 			addButton("Toggle cloud enabled", toggleCloudEnabled);
 			addButton("Toggle file", toggleFile);
 			addButton("Publish file", publishFile);
+			addButton("Delete published file", deletePublishedFile);
 			addButton("Toggle fullscreen", toggleFullscreen);
 			addButton("Show Friends overlay", activateOverlay);
 			addButton("List subscribed files", enumerateSubscribedFiles);
@@ -167,6 +168,20 @@ package
 			log("fileShare('test.txt') == " + Steamworks.fileShare("test.txt"));
 		}
 
+		private function deletePublishedFile(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			if(!publishedFile) {
+				log("No file handle set, publish or enumerate first");
+				return;
+			}
+
+			var res:Boolean = Steamworks.unsubscribePublishedFile(publishedFile);
+			log("unsubscribePublishedFile(" + publishedFile + ") == " + res);
+			res = Steamworks.deletePublishedFile(publishedFile);
+			log("deletePublishedFile(" + publishedFile + ") == " + res);
+		}
+
 		private function toggleFullscreen(e:Event = null):void {
 			if(stage.displayState == StageDisplayState.NORMAL)
 				stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
@@ -211,12 +226,12 @@ package
 		}
 
 		private function updateFile(e:Event = null):void {
-			if(!file) {
+			if(!publishedFile) {
 				log("No file handle set, publish or enumerate first");
 				return;
 			}
 
-			var handle:String = Steamworks.createPublishedFileUpdateRequest(file);
+			var handle:String = Steamworks.createPublishedFileUpdateRequest(publishedFile);
 			log("createPublishedFileUpdateRequest() == " + handle);
 			if(handle == WorkshopConstants.FILEUPDATEHANDLE_Invalid) return;
 
@@ -253,7 +268,7 @@ package
 
 		private var id:String;
 		private var ugcHandle:String;
-		private var file:String;
+		private var publishedFile:String;
 		private function onSteamResponse(e:SteamEvent):void{
 			var apiCall:Boolean;
 			var i:int;
@@ -279,9 +294,9 @@ package
 				case SteamConstants.RESPONSE_OnPublishWorkshopFile:
 					log("RESPONSE_OnPublishWorkshopFile: " + e.response);
 					if(e.response != SteamResults.OK) return;
-					file = Steamworks.publishWorkshopFileResult();
-					log("File published as " + file);
-					log("subscribePublishedFile(...) == " + Steamworks.subscribePublishedFile(file));
+					publishedFile = Steamworks.publishWorkshopFileResult();
+					log("File published as " + publishedFile);
+					log("subscribePublishedFile(...) == " + Steamworks.subscribePublishedFile(publishedFile));
 					break;
 				case SteamConstants.RESPONSE_OnEnumerateUserSubscribedFiles:
 					log("RESPONSE_OnEnumerateUserSubscribedFiles: " + e.response);
@@ -320,11 +335,9 @@ package
 						log(i + ": " + userRes.publishedFileId[i]);
 					}
 
-					if(userRes.resultsReturned > 0) {
-						file = userRes.publishedFileId[0];
-						apiCall = Steamworks.getPublishedItemVoteDetails(file);
-						log("getPublishedItemVoteDetails(" + file + ") == " + apiCall);
-					}
+					if(userRes.resultsReturned > 0)
+						publishedFile = userRes.publishedFileId[0];
+
 					break;
 				case SteamConstants.RESPONSE_OnEnumeratePublishedWorkshopFiles:
 					log("RESPONSE_OnEnumeratePublishedWorkshopFiles: " + e.response);
@@ -339,6 +352,8 @@ package
 						log("updateUserPublishedItemVote(" + f + ", true)");
 						apiCall = Steamworks.updateUserPublishedItemVote(f, true);
 						log("updateUserPublishedItemVote(" + f + ", true) == " + apiCall);
+						apiCall = Steamworks.getPublishedItemVoteDetails(f);
+						log("getPublishedItemVoteDetails(" + f + ") == " + apiCall);
 					}
 					break;
 				case SteamConstants.RESPONSE_OnGetPublishedFileDetails:
