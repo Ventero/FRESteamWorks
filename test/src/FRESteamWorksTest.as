@@ -49,6 +49,7 @@ package
 			addButton("Toggle fullscreen", toggleFullscreen);
 			addButton("Show Friends overlay", activateOverlay);
 			addButton("List subscribed files", enumerateSubscribedFiles);
+			addButton("List published files", enumerateUserPublishedFiles)
 			addButton("List shared files", enumerateSharedFiles);
 			addButton("List workshop files", enumerateWorkshopFiles);
 			addButton("Update file", updateFile);
@@ -187,6 +188,12 @@ package
 			log("enumerateUserSubscribedFiles(0) == " + Steamworks.enumerateUserSubscribedFiles(0));
 		}
 
+		private function enumerateUserPublishedFiles(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			log("enumerateUserPublishedFiles(0) == " + Steamworks.enumerateUserPublishedFiles(0));
+		}
+
 		private function enumerateSharedFiles(e:Event = null):void {
 			if(!Steamworks.isReady) return;
 
@@ -296,10 +303,19 @@ package
 					}
 					break;
 				case SteamConstants.RESPONSE_OnEnumerateUserSharedWorkshopFiles:
-					log("RESPONSE_OnEnumerateUserSharedWorkshopFiles: " + e.response);
+				case SteamConstants.RESPONSE_OnEnumerateUserPublishedFiles:
+					var shared:Boolean = (e.req_type == SteamConstants.RESPONSE_OnEnumerateUserSharedWorkshopFiles);
+					log((shared ?
+						"RESPONSE_OnEnumerateUserSharedWorkshopFile" :
+						"RESPONSE_OnEnumerateUserPublishedFiles: ") + e.response);
 					if(e.response != SteamResults.OK) return;
-					var userRes:UserFilesResult = Steamworks.enumerateUserSharedWorkshopFilesResult();
-					log("User shared files: " + userRes.resultsReturned + "/" + userRes.totalResults);
+					var userRes:UserFilesResult = shared ?
+						Steamworks.enumerateUserSharedWorkshopFilesResult() :
+						Steamworks.enumerateUserPublishedFilesResult();
+
+					log("User " + (shared ? "shared" : "published") +" files: " +
+						userRes.resultsReturned + "/" + userRes.totalResults);
+
 					for(i = 0; i < userRes.resultsReturned; i++) {
 						log(i + ": " + userRes.publishedFileId[i]);
 					}
