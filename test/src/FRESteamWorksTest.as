@@ -284,6 +284,14 @@ package
 						apiCall = Steamworks.getPublishedFileDetails(subRes.publishedFileId[i]);
 						log(i + ": " + subRes.publishedFileId[i] + " (" + subRes.timeSubscribed[i] + ") - " + apiCall);
 					}
+
+					// only unsubscribe if we're subscribed to more than one file, so we
+					// can continue testing UGCDownload etc.
+					if(subRes.resultsReturned > 1) {
+						var subbedFile:String = subRes.publishedFileId[1]
+						apiCall = Steamworks.unsubscribePublishedFile(subbedFile);
+						log("unsubscribePublishedFile(" + subbedFile + ") == " + apiCall);
+					}
 					break;
 				case SteamConstants.RESPONSE_OnEnumerateUserSharedWorkshopFiles:
 					log("RESPONSE_OnEnumerateUserSharedWorkshopFiles: " + e.response);
