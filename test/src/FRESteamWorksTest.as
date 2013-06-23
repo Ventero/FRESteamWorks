@@ -261,6 +261,7 @@ package
 				case SteamConstants.RESPONSE_OnFileShared:
 					log("RESPONSE_OnFileShared: " + e.response);
 					if(e.response != SteamResults.OK) return;
+					log("fileShareResult() == " + Steamworks.fileShareResult());
 					apiCall = Steamworks.publishWorkshopFile("test.txt", "", _appId,
 						"Test.txt", "Test.txt", WorkshopConstants.VISIBILITY_Private,
 						["TestTag"], WorkshopConstants.FILETYPE_Community);
