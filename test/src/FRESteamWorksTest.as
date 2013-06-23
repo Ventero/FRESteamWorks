@@ -159,10 +159,9 @@ package
 		private function publishFile(e:Event = null):void {
 			if(!Steamworks.isReady) return;
 
-			var res:Boolean = Steamworks.publishWorkshopFile("test.txt", "", _appId,
-				"Test.txt", "Test.txt", WorkshopConstants.VISIBILITY_Private,
-				["TestTag"], WorkshopConstants.FILETYPE_Community);
-			log("publishWorkshopFile('test.txt' ...) == " + res);
+			// we need to make sure the file has actually been uploaded before we can
+			// call publishWorkshopFile
+			log("fileShare('test.txt') == " + Steamworks.fileShare("test.txt"));
 		}
 
 		private function toggleFullscreen(e:Event = null):void {
@@ -258,6 +257,14 @@ package
 					break;
 				case SteamConstants.RESPONSE_OnAchievementStored:
 					log("RESPONSE_OnAchievementStored: "+e.response);
+					break;
+				case SteamConstants.RESPONSE_OnFileShared:
+					log("RESPONSE_OnFileShared: " + e.response);
+					if(e.response != SteamResults.OK) return;
+					apiCall = Steamworks.publishWorkshopFile("test.txt", "", _appId,
+						"Test.txt", "Test.txt", WorkshopConstants.VISIBILITY_Private,
+						["TestTag"], WorkshopConstants.FILETYPE_Community);
+					log("publishWorkshopFile('test.txt' ...) == " + apiCall);
 					break;
 				case SteamConstants.RESPONSE_OnPublishWorkshopFile:
 					log("RESPONSE_OnPublishWorkshopFile: " + e.response);
