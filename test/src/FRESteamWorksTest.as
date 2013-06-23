@@ -302,9 +302,11 @@ package
 						log(i + ": " + userRes.publishedFileId[i]);
 					}
 
-					if(userRes.resultsReturned > 0)
+					if(userRes.resultsReturned > 0) {
 						file = userRes.publishedFileId[0];
-
+						apiCall = Steamworks.getPublishedItemVoteDetails(file);
+						log("getPublishedItemVoteDetails(" + file + ") == " + apiCall);
+					}
 					break;
 				case SteamConstants.RESPONSE_OnEnumeratePublishedWorkshopFiles:
 					log("RESPONSE_OnEnumeratePublishedWorkshopFiles: " + e.response);
@@ -349,6 +351,18 @@ package
 							log("Result: " + ba.readUTFBytes(ugcResult.size));
 						}
 					}
+					break;
+				case SteamConstants.RESPONSE_OnGetPublishedItemVoteDetails:
+					log("RESPONSE_OnGetPublishedItemVoteDetails: " + e.response);
+					if(e.response != SteamResults.OK) return;
+
+					var voteDetails:ItemVoteDetailsResult = Steamworks.getPublishedItemVoteDetailsResult();
+					log("getPublishedItemVoteDetails() == " + (voteDetails ? voteDetails.result : "null"));
+					if(!voteDetails) return;
+
+					// no native JSON support for Linux ...
+					log("votes: " + voteDetails.votesFor + "//" + voteDetails.votesAgainst +
+						", score: " + voteDetails.score + ", reports: " + voteDetails.reports);
 					break;
 				default:
 					log("STEAMresponse type:"+e.req_type+" response:"+e.response);
