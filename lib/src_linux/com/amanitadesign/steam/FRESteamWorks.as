@@ -500,7 +500,7 @@ package com.amanitadesign.steam {
 		}
 
 		public function UGCRead(handle:String, size:int, offset:uint, data:ByteArray):Boolean {
-			if(!callWrapper(AIRSteam_UGCRead, [handle, size, offset, data])) return false;
+			if(!callWrapper(AIRSteam_UGCRead, [handle, size, offset])) return false;
 			var success:Boolean = readBoolResponse();
 
 			if(success) {
