@@ -30,7 +30,8 @@ package
 		public var Steamworks:FRESteamWorks = new FRESteamWorks();
 		public var tf:TextField;
 
-		private var _buttonPos:int = 0;
+		private var _buttonContainer:Sprite;
+		private var _enumerateContainer:Sprite;
 		private var _appId:uint;
 
 		public function FRESteamWorksTest()
@@ -41,19 +42,25 @@ package
 			tf.height = stage.stageHeight;
 			addChild(tf);
 
-			addButton("Check stats/achievements", checkAchievements);
-			addButton("Toggle achievement", toggleAchievement);
-			addButton("Toggle cloud enabled", toggleCloudEnabled);
-			addButton("Toggle file", toggleFile);
-			addButton("Publish file", publishFile);
-			addButton("Delete published file", deletePublishedFile);
-			addButton("Toggle fullscreen", toggleFullscreen);
-			addButton("Show Friends overlay", activateOverlay);
-			addButton("List subscribed files", enumerateSubscribedFiles);
-			addButton("List published files", enumerateUserPublishedFiles)
-			addButton("List shared files", enumerateSharedFiles);
-			addButton("List workshop files", enumerateWorkshopFiles);
-			addButton("Update file", updateFile);
+			_buttonContainer = new Sprite();
+			addChild(_buttonContainer);
+
+			addButton("Check stats/achievements", checkAchievements, _buttonContainer);
+			addButton("Toggle achievement", toggleAchievement, _buttonContainer);
+			addButton("Toggle cloud enabled", toggleCloudEnabled, _buttonContainer);
+			addButton("Toggle file", toggleFile, _buttonContainer);
+			addButton("Publish file", publishFile, _buttonContainer);
+			addButton("Delete published file", deletePublishedFile, _buttonContainer);
+			addButton("Toggle fullscreen", toggleFullscreen, _buttonContainer);
+			addButton("Show Friends overlay", activateOverlay, _buttonContainer);
+			addButton("Update file", updateFile, _buttonContainer);
+			addButton("Enumerate workshop", toggleEnumerateButtons, _buttonContainer);
+
+			_enumerateContainer = new Sprite();
+			addButton("User subscribed files", enumerateSubscribedFiles, _enumerateContainer);
+			addButton("User published files", enumerateUserPublishedFiles, _enumerateContainer);
+			addButton("User shared files", enumerateSharedFiles, _enumerateContainer);
+			addButton("All published files", enumerateWorkshopFiles, _enumerateContainer);
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
 			Steamworks.addOverlayWorkaround(stage, true);
@@ -197,19 +204,32 @@ package
 			log("isOverlayEnabled() == " + Steamworks.isOverlayEnabled());
 		}
 
+		private function toggleEnumerateButtons(e:Event = null):void {
+			if (_enumerateContainer.parent) {
+				removeChild(_enumerateContainer);
+				addChild(_buttonContainer);
+			} else {
+				removeChild(_buttonContainer);
+				addChild(_enumerateContainer);
+			}
+		}
+
 		private function enumerateSubscribedFiles(e:Event = null):void {
+			toggleEnumerateButtons();
 			if(!Steamworks.isReady) return;
 
 			log("enumerateUserSubscribedFiles(0) == " + Steamworks.enumerateUserSubscribedFiles(0));
 		}
 
 		private function enumerateUserPublishedFiles(e:Event = null):void {
+			toggleEnumerateButtons();
 			if(!Steamworks.isReady) return;
 
 			log("enumerateUserPublishedFiles(0) == " + Steamworks.enumerateUserPublishedFiles(0));
 		}
 
 		private function enumerateSharedFiles(e:Event = null):void {
+			toggleEnumerateButtons();
 			if(!Steamworks.isReady) return;
 
 			var userID:String = Steamworks.getUserID();
@@ -218,6 +238,7 @@ package
 		}
 
 		private function enumerateWorkshopFiles(e:Event = null):void {
+			toggleEnumerateButtons();
 			if(!Steamworks.isReady) return;
 
 			var res:Boolean = Steamworks.enumeratePublishedWorkshopFiles(
@@ -409,7 +430,7 @@ package
 			Steamworks.dispose();
 		}
 
-		private function addButton(label:String, callback:Function):void {
+		private function addButton(label:String, callback:Function, container:Sprite):void {
 			var button:Sprite = new Sprite();
 			button.graphics.beginFill(0xaaaaaa);
 			button.graphics.drawRoundRect(0, 0, 150, 25, 5, 5);
@@ -418,8 +439,7 @@ package
 			button.useHandCursor = true;
 			button.addEventListener(MouseEvent.CLICK, callback);
 			button.x = 5;
-			button.y = _buttonPos;
-			_buttonPos += button.height + 5;
+			button.y = container.height + 5;
 
 			button.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void {
 				button.graphics.clear();
@@ -444,7 +464,7 @@ package
 			text.mouseEnabled = false;
 
 			button.addChild(text);
-			addChild(button);
+			container.addChild(button);
 		}
 	}
 }
