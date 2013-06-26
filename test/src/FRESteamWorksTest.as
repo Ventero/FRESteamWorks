@@ -57,6 +57,7 @@ package
 			addButton("Enumerate workshop", toggleEnumerateButtons, _buttonContainer);
 
 			_enumerateContainer = new Sprite();
+			addButton("Back", toggleEnumerateButtons, _enumerateContainer);
 			addButton("User subscribed files", enumerateSubscribedFiles, _enumerateContainer);
 			addButton("User published files", enumerateUserPublishedFiles, _enumerateContainer);
 			addButton("User shared files", enumerateSharedFiles, _enumerateContainer);
