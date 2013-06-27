@@ -66,10 +66,10 @@ package
 			addButton("Show overlay", null, _buttonContainer, _overlayContainer);
 
 			addButton("Back", null, _enumerateContainer);
-			addButton("User subscribed files", enumerateSubscribedFiles, _enumerateContainer);
+			addButton("Subscribed files (+unsub/dl)", enumerateSubscribedFiles, _enumerateContainer);
 			addButton("User published files", enumerateUserPublishedFiles, _enumerateContainer);
 			addButton("User shared files", enumerateSharedFiles, _enumerateContainer);
-			addButton("All published files", enumerateWorkshopFiles, _enumerateContainer);
+			addButton("All published files (+vote)", enumerateWorkshopFiles, _enumerateContainer);
 
 			addButton("Back", null, _overlayContainer);
 			addButton("Show friends overlay", activateOverlay, _overlayContainer);
