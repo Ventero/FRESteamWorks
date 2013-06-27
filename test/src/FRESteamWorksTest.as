@@ -31,9 +31,12 @@ package
 		public var Steamworks:FRESteamWorks = new FRESteamWorks();
 		public var tf:TextField;
 
+		private var _container:Sprite;
 		private var _buttonContainer:Sprite;
 		private var _enumerateContainer:Sprite;
+		private var _overlayContainer:Sprite;
 		private var _appId:uint;
+		private var _userId:String;
 
 		public function FRESteamWorksTest()
 		{
@@ -43,8 +46,13 @@ package
 			tf.height = stage.stageHeight;
 			addChild(tf);
 
+			_container = new Sprite();
+			addChild(_container);
+
 			_buttonContainer = new Sprite();
-			addChild(_buttonContainer);
+			_enumerateContainer = new Sprite();
+			_overlayContainer = new Sprite();
+			_container.addChild(_buttonContainer);
 
 			addButton("Check stats/achievements", checkAchievements, _buttonContainer);
 			addButton("Toggle achievement", toggleAchievement, _buttonContainer);
@@ -53,16 +61,22 @@ package
 			addButton("Publish file", publishFile, _buttonContainer);
 			addButton("Delete published file", deletePublishedFile, _buttonContainer);
 			addButton("Toggle fullscreen", toggleFullscreen, _buttonContainer);
-			addButton("Show Friends overlay", activateOverlay, _buttonContainer);
 			addButton("Update file", updateFile, _buttonContainer);
-			addButton("Enumerate workshop", toggleEnumerateButtons, _buttonContainer);
+			addButton("Enumerate workshop", null, _buttonContainer, _enumerateContainer);
+			addButton("Show overlay", null, _buttonContainer, _overlayContainer);
 
-			_enumerateContainer = new Sprite();
-			addButton("Back", toggleEnumerateButtons, _enumerateContainer);
+			addButton("Back", null, _enumerateContainer);
 			addButton("User subscribed files", enumerateSubscribedFiles, _enumerateContainer);
 			addButton("User published files", enumerateUserPublishedFiles, _enumerateContainer);
 			addButton("User shared files", enumerateSharedFiles, _enumerateContainer);
 			addButton("All published files", enumerateWorkshopFiles, _enumerateContainer);
+
+			addButton("Back", null, _overlayContainer);
+			addButton("Show friends overlay", activateOverlay, _overlayContainer);
+			addButton("Show user overlay", activateOverlayToUser, _overlayContainer);
+			addButton("Show webpage overlay", activateOverlayToWebpage, _overlayContainer);
+			addButton("Show store overlay", activateOverlayToStore, _overlayContainer);
+			addButton("Show overlay invite dialog", activateOverlayInvite, _overlayContainer);
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
 			Steamworks.addOverlayWorkaround(stage, true);
@@ -75,7 +89,8 @@ package
 				}
 
 				log("STEAMWORKS API is available\n");
-				log("User ID: " + Steamworks.getUserID());
+				_userId = Steamworks.getUserID();
+				log("User ID: " + _userId);
 				_appId = Steamworks.getAppID();
 				log("App ID: " + _appId);
 				log("Persona name: " + Steamworks.getPersonaName());
@@ -208,32 +223,49 @@ package
 			}, 1000);
 		}
 
-		private function toggleEnumerateButtons(e:Event = null):void {
-			if (_enumerateContainer.parent) {
-				removeChild(_enumerateContainer);
-				addChild(_buttonContainer);
-			} else {
-				removeChild(_buttonContainer);
-				addChild(_enumerateContainer);
-			}
+		private function activateOverlayToUser(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			var res:Boolean = Steamworks.activateGameOverlayToUser("steamid", _userId);
+			log("activateGameOverlay('steamid', " + _userId + ") == " + res);
+		}
+
+		private function activateOverlayToWebpage(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			var res:Boolean = Steamworks.activateGameOverlayToWebPage("http://www.steamgames.com/");
+			log("activateGameOverlayToWebPage(...) == " + res);
+		}
+
+		private function activateOverlayToStore(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			var res:Boolean = Steamworks.activateGameOverlayToStore(_appId,
+				WorkshopConstants.OVERLAYSTOREFLAG_None);
+			log("activateGameOverlayToStore(" + _appId + ", " +
+				WorkshopConstants.OVERLAYSTOREFLAG_None + ") == " + res);
+		}
+
+		private function activateOverlayInvite(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			log("activateGameOverlayInviteDialog('0') == " +
+				Steamworks.activateGameOverlayInviteDialog("0"));
 		}
 
 		private function enumerateSubscribedFiles(e:Event = null):void {
-			toggleEnumerateButtons();
 			if(!Steamworks.isReady) return;
 
 			log("enumerateUserSubscribedFiles(0) == " + Steamworks.enumerateUserSubscribedFiles(0));
 		}
 
 		private function enumerateUserPublishedFiles(e:Event = null):void {
-			toggleEnumerateButtons();
 			if(!Steamworks.isReady) return;
 
 			log("enumerateUserPublishedFiles(0) == " + Steamworks.enumerateUserPublishedFiles(0));
 		}
 
 		private function enumerateSharedFiles(e:Event = null):void {
-			toggleEnumerateButtons();
 			if(!Steamworks.isReady) return;
 
 			var userID:String = Steamworks.getUserID();
@@ -242,7 +274,6 @@ package
 		}
 
 		private function enumerateWorkshopFiles(e:Event = null):void {
-			toggleEnumerateButtons();
 			if(!Steamworks.isReady) return;
 
 			var res:Boolean = Steamworks.enumeratePublishedWorkshopFiles(
@@ -393,6 +424,10 @@ package
 						log("UGCDownload(...) == " + apiCall);
 						var progress:Array = Steamworks.getUGCDownloadProgress(res.fileHandle);
 						log("getUGCDownloadProgress(...) == " + progress);
+						setTimeout(function():void {
+							var progress:Array = Steamworks.getUGCDownloadProgress(res.fileHandle);
+							log("getUGCDownloadProgress(...) == " + progress);
+						}, 1000);
 					}
 					break;
 				case SteamConstants.RESPONSE_OnUGCDownload:
@@ -434,16 +469,30 @@ package
 			Steamworks.dispose();
 		}
 
-		private function addButton(label:String, callback:Function, container:Sprite):void {
+		private function showButtonContainer(cont:Sprite):void {
+			trace("showbuttoncont");
+			trace(cont);
+			while (_container.numChildren > 0)
+				_container.removeChildAt(0);
+
+			_container.addChild(cont);
+		}
+
+		private function addButton(label:String, callback:Function, container:Sprite,
+			showContainer:Sprite = null):void {
 			var button:Sprite = new Sprite();
 			button.graphics.beginFill(0xaaaaaa);
 			button.graphics.drawRoundRect(0, 0, 150, 25, 5, 5);
 			button.graphics.endFill();
 			button.buttonMode = true;
 			button.useHandCursor = true;
-			button.addEventListener(MouseEvent.CLICK, callback);
 			button.x = 5;
 			button.y = container.height + 5;
+
+			button.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
+				showButtonContainer(showContainer || _buttonContainer);
+				if (callback != null) callback();
+			});
 
 			button.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void {
 				button.graphics.clear();
