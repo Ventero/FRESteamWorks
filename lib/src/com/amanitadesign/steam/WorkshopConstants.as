@@ -37,6 +37,10 @@ package com.amanitadesign.steam
 		public static const VISIBILITY_FriendsOnly:int = 1;
 		public static const VISIBILITY_Private:int = 2;
 
+		public static const OVERLAYSTOREFLAG_None:int = 0;
+		public static const OVERLAYSTOREFLAG_AddToCart:int = 1;
+		public static const OVERLAYSTOREFLAG_AddToCartAndShow:int = 2;
+
 		public static const FILEUPDATEHANDLE_Invalid:String = "18446744073709551615"; // 0xffffffffffffffffull
 		public static const UGCHANDLE_Invalid:String = "18446744073709551615"; // 0xffffffffffffffffull
 	}
