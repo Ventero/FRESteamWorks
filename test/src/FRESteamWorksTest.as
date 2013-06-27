@@ -24,6 +24,7 @@ package
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
+	import flash.utils.setTimeout;
 
 	public class FRESteamWorksTest extends Sprite
 	{
@@ -202,7 +203,9 @@ package
 
 			log("isOverlayEnabled() == " + Steamworks.isOverlayEnabled());
 			log("activateGameOverlay('Friends') == " + Steamworks.activateGameOverlay("Friends"));
-			log("isOverlayEnabled() == " + Steamworks.isOverlayEnabled());
+			setTimeout(function():void {
+				log("isOverlayEnabled() == " + Steamworks.isOverlayEnabled());
+			}, 1000);
 		}
 
 		private function toggleEnumerateButtons(e:Event = null):void {
