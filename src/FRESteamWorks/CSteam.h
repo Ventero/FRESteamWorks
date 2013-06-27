@@ -15,6 +15,7 @@
 
 #include <algorithm>
 #include <map>
+#include <memory>
 #include <stdio.h>
 #include <string>
 #include <sstream>
@@ -220,20 +221,22 @@ private:
 
 	// the most recently received *Result
 	SteamLeaderboard_t m_CurrentLeaderboard;
-	LeaderboardScoreUploaded_t m_ScoreUpload;
-	LeaderboardScoresDownloaded_t m_ScoreDownloaded;
 	UGCHandle_t m_FileHandle;
-	std::map<UGCHandle_t, RemoteStorageDownloadUGCResult_t> m_DownloadResults;
 	PublishedFileId_t m_PublishedFileId;
-	std::map<PublishedFileId_t, RemoteStorageGetPublishedFileDetailsResult_t> m_PublishedFileDetails;
-	RemoteStorageEnumerateUserPublishedFilesResult_t m_UserPublishedFiles;
-	RemoteStorageEnumerateWorkshopFilesResult_t m_WorkshopFiles;
-	RemoteStorageEnumerateUserSubscribedFilesResult_t m_SubscribedFiles;
-	RemoteStorageEnumerateUserSharedWorkshopFilesResult_t m_UserSharedFiles;
-	RemoteStorageEnumeratePublishedFilesByUserActionResult_t m_PublishedFilesByAction;
-	RemoteStorageGetPublishedItemVoteDetailsResult_t m_PublishedItemVoteDetails;
-	RemoteStorageUserVoteDetails_t m_UserPublishedItemVoteDetails;
 	AppId_t m_DLCInstalled;
+
+	std::map<UGCHandle_t, RemoteStorageDownloadUGCResult_t> m_DownloadResults;
+	std::map<PublishedFileId_t, RemoteStorageGetPublishedFileDetailsResult_t> m_PublishedFileDetails;
+
+	std::unique_ptr<LeaderboardScoreUploaded_t> m_ScoreUpload;
+	std::unique_ptr<LeaderboardScoresDownloaded_t> m_ScoreDownloaded;
+	std::unique_ptr<RemoteStorageEnumerateUserPublishedFilesResult_t> m_UserPublishedFiles;
+	std::unique_ptr<RemoteStorageEnumerateWorkshopFilesResult_t> m_WorkshopFiles;
+	std::unique_ptr<RemoteStorageEnumerateUserSubscribedFilesResult_t> m_SubscribedFiles;
+	std::unique_ptr<RemoteStorageEnumerateUserSharedWorkshopFilesResult_t> m_UserSharedFiles;
+	std::unique_ptr<RemoteStorageEnumeratePublishedFilesByUserActionResult_t> m_PublishedFilesByAction;
+	std::unique_ptr<RemoteStorageGetPublishedItemVoteDetailsResult_t> m_PublishedItemVoteDetails;
+	std::unique_ptr<RemoteStorageUserVoteDetails_t> m_UserPublishedItemVoteDetails;
 
 	void DispatchEvent(const int req_type, const int response);
 

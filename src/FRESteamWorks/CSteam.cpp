@@ -11,6 +11,7 @@
 #include "CSteam.h"
 
 CSteam::CSteam():
+	m_CurrentLeaderboard(0),
 	m_FileHandle(k_UGCHandleInvalid),
 	m_PublishedFileId(0),
 	m_DLCInstalled(0),
@@ -183,7 +184,7 @@ bool CSteam::UploadLeaderboardScore(SteamLeaderboard_t handle,
 LeaderboardScoreUploaded_t* CSteam::UploadLeaderboardScoreResult() {
 	if (!m_bInitialized) return nullptr;
 
-	return &m_ScoreUpload;
+	return m_ScoreUpload.get();
 }
 
 bool CSteam::DownloadLeaderboardEntries(SteamLeaderboard_t handle,
@@ -200,14 +201,15 @@ bool CSteam::DownloadLeaderboardEntries(SteamLeaderboard_t handle,
 
 std::vector<LeaderboardEntry> CSteam::DownloadLeaderboardEntriesResult(int maxDetails) {
 	std::vector<LeaderboardEntry> res;
-	int cnt = m_ScoreDownloaded.m_cEntryCount;
+	if (!m_bInitialized || !m_ScoreDownloaded) return res;
 
-	if (!m_bInitialized || !cnt) return res;
+	int cnt = m_ScoreDownloaded->m_cEntryCount;
+	if (!cnt) return res;
 
 	res.reserve(cnt);
 	for (int i = 0; i < cnt; ++i) {
 		LeaderboardEntry entry(maxDetails);
-		SteamUserStats()->GetDownloadedLeaderboardEntry(m_ScoreDownloaded.m_hSteamLeaderboardEntries,
+		SteamUserStats()->GetDownloadedLeaderboardEntry(m_ScoreDownloaded->m_hSteamLeaderboardEntries,
 			i, &entry.entry, entry.details, maxDetails);
 
 		res.push_back(entry);
@@ -399,7 +401,7 @@ bool CSteam::EnumerateUserPublishedFiles(uint32 startIndex) {
 RemoteStorageEnumerateUserPublishedFilesResult_t* CSteam::EnumerateUserPublishedFilesResult() {
 	if (!m_bInitialized) return nullptr;
 
-	return &m_UserPublishedFiles;
+	return m_UserPublishedFiles.get();
 }
 
 bool CSteam::EnumeratePublishedWorkshopFiles(EWorkshopEnumerationType type, uint32 start, uint32 count,
@@ -416,7 +418,7 @@ bool CSteam::EnumeratePublishedWorkshopFiles(EWorkshopEnumerationType type, uint
 RemoteStorageEnumerateWorkshopFilesResult_t* CSteam::EnumeratePublishedWorkshopFilesResult() {
 	if (!m_bInitialized) return nullptr;
 
-	return &m_WorkshopFiles;
+	return m_WorkshopFiles.get();
 }
 
 bool CSteam::EnumerateUserSubscribedFiles(uint32 startIndex) {
@@ -431,7 +433,7 @@ bool CSteam::EnumerateUserSubscribedFiles(uint32 startIndex) {
 RemoteStorageEnumerateUserSubscribedFilesResult_t* CSteam::EnumerateUserSubscribedFilesResult() {
 	if (!m_bInitialized) return nullptr;
 
-	return &m_SubscribedFiles;
+	return m_SubscribedFiles.get();
 }
 
 bool CSteam::EnumerateUserSharedWorkshopFiles(CSteamID steamId, uint32 startIndex,
@@ -449,7 +451,7 @@ bool CSteam::EnumerateUserSharedWorkshopFiles(CSteamID steamId, uint32 startInde
 RemoteStorageEnumerateUserSharedWorkshopFilesResult_t* CSteam::EnumerateUserSharedWorkshopFilesResult() {
 	if (!m_bInitialized) return nullptr;
 
-	return &m_UserSharedFiles;
+	return m_UserSharedFiles.get();
 }
 
 bool CSteam::EnumeratePublishedFilesByUserAction(EWorkshopFileAction action, uint32 startIndex) {
@@ -465,7 +467,7 @@ bool CSteam::EnumeratePublishedFilesByUserAction(EWorkshopFileAction action, uin
 RemoteStorageEnumeratePublishedFilesByUserActionResult_t* CSteam::EnumeratePublishedFilesByUserActionResult() {
 	if(!m_bInitialized) return nullptr;
 
-	return &m_PublishedFilesByAction;
+	return m_PublishedFilesByAction.get();
 }
 
 bool CSteam::SubscribePublishedFile(PublishedFileId_t file) {
@@ -555,7 +557,7 @@ bool CSteam::GetPublishedItemVoteDetails(PublishedFileId_t file) {
 RemoteStorageGetPublishedItemVoteDetailsResult_t* CSteam::GetPublishedItemVoteDetailsResult() {
 	if (!m_bInitialized) return nullptr;
 
-	return &m_PublishedItemVoteDetails;
+	return m_PublishedItemVoteDetails.get();
 }
 
 bool CSteam::GetUserPublishedItemVoteDetails(PublishedFileId_t file) {
@@ -570,7 +572,7 @@ bool CSteam::GetUserPublishedItemVoteDetails(PublishedFileId_t file) {
 RemoteStorageUserVoteDetails_t* CSteam::GetUserPublishedItemVoteDetailsResult() {
 	if (!m_bInitialized) return nullptr;
 
-	return &m_UserPublishedItemVoteDetails;
+	return m_UserPublishedItemVoteDetails.get();
 }
 
 bool CSteam::UpdateUserPublishedItemVote(PublishedFileId_t file, bool upvote) {
@@ -704,12 +706,12 @@ void CSteam::OnFindLeaderboard(LeaderboardFindResult_t *result, bool failure) {
 }
 
 void CSteam::OnUploadLeaderboardScore(LeaderboardScoreUploaded_t *result, bool failure) {
-	if (!failure) m_ScoreUpload = *result;
+	if (!failure) m_ScoreUpload.reset(new LeaderboardScoreUploaded_t(*result));
 	DispatchEvent(RESPONSE_OnUploadLeaderboardScore, result->m_bSuccess ? k_EResultOK : k_EResultFail);
 }
 
 void CSteam::OnDownloadLeaderboardEntries(LeaderboardScoresDownloaded_t *result, bool failure) {
-	if (!failure) m_ScoreDownloaded = *result;
+	if (!failure) m_ScoreDownloaded.reset(new LeaderboardScoresDownloaded_t(*result));
 	DispatchEvent(RESPONSE_OnDownloadLeaderboardEntries, result->m_cEntryCount ? k_EResultOK : k_EResultFail);
 }
 
@@ -742,27 +744,27 @@ void CSteam::OnGetPublishedFileDetails(RemoteStorageGetPublishedFileDetailsResul
 }
 
 void CSteam::OnEnumerateUserPublishedFiles(RemoteStorageEnumerateUserPublishedFilesResult_t *result, bool failure) {
-	if (!failure) m_UserPublishedFiles = *result;
+	if (!failure) m_UserPublishedFiles.reset(new RemoteStorageEnumerateUserPublishedFilesResult_t(*result));
 	DispatchEvent(RESPONSE_OnEnumerateUserPublishedFiles, result->m_eResult);
 }
 
 void CSteam::OnEnumeratePublishedWorkshopFiles(RemoteStorageEnumerateWorkshopFilesResult_t *result, bool failure) {
-	if (!failure) m_WorkshopFiles = *result;
+	if (!failure) m_WorkshopFiles.reset(new RemoteStorageEnumerateWorkshopFilesResult_t(*result));
 	DispatchEvent(RESPONSE_OnEnumeratePublishedWorkshopFiles, result->m_eResult);
 }
 
 void CSteam::OnEnumerateUserSubscribedFiles(RemoteStorageEnumerateUserSubscribedFilesResult_t *result, bool failure) {
-	if (!failure) m_SubscribedFiles = *result;
+	if (!failure) m_SubscribedFiles.reset(new RemoteStorageEnumerateUserSubscribedFilesResult_t(*result));
 	DispatchEvent(RESPONSE_OnEnumerateUserSubscribedFiles, result->m_eResult);
 }
 
 void CSteam::OnEnumerateUserSharedWorkshopFiles(RemoteStorageEnumerateUserSharedWorkshopFilesResult_t *result, bool failure) {
-	if (!failure) m_UserSharedFiles = *result;
+	if (!failure) m_UserSharedFiles.reset(new RemoteStorageEnumerateUserSharedWorkshopFilesResult_t(*result));
 	DispatchEvent(RESPONSE_OnEnumerateUserSharedWorkshopFiles, result->m_eResult);
 }
 
 void CSteam::OnEnumeratePublishedFilesByUserAction(RemoteStorageEnumeratePublishedFilesByUserActionResult_t *result, bool failure) {
-	if (!failure) m_PublishedFilesByAction = *result;
+	if (!failure) m_PublishedFilesByAction.reset(new RemoteStorageEnumeratePublishedFilesByUserActionResult_t(*result));
 	DispatchEvent(RESPONSE_OnEnumeratePublishedFilesByUserAction, result->m_eResult);
 }
 
@@ -782,12 +784,12 @@ void CSteam::OnUnsubscribePublishedFile(RemoteStorageUnsubscribePublishedFileRes
 }
 
 void CSteam::OnGetPublishedItemVoteDetails(RemoteStorageGetPublishedItemVoteDetailsResult_t *result, bool failure) {
-	if (!failure) m_PublishedItemVoteDetails = *result;
+	if (!failure) m_PublishedItemVoteDetails.reset(new RemoteStorageGetPublishedItemVoteDetailsResult_t(*result));
 	DispatchEvent(RESPONSE_OnGetPublishedItemVoteDetails, result->m_eResult);
 }
 
 void CSteam::OnGetUserPublishedItemVoteDetails(RemoteStorageUserVoteDetails_t *result, bool failure) {
-	if (!failure) m_UserPublishedItemVoteDetails = *result;
+	if (!failure) m_UserPublishedItemVoteDetails.reset(new RemoteStorageUserVoteDetails_t(*result));
 	DispatchEvent(RESPONSE_OnGetUserPublishedItemVoteDetails, result->m_eResult);
 }
 
