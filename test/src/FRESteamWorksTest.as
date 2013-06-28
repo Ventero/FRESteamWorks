@@ -512,8 +512,6 @@ package
 		}
 
 		private function showButtonContainer(cont:Sprite):void {
-			trace("showbuttoncont");
-			trace(cont);
 			while (_container.numChildren > 0)
 				_container.removeChildAt(0);
 
