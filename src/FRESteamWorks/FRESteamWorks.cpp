@@ -755,7 +755,7 @@ AIR_FUNC(AIRSteam_EnumeratePublishedFilesByUserAction) {
 
 AIR_FUNC(AIRSteam_EnumeratePublishedFilesByUserActionResult) {
 	FREObject result;
-	FRENewObject((const uint8_t*)"com.amanitadesign.steam.FilesByActionResult", 0, NULL, &result, NULL);
+	FRENewObject((const uint8_t*)"com.amanitadesign.steam.FilesByUserActionResult", 0, NULL, &result, NULL);
 
 	ARG_CHECK(0, result);
 	auto details = g_Steam->EnumeratePublishedFilesByUserActionResult();

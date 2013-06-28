@@ -688,7 +688,7 @@ void AIRSteam_EnumeratePublishedFilesByUserActionResult() {
 	auto details = g_Steam->EnumeratePublishedFilesByUserActionResult();
 	if (!details) return send(nullptr);
 
-	AmfObjectTraits traits("com.amanitadesign.steam.FilesByActionResult", false, false);
+	AmfObjectTraits traits("com.amanitadesign.steam.FilesByUserActionResult", false, false);
 	AmfObject obj(traits);
 
 	obj.addSealedProperty("result", AmfInteger(details->m_eResult));
