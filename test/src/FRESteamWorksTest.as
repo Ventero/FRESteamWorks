@@ -66,10 +66,12 @@ package
 			addButton("Show overlay", null, _buttonContainer, _overlayContainer);
 
 			addButton("Back", null, _enumerateContainer);
-			addButton("Subscribed files (+unsub/dl)", enumerateSubscribedFiles, _enumerateContainer);
+			addButton("Sub'd files (unsub/dl/action)", enumerateSubscribedFiles, _enumerateContainer);
 			addButton("User published files", enumerateUserPublishedFiles, _enumerateContainer);
 			addButton("User shared files", enumerateSharedFiles, _enumerateContainer);
-			addButton("All published files (+vote)", enumerateWorkshopFiles, _enumerateContainer);
+			addButton("All published files (vote)", enumerateWorkshopFiles, _enumerateContainer);
+			addButton("By Action (played)", enumeratePlayedFiles, _enumerateContainer);
+			addButton("By Action (completed)", enumerateCompletedFiles, _enumerateContainer);
 
 			addButton("Back", null, _overlayContainer);
 			addButton("Show friends overlay", activateOverlay, _overlayContainer);
@@ -281,6 +283,22 @@ package
 			log("enumerateSharedFiles(...) == " + res);
 		}
 
+		private function enumeratePlayedFiles(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			var res:Boolean = Steamworks.enumeratePublishedFilesByUserAction(
+				WorkshopConstants.FILEACTION_Played, 0);
+			log("enumeratePublishedFilesByUserAction(Played, 0) == " + res);
+		}
+
+		private function enumerateCompletedFiles(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			var res:Boolean = Steamworks.enumeratePublishedFilesByUserAction(
+				WorkshopConstants.FILEACTION_Completed, 0);
+			log("enumeratePublishedFilesByUserAction(Completed, 0) == " + res);
+		}
+
 		private function updateFile(e:Event = null):void {
 			if(!publishedFile) {
 				log("No file handle set, publish or enumerate first");
@@ -372,6 +390,12 @@ package
 						apiCall = Steamworks.unsubscribePublishedFile(subbedFile);
 						log("unsubscribePublishedFile(" + subbedFile + ") == " + apiCall);
 					}
+
+					if(subRes.resultsReturned > 0) {
+						apiCall = Steamworks.setUserPublishedFileAction(
+							subRes.publishedFileId[0], WorkshopConstants.FILEACTION_Played);
+						log("setUserPublishedFileAction(..., Played) == " + apiCall);
+					}
 					break;
 				case SteamConstants.RESPONSE_OnEnumerateUserSharedWorkshopFiles:
 				case SteamConstants.RESPONSE_OnEnumerateUserPublishedFiles:
@@ -410,6 +434,24 @@ package
 						log("updateUserPublishedItemVote(" + f + ", true) == " + apiCall);
 						apiCall = Steamworks.getPublishedItemVoteDetails(f);
 						log("getPublishedItemVoteDetails(" + f + ") == " + apiCall);
+					}
+					break;
+				case SteamConstants.RESPONSE_OnEnumeratePublishedFilesByUserAction:
+					log("RESPONSE_OnEnumeratePublishedFilesByUserAction: " + e.response);
+					if(e.response != SteamResults.OK) return;
+
+					var actionRes:FilesByUserActionResult = Steamworks.enumeratePublishedFilesByUserActionResult();
+					// TODO: m_eAction seems to be uninitialized?
+					log("Files for action " + actionRes.action + ": " +
+						actionRes.resultsReturned + "/" + actionRes.totalResults);
+
+					for(i = 0; i < actionRes.resultsReturned; i++) {
+						log(i + ": " + actionRes.publishedFileId[i] + " - " + actionRes.timeUpdated[i]);
+						if (actionRes.action == WorkshopConstants.FILEACTION_Played) {
+							log("setUserPublishedFileAction(..., Completed) == " +
+								Steamworks.setUserPublishedFileAction(actionRes.publishedFileId[i],
+								WorkshopConstants.FILEACTION_Completed));
+						}
 					}
 					break;
 				case SteamConstants.RESPONSE_OnGetPublishedFileDetails:
