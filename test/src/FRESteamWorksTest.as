@@ -102,6 +102,9 @@ package
 				log("getDLCCount() == " + Steamworks.getDLCCount());
 				log("isSubscribedApp(" + _appId + ") == " + Steamworks.isSubscribedApp(_appId));
 				log("isSubscribedApp(999999) == " + Steamworks.isSubscribedApp(999999));
+				// TODO: find better appID to test this for (i.e. one that can
+				//       potentially be installed)
+				log("isDLCInstalled(999999) == " + Steamworks.isDLCInstalled(999999));
 
 				var quota:Array = Steamworks.getQuota();
 				log("getQuota() == " + (quota ? "[" + quota.join(", ") + "]" : "null"));
