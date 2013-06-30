@@ -57,91 +57,9 @@ class ANESteam : public CSteam {
 };
 
 extern "C" {
-	AIR_FUNC(AIRSteam_Init);
-	AIR_FUNC(AIRSteam_RunCallbacks);
-	AIR_FUNC(AIRSteam_GetUserID);
-	AIR_FUNC(AIRSteam_GetAppID);
-	AIR_FUNC(AIRSteam_GetPersonaName);
-	AIR_FUNC(AIRSteam_UseCrashHandler);
-
-	// stats / achievements
-	AIR_FUNC(AIRSteam_RequestStats);
-	AIR_FUNC(AIRSteam_SetAchievement);
-	AIR_FUNC(AIRSteam_ClearAchievement);
-	AIR_FUNC(AIRSteam_IsAchievement);
-	AIR_FUNC(AIRSteam_GetStatInt);
-	AIR_FUNC(AIRSteam_GetStatFloat);
-	AIR_FUNC(AIRSteam_SetStatInt);
-	AIR_FUNC(AIRSteam_SetStatFloat);
-	AIR_FUNC(AIRSteam_StoreStats);
-	AIR_FUNC(AIRSteam_ResetAllStats);
-
-	// cloud
-	AIR_FUNC(AIRSteam_GetFileCount);
-	AIR_FUNC(AIRSteam_GetFileSize);
-	AIR_FUNC(AIRSteam_FileExists);
-	AIR_FUNC(AIRSteam_FileWrite);
-	AIR_FUNC(AIRSteam_FileRead);
-	AIR_FUNC(AIRSteam_FileDelete);
-	AIR_FUNC(AIRSteam_FileShare);
-	AIR_FUNC(AIRSteam_FileShareResult);
-	AIR_FUNC(AIRSteam_IsCloudEnabledForApp);
-	AIR_FUNC(AIRSteam_SetCloudEnabledForApp);
-	AIR_FUNC(AIRSteam_GetQuota);
-
-	// workshop
-	AIR_FUNC(AIRSteam_UGCDownload);
-	AIR_FUNC(AIRSteam_UGCRead);
-	AIR_FUNC(AIRSteam_GetUGCDownloadProgress);
-	AIR_FUNC(AIRSteam_GetUGCDownloadResult);
-	AIR_FUNC(AIRSteam_PublishWorkshopFile);
-	AIR_FUNC(AIRSteam_PublishWorkshopFileResult);
-	AIR_FUNC(AIRSteam_DeletePublishedFile);
-	AIR_FUNC(AIRSteam_GetPublishedFileDetails);
-	AIR_FUNC(AIRSteam_GetPublishedFileDetailsResult);
-	AIR_FUNC(AIRSteam_EnumerateUserPublishedFiles);
-	AIR_FUNC(AIRSteam_EnumerateUserPublishedFilesResult);
-	AIR_FUNC(AIRSteam_EnumeratePublishedWorkshopFiles);
-	AIR_FUNC(AIRSteam_EnumeratePublishedWorkshopFilesResult);
-	AIR_FUNC(AIRSteam_EnumerateUserSubscribedFiles);
-	AIR_FUNC(AIRSteam_EnumerateUserSubscribedFilesResult);
-	AIR_FUNC(AIRSteam_EnumerateUserSharedWorkshopFiles);
-	AIR_FUNC(AIRSteam_EnumerateUserSharedWorkshopFilesResult);
-	AIR_FUNC(AIRSteam_EnumeratePublishedFilesByUserAction);
-	AIR_FUNC(AIRSteam_EnumeratePublishedFilesByUserActionResult);
-	AIR_FUNC(AIRSteam_SubscribePublishedFile);
-	AIR_FUNC(AIRSteam_UnsubscribePublishedFile);
-	AIR_FUNC(AIRSteam_CreatePublishedFileUpdateRequest);
-	AIR_FUNC(AIRSteam_UpdatePublishedFileFile);
-	AIR_FUNC(AIRSteam_UpdatePublishedFilePreviewFile);
-	AIR_FUNC(AIRSteam_UpdatePublishedFileTitle);
-	AIR_FUNC(AIRSteam_UpdatePublishedFileDescription);
-	AIR_FUNC(AIRSteam_UpdatePublishedFileSetChangeDescription);
-	AIR_FUNC(AIRSteam_UpdatePublishedFileVisibility);
-	AIR_FUNC(AIRSteam_UpdatePublishedFileTags);
-	AIR_FUNC(AIRSteam_CommitPublishedFileUpdate);
-	AIR_FUNC(AIRSteam_GetPublishedItemVoteDetails);
-	AIR_FUNC(AIRSteam_GetPublishedItemVoteDetailsResult);
-	AIR_FUNC(AIRSteam_GetUserPublishedItemVoteDetails);
-	AIR_FUNC(AIRSteam_GetUserPublishedItemVoteDetailsResult);
-	AIR_FUNC(AIRSteam_UpdateUserPublishedItemVote);
-	AIR_FUNC(AIRSteam_SetUserPublishedFileAction);
-
-	// overlay
-	AIR_FUNC(AIRSteam_ActivateGameOverlay);
-	AIR_FUNC(AIRSteam_ActivateGameOverlayToUser);
-	AIR_FUNC(AIRSteam_ActivateGameOverlayToWebPage);
-	AIR_FUNC(AIRSteam_ActivateGameOverlayToStore);
-	AIR_FUNC(AIRSteam_ActivateGameOverlayInviteDialog);
-	AIR_FUNC(AIRSteam_IsOverlayEnabled);
-
-	// DLC / subscription
-	AIR_FUNC(AIRSteam_IsSubscribedApp);
-	AIR_FUNC(AIRSteam_IsDLCInstalled);
-	AIR_FUNC(AIRSteam_GetDLCCount);
-	AIR_FUNC(AIRSteam_InstallDLC);
-	AIR_FUNC(AIRSteam_UninstallDLC);
-	AIR_FUNC(AIRSteam_DLCInstalledResult);
+#define X(a) AIR_FUNC(a);
+#include "functions.h"
+#undef X
 
 	// A native context instance is created
 	void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,

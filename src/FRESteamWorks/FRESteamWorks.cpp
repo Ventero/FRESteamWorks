@@ -1099,91 +1099,9 @@ extern "C" {
 		{ (const uint8_t*) #fname, NULL, &fname }
 
 	static FRENamedFunction func[] = {
-		FRE_FUNC(AIRSteam_Init),
-		FRE_FUNC(AIRSteam_RunCallbacks),
-		FRE_FUNC(AIRSteam_GetUserID),
-		FRE_FUNC(AIRSteam_GetAppID),
-		FRE_FUNC(AIRSteam_GetPersonaName),
-		FRE_FUNC(AIRSteam_UseCrashHandler),
-
-		// stats / achievements
-		FRE_FUNC(AIRSteam_RequestStats),
-		FRE_FUNC(AIRSteam_SetAchievement),
-		FRE_FUNC(AIRSteam_ClearAchievement),
-		FRE_FUNC(AIRSteam_IsAchievement),
-		FRE_FUNC(AIRSteam_GetStatInt),
-		FRE_FUNC(AIRSteam_GetStatFloat),
-		FRE_FUNC(AIRSteam_SetStatInt),
-		FRE_FUNC(AIRSteam_SetStatFloat),
-		FRE_FUNC(AIRSteam_StoreStats),
-		FRE_FUNC(AIRSteam_ResetAllStats),
-
-		// remote storage
-		FRE_FUNC(AIRSteam_GetFileCount),
-		FRE_FUNC(AIRSteam_GetFileSize),
-		FRE_FUNC(AIRSteam_FileExists),
-		FRE_FUNC(AIRSteam_FileWrite),
-		FRE_FUNC(AIRSteam_FileRead),
-		FRE_FUNC(AIRSteam_FileDelete),
-		FRE_FUNC(AIRSteam_FileShare),
-		FRE_FUNC(AIRSteam_FileShareResult),
-		FRE_FUNC(AIRSteam_IsCloudEnabledForApp),
-		FRE_FUNC(AIRSteam_SetCloudEnabledForApp),
-		FRE_FUNC(AIRSteam_GetQuota),
-
-		// ugc / workshop
-		FRE_FUNC(AIRSteam_UGCDownload),
-		FRE_FUNC(AIRSteam_UGCRead),
-		FRE_FUNC(AIRSteam_GetUGCDownloadProgress),
-		FRE_FUNC(AIRSteam_GetUGCDownloadResult),
-		FRE_FUNC(AIRSteam_PublishWorkshopFile),
-		FRE_FUNC(AIRSteam_PublishWorkshopFileResult),
-		FRE_FUNC(AIRSteam_DeletePublishedFile),
-		FRE_FUNC(AIRSteam_GetPublishedFileDetails),
-		FRE_FUNC(AIRSteam_GetPublishedFileDetailsResult),
-		FRE_FUNC(AIRSteam_EnumerateUserPublishedFiles),
-		FRE_FUNC(AIRSteam_EnumerateUserPublishedFilesResult),
-		FRE_FUNC(AIRSteam_EnumeratePublishedWorkshopFiles),
-		FRE_FUNC(AIRSteam_EnumeratePublishedWorkshopFilesResult),
-		FRE_FUNC(AIRSteam_EnumerateUserSubscribedFiles),
-		FRE_FUNC(AIRSteam_EnumerateUserSubscribedFilesResult),
-		FRE_FUNC(AIRSteam_EnumerateUserSharedWorkshopFiles),
-		FRE_FUNC(AIRSteam_EnumerateUserSharedWorkshopFilesResult),
-		FRE_FUNC(AIRSteam_EnumeratePublishedFilesByUserAction),
-		FRE_FUNC(AIRSteam_EnumeratePublishedFilesByUserActionResult),
-		FRE_FUNC(AIRSteam_SubscribePublishedFile),
-		FRE_FUNC(AIRSteam_UnsubscribePublishedFile),
-		FRE_FUNC(AIRSteam_CreatePublishedFileUpdateRequest),
-		FRE_FUNC(AIRSteam_UpdatePublishedFileFile),
-		FRE_FUNC(AIRSteam_UpdatePublishedFilePreviewFile),
-		FRE_FUNC(AIRSteam_UpdatePublishedFileTitle),
-		FRE_FUNC(AIRSteam_UpdatePublishedFileDescription),
-		FRE_FUNC(AIRSteam_UpdatePublishedFileSetChangeDescription),
-		FRE_FUNC(AIRSteam_UpdatePublishedFileVisibility),
-		FRE_FUNC(AIRSteam_UpdatePublishedFileTags),
-		FRE_FUNC(AIRSteam_CommitPublishedFileUpdate),
-		FRE_FUNC(AIRSteam_GetPublishedItemVoteDetails),
-		FRE_FUNC(AIRSteam_GetPublishedItemVoteDetailsResult),
-		FRE_FUNC(AIRSteam_GetUserPublishedItemVoteDetails),
-		FRE_FUNC(AIRSteam_GetUserPublishedItemVoteDetailsResult),
-		FRE_FUNC(AIRSteam_UpdateUserPublishedItemVote),
-		FRE_FUNC(AIRSteam_SetUserPublishedFileAction),
-
-		// overlay
-		FRE_FUNC(AIRSteam_ActivateGameOverlay),
-		FRE_FUNC(AIRSteam_ActivateGameOverlayToUser),
-		FRE_FUNC(AIRSteam_ActivateGameOverlayToWebPage),
-		FRE_FUNC(AIRSteam_ActivateGameOverlayToStore),
-		FRE_FUNC(AIRSteam_ActivateGameOverlayInviteDialog),
-		FRE_FUNC(AIRSteam_IsOverlayEnabled),
-
-		// DLC / subscription
-		FRE_FUNC(AIRSteam_IsSubscribedApp),
-		FRE_FUNC(AIRSteam_IsDLCInstalled),
-		FRE_FUNC(AIRSteam_GetDLCCount),
-		FRE_FUNC(AIRSteam_InstallDLC),
-		FRE_FUNC(AIRSteam_UninstallDLC),
-		FRE_FUNC(AIRSteam_DLCInstalledResult),
+#define X(a) FRE_FUNC(a),
+#include "functions.h"
+#undef X
 	};
 
 	// A native context instance is created
