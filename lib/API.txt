@@ -60,6 +60,8 @@ public function updatePublishedFileTags(handle:String, tags:Array):Boolean
 public function commitPublishedFileUpdate(handle:String):Boolean
 public function getPublishedItemVoteDetails(file:String):Boolean
 public function getPublishedItemVoteDetailsResult():ItemVoteDetailsResult
+public function getUserPublishedItemVoteDetails(file:String):Boolean
+public function getUserPublishedItemVoteDetailsResult():UserVoteDetails
 public function updateUserPublishedItemVote(file:String, upvote:Boolean):Boolean
 public function setUserPublishedFileAction(file:String, action:uint):Boolean
 /* overlay */

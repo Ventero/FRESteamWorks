@@ -41,6 +41,7 @@ enum ResponseTypes {
 	RESPONSE_OnSubscribePublishedFile,
 	RESPONSE_OnUnsubscribePublishedFile,
 	RESPONSE_OnGetPublishedItemVoteDetails,
+	RESPONSE_OnGetUserPublishedItemVoteDetails,
 	RESPONSE_OnUpdateUserPublishedItemVote,
 	RESPONSE_OnSetUserPublishedFileAction,
 	RESPONSE_OnDLCInstalled
@@ -127,6 +128,8 @@ public:
 
 	bool GetPublishedItemVoteDetails(PublishedFileId_t file);
 	RemoteStorageGetPublishedItemVoteDetailsResult_t* GetPublishedItemVoteDetailsResult();
+	bool GetUserPublishedItemVoteDetails(PublishedFileId_t file);
+	RemoteStorageUserVoteDetails_t* GetUserPublishedItemVoteDetailsResult();
 	bool UpdateUserPublishedItemVote(PublishedFileId_t file, bool upvote);
 
 	bool SetUserPublishedFileAction(PublishedFileId_t file, EWorkshopFileAction action);
@@ -166,6 +169,7 @@ private:
 	RemoteStorageEnumerateUserSharedWorkshopFilesResult_t m_UserSharedFiles;
 	RemoteStorageEnumeratePublishedFilesByUserActionResult_t m_PublishedFilesByAction;
 	RemoteStorageGetPublishedItemVoteDetailsResult_t m_PublishedItemVoteDetails;
+	RemoteStorageUserVoteDetails_t m_UserPublishedItemVoteDetails;
 	AppId_t m_DLCInstalled;
 
 	void DispatchEvent(const int req_type, const int response);
@@ -229,6 +233,9 @@ private:
 	STEAM_CALLRESULT(CSteam, OnGetPublishedItemVoteDetails,
 	                 RemoteStorageGetPublishedItemVoteDetailsResult_t,
 	                 m_CallbackGetPublishedItemVoteDetails);
+	STEAM_CALLRESULT(CSteam, OnGetUserPublishedItemVoteDetails,
+	                 RemoteStorageUserVoteDetails_t,
+	                 m_CallbackGetUserPublishedItemVoteDetails);
 	STEAM_CALLRESULT(CSteam, OnUpdateUserPublishedItemVote,
 	                 RemoteStorageUpdateUserPublishedItemVoteResult_t,
 	                 m_CallbackUpdateUserPublishedItemVote);

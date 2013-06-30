@@ -933,6 +933,30 @@ AIR_FUNC(AIRSteam_GetPublishedItemVoteDetailsResult) {
 	return result;
 }
 
+AIR_FUNC(AIRSteam_GetUserPublishedItemVoteDetails) {
+	ARG_CHECK(1, FREBool(false));
+
+	PublishedFileId_t file;
+	if(!FREGetUint64(argv[0], &file)) return FREBool(false);
+
+	return FREBool(g_Steam->GetUserPublishedItemVoteDetails(file));
+}
+
+AIR_FUNC(AIRSteam_GetUserPublishedItemVoteDetailsResult) {
+	FREObject result;
+	FRENewObject((const uint8_t*)"com.amanitadesign.steam.UserVoteDetails", 0, NULL, &result, NULL);
+
+	ARG_CHECK(0, result);
+	auto details = g_Steam->GetUserPublishedItemVoteDetailsResult();
+	if(!details) return result;
+
+	SET_PROP(result, "result", FREInt(details->m_eResult));
+	SET_PROP(result, "publishedFileId", FREUint64(details->m_nPublishedFileId));
+	SET_PROP(result, "vote", FREInt(details->m_eVote));
+
+	return result;
+}
+
 AIR_FUNC(AIRSteam_UpdateUserPublishedItemVote) {
 	ARG_CHECK(2, FREBool(false));
 
@@ -1140,6 +1164,8 @@ extern "C" {
 		FRE_FUNC(AIRSteam_CommitPublishedFileUpdate),
 		FRE_FUNC(AIRSteam_GetPublishedItemVoteDetails),
 		FRE_FUNC(AIRSteam_GetPublishedItemVoteDetailsResult),
+		FRE_FUNC(AIRSteam_GetUserPublishedItemVoteDetails),
+		FRE_FUNC(AIRSteam_GetUserPublishedItemVoteDetailsResult),
 		FRE_FUNC(AIRSteam_UpdateUserPublishedItemVote),
 		FRE_FUNC(AIRSteam_SetUserPublishedFileAction),
 

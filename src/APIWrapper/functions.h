@@ -63,6 +63,8 @@ X(AIRSteam_UpdatePublishedFileTags)
 X(AIRSteam_CommitPublishedFileUpdate)
 X(AIRSteam_GetPublishedItemVoteDetails)
 X(AIRSteam_GetPublishedItemVoteDetailsResult)
+X(AIRSteam_GetUserPublishedItemVoteDetails)
+X(AIRSteam_GetUserPublishedItemVoteDetailsResult)
 X(AIRSteam_UpdateUserPublishedItemVote)
 X(AIRSteam_SetUserPublishedFileAction)
 

@@ -407,6 +407,16 @@ package com.amanitadesign.steam
 			return _ExtensionContext.call("AIRSteam_GetPublishedItemVoteDetailsResult") as ItemVoteDetailsResult;
 		}
 
+		public function getUserPublishedItemVoteDetails(file:String):Boolean
+		{
+			return _ExtensionContext.call("AIRSteam_GetUserPublishedItemVoteDetails", file) as Boolean;
+		}
+
+		public function getUserPublishedItemVoteDetailsResult():UserVoteDetails
+		{
+			return _ExtensionContext.call("AIRSteam_GetUserPublishedItemVoteDetailsResult") as UserVoteDetails;
+		}
+
 		public function updateUserPublishedItemVote(file:String, upvote:Boolean):Boolean
 		{
 			return _ExtensionContext.call("AIRSteam_UpdateUserPublishedItemVote", file, upvote) as Boolean;

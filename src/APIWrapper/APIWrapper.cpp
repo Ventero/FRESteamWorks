@@ -835,6 +835,29 @@ void AIRSteam_GetPublishedItemVoteDetailsResult() {
 	sendItem(obj);
 }
 
+void AIRSteam_GetUserPublishedItemVoteDetails() {
+	PublishedFileId_t file = get_uint64();
+	if (!g_Steam || file == 0) return send(false);
+
+	return send(g_Steam->GetUserPublishedItemVoteDetails(file));
+}
+
+void AIRSteam_GetUserPublishedItemVoteDetailsResult() {
+	if (!g_Steam) return send(nullptr);
+
+	auto details = g_Steam->GetUserPublishedItemVoteDetailsResult();
+	if (!details) return send(nullptr);
+
+	AmfObjectTraits traits("com.amanitadesign.steam.UserVoteDetails", false, false);
+	AmfObject obj(traits);
+
+	obj.addSealedProperty("result", AmfInteger(details->m_eResult));
+	obj.addSealedProperty("publishedFileId", AmfString(std::to_string(details->m_nPublishedFileId)));
+	obj.addSealedProperty("vote", AmfInteger(details->m_eVote));
+
+	sendItem(obj);
+}
+
 void AIRSteam_UpdateUserPublishedItemVote() {
 	PublishedFileId_t file = get_uint64();
 	bool upvote = get_bool();

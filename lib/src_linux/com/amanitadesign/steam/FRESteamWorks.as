@@ -103,22 +103,24 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_CommitPublishedFileUpdate:int = 56;
 		private static const AIRSteam_GetPublishedItemVoteDetails:int = 57;
 		private static const AIRSteam_GetPublishedItemVoteDetailsResult:int = 58;
-		private static const AIRSteam_UpdateUserPublishedItemVote:int = 59;
-		private static const AIRSteam_SetUserPublishedFileAction:int = 60;
+		private static const AIRSteam_GetUserPublishedItemVoteDetails:int = 59;
+		private static const AIRSteam_GetUserPublishedItemVoteDetailsResult:int = 60;
+		private static const AIRSteam_UpdateUserPublishedItemVote:int = 61;
+		private static const AIRSteam_SetUserPublishedFileAction:int = 62;
 		/* overlay */
-		private static const AIRSteam_ActivateGameOverlay:int = 61;
-		private static const AIRSteam_ActivateGameOverlayToUser:int = 62;
-		private static const AIRSteam_ActivateGameOverlayToWebPage:int = 63;
-		private static const AIRSteam_ActivateGameOverlayToStore:int = 64;
-		private static const AIRSteam_ActivateGameOverlayInviteDialog:int = 65;
-		private static const AIRSteam_IsOverlayEnabled:int = 66;
+		private static const AIRSteam_ActivateGameOverlay:int = 63;
+		private static const AIRSteam_ActivateGameOverlayToUser:int = 64;
+		private static const AIRSteam_ActivateGameOverlayToWebPage:int = 65;
+		private static const AIRSteam_ActivateGameOverlayToStore:int = 66;
+		private static const AIRSteam_ActivateGameOverlayInviteDialog:int = 67;
+		private static const AIRSteam_IsOverlayEnabled:int = 68;
 		/* DLC / subscriptions */
-		private static const AIRSteam_IsSubscribedApp:int = 67;
-		private static const AIRSteam_IsDLCInstalled:int = 68;
-		private static const AIRSteam_GetDLCCount:int = 69;
-		private static const AIRSteam_InstallDLC:int = 70;
-		private static const AIRSteam_UninstallDLC:int = 71;
-		private static const AIRSteam_DLCInstalledResult:int = 72;
+		private static const AIRSteam_IsSubscribedApp:int = 69;
+		private static const AIRSteam_IsDLCInstalled:int = 70;
+		private static const AIRSteam_GetDLCCount:int = 71;
+		private static const AIRSteam_InstallDLC:int = 72;
+		private static const AIRSteam_UninstallDLC:int = 73;
+		private static const AIRSteam_DLCInstalledResult:int = 74;
 
 		public function FRESteamWorks (target:IEventDispatcher = null) {
 			_file = File.applicationDirectory.resolvePath(PATH);
@@ -133,6 +135,7 @@ package com.amanitadesign.steam {
 			registerClassAlias("com.amanitadesign.steam.ItemVoteDetailsResult", ItemVoteDetailsResult);
 			registerClassAlias("com.amanitadesign.steam.SubscribedFilesResult", SubscribedFilesResult);
 			registerClassAlias("com.amanitadesign.steam.UserFilesResult", UserFilesResult);
+			registerClassAlias("com.amanitadesign.steam.UserVoteDetails", UserVoteDetails);
 			registerClassAlias("com.amanitadesign.steam.WorkshopFilesResult", WorkshopFilesResult);
 
 			super(target);
@@ -660,6 +663,16 @@ package com.amanitadesign.steam {
 		public function getPublishedItemVoteDetailsResult():ItemVoteDetailsResult {
 			if(!callWrapper(AIRSteam_GetPublishedItemVoteDetailsResult, [])) return null;
 			return readResponse() as ItemVoteDetailsResult;
+		}
+
+		public function getUserPublishedItemVoteDetails(file:String):Boolean {
+			if(!callWrapper(AIRSteam_GetUserPublishedItemVoteDetails, [file])) return false;
+			return readResponse() as Boolean;
+		}
+
+		public function getUserPublishedItemVoteDetailsResult():UserVoteDetails {
+			if(!callWrapper(AIRSteam_GetUserPublishedItemVoteDetailsResult, [])) return null;
+			return readResponse() as UserVoteDetails;
 		}
 
 		public function updateUserPublishedItemVote(file:String, upvote:Boolean):Boolean {

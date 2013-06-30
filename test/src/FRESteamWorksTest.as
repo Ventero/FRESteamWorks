@@ -432,11 +432,12 @@ package
 					}
 					if(fileRes.resultsReturned > 0) {
 						var f:String = fileRes.publishedFileId[0];
-						log("updateUserPublishedItemVote(" + f + ", true)");
 						apiCall = Steamworks.updateUserPublishedItemVote(f, true);
 						log("updateUserPublishedItemVote(" + f + ", true) == " + apiCall);
 						apiCall = Steamworks.getPublishedItemVoteDetails(f);
 						log("getPublishedItemVoteDetails(" + f + ") == " + apiCall);
+						apiCall = Steamworks.getUserPublishedItemVoteDetails(f);
+						log("getUserPublishedItemVoteDetails(" + f + ") == " + apiCall);
 					}
 					break;
 				case SteamConstants.RESPONSE_OnEnumeratePublishedFilesByUserAction:
@@ -503,6 +504,16 @@ package
 					// no native JSON support for Linux ...
 					log("votes: " + voteDetails.votesFor + "//" + voteDetails.votesAgainst +
 						", score: " + voteDetails.score + ", reports: " + voteDetails.reports);
+					break;
+				case SteamConstants.RESPONSE_OnGetUserPublishedItemVoteDetails:
+					log("RESPONSE_OnGetUserPublishedItemVoteDetails: " + e.response);
+					if(e.response != SteamResults.OK) return;
+
+					var userVoteDetails:UserVoteDetails = Steamworks.getUserPublishedItemVoteDetailsResult();
+					log("getUserPublishedItemVoteDetails() == " + (userVoteDetails ? userVoteDetails.result : "null"));
+					if(!userVoteDetails) return;
+
+					log("vote: " + userVoteDetails.vote);
 					break;
 				default:
 					log("STEAMresponse type:"+e.req_type+" response:"+e.response);

@@ -452,6 +452,21 @@ RemoteStorageGetPublishedItemVoteDetailsResult_t* CSteam::GetPublishedItemVoteDe
 	return &m_PublishedItemVoteDetails;
 }
 
+bool CSteam::GetUserPublishedItemVoteDetails(PublishedFileId_t file) {
+	if (!m_bInitialized) return false;
+
+	SteamAPICall_t result = SteamRemoteStorage()->GetUserPublishedItemVoteDetails(file);
+	m_CallbackGetUserPublishedItemVoteDetails.Set(result, this, &CSteam::OnGetUserPublishedItemVoteDetails);
+
+	return true;
+}
+
+RemoteStorageUserVoteDetails_t* CSteam::GetUserPublishedItemVoteDetailsResult() {
+	if (!m_bInitialized) return nullptr;
+
+	return &m_UserPublishedItemVoteDetails;
+}
+
 bool CSteam::UpdateUserPublishedItemVote(PublishedFileId_t file, bool upvote) {
 	if (!m_bInitialized) return false;
 
@@ -648,6 +663,11 @@ void CSteam::OnUnsubscribePublishedFile(RemoteStorageUnsubscribePublishedFileRes
 void CSteam::OnGetPublishedItemVoteDetails(RemoteStorageGetPublishedItemVoteDetailsResult_t *result, bool failure) {
 	if (!failure) m_PublishedItemVoteDetails = *result;
 	DispatchEvent(RESPONSE_OnGetPublishedItemVoteDetails, result->m_eResult);
+}
+
+void CSteam::OnGetUserPublishedItemVoteDetails(RemoteStorageUserVoteDetails_t *result, bool failure) {
+	if (!failure) m_UserPublishedItemVoteDetails = *result;
+	DispatchEvent(RESPONSE_OnGetUserPublishedItemVoteDetails, result->m_eResult);
 }
 
 void CSteam::OnUpdateUserPublishedItemVote(RemoteStorageUpdateUserPublishedItemVoteResult_t *result, bool failure) {

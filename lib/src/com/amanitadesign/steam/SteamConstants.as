@@ -31,9 +31,10 @@ package com.amanitadesign.steam
 		public static const RESPONSE_OnSubscribePublishedFile:int = 15;
 		public static const RESPONSE_OnUnsubscribePublishedFile:int = 16;
 		public static const RESPONSE_OnGetPublishedItemVoteDetails:int = 17;
-		public static const RESPONSE_OnUpdateUserPublishedItemVote:int = 18;
-		public static const RESPONSE_OnSetUserPublishedFileAction:int = 19;
-		public static const RESPONSE_OnDLCInstalled:int = 20;
+		public static const RESPONSE_OnGetUserPublishedItemVoteDetails:int = 18;
+		public static const RESPONSE_OnUpdateUserPublishedItemVote:int = 19;
+		public static const RESPONSE_OnSetUserPublishedFileAction:int = 20;
+		public static const RESPONSE_OnDLCInstalled:int = 21;
 	}
 
 }

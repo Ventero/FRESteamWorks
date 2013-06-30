@@ -122,6 +122,8 @@ extern "C" {
 	AIR_FUNC(AIRSteam_CommitPublishedFileUpdate);
 	AIR_FUNC(AIRSteam_GetPublishedItemVoteDetails);
 	AIR_FUNC(AIRSteam_GetPublishedItemVoteDetailsResult);
+	AIR_FUNC(AIRSteam_GetUserPublishedItemVoteDetails);
+	AIR_FUNC(AIRSteam_GetUserPublishedItemVoteDetailsResult);
 	AIR_FUNC(AIRSteam_UpdateUserPublishedItemVote);
 	AIR_FUNC(AIRSteam_SetUserPublishedFileAction);
 
