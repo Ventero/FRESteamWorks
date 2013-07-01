@@ -56,15 +56,15 @@ class ANESteam : public CSteam {
 	void DispatchEvent(char* code, char* level);
 };
 
-extern "C" {
 #define X(a) AIR_FUNC(a);
 #include "functions.h"
 #undef X
 
-	// A native context instance is created
-	void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
-	                        uint32_t* numFunctions, const FRENamedFunction** functions);
-	void ContextFinalizer(FREContext ctx);
+void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
+                        uint32_t* numFunctions, const FRENamedFunction** functions);
+void ContextFinalizer(FREContext ctx);
+
+extern "C" {
 	EXPORT void ExtInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerToSet,
 	                           FREContextFinalizer* ctxFinalizerToSet);
 	EXPORT void ExtFinalizer(void* extData);

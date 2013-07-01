@@ -1093,35 +1093,35 @@ AIR_FUNC(AIRSteam_DLCInstalledResult) {
 
 	//============================
 
-extern "C" {
 
 #define FRE_FUNC(fname) \
 		{ (const uint8_t*) #fname, NULL, &fname }
 
-	static FRENamedFunction func[] = {
+static FRENamedFunction func[] = {
 #define X(a) FRE_FUNC(a),
 #include "functions.h"
 #undef X
-	};
+};
 
-	// A native context instance is created
-	void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
-	                        uint32_t* numFunctions, const FRENamedFunction** functions) {
-		AIRContext = ctx;
-		*functions = func;
-		*numFunctions = sizeof(func) / sizeof(func[0]);
-	}
+// A native context instance is created
+void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
+                        uint32_t* numFunctions, const FRENamedFunction** functions) {
+	AIRContext = ctx;
+	*functions = func;
+	*numFunctions = sizeof(func) / sizeof(func[0]);
+}
 
-	// A native context instance is disposed
-	void ContextFinalizer(FREContext ctx) {
-		AIRContext = NULL;
-		// Shutdown Steam
-		SteamAPI_Shutdown();
-		// Delete the SteamAchievements object
-		delete g_Steam;
-		g_Steam = NULL;
-	}
+// A native context instance is disposed
+void ContextFinalizer(FREContext ctx) {
+	AIRContext = NULL;
+	// Shutdown Steam
+	SteamAPI_Shutdown();
+	// Delete the SteamAchievements object
+	delete g_Steam;
+	g_Steam = NULL;
+}
 
+extern "C" {
 	// Initialization function of each extension
 	EXPORT void ExtInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerToSet,
 	                           FREContextFinalizer* ctxFinalizerToSet) {
