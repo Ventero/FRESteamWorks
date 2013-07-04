@@ -4,19 +4,12 @@ contents = open("API.txt", "r").read.split("\n")
 
 linuxLib = !ARGV[0].nil?
 
-defaults = Hash.new("null");
-defaults["Boolean"] = "false"
-defaults["Number"] = "0.0"
-defaults["int"] = "0"
-defaults["uint"] = "0"
-defaults["String"] = "\"\""
-
-types = Hash.new { |h,k| "readResponse() as #{k}"}
-types["Boolean"] = "readBoolResponse()"
-types["int"] = "readIntResponse()"
-types["uint"] = "readIntResponse()"
-types["Number"] = "readFloatResponse()"
-types["String"] = "readStringResponse()"
+defaults = Hash.new { |h,k| ["readResponse() as #{k}", "null"] }
+defaults["Boolean"] = ["readBoolResponse()", "false"]
+defaults["Number"] = ["readIntResponse()", "0.0"]
+defaults["int"] = ["readIntResponse()", "0"]
+defaults["uint"] = ["readFloatResponse()", "0"]
+defaults["String"] = ["readStringResponse()", "\"\""]
 
 num = 0
 # skip first line (init) when generating actual functions, since it has a
@@ -40,10 +33,11 @@ contents.drop(1).each do |line|
 	when "f" then
 		puts "\t\tprivate static const #{func_name}:int = #{num};"
 	when "l" then
+		type, default = defaults[ret]
 		puts <<EOD
 		#{line} {
-			if(!callWrapper(#{func_name}, [#{arg_names.join(", ")}])) return #{defaults[ret]};
-			return #{types[ret]};
+			if(!callWrapper(#{func_name}, [#{arg_names.join(", ")}])) return #{default};
+			return #{type};
 		}
 
 EOD
