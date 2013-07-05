@@ -28,7 +28,7 @@ $(wdir)/APIWrapper: $(wdir)/APIWrapper.o $(dir)/CSteam.o $(wdir)/amf-cpp/libamf.
 $(wdir)/APIWrapper.o: $(wdir)/APIWrapper.cpp $(wdir)/APIWrapper.h
 	$(CXX) $(CXXFLAGS) -c -DLINUX $(WHITELIST) $(INC) -isystem $(wdir)/amf-cpp -IFRESteamWorks $< -o $@
 
-$(wdir)/amf-cpp/libamf.a:
+$(wdir)/amf-cpp/libamf.a: $(wdir)/amf-cpp
 	$(MAKE) -C $(wdir)/amf-cpp 32bit
 
 %.o: %.cpp %.h
