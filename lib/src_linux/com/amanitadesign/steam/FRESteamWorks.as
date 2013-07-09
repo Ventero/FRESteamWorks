@@ -239,7 +239,10 @@ package com.amanitadesign.steam {
 		}
 
 		private function writeValue(output:IDataOutput, value:*):void {
-			if(value is ByteArray) {
+			if (value === null || value === undefined) {
+				// no data, so length 0
+				output.writeUTFBytes(0 + "\n");
+			} else if(value is ByteArray) {
 				var length:uint = value.length;
 				// length + 1 for the added newline
 				output.writeUTFBytes(String(length + 1) + "\n");

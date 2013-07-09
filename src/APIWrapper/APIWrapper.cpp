@@ -97,6 +97,7 @@ std::string get_string() {
 	std::getline(std::cin, item);
 
 	size_t length = std::stoi(item);
+	if (length < 1) return "";
 	char* buf = new char[length];
 	std::cin.read(buf, length);
 	// remove trailing newline
@@ -119,6 +120,8 @@ uint64 get_uint64() {
 std::vector<std::string> get_array() {
 	int length = get_int();
 	std::vector<std::string> v;
+	if (length < 1) return v;
+
 	for(int i = 0; i < length; ++i) {
 		std::string val = get_string();
 		v.push_back(val);
