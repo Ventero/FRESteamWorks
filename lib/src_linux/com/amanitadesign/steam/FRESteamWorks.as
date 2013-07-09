@@ -672,7 +672,7 @@ package com.amanitadesign.steam {
 
 		public function getUserPublishedItemVoteDetails(file:String):Boolean {
 			if(!callWrapper(AIRSteam_GetUserPublishedItemVoteDetails, [file])) return false;
-			return readResponse() as Boolean;
+			return readBoolResponse();
 		}
 
 		public function getUserPublishedItemVoteDetailsResult():UserVoteDetails {
