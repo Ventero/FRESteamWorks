@@ -62,6 +62,7 @@ package
 			addButton("Delete published file", deletePublishedFile, _buttonContainer);
 			addButton("Toggle fullscreen", toggleFullscreen, _buttonContainer);
 			addButton("Update file", updateFile, _buttonContainer);
+			addButton("Invalid API call", invalidCall, _buttonContainer);
 			addButton("Enumerate workshop", null, _buttonContainer, _enumerateContainer);
 			addButton("Show overlay", null, _buttonContainer, _overlayContainer);
 
@@ -341,6 +342,13 @@ package
 
 			res = Steamworks.commitPublishedFileUpdate(handle);
 			log("commitPublishedFileUpdate(...) == " + res);
+		}
+
+		private function invalidCall(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			var res:Boolean = Steamworks.getPublishedFileDetails(undefined);
+			log("getPublishedFileDetails(undefined) == " + res);
 		}
 
 		private var id:String;
