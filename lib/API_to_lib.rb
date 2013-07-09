@@ -14,7 +14,8 @@ defaults["String"] = ["readStringResponse()", "\"\""]
 num = 0
 # skip first line (init) when generating actual functions, since it has a
 # special implementation in both libs
-contents.drop(1).each do |line|
+skip = (ARGV[0] == "f") ? 0 : 1
+contents.drop(skip).each do |line|
 	if line.empty? or line[0].chr == "/"
 		puts "\t\t#{line}".rstrip
 		next
