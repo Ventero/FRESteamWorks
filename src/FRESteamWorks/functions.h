@@ -1,85 +1,80 @@
-X(AIRSteam_Init)
-X(AIRSteam_RunCallbacks)
-X(AIRSteam_GetUserID)
-X(AIRSteam_GetAppID)
-X(AIRSteam_GetPersonaName)
-X(AIRSteam_UseCrashHandler)
-
-// stats / achievements
-X(AIRSteam_RequestStats)
-X(AIRSteam_SetAchievement)
-X(AIRSteam_ClearAchievement)
-X(AIRSteam_IsAchievement)
-X(AIRSteam_GetStatInt)
-X(AIRSteam_GetStatFloat)
-X(AIRSteam_SetStatInt)
-X(AIRSteam_SetStatFloat)
-X(AIRSteam_StoreStats)
-X(AIRSteam_ResetAllStats)
-
-// remote storage
-X(AIRSteam_GetFileCount)
-X(AIRSteam_GetFileSize)
-X(AIRSteam_FileExists)
-X(AIRSteam_FileWrite)
-X(AIRSteam_FileRead)
-X(AIRSteam_FileDelete)
-X(AIRSteam_FileShare)
-X(AIRSteam_FileShareResult)
-X(AIRSteam_IsCloudEnabledForApp)
-X(AIRSteam_SetCloudEnabledForApp)
-X(AIRSteam_GetQuota)
-
-// ugc / workshop
-X(AIRSteam_UGCDownload)
-X(AIRSteam_UGCRead)
-X(AIRSteam_GetUGCDownloadProgress)
-X(AIRSteam_GetUGCDownloadResult)
-X(AIRSteam_PublishWorkshopFile)
-X(AIRSteam_PublishWorkshopFileResult)
-X(AIRSteam_DeletePublishedFile)
-X(AIRSteam_GetPublishedFileDetails)
-X(AIRSteam_GetPublishedFileDetailsResult)
-X(AIRSteam_EnumerateUserPublishedFiles)
-X(AIRSteam_EnumerateUserPublishedFilesResult)
-X(AIRSteam_EnumeratePublishedWorkshopFiles)
-X(AIRSteam_EnumeratePublishedWorkshopFilesResult)
-X(AIRSteam_EnumerateUserSubscribedFiles)
-X(AIRSteam_EnumerateUserSubscribedFilesResult)
-X(AIRSteam_EnumerateUserSharedWorkshopFiles)
-X(AIRSteam_EnumerateUserSharedWorkshopFilesResult)
-X(AIRSteam_EnumeratePublishedFilesByUserAction)
-X(AIRSteam_EnumeratePublishedFilesByUserActionResult)
-X(AIRSteam_SubscribePublishedFile)
-X(AIRSteam_UnsubscribePublishedFile)
-X(AIRSteam_CreatePublishedFileUpdateRequest)
-X(AIRSteam_UpdatePublishedFileFile)
-X(AIRSteam_UpdatePublishedFilePreviewFile)
-X(AIRSteam_UpdatePublishedFileTitle)
-X(AIRSteam_UpdatePublishedFileDescription)
-X(AIRSteam_UpdatePublishedFileSetChangeDescription)
-X(AIRSteam_UpdatePublishedFileVisibility)
-X(AIRSteam_UpdatePublishedFileTags)
-X(AIRSteam_CommitPublishedFileUpdate)
-X(AIRSteam_GetPublishedItemVoteDetails)
-X(AIRSteam_GetPublishedItemVoteDetailsResult)
-X(AIRSteam_GetUserPublishedItemVoteDetails)
-X(AIRSteam_GetUserPublishedItemVoteDetailsResult)
-X(AIRSteam_UpdateUserPublishedItemVote)
-X(AIRSteam_SetUserPublishedFileAction)
-
-// overlay
-X(AIRSteam_ActivateGameOverlay)
-X(AIRSteam_ActivateGameOverlayToUser)
-X(AIRSteam_ActivateGameOverlayToWebPage)
-X(AIRSteam_ActivateGameOverlayToStore)
-X(AIRSteam_ActivateGameOverlayInviteDialog)
-X(AIRSteam_IsOverlayEnabled)
-
-// DLC / subscription
-X(AIRSteam_IsSubscribedApp)
-X(AIRSteam_IsDLCInstalled)
-X(AIRSteam_GetDLCCount)
-X(AIRSteam_InstallDLC)
-X(AIRSteam_UninstallDLC)
-X(AIRSteam_DLCInstalledResult)
+X(AIRSteam_Init) /* = 0 */
+X(AIRSteam_RunCallbacks) /* = 1 */
+X(AIRSteam_GetUserID) /* = 2 */
+X(AIRSteam_GetAppID) /* = 3 */
+X(AIRSteam_GetPersonaName) /* = 4 */
+X(AIRSteam_UseCrashHandler) /* = 5 */
+/* stats/achievements */
+X(AIRSteam_RequestStats) /* = 6 */
+X(AIRSteam_SetAchievement) /* = 7 */
+X(AIRSteam_ClearAchievement) /* = 8 */
+X(AIRSteam_IsAchievement) /* = 9 */
+X(AIRSteam_GetStatInt) /* = 10 */
+X(AIRSteam_GetStatFloat) /* = 11 */
+X(AIRSteam_SetStatInt) /* = 12 */
+X(AIRSteam_SetStatFloat) /* = 13 */
+X(AIRSteam_StoreStats) /* = 14 */
+X(AIRSteam_ResetAllStats) /* = 15 */
+/* cloud */
+X(AIRSteam_GetFileCount) /* = 16 */
+X(AIRSteam_GetFileSize) /* = 17 */
+X(AIRSteam_FileExists) /* = 18 */
+X(AIRSteam_FileWrite) /* = 19 */
+X(AIRSteam_FileRead) /* = 20 */
+X(AIRSteam_FileDelete) /* = 21 */
+X(AIRSteam_FileShare) /* = 22 */
+X(AIRSteam_FileShareResult) /* = 23 */
+X(AIRSteam_IsCloudEnabledForApp) /* = 24 */
+X(AIRSteam_SetCloudEnabledForApp) /* = 25 */
+X(AIRSteam_GetQuota) /* = 26 */
+/* ugc/workshop */
+X(AIRSteam_UGCDownload) /* = 27 */
+X(AIRSteam_UGCRead) /* = 28 */
+X(AIRSteam_GetUGCDownloadProgress) /* = 29 */
+X(AIRSteam_GetUGCDownloadResult) /* = 30 */
+X(AIRSteam_PublishWorkshopFile) /* = 31 */
+X(AIRSteam_PublishWorkshopFileResult) /* = 32 */
+X(AIRSteam_DeletePublishedFile) /* = 33 */
+X(AIRSteam_GetPublishedFileDetails) /* = 34 */
+X(AIRSteam_GetPublishedFileDetailsResult) /* = 35 */
+X(AIRSteam_EnumerateUserPublishedFiles) /* = 36 */
+X(AIRSteam_EnumerateUserPublishedFilesResult) /* = 37 */
+X(AIRSteam_EnumeratePublishedWorkshopFiles) /* = 38 */
+X(AIRSteam_EnumeratePublishedWorkshopFilesResult) /* = 39 */
+X(AIRSteam_EnumerateUserSubscribedFiles) /* = 40 */
+X(AIRSteam_EnumerateUserSubscribedFilesResult) /* = 41 */
+X(AIRSteam_EnumerateUserSharedWorkshopFiles) /* = 42 */
+X(AIRSteam_EnumerateUserSharedWorkshopFilesResult) /* = 43 */
+X(AIRSteam_EnumeratePublishedFilesByUserAction) /* = 44 */
+X(AIRSteam_EnumeratePublishedFilesByUserActionResult) /* = 45 */
+X(AIRSteam_SubscribePublishedFile) /* = 46 */
+X(AIRSteam_UnsubscribePublishedFile) /* = 47 */
+X(AIRSteam_CreatePublishedFileUpdateRequest) /* = 48 */
+X(AIRSteam_UpdatePublishedFileFile) /* = 49 */
+X(AIRSteam_UpdatePublishedFilePreviewFile) /* = 50 */
+X(AIRSteam_UpdatePublishedFileTitle) /* = 51 */
+X(AIRSteam_UpdatePublishedFileDescription) /* = 52 */
+X(AIRSteam_UpdatePublishedFileSetChangeDescription) /* = 53 */
+X(AIRSteam_UpdatePublishedFileVisibility) /* = 54 */
+X(AIRSteam_UpdatePublishedFileTags) /* = 55 */
+X(AIRSteam_CommitPublishedFileUpdate) /* = 56 */
+X(AIRSteam_GetPublishedItemVoteDetails) /* = 57 */
+X(AIRSteam_GetPublishedItemVoteDetailsResult) /* = 58 */
+X(AIRSteam_GetUserPublishedItemVoteDetails) /* = 59 */
+X(AIRSteam_GetUserPublishedItemVoteDetailsResult) /* = 60 */
+X(AIRSteam_UpdateUserPublishedItemVote) /* = 61 */
+X(AIRSteam_SetUserPublishedFileAction) /* = 62 */
+/* overlay */
+X(AIRSteam_ActivateGameOverlay) /* = 63 */
+X(AIRSteam_ActivateGameOverlayToUser) /* = 64 */
+X(AIRSteam_ActivateGameOverlayToWebPage) /* = 65 */
+X(AIRSteam_ActivateGameOverlayToStore) /* = 66 */
+X(AIRSteam_ActivateGameOverlayInviteDialog) /* = 67 */
+X(AIRSteam_IsOverlayEnabled) /* = 68 */
+/* DLC / subscriptions */
+X(AIRSteam_IsSubscribedApp) /* = 69 */
+X(AIRSteam_IsDLCInstalled) /* = 70 */
+X(AIRSteam_GetDLCCount) /* = 71 */
+X(AIRSteam_InstallDLC) /* = 72 */
+X(AIRSteam_UninstallDLC) /* = 73 */
+X(AIRSteam_DLCInstalledResult) /* = 74 */
