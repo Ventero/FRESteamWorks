@@ -255,8 +255,10 @@ package com.amanitadesign.steam {
 				for (var el:int = 0; el < value.length; ++el) {
 					writeValue(output, value[el]);
 				}
-			} else {
+			} else if(value is int || value is uint || value is Number || value is Boolean) {
 				output.writeUTFBytes(String(value) + "\n");
+			} else {
+				throw new ArgumentError("Cannot write value " + value);
 			}
 		}
 
