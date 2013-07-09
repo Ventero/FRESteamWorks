@@ -6,9 +6,9 @@ linuxLib = !ARGV[0].nil?
 
 defaults = Hash.new { |h,k| ["readResponse() as #{k}", "null"] }
 defaults["Boolean"] = ["readBoolResponse()", "false"]
-defaults["Number"] = ["readIntResponse()", "0.0"]
+defaults["Number"] = ["readFloatResponse()", "0.0"]
 defaults["int"] = ["readIntResponse()", "0"]
-defaults["uint"] = ["readFloatResponse()", "0"]
+defaults["uint"] = ["readIntResponse()", "0"]
 defaults["String"] = ["readStringResponse()", "\"\""]
 
 num = 0
