@@ -10,6 +10,8 @@ ifneq ($(APPIDS),)
 WHITELIST = -DWHITELIST=$(APPIDS)
 endif
 
+.SUFFIXES:
+
 dir := FRESteamWorks
 wdir := APIWrapper
 obj := $(dir)/FRESteamWorks.o $(dir)/CSteam.o
@@ -17,7 +19,10 @@ obj := $(dir)/FRESteamWorks.o $(dir)/CSteam.o
 all: lib wrapper
 lib: $(dir)/FRESteamWorks.so
 wrapper: $(wdir)/APIWrapper
-.SUFFIXES:
+obj: SteamSDK
+
+SteamSDK:
+	ln -sf $(STEAM_SDK) $@
 
 $(dir)/FRESteamWorks.so: $(obj)
 	$(CXX) -shared $(LIB) $^ $(LINK) -o $@
@@ -25,7 +30,7 @@ $(dir)/FRESteamWorks.so: $(obj)
 $(wdir)/APIWrapper: $(wdir)/APIWrapper.o $(dir)/CSteam.o $(wdir)/amf-cpp/libamf.a
 	$(CXX) $(LIB) $^ $(LINK) -o $@
 
-$(wdir)/APIWrapper.o: $(wdir)/APIWrapper.cpp $(wdir)/APIWrapper.h
+$(wdir)/APIWrapper.o: $(wdir)/APIWrapper.cpp $(wdir)/APIWrapper.h SteamSDK
 	$(CXX) $(CXXFLAGS) -c -DLINUX $(WHITELIST) $(INC) -isystem $(wdir)/amf-cpp -IFRESteamWorks $< -o $@
 
 $(wdir)/amf-cpp/libamf.a: $(wdir)/amf-cpp
@@ -36,4 +41,5 @@ $(wdir)/amf-cpp/libamf.a: $(wdir)/amf-cpp
 
 clean:
 	rm -f $(dir)/*.o $(dir)/*.so $(wdir)/*.o $(wdir)/APIWrapper $(wdir)/amf-cpp/libamf.a
+	rm -f SteamSDK
 	$(MAKE) -C $(wdir)/amf-cpp clean
