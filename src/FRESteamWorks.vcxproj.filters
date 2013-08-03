@@ -21,6 +21,9 @@
     <ClInclude Include="FRESteamWorks\CSteam.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FRESteamWorks\functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FRESteamWorks\FRESteamWorks.cpp">
