@@ -35,7 +35,7 @@ FREObject FREUint(uint32 value) {
 	return result;
 }
 
-FREObject FREFloat(float value) {
+FREObject FREDouble(double value) {
 	FREObject result;
 	FRENewObjectFromDouble(value, &result);
 	return result;
@@ -244,14 +244,14 @@ AIR_FUNC(AIRSteam_GetStatInt) {
 }
 
 AIR_FUNC(AIRSteam_GetStatFloat) {
-	if (!g_Steam || argc != 1) return FREFloat(0.0);
+	if (!g_Steam || argc != 1) return FREDouble(0.0);
 
 	std::string name;
-	if(!FREGetString(argv[0], name)) return FREFloat(0.0);
+	if(!FREGetString(argv[0], name)) return FREDouble(0.0);
 
 	float value = 0.0f;
 	g_Steam->GetStat(name, &value);
-	return FREFloat(value);
+	return FREDouble(value);
 }
 
 AIR_FUNC(AIRSteam_SetStatInt) {
@@ -657,7 +657,7 @@ AIR_FUNC(AIRSteam_EnumeratePublishedWorkshopFilesResult) {
 	FREObject scores = FREArray(details->m_nResultsReturned);
 	for (int32 i = 0; i < details->m_nResultsReturned; ++i) {
 		FRESetArrayElementAt(ids, i, FREUint64(details->m_rgPublishedFileId[i]));
-		FRESetArrayElementAt(scores, i, FREFloat(details->m_rgScore[i]));
+		FRESetArrayElementAt(scores, i, FREDouble(details->m_rgScore[i]));
 	}
 	SET_PROP(result, "publishedFileId", ids);
 	SET_PROP(result, "score", scores);
@@ -928,7 +928,7 @@ AIR_FUNC(AIRSteam_GetPublishedItemVoteDetailsResult) {
 	SET_PROP(result, "votesFor", FREInt(details->m_nVotesFor));
 	SET_PROP(result, "votesAgainst", FREInt(details->m_nVotesAgainst));
 	SET_PROP(result, "reports", FREInt(details->m_nReports));
-	SET_PROP(result, "score", FREFloat(details->m_fScore));
+	SET_PROP(result, "score", FREDouble(details->m_fScore));
 
 	return result;
 }

@@ -36,19 +36,19 @@
 
 // utility functions for conversion of FRE types
 FREObject FREBool(bool);
+FREObject FREDouble(double);
 FREObject FREInt(int32);
 FREObject FREUint(uint32);
-FREObject FREFloat(float);
+FREObject FREUint64(uint64);
 FREObject FREString(std::string);
 FREObject FREString(const char*);
-FREObject FREUint64(uint64);
 FREObject FREArray(uint32_t);
-bool FREGetString(FREObject, std::string&);
 bool FREGetBool(FREObject, uint32* val);
 bool FREGetDouble(FREObject, double* val);
 bool FREGetInt32(FREObject, int32* val);
 bool FREGetUint32(FREObject, uint32* val);
 bool FREGetUint64(FREObject, uint64* val);
+bool FREGetString(FREObject, std::string&);
 
 std::vector<std::string> extractStringArray(FREObject object);
 
