@@ -48,6 +48,9 @@ cp Release/FRESteamWorks.ane FRESteamWorks.ane
                       -swf-version=11 -output FRESteamWorksLibLinux.swc
 popd
 
-curl --ftp-create-dirs -nT \
-     "{$target/FRESteamWorks-Debug.ane,$target/FRESteamWorks.ane,$target/FRESteamWorksLibLinux.swc}" \
-     "$UPLOAD_URL/$target/"
+
+if [ -n "$UPLOAD_URL" ]; then
+	curl --ftp-create-dirs -nT \
+	     "{$target/FRESteamWorks-Debug.ane,$target/FRESteamWorks.ane,$target/FRESteamWorksLibLinux.swc}" \
+	     "$UPLOAD_URL/$target/"
+fi
