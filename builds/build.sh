@@ -3,15 +3,20 @@ set -xe
 [ ! -e ../config.sh ] && die "FRESteamWorks/config.sh is not set up!"
 . ../config.sh
 
+die() {
+	echo "$@"
+	exit 1
+}
+
 target="$(git describe --tags --always)"
 
 for type in Debug Release; do
 	dir="$target/$type"
-	if [ ! -d "$dir" ]; then
-		echo "Build directory $dir missing"
-		exit 1
-	fi
+	[ ! -d "$dir" ] && die "Build directory $dir missing"
 	pushd "$dir"
+
+	[ ! -f "FRESteamWorks.framework" ] && die "$dir/FRESteamWorks.framework missing"
+	[ ! -f "FRESteamWorks.dll" ] && die "$dir/FRESteamWorks.dll missing"
 
 	install_name_tool -change \
 	    "@loader_path/libsteam_api.dylib" "@rpath/../Resources/libsteam_api.dylib" \
