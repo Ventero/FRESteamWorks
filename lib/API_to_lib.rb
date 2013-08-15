@@ -32,7 +32,9 @@ contents.drop(skip).each do |line|
 
 	case ARGV[0]
 	when "f" then
-		puts "\t\tprivate static const #{func_name}:int = #{num};"
+		puts <<EOD
+		private static const #{func_name}:int = #{num};
+EOD
 	when "l" then
 		type, default = defaults[ret]
 		puts <<EOD
