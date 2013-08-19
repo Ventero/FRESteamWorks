@@ -17,7 +17,9 @@ This project initially started as a fork of [FRESteamWorks by Oldes/Amanita Desi
 # Download #
 
 A pre-built ANE (containing the Windows dll and OS X dylib) as well as the
-Linux SWC can be found on http://dump.ventero.de/FRESteamWorks/
+Linux SWC can be found on http://dump.ventero.de/FRESteamWorks/. To build the
+Linux APIWrapper, run `make APPIDS=whitelist wrapper`, where `whitelist` is a
+comma separated list of app ids.
 
 # Documentation #
 
