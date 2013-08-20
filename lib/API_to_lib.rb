@@ -24,8 +24,7 @@ contents.drop(skip).each do |line|
 	match = line.match /function ([^(]+)\(([^)]*)\):(.+)/
 	($stderr.puts "Invalid line: #{line}"; next) unless match
 
-	_, func, args, ret = *match
-
+	func, args, ret = match.captures
 	arg_names = args.split(/,\s*/).map do |arg|
 		arg.split(":")[0]
 	end
