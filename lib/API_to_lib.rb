@@ -21,10 +21,11 @@ contents.drop(skip).each do |line|
 		next
 	end
 
-	func = line.split("(")[0].split[-1]
+	match = line.match /function ([^(]+)\(([^)]*)\):(.+)/
+	($stderr.puts "Invalid line: #{line}"; next) unless match
 
-	ret = line.split(":")[-1]
-	args = line[/\(([^)]*)\)/, 1]
+	_, func, args, ret = *match
+
 	arg_names = args.split(/,\s*/).map do |arg|
 		arg.split(":")[0]
 	end
