@@ -32,30 +32,30 @@ contents.drop(skip).each do |line|
 
 	case ARGV[0]
 	when "f" then
-		puts <<EOD
+		puts <<-EOD
 		private static const #{func_name}:int = #{num};
-EOD
+		EOD
 	when "l" then
 		type, default = defaults[ret]
-		puts <<EOD
+		puts <<-EOD
 		#{line} {
 			if(!callWrapper(#{func_name}, [#{arg_names.join(", ")}])) return #{default};
 			return #{type};
 		}
 
-EOD
+		EOD
 	when "c" then
-		puts <<EOD
+		puts <<-EOD
 		X(#{func_name}) /* = #{num} */
-EOD
+		EOD
 	else
-		puts <<EOD
+		puts <<-EOD
 		#{line}
 		{
 			return _ExtensionContext.call(#{["func_name", *arg_names].join(", ")}) as #{ret};
 		}
 
-EOD
+		EOD
 	end
 
 	num += 1
