@@ -52,7 +52,7 @@ contents.drop(skip).each do |line|
 		puts <<-EOD
 		#{line}
 		{
-			return _ExtensionContext.call(#{["func_name", *arg_names].join(", ")}) as #{ret};
+			return _ExtensionContext.call("#{func_name}"#{["", *arg_names].join(", ")}) as #{ret};
 		}
 
 		EOD
