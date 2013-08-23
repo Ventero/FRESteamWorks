@@ -2,8 +2,6 @@
 
 contents = open("API.txt", "r").read.split("\n")
 
-linuxLib = !ARGV[0].nil?
-
 defaults = Hash.new { |h,k| ["readResponse() as #{k}", "null"] }
 defaults["Boolean"] = ["readBoolResponse()", "false"]
 defaults["Number"] = ["readFloatResponse()", "0.0"]
