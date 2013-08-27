@@ -27,7 +27,7 @@ package com.amanitadesign.steam {
 	import flash.utils.setInterval;
 
 	public class FRESteamWorks extends EventDispatcher {
-		[Event(name="steam_response", type="com.amanitadesign.steam.SteamEvent")]
+		[Event(name="steamResponse", type="com.amanitadesign.steam.SteamEvent")]
 
 		private static const PATH:String = "NativeApps/Linux/APIWrapper";
 

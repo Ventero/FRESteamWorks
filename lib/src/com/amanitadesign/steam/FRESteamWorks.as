@@ -24,7 +24,7 @@ package com.amanitadesign.steam
 
 	public class FRESteamWorks extends EventDispatcher
 	{
-		[Event(name="steam_response", type="com.amanitadesign.steam.SteamEvent")]
+		[Event(name="steamResponse", type="com.amanitadesign.steam.SteamEvent")]
 
 		private var _ExtensionContext:ExtensionContext;
 		private var _tm:int;
