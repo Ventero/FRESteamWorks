@@ -10,7 +10,6 @@ package com.amanitadesign.steam {
 	import flash.desktop.NativeProcess;
 	import flash.desktop.NativeProcessStartupInfo;
 	import flash.display.DisplayObjectContainer;
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
@@ -26,7 +25,7 @@ package com.amanitadesign.steam {
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
 
-	public class FRESteamWorks extends EventDispatcher {
+	public class FRESteamWorks extends EventDispatcher implements ISteamWorks {
 		[Event(name="steamResponse", type="com.amanitadesign.steam.SteamEvent")]
 
 		private static const PATH:String = "NativeApps/Linux/APIWrapper";

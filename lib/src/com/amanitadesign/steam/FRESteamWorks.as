@@ -22,7 +22,7 @@ package com.amanitadesign.steam
 	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
 
-	public class FRESteamWorks extends EventDispatcher
+	public class FRESteamWorks extends EventDispatcher implements ISteamWorks
 	{
 		[Event(name="steamResponse", type="com.amanitadesign.steam.SteamEvent")]
 
