@@ -46,6 +46,10 @@ contents.drop(skip).each do |line|
 		puts <<-EOD
 		X(#{func_name}) /* = #{num} */
 		EOD
+	when "i" then
+		puts <<-EOD
+		#{line.sub("public ", "")}
+		EOD
 	else
 		puts <<-EOD
 		#{line}
