@@ -12,6 +12,7 @@ package com.amanitadesign.steam {
 	import flash.utils.ByteArray;
 
 	public interface ISteamWorks extends IEventDispatcher {
+		[Event(name="steamResponse", type="com.amanitadesign.steam.SteamEvent")]
 		function ISteamWorks(target:IEventDispatcher = null);
 
 		function init():Boolean;

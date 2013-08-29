@@ -24,8 +24,6 @@ package com.amanitadesign.steam
 
 	public class FRESteamWorks extends EventDispatcher implements ISteamWorks
 	{
-		[Event(name="steamResponse", type="com.amanitadesign.steam.SteamEvent")]
-
 		private var _ExtensionContext:ExtensionContext;
 		private var _tm:int;
 
