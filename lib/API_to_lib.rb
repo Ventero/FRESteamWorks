@@ -1,5 +1,18 @@
 #!/usr/bin/ruby
 
+mode = ARGV[0]
+if not "fclw".include? mode then
+	$stderr.puts <<-EOD
+Usage:
+	ruby #$0 [f|c|l|w]
+		f: AS3 function enum values
+		c: C function macros
+		l: Linux AS3 lib implementations
+		w: Windows/OS X AS3 lib implementations
+	EOD
+	exit
+end
+
 contents = open("API.txt", "r").read.split("\n")
 
 defaults = Hash.new { |h,k| ["readResponse() as #{k}", "null"] }
