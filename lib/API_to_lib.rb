@@ -15,6 +15,8 @@ end
 
 contents = open("API.txt", "r").read.split("\n")
 
+# maps function return types to the corresponding utility functions and
+# default values
 defaults = Hash.new { |h,k| ["readResponse() as #{k}", "null"] }
 defaults["Boolean"] = ["readBoolResponse()", "false"]
 defaults["Number"] = ["readFloatResponse()", "0.0"]
@@ -22,11 +24,13 @@ defaults["int"] = ["readIntResponse()", "0"]
 defaults["uint"] = ["readIntResponse()", "0"]
 defaults["String"] = ["readStringResponse()", "\"\""]
 
+# functions to skip when generating code
+ignore = Hash.new []
+ignore["l"] = ["init", "runCallbacks", "useCrashHandler", "fileRead", "UGCRead"]
+ignore["w"] = ["init"]
+
 num = 0
-# skip first line (init) when generating actual functions, since it has a
-# special implementation in both libs
-skip = (ARGV[0] == "f" or ARGV[0] == "c") ? 0 : 1
-contents.drop(skip).each do |line|
+contents.each do |line|
 	if line.empty? or line[0].chr == "/"
 		puts "\t\t#{line}".rstrip
 		next
@@ -41,7 +45,9 @@ contents.drop(skip).each do |line|
 	end
 	func_name = "AIRSteam_#{func[0].chr.upcase + func[1,func.size]}"
 
-	case ARGV[0]
+	next if ignore[mode].include? func
+
+	case mode
 	when "f" then
 		puts <<-EOD
 		private static const #{func_name}:int = #{num};
