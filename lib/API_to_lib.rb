@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 
 mode = ARGV[0]
-if not ARGV[0] or not "fclw".include? mode then
+if not ARGV[0] or not "fcliw".include? mode then
 	$stderr.puts <<-EOD
 Usage:
 	ruby #$0 [f|c|l|w]
