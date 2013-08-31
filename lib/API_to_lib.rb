@@ -31,21 +31,17 @@ ignore["w"] = ["init"]
 
 num = 0
 contents.each do |line|
-	if line.empty? or line[0].chr == "/"
-		puts "\t\t#{line}".rstrip
-		next
-	end
+	(puts; next) if line.empty?
+	(puts "\t\t#{line}"; next) if line[0].chr == "/"
 
 	match = line.match /function ([^(]+)\(([^)]*)\):(.+)/
 	($stderr.puts "Invalid line: #{line}"; next) unless match
 
 	func, args, ret = match.captures
-	arg_names = args.split(/,\s*/).map do |arg|
-		arg.split(":")[0]
-	end
-	func_name = "AIRSteam_#{func[0].chr.upcase + func[1,func.size]}"
-
 	next if ignore[mode].include? func
+
+	func_name = "AIRSteam_#{func[0].chr.upcase + func[1,func.size]}"
+	arg_names = args.split(/:[^,]+(?:,\s*)?/)
 
 	case mode
 	when "f" then
