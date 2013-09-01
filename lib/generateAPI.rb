@@ -1,13 +1,14 @@
 #!/usr/bin/ruby
 
 mode = ARGV[0]
-if not ARGV[0] or not "fcliw".include? mode then
+if not mode or not "fcliw".include? mode then
 	$stderr.puts <<-EOD
 Usage:
-	ruby #$0 [f|c|l|w]
+	ruby #$0 [f|c|l|i|w]
 		f: AS3 function enum values
 		c: C function macros
 		l: Linux AS3 lib implementations
+		i: AS3 interface definition
 		w: Windows/OS X AS3 lib implementations
 	EOD
 	exit
