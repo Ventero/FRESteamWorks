@@ -1,16 +1,17 @@
 # Steamworks API for AIR applications #
 
 A simple Steamworks API wrapper to be used as native extension for Adobe AIR
-applications (see src/FRESteamWorks). Since the AIR runtime on Linux doesn't
-support native extensions, it also includes a small command line tool which
-can communicate with the AIR application (src/APIWrapper).
+applications (see `src/FRESteamWorks`). Since the AIR runtime on Linux doesn't
+support native extensions, this project also includes a small command line tool
+used to communicate with the AIR application (`src/APIWrapper`).
 
-The library to be used on the AS3 side can be found in lib/src/ (or lib/src_linux
-for Linux). Scripts to create the ANE/SWC files are in lib/bin/.
+The library to be used on the AS3 side can be found in `lib/src/` (or `lib/src_linux`
+for Linux). For a definition of the public interface, check `ISteamWorks.as`.
+Scripts to create the ANE/SWC files are in `lib/bin/`.
 
-It also includes a small test application (in test/src/), which tests the basic
-Steamworks API functions. It uses app id 480, which is the example application from
-the Steamworks SDK.
+It also includes a small test application (in `test/src/`), which tests the basic
+Steamworks API functions. It uses application ID 480, which is the example application
+from the Steamworks SDK.
 
 This project initially started as a fork of [FRESteamWorks by Oldes/Amanita Design](https://github.com/Oldes/FRESteamWorks/).
 
@@ -19,7 +20,7 @@ This project initially started as a fork of [FRESteamWorks by Oldes/Amanita Desi
 A pre-built ANE (containing the Windows dll and OS X dylib) as well as the
 Linux SWC can be found on http://dump.ventero.de/FRESteamWorks/. To build the
 Linux APIWrapper, run `make APPIDS=whitelist wrapper`, where `whitelist` is a
-comma separated list of app ids.
+comma separated list of application IDs that are able to use the wrapper binary.
 
 # Documentation #
 
