@@ -15,7 +15,7 @@ for type in Debug Release; do
 	[ ! -d "$dir" ] && die "Build directory $dir missing"
 	pushd "$dir"
 
-	[ ! -f "FRESteamWorks.framework" ] && die "$dir/FRESteamWorks.framework missing"
+	[ ! -d "FRESteamWorks.framework" ] && die "$dir/FRESteamWorks.framework missing"
 	[ ! -f "FRESteamWorks.dll" ] && die "$dir/FRESteamWorks.dll missing"
 
 	install_name_tool -change \
