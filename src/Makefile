@@ -16,6 +16,7 @@ dir := FRESteamWorks
 wdir := APIWrapper
 obj := $(dir)/FRESteamWorks.o $(dir)/CSteam.o
 
+.PHONY: all lib wrapper obj clean
 all: lib wrapper
 lib: $(dir)/FRESteamWorks.so
 wrapper: $(wdir)/APIWrapper
