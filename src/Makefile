@@ -3,11 +3,12 @@ include ../config.sh
 INC = -isystem $(AIR_SDK)/include -isystem $(STEAM_SDK)/public/steam
 LIB = -L$(STEAM_SDK)/redistributable_bin/linux32
 LINK = -m32 -lsteam_api
-CXXFLAGS = -std=c++0x -m32 -fvisibility=hidden -Wall -Wextra -pedantic -Wno-unused-parameter -DUSE_BREAKPAD_HANDLER
+CXXFLAGS = -std=c++0x -m32 -fvisibility=hidden -Wall -Wextra -pedantic -Wno-unused-parameter
+CXXFLAGS += -DUSE_BREAKPAD_HANDLER -DLINUX
 
 # comma separated list of whitelisted app ids
 ifneq ($(APPIDS),)
-WHITELIST = -DWHITELIST=$(APPIDS)
+CXXFLAGS += -DWHITELIST=$(APPIDS)
 endif
 
 .SUFFIXES:
@@ -16,7 +17,7 @@ dir := FRESteamWorks
 wdir := APIWrapper
 obj := $(dir)/FRESteamWorks.o $(dir)/CSteam.o
 
-.PHONY: all lib wrapper obj clean
+.PHONY: all lib wrapper obj clean dist-clean
 all: lib wrapper
 lib: $(dir)/FRESteamWorks.so
 wrapper: $(wdir)/APIWrapper
@@ -26,21 +27,24 @@ SteamSDK:
 	ln -sf $(STEAM_SDK) $@
 
 $(dir)/FRESteamWorks.so: $(obj)
-	$(CXX) -shared $(LIB) $^ $(LINK) -o $@
+	$(CXX) -shared $(LIB) $(LINK) $^ -o $@
 
-$(wdir)/APIWrapper: $(wdir)/APIWrapper.o $(dir)/CSteam.o $(wdir)/amf-cpp/libamf.a
-	$(CXX) $(LIB) $^ $(LINK) -o $@
+$(wdir)/APIWrapper: $(wdir)/APIWrapper.o $(dir)/CSteam.o $(wdir)/libamf.a
+	$(CXX) $(LIB) $(LINK) $^ -o $@
 
 $(wdir)/APIWrapper.o: $(wdir)/APIWrapper.cpp $(wdir)/APIWrapper.h SteamSDK
-	$(CXX) $(CXXFLAGS) -c -DLINUX $(WHITELIST) $(INC) -isystem $(wdir)/amf-cpp -IFRESteamWorks $< -o $@
+	$(CXX) -c $(CXXFLAGS) $(INC) -isystem $(wdir)/amf-cpp -I$(dir) $< -o $@
 
-$(wdir)/amf-cpp/libamf.a: $(wdir)/amf-cpp
+$(wdir)/libamf.a: $(wdir)/amf-cpp
 	$(MAKE) -C $(wdir)/amf-cpp 32bit
+	cp $(wdir)/amf-cpp/libamf.a $@
 
 %.o: %.cpp %.h
-	$(CXX) $(CXXFLAGS) -c -DLINUX $(INC) $< -o $@
+	$(CXX) -c $(CXXFLAGS) $(INC) $< -o $@
 
 clean:
-	rm -f $(dir)/*.o $(dir)/*.so $(wdir)/*.o $(wdir)/APIWrapper $(wdir)/amf-cpp/libamf.a
+	rm -f $(obj) $(wdir)/FRESteamWorks.o $(wdir)/APIWrapper $(wdir)/libamf.a
 	rm -f SteamSDK
+
+dist-clean: clean
 	$(MAKE) -C $(wdir)/amf-cpp clean

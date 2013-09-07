@@ -17,6 +17,7 @@ project.xcworkspace
 
 # build files
 *.o
+*.a
 *.so
 *.ane
 *.dll
