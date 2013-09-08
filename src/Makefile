@@ -1,8 +1,7 @@
 include ../config.sh
 
 INC = -isystem $(AIR_SDK)/include -isystem $(STEAM_SDK)/public/steam
-LIB = -L$(STEAM_SDK)/redistributable_bin/linux32
-LINK = -m32 -lsteam_api
+LIB = -m32 -L$(STEAM_SDK)/redistributable_bin/linux32 -lsteam_api
 CXXFLAGS = -std=c++0x -m32 -fvisibility=hidden -Wall -Wextra -pedantic -Wno-unused-parameter
 CXXFLAGS += -DUSE_BREAKPAD_HANDLER -DLINUX
 
@@ -27,10 +26,10 @@ SteamSDK:
 	ln -sf $(STEAM_SDK) $@
 
 $(dir)/FRESteamWorks.so: $(obj)
-	$(CXX) -shared $(LIB) $(LINK) $^ -o $@
+	$(CXX) -shared $(LIB) $^ -o $@
 
 $(wdir)/APIWrapper: $(wdir)/APIWrapper.o $(dir)/CSteam.o $(wdir)/libamf.a
-	$(CXX) $(LIB) $(LINK) $^ -o $@
+	$(CXX) $(LIB) $^ -o $@
 
 $(wdir)/APIWrapper.o: $(wdir)/APIWrapper.cpp $(wdir)/APIWrapper.h SteamSDK
 	$(CXX) -c $(CXXFLAGS) $(INC) -isystem $(wdir)/amf-cpp -I$(dir) $< -o $@
