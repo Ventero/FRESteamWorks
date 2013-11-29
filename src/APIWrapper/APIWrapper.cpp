@@ -486,9 +486,10 @@ void AIRSteam_DeletePublishedFile() {
 
 void AIRSteam_GetPublishedFileDetails() {
 	PublishedFileId_t handle = get_uint64();
+	int32 maxAge = get_int();
 	if (!g_Steam || handle == 0) return send(false);
 
-	send(g_Steam->GetPublishedFileDetails(handle));
+	send(g_Steam->GetPublishedFileDetails(handle, maxAge));
 }
 
 void AIRSteam_GetPublishedFileDetailsResult() {

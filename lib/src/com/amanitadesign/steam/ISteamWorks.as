@@ -57,7 +57,7 @@ package com.amanitadesign.steam {
 		function publishWorkshopFile(name:String, preview:String, appId:uint, title:String, description:String, visibility:uint, tags:Array, fileType:uint):Boolean;
 		function publishWorkshopFileResult():String;
 		function deletePublishedFile(file:String):Boolean;
-		function getPublishedFileDetails(file:String):Boolean;
+		function getPublishedFileDetails(file:String, maxAge:int):Boolean;
 		function getPublishedFileDetailsResult(file:String):FileDetailsResult;
 		function enumerateUserPublishedFiles(startIndex:uint):Boolean;
 		function enumerateUserPublishedFilesResult():UserFilesResult;

@@ -548,8 +548,8 @@ package com.amanitadesign.steam {
 			return readBoolResponse();
 		}
 
-		public function getPublishedFileDetails(file:String):Boolean {
-			if(!callWrapper(AIRSteam_GetPublishedFileDetails, [file])) return false;
+		public function getPublishedFileDetails(file:String, maxAge:int):Boolean {
+			if(!callWrapper(AIRSteam_GetPublishedFileDetails, [file, maxAge]))
 			return readBoolResponse();
 		}
 

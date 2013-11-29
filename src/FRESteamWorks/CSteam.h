@@ -94,7 +94,7 @@ public:
 	PublishedFileId_t PublishWorkshopFileResult();
 	bool DeletePublishedFile(PublishedFileId_t file);
 
-	bool GetPublishedFileDetails(PublishedFileId_t file);
+	bool GetPublishedFileDetails(PublishedFileId_t file, int32 maxAge);
 	RemoteStorageGetPublishedFileDetailsResult_t* GetPublishedFileDetailsResult(PublishedFileId_t file);
 
 	bool EnumerateUserPublishedFiles(uint32 startIndex);

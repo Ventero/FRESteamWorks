@@ -543,12 +543,14 @@ AIR_FUNC(AIRSteam_DeletePublishedFile) {
 }
 
 AIR_FUNC(AIRSteam_GetPublishedFileDetails) {
-	ARG_CHECK(1, FREBool(false));
+	ARG_CHECK(2, FREBool(false));
 
 	PublishedFileId_t handle;
-	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+	int32 maxAge;
+	if(!FREGetUint64(argv[0], &handle) ||
+	   !FREGetInt32(argv[1], &maxAge)) return FREBool(false);
 
-	return FREBool(g_Steam->GetPublishedFileDetails(handle));
+	return FREBool(g_Steam->GetPublishedFileDetails(handle, maxAge));
 }
 
 AIR_FUNC(AIRSteam_GetPublishedFileDetailsResult) {

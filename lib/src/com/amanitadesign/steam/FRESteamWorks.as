@@ -283,9 +283,9 @@ package com.amanitadesign.steam
 			return _ExtensionContext.call("AIRSteam_DeletePublishedFile", file) as Boolean;
 		}
 
-		public function getPublishedFileDetails(file:String):Boolean
+		public function getPublishedFileDetails(file:String, maxAge:int = 0):Boolean
 		{
-			return _ExtensionContext.call("AIRSteam_GetPublishedFileDetails", file) as Boolean;
+			return _ExtensionContext.call("AIRSteam_GetPublishedFileDetails", file, maxAge) as Boolean;
 		}
 
 		public function getPublishedFileDetailsResult(file:String):FileDetailsResult
