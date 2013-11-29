@@ -10,7 +10,7 @@ for type in Release Debug; do
 	mkdir -p $type
 
 	pushd "../../src"
-	xcodebuild -configuration $type -scheme FRESteamWorks build
+	xcodebuild -configuration $type build
 	popd
 	cp -r "../../lib/bin/FRESteamWorks.framework" "$type/"
 done
