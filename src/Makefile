@@ -10,6 +10,10 @@ ifneq ($(APPIDS),)
 CXXFLAGS += -DWHITELIST=$(APPIDS)
 endif
 
+ifdef DEBUG
+CXXFLAGS += -g -DDEBUG
+endif
+
 .SUFFIXES:
 
 dir := FRESteamWorks
