@@ -130,6 +130,17 @@ std::vector<std::string> get_array() {
 	return v;
 }
 
+#ifdef DEBUG
+void steamWarningMessageHook(int severity, const char* msg) {
+	std::fstream f("/tmp/steam.log", std::ios::out | std::ios::app);
+	f << "Severity " << severity << ": " << msg << std::endl;
+}
+#else
+void steamWarningMessageHook(int severity, const char* msg) {
+	// silently ignore
+}
+#endif
+
 /*
  * general functions
  */
@@ -157,6 +168,10 @@ void AIRSteam_Init() {
 	}
 
 	exit(1);
+#endif
+
+#ifdef DEBUG
+	SteamUtils()->SetWarningMessageHook(steamWarningMessageHook);
 #endif
 }
 

@@ -52,6 +52,8 @@ std::string get_string();
 uint64 get_uint64();
 std::vector<std::string> get_array();
 
+void steamWarningMessageHook(int severity, const char* msg);
+
 #define X(a) void a();
 #include "functions.h"
 #undef X

@@ -131,6 +131,17 @@ std::vector<std::string> extractStringArray(FREObject object) {
 	return tags;
 }
 
+#ifdef DEBUG
+#include <iostream>
+void steamWarningMessageHook(int severity, const char* msg) {
+	std::cerr << "Severity " << severity << ": " << msg << std::endl;
+}
+#else
+void steamWarningMessageHook(int severity, const char* msg) {
+	// ignore silently
+}
+#endif
+
 void ANESteam::DispatchEvent(char* code, char* level) {
 	// ignore unsuccessful dispatches
 	FREDispatchStatusEventAsync(AIRContext, (const uint8_t*)code, (const uint8_t*)level);
@@ -146,6 +157,10 @@ AIR_FUNC(AIRSteam_Init) {
 
 	bool ret = SteamAPI_Init();
 	if (ret) g_Steam = new ANESteam();
+
+#ifdef DEBUG
+	SteamUtils()->SetWarningMessageHook(steamWarningMessageHook);
+#endif
 
 	return FREBool(ret);
 }

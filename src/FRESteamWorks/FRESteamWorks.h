@@ -51,6 +51,7 @@ bool FREGetUint64(FREObject, uint64* val);
 bool FREGetString(FREObject, std::string&);
 
 std::vector<std::string> extractStringArray(FREObject object);
+void steamWarningMessageHook(int severity, const char* msg);
 
 class ANESteam : public CSteam {
 	void DispatchEvent(char* code, char* level);
