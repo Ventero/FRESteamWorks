@@ -35,7 +35,7 @@ public function getUGCDownloadResult(handle:String):DownloadUGCResult
 public function publishWorkshopFile(name:String, preview:String, appId:uint, title:String, description:String, visibility:uint, tags:Array, fileType:uint):Boolean
 public function publishWorkshopFileResult():String
 public function deletePublishedFile(file:String):Boolean
-public function getPublishedFileDetails(file:String, maxAge:int):Boolean
+public function getPublishedFileDetails(file:String, maxAge:int = 0):Boolean
 public function getPublishedFileDetailsResult(file:String):FileDetailsResult
 public function enumerateUserPublishedFiles(startIndex:uint):Boolean
 public function enumerateUserPublishedFilesResult():UserFilesResult
