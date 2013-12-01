@@ -11,10 +11,21 @@
 package
 {
 	import com.amanitadesign.steam.FRESteamWorks;
-	import com.amanitadesign.steam.SteamConstants;
+
 	import com.amanitadesign.steam.SteamEvent;
 	import com.amanitadesign.steam.SteamResults;
+
+	import com.amanitadesign.steam.SteamConstants;
 	import com.amanitadesign.steam.WorkshopConstants;
+
+	import com.amanitadesign.steam.DownloadUGCResult;
+	import com.amanitadesign.steam.FileDetailsResult;
+	import com.amanitadesign.steam.FilesByUserActionResult;
+	import com.amanitadesign.steam.ItemVoteDetailsResult;
+	import com.amanitadesign.steam.SubscribedFilesResult;
+	import com.amanitadesign.steam.UserFilesResult;
+	import com.amanitadesign.steam.UserVoteDetails;
+	import com.amanitadesign.steam.WorkshopFilesResult;
 
 	import flash.desktop.NativeApplication;
 	import flash.display.SimpleButton;
