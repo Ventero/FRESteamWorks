@@ -1,5 +1,5 @@
 /*
- *  FRESteamWorks.h
+ *  FRESteamWorksTest.as
  *  This file is part of FRESteamWorks.
  *
  *  Created by David ´Oldes´ Oliva on 3/29/12.
