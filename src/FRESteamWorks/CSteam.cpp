@@ -213,7 +213,8 @@ int32 CSteam::UGCRead(UGCHandle_t handle, int32 size, uint32 offset, char **cont
 	if (!m_bInitialized) return 0;
 
 	char *data = new char[size];
-	int32 read = SteamRemoteStorage()->UGCRead(handle, data, size, offset);
+	// FIXME: add new parameter to API
+	int32 read = SteamRemoteStorage()->UGCRead(handle, data, size, offset, k_EUGCRead_ContinueReadingUntilFinished);
 	if (read == 0) {
 		delete[] data;
 		return 0;
