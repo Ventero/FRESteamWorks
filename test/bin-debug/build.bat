@@ -1,4 +1,4 @@
-
+@echo off
 if not exist ..\..\config.bat (
     echo "FRESteamWorks/config.bat is not set up!"
     goto :eof
