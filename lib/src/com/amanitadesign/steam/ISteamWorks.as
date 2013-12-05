@@ -13,8 +13,6 @@ package com.amanitadesign.steam {
 
 	public interface ISteamWorks extends IEventDispatcher {
 		[Event(name="steamResponse", type="com.amanitadesign.steam.SteamEvent")]
-		function ISteamWorks(target:IEventDispatcher = null);
-
 		function init():Boolean;
 		function dispose():void;
 
