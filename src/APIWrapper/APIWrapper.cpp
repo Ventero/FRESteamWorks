@@ -104,6 +104,24 @@ float get_float() {
 	return std::stof(item);
 }
 
+
+std::string readTempFileBuf(size_t length) {
+	std::string filename;
+	std::getline(std::cin, filename);
+	std::ifstream tempfile(filename, std::ios::in | std::ios::binary);
+
+	char* buf = new char[length];
+	tempfile.read(buf, length);
+
+	std::string result(buf, length - 1);
+
+	delete[] buf;
+	tempfile.close();
+	std::remove(filename.c_str());
+
+	return result;
+}
+
 std::string get_string() {
 	std::string item;
 	std::getline(std::cin, item);
@@ -111,12 +129,25 @@ std::string get_string() {
 	size_t length = std::stoi(item);
 	if (length < 1) return "";
 	char* buf = new char[length];
+
+	if (length > 1024)
+		return readTempFileBuf(length);
+
 	std::cin.read(buf, length);
 	// remove trailing newline
 	std::string result(buf, length - 1);
 
 	delete[] buf;
 	return result;
+}
+
+std::string get_bytearray() {
+	std::string item;
+	std::getline(std::cin, item);
+
+	size_t length = std::stoi(item);
+	if (length < 1) return "";
+	return readTempFileBuf(length);
 }
 
 uint64 get_uint64() {
@@ -337,7 +368,7 @@ void AIRSteam_FileExists() {
 
 void AIRSteam_FileWrite() {
 	std::string name = get_string();
-	std::string data = get_string();
+	std::string data = get_bytearray();
 	if(!g_Steam || name.empty()) return send(false);
 
 	send(g_Steam->FileWrite(name, data.c_str(), data.length()));

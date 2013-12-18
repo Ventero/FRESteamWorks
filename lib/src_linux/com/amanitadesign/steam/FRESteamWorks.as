@@ -229,35 +229,51 @@ package com.amanitadesign.steam {
 
 			if (params) {
 				for(var i:int = 0; i < params.length; ++i) {
-					writeValue(stdin, params[i]);
+					var outbuf:ByteArray = new ByteArray();
+					var needTemp:Boolean = writeValue(outbuf, params[i]);
+					outbuf.position = 0;
+					if (needTemp || outbuf.length > 1024) {
+						// send data via tempfile, see readResponse for an explanation
+						var tempfile:File = File.createTempFile();
+						var stream:FileStream = new FileStream();
+						stream.open(tempfile, FileMode.WRITE);
+						stream.writeBytes(outbuf);
+						stream.close();
+						stdin.writeUTFBytes(outbuf.length + "\n");
+						stdin.writeUTFBytes(tempfile.nativePath + "\n");
+					} else {
+						stdin.writeBytes(outbuf);
+					}
 				}
 			}
 
 			return !_error;
 		}
 
-		private function writeValue(output:IDataOutput, value:*):void {
+		private function writeValue(output:IDataOutput, value:*):Boolean {
+			var tempFile:Boolean = false;
 			if (value === null || value === undefined) {
 				// no data, so length 0
 				output.writeUTFBytes(0 + "\n");
 			} else if(value is ByteArray) {
-				var length:uint = value.length;
-				// length + 1 for the added newline
-				output.writeUTFBytes(String(length + 1) + "\n");
+				// byte arrays are passed through external files, so we don't need a
+				// length marker here
 				output.writeBytes(value);
 				output.writeUTFBytes("\n");
+				tempFile = true;
 			} else if(value is String) {
 				output.writeUTFBytes(String(value.length + 1) + "\n" + value + "\n");
 			} else if(value is Array) {
 				output.writeUTFBytes(value.length + "\n");
 				for (var el:int = 0; el < value.length; ++el) {
-					writeValue(output, value[el]);
+					if(writeValue(output, value[el])) tempFile = true;
 				}
 			} else if(value is int || value is uint || value is Number || value is Boolean) {
 				output.writeUTFBytes(String(value) + "\n");
 			} else {
 				throw new ArgumentError("Cannot write value " + value);
 			}
+			return tempFile;
 		}
 
 		private function waitForData(output:IDataInput, length:uint = 1):uint {
