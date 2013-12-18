@@ -33,6 +33,7 @@ class CLISteam : public CSteam {
 };
 
 void sendData(Serializer&);
+void sendDataTempFile(Serializer&);
 
 template<class T>
 void sendItem(T item);

@@ -285,7 +285,7 @@ package com.amanitadesign.steam {
 			return _buf.length;
 		}
 
-		private function readResponse():* {
+		private function readResponse(forceTempFile:Boolean = false):* {
 			if (!_process.running) return null;
 			var stdout:IDataInput = _process.standardOutput;
 
@@ -295,8 +295,9 @@ package com.amanitadesign.steam {
 
 			// AIR seems to have a limit of around 32k bytes data on stdin
 			// we can synchronously wait for, so for large data we use a temp
-			// file instead
-			if (length > 16384) {
+			// file instead. Sometimes the limit seems to be much lower than 32k
+			// though, so we define "large data" very conservatively.
+			if (forceTempFile || length > 1024) {
 				var filename:String = readStringResponse();
 				if (!filename) return null;
 
@@ -342,6 +343,11 @@ package com.amanitadesign.steam {
 			return readResponse() as String;
 		}
 
+		private function readByteArrayResponse():ByteArray {
+			if(!_process.running) return null;
+			return readResponse(true) as ByteArray;
+		}
+
 		private function eventDispatched(e:ProgressEvent):void {
 			var stderr:IDataInput = _process.standardError;
 			var avail:uint = stderr.bytesAvailable;
@@ -375,7 +381,7 @@ package com.amanitadesign.steam {
 
 			var success:Boolean = readBoolResponse();
 			if(success) {
-				var response:ByteArray = readResponse() as ByteArray;
+				var response:ByteArray = readByteArrayResponse();
 				data.writeBytes(response);
 				data.position = 0;
 			}
@@ -388,7 +394,7 @@ package com.amanitadesign.steam {
 			var success:Boolean = readBoolResponse();
 
 			if(success) {
-				var response:ByteArray = readResponse() as ByteArray;
+				var response:ByteArray = readByteArrayResponse();
 				data.writeBytes(response);
 				data.position = 0;
 			}

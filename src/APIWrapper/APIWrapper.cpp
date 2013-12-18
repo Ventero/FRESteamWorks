@@ -20,22 +20,34 @@ void CLISteam::DispatchEvent(char* code, char* level) {
 
 void sendData(Serializer& serializer) {
 	std::vector<u8> data = serializer.data();
+	if(data.size() > 1024) {
+		// due to output buffering, large outputs need to be sent via a tempfile
+		sendDataTempFile(serializer);
+		return;
+	}
+
 	serializer.clear();
 
 	// first, send a length prefix
 	std::vector<u8> length = AmfInteger(data.size()).serialize();
 	std::copy(length.begin(), length.end(), std::ostream_iterator<u8>(std::cout));
+	// send actual data
+	std::copy(data.begin(), data.end(), std::ostream_iterator<u8>(std::cout));
+}
 
-	// if we have "too much" data to send at once, use a tempfile instead
-	if(data.size() > 16384) {
-		std::string filename = std::tmpnam(nullptr);
-		std::fstream tmpfile(filename, std::ios::out | std::ios::binary);
-		std::copy(data.begin(), data.end(), std::ostream_iterator<u8>(tmpfile));
-		tmpfile.close();
-		send(filename);
-	} else {
-		std::copy(data.begin(), data.end(), std::ostream_iterator<u8>(std::cout));
-	}
+void sendDataTempFile(Serializer& serializer) {
+	std::vector<u8> data = serializer.data();
+	serializer.clear();
+
+	// send length via stdout
+	std::vector<u8> length = AmfInteger(data.size()).serialize();
+	std::copy(length.begin(), length.end(), std::ostream_iterator<u8>(std::cout));
+
+	std::string filename = std::tmpnam(nullptr);
+	std::fstream tmpfile(filename, std::ios::out | std::ios::binary);
+	std::copy(data.begin(), data.end(), std::ostream_iterator<u8>(tmpfile));
+	tmpfile.close();
+	send(filename);
 }
 
 template<class T>
@@ -342,7 +354,7 @@ void AIRSteam_FileRead() {
 	send(true);
 	Serializer serializer;
 	serializer << AmfByteArray(data, data + size);
-	sendData(serializer);
+	sendDataTempFile(serializer);
 	delete[] data;
 }
 
@@ -424,7 +436,7 @@ void AIRSteam_UGCRead() {
 
 	Serializer serializer;
 	serializer << AmfByteArray(data, data + result);
-	sendData(serializer);
+	sendDataTempFile(serializer);
 	delete[] data;
 }
 
