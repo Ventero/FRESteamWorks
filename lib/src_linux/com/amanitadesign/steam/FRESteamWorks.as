@@ -251,7 +251,6 @@ package com.amanitadesign.steam {
 		}
 
 		private function writeValue(output:IDataOutput, value:*):Boolean {
-			var tempFile:Boolean = false;
 			if (value === null || value === undefined) {
 				// no data, so length 0
 				output.writeUTFBytes(0 + "\n");
@@ -260,20 +259,22 @@ package com.amanitadesign.steam {
 				// length marker here
 				output.writeBytes(value);
 				output.writeUTFBytes("\n");
-				tempFile = true;
+				return true;
 			} else if(value is String) {
 				output.writeUTFBytes(String(value.length + 1) + "\n" + value + "\n");
 			} else if(value is Array) {
 				output.writeUTFBytes(value.length + "\n");
 				for (var el:int = 0; el < value.length; ++el) {
-					if(writeValue(output, value[el])) tempFile = true;
+					if(!(value[el] is String))
+						throw new ArgumentError("Only arrays of strings are supported");
+					writeValue(output, value[el]);
 				}
 			} else if(value is int || value is uint || value is Number || value is Boolean) {
 				output.writeUTFBytes(String(value) + "\n");
 			} else {
 				throw new ArgumentError("Cannot write value " + value);
 			}
-			return tempFile;
+			return false;
 		}
 
 		private function waitForData(output:IDataInput, length:uint = 1):uint {
