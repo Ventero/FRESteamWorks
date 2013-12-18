@@ -1027,7 +1027,6 @@ void AIRSteam_DLCInstalledResult() {
 	send(g_Steam->DLCInstalledResult());
 }
 
-
 int main(int argc, char** argv) {
 	std::ios::sync_with_stdio(false);
 
@@ -1040,8 +1039,11 @@ int main(int argc, char** argv) {
 		unsigned int func;
 		try {
 			func = std::stoi(buf);
+		} catch (std::exception& e) {
+			steamWarningMessageHook(2, e.what());
 		} catch (...) {
-			// just read on and hope for the best
+			// shouldn't happen, just read on and hope for the best
+			steamWarningMessageHook(2, "exception caught");
 			continue;
 		}
 
