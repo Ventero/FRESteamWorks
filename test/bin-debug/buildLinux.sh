@@ -5,7 +5,7 @@ set -e
 [ ! -e ../../config.sh ] && die "FRESteamWorks/config.sh is not set up!"
 . ../../config.sh
 
-make -C ../../src wrapper
+make -C ../../src DEBUG=1 wrapper
 cp ../../src/APIWrapper/APIWrapper NativeApps/Linux
 
 "$FLEX_SDK/bin/amxmlc" -library-path+=../../lib/bin/FRESteamWorksLibLinux.swc \
