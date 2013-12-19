@@ -1039,18 +1039,19 @@ int main(int argc, char** argv) {
 		unsigned int func;
 		try {
 			func = std::stoi(buf);
+
+			if (func >= apiFunctions.size())
+				continue;
+
+			apiFunctions[func]();
 		} catch (std::exception& e) {
 			steamWarningMessageHook(2, e.what());
+			continue;
 		} catch (...) {
 			// shouldn't happen, just read on and hope for the best
 			steamWarningMessageHook(2, "exception caught");
 			continue;
 		}
-
-		if (func >= apiFunctions.size())
-			continue;
-
-		apiFunctions[func]();
 	}
 
 	SteamAPI_Shutdown();
