@@ -5,5 +5,5 @@ if not exist ..\..\config.bat (
 )
 call ..\..\config.bat
 
-"%FLEX_SDK%/bin/amxmlc" -swf-version=11 -compiler.source-path=../../lib/src ^
+"%FLEX_SDK%/bin/amxmlc" -swf-version=11 -external-library-path+=../../lib/bin/FRESteamWorks.ane ^
                         -output FRESteamWorksTest.swf ../src/FRESteamWorksTest.as
