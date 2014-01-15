@@ -179,7 +179,6 @@ package com.amanitadesign.steam {
 				// no-op
 			}
 			if(!_process.running) return false;
-			if(_process.standardError.bytesAvailable > 0) return false;
 
 			// initialization seems to be successful
 			_init = true;
