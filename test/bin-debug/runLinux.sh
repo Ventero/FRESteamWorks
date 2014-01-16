@@ -21,5 +21,5 @@ if [ ! -x "NativeApps/Linux/APIWrapper" ]; then
 	exit 4
 fi
 
-export LD_PRELOAD="$STEAM_LIB:${LD_PRELOAD+:$LD_PRELOAD}"
+export LD_PRELOAD="$STEAM_LIB${LD_PRELOAD+:$LD_PRELOAD}"
 "$AIR_SDK/bin/adl" FRESteamWorksTest-linux.xml .
