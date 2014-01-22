@@ -27,7 +27,6 @@
 #include "amf-cpp/serializer.hpp"
 
 #include <steam_api.h>
-#include <isteamremotestorage.h>
 
 class CLISteam : public CSteam {
 	void DispatchEvent(char* code, char* level);
