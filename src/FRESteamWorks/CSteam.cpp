@@ -298,6 +298,8 @@ bool CSteam::GetQuota(int32 *total, int32 *available) {
 	return SteamRemoteStorage()->GetQuota(total, available);
 }
 
+// ugc / workshop
+
 bool CSteam::UGCDownload(UGCHandle_t handle, uint32 priority) {
 	if (!m_bInitialized) return false;
 
@@ -583,6 +585,8 @@ bool CSteam::SetUserPublishedFileAction(PublishedFileId_t file, EWorkshopFileAct
 	return true;
 }
 
+// overlay
+
 bool CSteam::ActivateGameOverlay(std::string dialog) {
 	if (!m_bInitialized) return false;
 
@@ -624,6 +628,8 @@ bool CSteam::IsOverlayEnabled() {
 	return SteamUtils()->IsOverlayEnabled();
 }
 
+// DLC / subscriptions
+
 bool CSteam::IsSubscribedApp(AppId_t appId) {
 	if (!m_bInitialized) return false;
 
@@ -658,6 +664,45 @@ bool CSteam::UninstallDLC(AppId_t appId) {
 
 AppId_t CSteam::DLCInstalledResult() {
 	return m_DLCInstalled;
+}
+
+bool CSteam::ControllerInit(std::string absoluteConfigPath) {
+	if (!m_bInitialized) return false;
+
+	return SteamController()->Init(absoluteConfigPath.c_str());
+}
+
+bool CSteam::ControllerShutdown() {
+	if (!m_bInitialized) return false;
+
+	return SteamController()->Shutdown();
+}
+
+bool CSteam::ControllerRunFrame() {
+	if (!m_bInitialized) return false;
+
+	SteamController()->RunFrame();
+	return true;
+}
+
+bool CSteam::GetControllerState(uint32 index, SteamControllerState_t* state) {
+	if (!m_bInitialized) return false;
+
+	return SteamController()->GetControllerState(index, state);
+}
+
+bool CSteam::TriggerHapticPulse(uint32 index, ESteamControllerPad targetPad, unsigned short duration) {
+	if (!m_bInitialized) return false;
+
+	SteamController()->TriggerHapticPulse(index, targetPad, duration);
+	return true;
+}
+
+bool CSteam::ControllerSetOverrideMode(std::string mode) {
+	if (!m_bInitialized) return false;
+
+	SteamController()->SetOverrideMode(mode.c_str());
+	return true;
 }
 
 void CSteam::DispatchEvent(const int req_type, const int response) {

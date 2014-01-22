@@ -1171,6 +1171,66 @@ void AIRSteam_DLCInstalledResult() {
 	send(g_Steam->DLCInstalledResult());
 }
 
+/*
+ * Controller
+ */
+void AIRSteam_ControllerInit() {
+	std::string configPath = get_string();
+	if (!g_Steam || configPath.empty()) return send(false);
+
+	send(g_Steam->ControllerInit(configPath));
+}
+
+void AIRSteam_ControllerShutdown() {
+	if (!g_Steam) return send(false);
+
+	send(g_Steam->ControllerShutdown());
+}
+
+void AIRSteam_ControllerRunFrame() {
+	if (!g_Steam) return send(false);
+
+	send(g_Steam->ControllerRunFrame());
+}
+
+void AIRSteam_GetControllerState() {
+	uint32 index = get_int();
+	if (!g_Steam) return send(nullptr);
+
+	SteamControllerState_t state;
+	bool ret = g_Steam->GetControllerState(index, &state);
+	if (!ret) return send(nullptr);
+
+	AmfObjectTraits traits("com.amanitadesign.steam.SteamControllerState", false, false);
+	AmfObject obj(traits);
+
+	obj.addSealedProperty("packetNum", AmfInteger(state.unPacketNum));
+	obj.addSealedProperty("buttonsLo", AmfInteger(state.ulButtons & 0xFFFFFFFF));
+	obj.addSealedProperty("buttonsHi", AmfInteger(state.ulButtons >> 32));
+	obj.addSealedProperty("leftPadX", AmfInteger(state.sLeftPadX));
+	obj.addSealedProperty("leftPadY", AmfInteger(state.sLeftPadY));
+	obj.addSealedProperty("rightPadX", AmfInteger(state.sRightPadX));
+	obj.addSealedProperty("rightPadY", AmfInteger(state.sRightPadY));
+
+	sendItem(obj);
+}
+
+void AIRSteam_TriggerHapticPulse() {
+	uint32 index = get_int();
+	uint32 targetPad = get_int();
+	uint32 duration = get_int();
+	if (!g_Steam) return send(false);
+
+	send(g_Steam->TriggerHapticPulse(index, ESteamControllerPad(targetPad), duration));
+}
+
+void AIRSteam_ControllerSetOverrideMode() {
+	std::string mode = get_string();
+	if (!g_Steam) return send(false);
+
+	send(g_Steam->ControllerSetOverrideMode(mode));
+}
+
 int main(int argc, char** argv) {
 	std::ios::sync_with_stdio(false);
 

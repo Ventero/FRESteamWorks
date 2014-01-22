@@ -115,6 +115,13 @@ package com.amanitadesign.steam {
 		function installDLC(appId:uint):Boolean
 		function uninstallDLC(appId:uint):Boolean
 		function DLCInstalledResult():uint
+		/* controller */
+		function controllerInit(configPath:String):Boolean
+		function controllerShutdown():Boolean
+		function controllerRunFrame():Boolean
+		function getControllerState(index:uint):SteamControllerState
+		function triggerHapticPulse(index:uint, targetPad:uint, duration:uint):Boolean
+		function controllerSetOverrideMode(mode:String):Boolean
 		// END GENERATED CODE
 	}
 }

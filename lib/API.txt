@@ -91,3 +91,10 @@ public function getDLCCount():int
 public function installDLC(appId:uint):Boolean
 public function uninstallDLC(appId:uint):Boolean
 public function DLCInstalledResult():uint
+/* controller */
+public function controllerInit(configPath:String):Boolean
+public function controllerShutdown():Boolean
+public function controllerRunFrame():Boolean
+public function getControllerState(index:uint):SteamControllerState
+public function triggerHapticPulse(index:uint, targetPad:uint, duration:uint):Boolean
+public function controllerSetOverrideMode(mode:String):Boolean

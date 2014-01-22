@@ -1266,6 +1266,74 @@ AIR_FUNC(AIRSteam_DLCInstalledResult) {
 	return FREUint(g_Steam->DLCInstalledResult());
 }
 
+/*
+ * Controller
+ */
+AIR_FUNC(AIRSteam_ControllerInit) {
+	ARG_CHECK(1, FREBool(false));
+
+	std::string configPath;
+	if (!FREGetString(argv[0], configPath)) return FREBool(false);
+
+	return FREBool(g_Steam->ControllerInit(configPath));
+}
+
+AIR_FUNC(AIRSteam_ControllerShutdown) {
+	ARG_CHECK(0, FREBool(false));
+
+	return FREBool(g_Steam->ControllerShutdown());
+}
+
+AIR_FUNC(AIRSteam_ControllerRunFrame) {
+	ARG_CHECK(0, FREBool(false));
+
+	return FREBool(g_Steam->ControllerRunFrame());
+}
+
+AIR_FUNC(AIRSteam_GetControllerState) {
+	FREObject result;
+	FRENewObject((const uint8_t*)"com.amanitadesign.steam.SteamControllerState", 0, NULL, &result, NULL);
+
+	ARG_CHECK(1, result);
+
+	uint32_t index;
+	if (!FREGetUint32(argv[0], &index)) return result;
+
+	SteamControllerState_t state;
+	bool ret = g_Steam->GetControllerState(index, &state);
+	if (!ret) return result;
+
+	SET_PROP(result, "packetNum", FREInt(state.unPacketNum));
+	SET_PROP(result, "buttonsLo", FREInt(state.ulButtons & 0xFFFFFFFF));
+	SET_PROP(result, "buttonsHi", FREInt(state.ulButtons >> 32));
+	SET_PROP(result, "leftPadX", FREInt(state.sLeftPadX));
+	SET_PROP(result, "leftPadY", FREInt(state.sLeftPadY));
+	SET_PROP(result, "rightPadX", FREInt(state.sRightPadX));
+	SET_PROP(result, "rightPadY", FREInt(state.sRightPadY));
+
+	return result;
+}
+
+AIR_FUNC(AIRSteam_TriggerHapticPulse) {
+	ARG_CHECK(3, FREBool(false));
+
+	uint32_t index, targetPad, duration;
+	if (!FREGetUint32(argv[0], &index) ||
+		  !FREGetUint32(argv[1], &targetPad) ||
+		  !FREGetUint32(argv[2], &duration)) return FREBool(false);
+
+	return FREBool(g_Steam->TriggerHapticPulse(index, ESteamControllerPad(targetPad),
+		duration));
+}
+
+AIR_FUNC(AIRSteam_ControllerSetOverrideMode) {
+	ARG_CHECK(1, FREBool(false));
+
+	std::string mode;
+	if (!FREGetString(argv[0], mode)) return FREBool(false);
+
+	return FREBool(g_Steam->ControllerSetOverrideMode(mode));
+}
 
 	//============================
 

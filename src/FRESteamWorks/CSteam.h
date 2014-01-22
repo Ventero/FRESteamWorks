@@ -210,6 +210,14 @@ public:
 	bool UninstallDLC(AppId_t appId);
 	AppId_t DLCInstalledResult();
 
+	// controller
+	bool ControllerInit(std::string absoluteConfigPath);
+	bool ControllerShutdown();
+	bool ControllerRunFrame();
+	bool GetControllerState(uint32 index, SteamControllerState_t* state);
+	bool TriggerHapticPulse(uint32 index, ESteamControllerPad targetPad, unsigned short duration);
+	bool ControllerSetOverrideMode(std::string mode);
+
 protected:
 	virtual void DispatchEvent(char* code, char* level) = 0;
 

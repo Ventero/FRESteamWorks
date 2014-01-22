@@ -131,6 +131,13 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_InstallDLC:int = 84;
 		private static const AIRSteam_UninstallDLC:int = 85;
 		private static const AIRSteam_DLCInstalledResult:int = 86;
+		/* controller */
+		private static const AIRSteam_ControllerInit:int = 87;
+		private static const AIRSteam_ControllerShutdown:int = 88;
+		private static const AIRSteam_ControllerRunFrame:int = 89;
+		private static const AIRSteam_GetControllerState:int = 90;
+		private static const AIRSteam_TriggerHapticPulse:int = 91;
+		private static const AIRSteam_ControllerSetOverrideMode:int = 92;
 		// END GENERATED VALUES
 
 		public function FRESteamWorks (target:IEventDispatcher = null) {
@@ -854,6 +861,37 @@ package com.amanitadesign.steam {
 		public function DLCInstalledResult():uint {
 			if(!callWrapper(AIRSteam_DLCInstalledResult, [])) return 0;
 			return readIntResponse();
+		}
+
+		/* controller */
+		public function controllerInit(configPath:String):Boolean {
+			if(!callWrapper(AIRSteam_ControllerInit, [configPath])) return false;
+			return readBoolResponse();
+		}
+
+		public function controllerShutdown():Boolean {
+			if(!callWrapper(AIRSteam_ControllerShutdown, [])) return false;
+			return readBoolResponse();
+		}
+
+		public function controllerRunFrame():Boolean {
+			if(!callWrapper(AIRSteam_ControllerRunFrame, [])) return false;
+			return readBoolResponse();
+		}
+
+		public function getControllerState(index:uint):SteamControllerState {
+			if(!callWrapper(AIRSteam_GetControllerState, [index])) return null;
+			return readResponse() as SteamControllerState;
+		}
+
+		public function triggerHapticPulse(index:uint, targetPad:uint, duration:uint):Boolean {
+			if(!callWrapper(AIRSteam_TriggerHapticPulse, [index, targetPad, duration])) return false;
+			return readBoolResponse();
+		}
+
+		public function controllerSetOverrideMode(mode:String):Boolean {
+			if(!callWrapper(AIRSteam_ControllerSetOverrideMode, [mode])) return false;
+			return readBoolResponse();
 		}
 
 		// END GENERATED CODE

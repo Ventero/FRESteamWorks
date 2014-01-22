@@ -461,6 +461,31 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_DLCInstalledResult") as uint;
 		}
 
+		/* controller */
+		public function controllerInit(configPath:String):Boolean {
+			return _ExtensionContext.call("AIRSteam_ControllerInit", configPath) as Boolean;
+		}
+
+		public function controllerShutdown():Boolean {
+			return _ExtensionContext.call("AIRSteam_ControllerShutdown") as Boolean;
+		}
+
+		public function controllerRunFrame():Boolean {
+			return _ExtensionContext.call("AIRSteam_ControllerRunFrame") as Boolean;
+		}
+
+		public function getControllerState(index:uint):SteamControllerState {
+			return _ExtensionContext.call("AIRSteam_GetControllerState", index) as SteamControllerState;
+		}
+
+		public function triggerHapticPulse(index:uint, targetPad:uint, duration:uint):Boolean {
+			return _ExtensionContext.call("AIRSteam_TriggerHapticPulse", index, targetPad, duration) as Boolean;
+		}
+
+		public function controllerSetOverrideMode(mode:String):Boolean {
+			return _ExtensionContext.call("AIRSteam_ControllerSetOverrideMode", mode) as Boolean;
+		}
+
 		// END GENERATED CODE
 	}
 }

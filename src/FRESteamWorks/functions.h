@@ -93,4 +93,11 @@ X(AIRSteam_GetDLCCount) /* = 83 */
 X(AIRSteam_InstallDLC) /* = 84 */
 X(AIRSteam_UninstallDLC) /* = 85 */
 X(AIRSteam_DLCInstalledResult) /* = 86 */
+/* controller */
+X(AIRSteam_ControllerInit) /* = 87 */
+X(AIRSteam_ControllerShutdown) /* = 88 */
+X(AIRSteam_ControllerRunFrame) /* = 89 */
+X(AIRSteam_GetControllerState) /* = 90 */
+X(AIRSteam_TriggerHapticPulse) /* = 91 */
+X(AIRSteam_ControllerSetOverrideMode) /* = 92 */
 /* END GENERATED CODE */
