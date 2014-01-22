@@ -21,6 +21,8 @@ package com.amanitadesign.steam
 		public static const FILETYPE_Concept:int = 8;
 		public static const FILETYPE_WebGuide:int = 9;
 		public static const FILETYPE_IntegratedGuide:int = 10;
+		public static const FILETYPE_Merch:int = 11;
+		public static const FILETYPE_ControllerBinding:int = 11;
 
 		public static const ENUMTYPE_RankedByVote:int = 0;
 		public static const ENUMTYPE_Recent:int = 1;
