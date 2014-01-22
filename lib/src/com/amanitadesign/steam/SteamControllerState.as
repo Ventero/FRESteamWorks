@@ -20,5 +20,9 @@ package com.amanitadesign.steam
 		public var leftPadY:int;
 		public var rightPadX:int;
 		public var rightPadY:int;
+
+		public function getButtons():SteamControllerButtonsState {
+			return new SteamControllerButtonsState(buttonsLo, buttonsHi);
+		}
 	}
 }
