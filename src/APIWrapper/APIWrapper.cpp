@@ -234,6 +234,18 @@ void AIRSteam_GetAppID() {
 	send(g_Steam->GetAppID());
 }
 
+void AIRSteam_GetAvailableGameLanguages() {
+	if (!g_Steam) return send("");
+
+	send(g_Steam->GetAvailableGameLanguages());
+}
+
+void AIRSteam_GetCurrentGameLanguage() {
+	if (!g_Steam) return send("");
+
+	send(g_Steam->GetCurrentGameLanguage());
+}
+
 void AIRSteam_GetPersonaName() {
 	if (!g_Steam) return send("");
 

@@ -55,6 +55,8 @@ public:
 	// general stuff
 	std::string GetUserID();
 	uint32 GetAppID();
+	std::string GetAvailableGameLanguages();
+	std::string GetCurrentGameLanguage();
 	std::string GetPersonaName();
 
 	// stats/achievements

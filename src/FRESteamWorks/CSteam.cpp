@@ -53,6 +53,18 @@ uint32 CSteam::GetAppID() {
 	return m_iAppID;
 }
 
+std::string CSteam::GetAvailableGameLanguages() {
+	if (!m_bInitialized) return "";
+
+	return std::string(SteamApps()->GetAvailableGameLanguages());
+}
+
+std::string CSteam::GetCurrentGameLanguage() {
+	if (!m_bInitialized) return "";
+
+	return std::string(SteamApps()->GetCurrentGameLanguage());
+}
+
 std::string CSteam::GetPersonaName() {
 	if (!m_bInitialized) return "";
 

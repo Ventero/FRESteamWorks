@@ -2,6 +2,8 @@ public function init():Boolean
 public function runCallbacks():Boolean
 public function getUserID():String
 public function getAppID():uint
+public function getAvailableGameLanguages():String;
+public function getCurrentGameLanguage():String;
 public function getPersonaName():String
 public function useCrashHandler(appID:uint, version:String, date:String, time:String):Boolean
 /* stats/achievements */

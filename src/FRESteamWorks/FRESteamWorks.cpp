@@ -182,6 +182,18 @@ AIR_FUNC(AIRSteam_GetAppID) {
 	return FREUint(g_Steam->GetAppID());
 }
 
+AIR_FUNC(AIRSteam_GetAvailableGameLanguages) {
+	if (!g_Steam) return FREString("");
+
+	return FREString(g_Steam->GetAvailableGameLanguages());
+}
+
+AIR_FUNC(AIRSteam_GetCurrentGameLanguage) {
+	if (!g_Steam) return FREString("");
+
+	return FREString(g_Steam->GetCurrentGameLanguage());
+}
+
 AIR_FUNC(AIRSteam_GetPersonaName) {
 	if (!g_Steam) return FREString("");
 
