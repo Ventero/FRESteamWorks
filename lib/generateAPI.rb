@@ -1,81 +1,107 @@
 #!/usr/bin/ruby
 
-mode = ARGV[0]
-if not mode or not "fcliw".include? mode then
-	$stderr.puts <<-EOD
-Usage:
-	ruby #$0 [f|c|l|i|w]
-		f: AS3 function enum values
-		c: C function macros
-		l: Linux AS3 lib implementations
-		i: AS3 interface definition
-		w: Windows/OS X AS3 lib implementations
-	EOD
-	exit
+def create_interface line, func, num, args, ret
+	line.sub("public ", "")
 end
 
-contents = open("API.txt", "r").read.split("\n")
+def create_lib line, func, num, args, ret
+	<<-EOD
+#{line}
+{
+	return _ExtensionContext.call("#{func}"#{["", *args].join(", ")}) as #{ret};
+}
+	EOD
+end
 
-# maps function return types to the corresponding utility functions and
-# default values
-defaults = Hash.new { |h,k| ["readResponse() as #{k}", "null"] }
-defaults["Boolean"] = ["readBoolResponse()", "false"]
-defaults["Number"] = ["readFloatResponse()", "0.0"]
-defaults["int"] = ["readIntResponse()", "0"]
-defaults["uint"] = ["readIntResponse()", "0"]
-defaults["String"] = ["readStringResponse()", "\"\""]
+@defaults = Hash.new { |h,k| ["readResponse() as #{k}", "null"] }
+@defaults["Boolean"] = ["readBoolResponse()", "false"]
+@defaults["Number"] = ["readFloatResponse()", "0.0"]
+@defaults["int"] = ["readIntResponse()", "0"]
+@defaults["uint"] = ["readIntResponse()", "0"]
+@defaults["String"] = ["readStringResponse()", "\"\""]
 
-# functions to skip when generating code
-ignore = Hash.new []
-ignore["l"] = ["init", "runCallbacks", "useCrashHandler", "fileRead", "UGCRead"]
-ignore["w"] = ["init"]
-ignore["i"] = ["init"]
+def create_lib_linux line, func, num, args, ret
+	type, default = @defaults[ret]
 
-num = 0
-contents.each do |line|
-	(puts; next) if line.empty?
-	(puts "\t\t#{line}"; next) if line[0].chr == "/"
+	<<-EOD
+#{line} {
+	if(!callWrapper(#{func}, [#{args.join(", ")}])) return #{default};
+	return #{type};
+}
+	EOD
+end
 
-	match = line.match /function ([^(]+)\(([^)]*)\):(.+)/
-	($stderr.puts "Invalid line: #{line}"; next) unless match
+def create_constants_linux line, func, num, args, ret
+	"private static const #{func}:int = #{num};"
+end
 
-	func, args, ret = match.captures
-	next if ignore[mode].include? func
+def create_macro line, func, num, args, ret
+	"X(#{func}) /* = #{num} */"
+end
 
-	func_name = "AIRSteam_#{func[0].chr.upcase + func[1,func.size]}"
-	arg_names = args.split(/:[^,]+(?:,\s*)?/)
 
-	case mode
-	when "f" then
-		puts <<-EOD
-		private static const #{func_name}:int = #{num};
-		EOD
-	when "l" then
-		type, default = defaults[ret]
-		puts <<-EOD
-		#{line} {
-			if(!callWrapper(#{func_name}, [#{arg_names.join(", ")}])) return #{default};
-			return #{type};
-		}
+files = [
+	{
+		:file => "src/com/amanitadesign/steam/ISteamWorks.as",
+		:ignore => ["init"],
+		:format => method(:create_interface)
+	},
+	{
+		:file => "src/com/amanitadesign/steam/FRESteamWorks.as",
+		:ignore => ["init"],
+		:format => method(:create_lib)
+	},
+	{
+		:file => "src_linux/com/amanitadesign/steam/FRESteamWorks.as",
+		:ignore => ["init", "runCallbacks", "useCrashHandler", "fileRead", "UGCRead"],
+		:format => method(:create_lib_linux)
+	},
+	{
+		:file => "src_linux/com/amanitadesign/steam/FRESteamWorks.as",
+		:ignore => [],
+		:format => method(:create_constants_linux),
+		:start => "START GENERATED VALUES",
+		:end => "END GENERATED VALUES"
+	},
+	{
+		:file => "../src/FRESteamWorks/functions.h",
+		:ignore => [],
+		:format => method(:create_macro)
+	}
+]
 
-		EOD
-	when "c" then
-		puts <<-EOD
-		X(#{func_name}) /* = #{num} */
-		EOD
-	when "i" then
-		puts <<-EOD
-		#{line.sub("public ", "")}
-		EOD
-	else
-		puts <<-EOD
-		#{line}
-		{
-			return _ExtensionContext.call("#{func_name}"#{["", *arg_names].join(", ")}) as #{ret};
-		}
+contents = File.read("API.txt").split("\n")
 
-		EOD
-	end
+files.each do |options|
+	file_content = File.read(options[:file]).split("\n")
 
-	num += 1
+	start_marker = options[:start]||"START GENERATED CODE"
+	end_marker = options[:end]||"END GENERATED CODE"
+	start_idx = file_content.find_index{|line| line.include? start_marker }
+	end_idx = file_content.find_index{|line| line.include? end_marker  }
+	indentation = file_content[start_idx].gsub(/^(\s*).+$/, "\\1")
+
+	func_num = -1
+	replacement = contents.map do |line|
+		next nil if line.empty?
+		next "#{indentation}#{line}" if line[0].chr == "/"
+
+		match = line.match /function ([^(]+)\(([^)]*)\):([^;]+)/
+		($stderr.puts "Invalid line: #{line}"; next "/* invalid line */") unless match
+
+		func_num += 1
+		func, args, ret = match.captures
+		next nil if options[:ignore].include? func
+
+		func_name = "AIRSteam_#{func[0].chr.upcase + func[1,func.size]}"
+		arg_names = args.split(/:[^,]+(?:,\s*)?/)
+		options[:format].call(line, func_name, func_num, arg_names, ret).gsub(/^/, indentation)
+	end.reject{|a|a.nil?}
+
+	indentation =
+	file_content[start_idx + 1..end_idx - 1] = replacement
+
+	File.open(options[:file], "w") {|f|
+		f.puts file_content.join("\n")
+	}
 end

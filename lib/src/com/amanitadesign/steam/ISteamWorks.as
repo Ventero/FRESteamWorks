@@ -19,6 +19,9 @@ package com.amanitadesign.steam {
 		function addOverlayWorkaround(container:DisplayObjectContainer,
 			alwaysVisible:Boolean = false, color:uint = 0x000000):void;
 
+		// the below list was automatically generated with generateAPI.rb
+
+		// START GENERATED CODE
 		function runCallbacks():Boolean
 		function getUserID():String
 		function getAppID():uint
@@ -100,5 +103,6 @@ package com.amanitadesign.steam {
 		function installDLC(appId:uint):Boolean
 		function uninstallDLC(appId:uint):Boolean
 		function DLCInstalledResult():uint
+		// END GENERATED CODE
 	}
 }
