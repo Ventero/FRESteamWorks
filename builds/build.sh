@@ -30,7 +30,7 @@ for type in Debug Release; do
 	unzip -o FRESteamWorksLib.swc
 
 	cp ../../../lib/bin/descriptor.xml .
-	version="$(git describe --long --always --tags | sed 's/-g.\+//;s/-/./')"
+	version="$(git describe --long --always --tags | sed 's/-g.*//;s/-/./')"
 	sed -E -i "" -e "s/<versionNumber>[^<]+/<versionNumber>${version##v}/" descriptor.xml
 
 	"$AIR_SDK"/bin/adt -package -target ane FRESteamWorks.ane descriptor.xml \
