@@ -29,6 +29,7 @@ defaults["String"] = ["readStringResponse()", "\"\""]
 ignore = Hash.new []
 ignore["l"] = ["init", "runCallbacks", "useCrashHandler", "fileRead", "UGCRead"]
 ignore["w"] = ["init"]
+ignore["i"] = ["init"]
 
 num = 0
 contents.each do |line|
