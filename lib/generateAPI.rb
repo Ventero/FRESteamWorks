@@ -98,7 +98,6 @@ files.each do |options|
 		options[:format].call(line, func_name, func_num, arg_names, ret).gsub(/^/, indentation)
 	end.reject{|a|a.nil?}
 
-	indentation =
 	file_content[start_idx + 1..end_idx - 1] = replacement
 
 	File.open(options[:file], "w") {|f|
