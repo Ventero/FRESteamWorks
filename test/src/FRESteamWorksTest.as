@@ -108,6 +108,8 @@ package
 				_appId = Steamworks.getAppID();
 				log("App ID: " + _appId);
 				log("Persona name: " + Steamworks.getPersonaName());
+				log("Current game language: " + Steamworks.getCurrentGameLanguage());
+				log("Available game languages: " + Steamworks.getAvailableGameLanguages());
 				log("isCloudEnabledForApp() == "+Steamworks.isCloudEnabledForApp());
 				log("getFileCount() == "+Steamworks.getFileCount());
 				log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt'));
