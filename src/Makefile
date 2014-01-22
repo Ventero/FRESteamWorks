@@ -29,13 +29,14 @@ obj: SteamSDK
 SteamSDK:
 	ln -sf $(STEAM_SDK) $@
 
+$(dir)/FRESteamWorks.o: $(dir)/functions.h
 $(dir)/FRESteamWorks.so: $(obj)
 	$(CXX) -shared $^ $(LIB) -o $@
 
 $(wdir)/APIWrapper: $(wdir)/APIWrapper.o $(dir)/CSteam.o $(wdir)/libamf.a
 	$(CXX) $^ $(LIB) -o $@
 
-$(wdir)/APIWrapper.o: $(wdir)/APIWrapper.cpp $(wdir)/APIWrapper.h SteamSDK
+$(wdir)/APIWrapper.o: $(wdir)/APIWrapper.cpp $(wdir)/APIWrapper.h $(dir)/functions.h SteamSDK
 	$(CXX) -c $(CXXFLAGS) -isystem $(wdir)/amf-cpp -I$(dir) $< -o $@
 
 $(wdir)/libamf.a: $(wdir)/amf-cpp
