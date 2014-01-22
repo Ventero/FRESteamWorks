@@ -130,14 +130,14 @@ package com.amanitadesign.steam
 			return _ExtensionContext.call("AIRSteam_GetAppID") as uint;
 		}
 
-		public function getAvailableGameLanguages():String;
+		public function getAvailableGameLanguages():String
 		{
-			return _ExtensionContext.call("AIRSteam_GetAvailableGameLanguages") as String;;
+			return _ExtensionContext.call("AIRSteam_GetAvailableGameLanguages") as String;
 		}
 
-		public function getCurrentGameLanguage():String;
+		public function getCurrentGameLanguage():String
 		{
-			return _ExtensionContext.call("AIRSteam_GetCurrentGameLanguage") as String;;
+			return _ExtensionContext.call("AIRSteam_GetCurrentGameLanguage") as String;
 		}
 
 		public function getPersonaName():String

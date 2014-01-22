@@ -22,8 +22,8 @@ package com.amanitadesign.steam {
 		function runCallbacks():Boolean
 		function getUserID():String
 		function getAppID():uint
-		function getAvailableGameLanguages():String;
-		function getCurrentGameLanguage():String;
+		function getAvailableGameLanguages():String
+		function getCurrentGameLanguage():String
 		function getPersonaName():String
 		function useCrashHandler(appID:uint, version:String, date:String, time:String):Boolean
 		/* stats/achievements */

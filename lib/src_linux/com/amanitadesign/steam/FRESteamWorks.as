@@ -434,12 +434,12 @@ package com.amanitadesign.steam {
 			return readIntResponse();
 		}
 
-		public function getAvailableGameLanguages():String; {
+		public function getAvailableGameLanguages():String {
 			if(!callWrapper(AIRSteam_GetAvailableGameLanguages, [])) return null;
 			return readResponse() as String;;
 		}
 
-		public function getCurrentGameLanguage():String; {
+		public function getCurrentGameLanguage():String {
 			if(!callWrapper(AIRSteam_GetCurrentGameLanguage, [])) return null;
 			return readResponse() as String;;
 		}
