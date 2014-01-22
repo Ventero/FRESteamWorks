@@ -215,7 +215,7 @@ public:
 	bool ControllerShutdown();
 	bool ControllerRunFrame();
 	bool GetControllerState(uint32 index, SteamControllerState_t* state);
-	bool TriggerHapticPulse(uint32 index, ESteamControllerPad targetPad, unsigned short duration);
+	bool TriggerHapticPulse(uint32 index, ESteamControllerPad targetPad, uint32 duration);
 	bool ControllerSetOverrideMode(std::string mode);
 
 protected:

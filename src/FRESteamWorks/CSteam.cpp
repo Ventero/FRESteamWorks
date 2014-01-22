@@ -691,10 +691,12 @@ bool CSteam::GetControllerState(uint32 index, SteamControllerState_t* state) {
 	return SteamController()->GetControllerState(index, state);
 }
 
-bool CSteam::TriggerHapticPulse(uint32 index, ESteamControllerPad targetPad, unsigned short duration) {
+bool CSteam::TriggerHapticPulse(uint32 index, ESteamControllerPad targetPad, uint32 duration) {
 	if (!m_bInitialized) return false;
 
-	SteamController()->TriggerHapticPulse(index, targetPad, duration);
+	unsigned short dur = static_cast<unsigned short>(
+		std::max<uint32>(duration, std::numeric_limits<unsigned short>::max()));
+	SteamController()->TriggerHapticPulse(index, targetPad, dur);
 	return true;
 }
 
