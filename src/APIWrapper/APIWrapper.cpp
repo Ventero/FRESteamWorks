@@ -229,7 +229,7 @@ void AIRSteam_GetUserID() {
 }
 
 void AIRSteam_GetAppID() {
-	if (!g_Steam) return send("");
+	if (!g_Steam) return send(0);
 
 	send(g_Steam->GetAppID());
 }
