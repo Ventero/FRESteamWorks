@@ -1,44 +1,44 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby1.9.1
 
-def create_interface line, func, num, args, ret
+def create_interface line, func
 	line.sub("public ", "")
 end
 
-def create_lib line, func, num, args, ret
+def create_lib line, func
 	<<-EOD
 #{line}
 {
-	return _ExtensionContext.call("#{func}"#{["", *args].join(", ")}) as #{ret};
+	return _ExtensionContext.call("#{func[:air_name]}"#{["", *func[:args].keys].join(", ")}) as #{func[:ret]};
 }
 	EOD
 end
 
-@defaults = Hash.new { |h,k| ["readResponse() as #{k}", "null"] }
-@defaults["Boolean"] = ["readBoolResponse()", "false"]
-@defaults["Number"] = ["readFloatResponse()", "0.0"]
-@defaults["int"] = ["readIntResponse()", "0"]
-@defaults["uint"] = ["readIntResponse()", "0"]
-@defaults["String"] = ["readStringResponse()", "\"\""]
-
-def create_lib_linux line, func, num, args, ret
-	type, default = @defaults[ret]
+@lib_lin_defaults = Hash.new { |h,k| h[k] = ["readResponse() as #{k}", "null"] }
+@lib_lin_defaults.merge!({
+	"Boolean" => ["readBoolResponse()", "false"],
+	"Number" => ["readFloatResponse()", "0.0"],
+	"int" => ["readIntResponse()", "0"],
+	"uint" => ["readIntResponse()", "0"],
+	"String" => ["readStringResponse()", "\"\""]
+})
+def create_lib_linux line, func
+	type, default = @lib_lin_defaults[func[:ret]]
 
 	<<-EOD
 #{line} {
-	if(!callWrapper(#{func}, [#{args.join(", ")}])) return #{default};
+	if(!callWrapper(#{func[:air_name]}, [#{func[:args].keys.join(", ")}])) return #{default};
 	return #{type};
 }
 	EOD
 end
 
-def create_constants_linux line, func, num, args, ret
-	"private static const #{func}:int = #{num};"
+def create_constants_linux line, func
+	"private static const #{func[:air_name]}:int = #{func[:num]};"
 end
 
-def create_macro line, func, num, args, ret
-	"X(#{func}) /* = #{num} */"
+def create_macro line, func
+	"X(#{func[:air_name]}) /* = #{func[:num]} */"
 end
-
 
 files = [
 	{
@@ -70,37 +70,51 @@ files = [
 	}
 ]
 
-contents = File.read("API.txt").split("\n")
+def parse_prototype line
+	match = line.match /function ([^(]+)\(([^)]*)\):(\w+)$/
+	raise "Invalid line: #{line}" unless match
 
-files.each do |options|
-	file_content = File.read(options[:file]).split("\n")
-
-	start_marker = options[:start]||"START GENERATED CODE"
-	end_marker = options[:end]||"END GENERATED CODE"
-	start_idx = file_content.find_index{|line| line.include? start_marker }
-	end_idx = file_content.find_index{|line| line.include? end_marker  }
-	indentation = file_content[start_idx].gsub(/^(\s*).+$/, "\\1")
-
-	func_num = -1
-	replacement = contents.map do |line|
-		next nil if line.empty?
-		next "#{indentation}#{line}" if line[0].chr == "/"
-
-		match = line.match /function ([^(]+)\(([^)]*)\):([^;]+)/
-		($stderr.puts "Invalid line: #{line}"; next "/* invalid line */") unless match
-
-		func_num += 1
-		func, args, ret = match.captures
-		next nil if options[:ignore].include? func
-
-		func_name = "AIRSteam_#{func[0].chr.upcase + func[1,func.size]}"
-		arg_names = args.split(/:[^,]+(?:,\s*)?/)
-		options[:format].call(line, func_name, func_num, arg_names, ret).gsub(/^/, indentation)
-	end.reject{|a|a.nil?}
-
-	file_content[start_idx + 1..end_idx - 1] = replacement
-
-	File.open(options[:file], "w") {|f|
-		f.puts file_content.join("\n")
+	func, args, ret = match.captures
+	return {
+		:name => func,
+		:air_name => "AIRSteam_#{func[0].chr.upcase + func[1,func.size]}",
+		# Ruby 1.9 guarantees that insertion order is maintained
+		:args => Hash[args.scan(/(\w+):([^,]+)(?:,\s*)?/)],
+		:ret => ret
 	}
 end
+
+def generate_api contents, files
+	files.each do |options|
+		file_content = File.read(options[:file]).split("\n")
+
+		start_marker = options[:start] || "START GENERATED CODE"
+		end_marker = options[:end] || "END GENERATED CODE"
+		start_idx = file_content.find_index{|line| line.include? start_marker }
+		end_idx = file_content.find_index{|line| line.include? end_marker  }
+		indentation = file_content[start_idx].scan(/^\s*/)[0]
+
+		func_num = -1
+		replacement = contents.map do |line|
+			next nil if line.empty?
+			next "#{indentation}#{line}" if line[0].chr == "/"
+
+			func_num += 1
+			func = parse_prototype line
+			func[:num] = func_num
+
+			next nil if options[:ignore].include? func[:name]
+
+			options[:format].call(line, func).gsub(/^/, indentation)
+		end.reject{|a|a.nil?}
+
+		file_content[start_idx + 1 .. end_idx - 1] = replacement
+
+		File.open(options[:file], "w") {|f|
+			f.puts file_content.join("\n")
+		}
+	end
+end
+
+contents = File.read("API.txt").split("\n")
+generate_api contents, files
