@@ -104,24 +104,6 @@ float get_float() {
 	return std::stof(item);
 }
 
-
-std::string readTempFileBuf(size_t length) {
-	std::string filename;
-	std::getline(std::cin, filename);
-	std::ifstream tempfile(filename, std::ios::in | std::ios::binary);
-
-	char* buf = new char[length];
-	tempfile.read(buf, length);
-
-	std::string result(buf, length - 1);
-
-	delete[] buf;
-	tempfile.close();
-	std::remove(filename.c_str());
-
-	return result;
-}
-
 std::string get_string() {
 	std::string item;
 	std::getline(std::cin, item);
@@ -171,6 +153,23 @@ std::vector<std::string> get_array() {
 	}
 
 	return v;
+}
+
+std::string readTempFileBuf(size_t length) {
+	std::string filename;
+	std::getline(std::cin, filename);
+	std::ifstream tempfile(filename, std::ios::in | std::ios::binary);
+
+	char* buf = new char[length];
+	tempfile.read(buf, length);
+
+	std::string result(buf, length - 1);
+
+	delete[] buf;
+	tempfile.close();
+	std::remove(filename.c_str());
+
+	return result;
 }
 
 #ifdef DEBUG

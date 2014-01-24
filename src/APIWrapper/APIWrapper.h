@@ -46,6 +46,8 @@ void send(float value);
 void send(std::string value);
 void send(std::nullptr_t);
 
+std::string readTempFileBuf(size_t length);
+
 bool get_bool();
 int32 get_int();
 float get_float();
