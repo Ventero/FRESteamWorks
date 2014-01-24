@@ -533,6 +533,8 @@ void AIRSteam_PublishWorkshopFile() {
 
 	uint32 fileType = get_int();
 
+	if (!g_Steam) return send(false);
+
 	send(g_Steam->PublishWorkshopFile(name, preview, appId, title, description,
 		ERemoteStoragePublishedFileVisibility(visibility), &tagArray,
 		EWorkshopFileType(fileType)));
