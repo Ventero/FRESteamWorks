@@ -10,6 +10,8 @@
 
 #include "CSteam.h"
 
+#include <limits>
+
 CSteam::CSteam():
 	m_FileHandle(k_UGCHandleInvalid),
 	m_PublishedFileId(0),
