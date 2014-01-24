@@ -8,6 +8,8 @@
 
 #include "APIWrapper.h"
 
+using namespace amf;
+
 CLISteam* g_Steam = NULL;
 
 Serializer serializer;

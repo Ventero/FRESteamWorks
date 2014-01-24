@@ -32,8 +32,8 @@ class CLISteam : public CSteam {
 	void DispatchEvent(char* code, char* level);
 };
 
-void sendData(Serializer&);
-void sendDataTempFile(Serializer&);
+void sendData(amf::Serializer&);
+void sendDataTempFile(amf::Serializer&);
 
 template<class T>
 void sendItem(T item);
