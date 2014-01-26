@@ -21,6 +21,7 @@ project.xcworkspace
 *.so
 *.ane
 *.dll
+*.dmg
 *.exe
 *.swc
 *.swf
