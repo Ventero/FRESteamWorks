@@ -44,13 +44,13 @@ for type in Debug Release; do
 done
 
 pushd "$target"
+pushd "../../lib/bin/"
+./compileLibLinux.swc
+popd
+
 cp Debug/FRESteamWorks.ane FRESteamWorks-Debug.ane
 cp Release/FRESteamWorks.ane FRESteamWorks.ane
-"$FLEX_SDK/bin/compc" +configname=air -source-path ../../lib/src_linux -optimize \
-                      -include-classes com.amanitadesign.steam.FRESteamWorks \
-                                       com.amanitadesign.steam.SteamConstants \
-                                       com.amanitadesign.steam.SteamEvent \
-                      -swf-version=11 -output FRESteamWorksLibLinux.swc
+cp ../../lib/bin/FRESteamWorksLibLinux.swc .
 popd
 
 
