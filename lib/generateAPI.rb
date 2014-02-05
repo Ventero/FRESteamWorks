@@ -1,9 +1,5 @@
 #!/usr/bin/ruby1.9.1
 
-def create_interface line, func
-	line.sub("public ", "")
-end
-
 def create_lib line, func
 	<<-EOD
 #{line}
@@ -32,19 +28,11 @@ def create_lib_linux line, func
 	EOD
 end
 
-def create_constants_linux line, func
-	"private static const #{func[:air_name]}:int = #{func[:num]};"
-end
-
-def create_macro line, func
-	"X(#{func[:air_name]}) /* = #{func[:num]} */"
-end
-
 files = [
 	{
 		:file => "src/com/amanitadesign/steam/ISteamWorks.as",
 		:ignore => ["init"],
-		:format => method(:create_interface)
+		:format => -> line, func { line.sub "public ", "" }
 	},
 	{
 		:file => "src/com/amanitadesign/steam/FRESteamWorks.as",
@@ -59,14 +47,14 @@ files = [
 	{
 		:file => "src_linux/com/amanitadesign/steam/FRESteamWorks.as",
 		:ignore => [],
-		:format => method(:create_constants_linux),
+		:format => -> line, func { "private static const #{func[:air_name]}:int = #{func[:num]};" },
 		:start => "START GENERATED VALUES",
 		:end => "END GENERATED VALUES"
 	},
 	{
 		:file => "../src/FRESteamWorks/functions.h",
 		:ignore => [],
-		:format => method(:create_macro)
+		:format => -> line, func { "X(#{func[:air_name]}) /* = #{func[:num]} */" }
 	}
 ]
 
