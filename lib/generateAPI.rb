@@ -75,11 +75,15 @@ def parse_prototype line
 	raise "Invalid line: #{line}" unless match
 
 	func, args, ret = match.captures
+
+	arg_spec = args.scan(/(\w+):([^,]+)(?:,\s*)?/)
+	arg_map = Hash[arg_spec]
+	raise RuntimeError.new("Hash insertion order not maintained") unless arg_spec == arg_map.to_a
 	return {
 		:name => func,
 		:air_name => "AIRSteam_#{func[0].chr.upcase + func[1,func.size]}",
 		# Ruby 1.9 guarantees that insertion order is maintained
-		:args => Hash[args.scan(/(\w+):([^,]+)(?:,\s*)?/)],
+		:args => arg_map,
 		:ret => ret
 	}
 end
