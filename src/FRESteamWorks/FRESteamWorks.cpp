@@ -155,14 +155,15 @@ AIR_FUNC(AIRSteam_Init) {
 	// check if already initialized
 	if (g_Steam) return FREBool(true);
 
-	bool ret = SteamAPI_Init();
-	if (ret) g_Steam = new ANESteam();
+	if (!SteamAPI_Init()) return FREBool(false);
+
+	g_Steam = new ANESteam();
 
 #ifdef DEBUG
 	SteamUtils()->SetWarningMessageHook(steamWarningMessageHook);
 #endif
 
-	return FREBool(ret);
+	return FREBool(true);
 }
 
 AIR_FUNC(AIRSteam_RunCallbacks) {
