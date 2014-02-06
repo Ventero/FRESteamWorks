@@ -6,11 +6,8 @@
  *  Copyright (c) 2013 Level Up Labs, LLC. All rights reserved.
  */
 
-
-package com.amanitadesign.steam
-{
-	public class DownloadUGCResult
-	{
+package com.amanitadesign.steam {
+	public class DownloadUGCResult {
 		public var result:int;
 		public var fileHandle:String;
 		public var appID:uint;

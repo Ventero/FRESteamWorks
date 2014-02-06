@@ -6,10 +6,8 @@
  *  Copyright (c) 2013 Level Up Labs, LLC. All rights reserved.
  */
 
-package com.amanitadesign.steam
-{
-	public class SteamResults
-	{
+package com.amanitadesign.steam {
+	public class SteamResults {
 		public static const OK:int	= 1;
 		public static const Fail:int = 2;
 		public static const NoConnection:int = 3;

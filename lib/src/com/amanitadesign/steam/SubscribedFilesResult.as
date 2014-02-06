@@ -6,10 +6,8 @@
  *  Copyright (c) 2013 Level Up Labs, LLC. All rights reserved.
  */
 
-package com.amanitadesign.steam
-{
-	public class SubscribedFilesResult
-	{
+package com.amanitadesign.steam {
+	public class SubscribedFilesResult {
 		public var result:int;
 		public var resultsReturned:int;
 		public var totalResults:int;

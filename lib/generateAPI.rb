@@ -2,8 +2,7 @@
 
 def create_lib line, func
 	<<-EOD
-#{line}
-{
+#{line} {
 	return _ExtensionContext.call("#{func[:air_name]}"#{["", *func[:args].keys].join(", ")}) as #{func[:ret]};
 }
 	EOD

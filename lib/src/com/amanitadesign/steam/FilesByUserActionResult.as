@@ -6,10 +6,8 @@
  *  Copyright (c) 2013 Level Up Labs, LLC. All rights reserved.
  */
 
-package com.amanitadesign.steam
-{
-	public class FilesByUserActionResult
-	{
+package com.amanitadesign.steam {
+	public class FilesByUserActionResult {
 		public var result:int;
 		public var action:int;
 		public var resultsReturned:int;

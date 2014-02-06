@@ -6,10 +6,8 @@
  *  Copyright (c) 2013 Level Up Labs, LLC. All rights reserved.
  */
 
-package com.amanitadesign.steam
-{
-	public class FileDetailsResult
-	{
+package com.amanitadesign.steam {
+	public class FileDetailsResult {
 		public var result:int;
 		public var file:String;
 		public var creatorAppID:uint;

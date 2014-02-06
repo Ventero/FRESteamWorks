@@ -8,8 +8,7 @@
  *  Copyright (c) 2012-2013 Level Up Labs, LLC. All rights reserved.
  */
 
-package
-{
+package {
 	import com.amanitadesign.steam.FRESteamWorks;
 
 	import com.amanitadesign.steam.SteamEvent;
@@ -37,8 +36,7 @@ package
 	import flash.utils.ByteArray;
 	import flash.utils.setTimeout;
 
-	public class FRESteamWorksTest extends Sprite
-	{
+	public class FRESteamWorksTest extends Sprite {
 		public var Steamworks:FRESteamWorks = new FRESteamWorks();
 		public var tf:TextField;
 
@@ -49,8 +47,7 @@ package
 		private var _appId:uint;
 		private var _userId:String;
 
-		public function FRESteamWorksTest()
-		{
+		public function FRESteamWorksTest() {
 			tf = new TextField();
 			tf.x = 160;
 			tf.width = stage.stageWidth - tf.x;

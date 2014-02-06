@@ -6,10 +6,8 @@
  *  Copyright (c) 2013 Level Up Labs, LLC. All rights reserved.
  */
 
-package com.amanitadesign.steam
-{
-	public class ItemVoteDetailsResult
-	{
+package com.amanitadesign.steam {
+	public class ItemVoteDetailsResult {
 		public var result:int;
 		public var publishedFileId:String;
 		public var votesFor:int;

@@ -8,10 +8,8 @@
  *  Copyright (c) 2012-2013 Level Up Labs, LLC. All rights reserved.
  */
 
-package com.amanitadesign.steam
-{
-	public class SteamConstants
-	{
+package com.amanitadesign.steam {
+	public class SteamConstants {
 		/* response types */
 		public static const RESPONSE_OnUserStatsReceived:int = 0;
 		public static const RESPONSE_OnUserStatsStored:int = 1;

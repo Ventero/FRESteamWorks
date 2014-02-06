@@ -6,10 +6,8 @@
  *  Copyright (c) 2013 Level Up Labs, LLC. All rights reserved.
  */
 
-package com.amanitadesign.steam
-{
-	public class WorkshopConstants
-	{
+package com.amanitadesign.steam {
+	public class WorkshopConstants {
 		public static const FILETYPE_Community:int = 0;
 		public static const FILETYPE_Microtransaction:int = 1;
 		public static const FILETYPE_Collection:int = 2;
