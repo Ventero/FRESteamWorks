@@ -86,6 +86,8 @@ def generate_api contents, files
 		end_marker = options[:end] || "END GENERATED CODE"
 		start_idx = file_content.find_index{|line| line.include? start_marker }
 		end_idx = file_content.find_index{|line| line.include? end_marker  }
+		raise "Invalid indices: #{start_idx} - #{end_idx}" unless end_idx > start_idx
+
 		indentation = file_content[start_idx].scan(/^\s*/)[0]
 
 		func_num = -1
