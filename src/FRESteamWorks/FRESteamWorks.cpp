@@ -494,7 +494,7 @@ AIR_FUNC(AIRSteam_GetUGCDownloadProgress) {
 	ARG_CHECK(1, FREObject());
 
 	UGCHandle_t handle;
-	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
+	if(!FREGetUint64(argv[0], &handle)) return FREObject();
 
 	int32 downloaded, expected;
 	if(!g_Steam->GetUGCDownloadProgress(handle, &downloaded, &expected))
