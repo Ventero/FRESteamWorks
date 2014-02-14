@@ -144,17 +144,23 @@ uint64 get_uint64() {
 	return val;
 }
 
-std::vector<std::string> get_array() {
+template<typename T, typename Getter>
+std::vector<T> get_array(Getter get) {
 	int length = get_int();
-	std::vector<std::string> v;
+	std::vector<T> v;
 	if (length < 1) return v;
 
+	v.reserve(length);
 	for(int i = 0; i < length; ++i) {
-		std::string val = get_string();
+		T val = get();
 		v.push_back(val);
 	}
 
 	return v;
+}
+
+std::vector<std::string> get_string_array() {
+	return get_array<std::string>(get_string);
 }
 
 std::string readTempFileBuf(size_t length) {
@@ -529,7 +535,7 @@ void AIRSteam_PublishWorkshopFile() {
 	std::string description = get_string();
 	uint32 visibility = get_int();
 
-	std::vector<std::string> tags = get_array();
+	std::vector<std::string> tags = get_string_array();
 	SteamParamStringArray_t tagArray;
 	createParamStringArray(tags, &tagArray);
 
@@ -634,8 +640,8 @@ void AIRSteam_EnumeratePublishedWorkshopFiles() {
 	uint32 count = get_int();
 	uint32 days = get_int();
 
-	std::vector<std::string> tags = get_array();
-	std::vector<std::string> userTags = get_array();
+	std::vector<std::string> tags = get_string_array();
+	std::vector<std::string> userTags = get_string_array();
 
 	SteamParamStringArray_t tagArray, userTagArray;
 	createParamStringArray(tags, &tagArray);
@@ -711,8 +717,8 @@ void AIRSteam_EnumerateUserSharedWorkshopFiles() {
 	uint64 steamID = get_uint64();
 	uint32 start = get_int();
 
-	std::vector<std::string> required = get_array();
-	std::vector<std::string> excluded = get_array();
+	std::vector<std::string> required = get_string_array();
+	std::vector<std::string> excluded = get_string_array();
 
 	SteamParamStringArray_t requiredArray, excludedArray;
 	createParamStringArray(required, &requiredArray);
@@ -867,7 +873,7 @@ void AIRSteam_UpdatePublishedFileVisibility() {
 void AIRSteam_UpdatePublishedFileTags() {
 	PublishedFileUpdateHandle_t handle = get_uint64();
 
-	std::vector<std::string> tags = get_array();
+	std::vector<std::string> tags = get_string_array();
 	SteamParamStringArray_t tagArray;
 	createParamStringArray(tags, &tagArray);
 

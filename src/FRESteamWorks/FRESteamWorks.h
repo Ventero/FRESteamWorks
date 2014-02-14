@@ -48,7 +48,11 @@ bool FREGetDouble(FREObject, double* val);
 bool FREGetInt32(FREObject, int32* val);
 bool FREGetUint32(FREObject, uint32* val);
 bool FREGetUint64(FREObject, uint64* val);
-bool FREGetString(FREObject, std::string&);
+bool FREGetString(FREObject, std::string& val);
+bool FREGetStringP(FREObject, std::string* val);
+
+template<typename T, typename Converter>
+std::vector<T> getArray(FREObject object, Converter conv);
 
 std::vector<std::string> extractStringArray(FREObject object);
 void steamWarningMessageHook(int severity, const char* msg);

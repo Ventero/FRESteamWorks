@@ -75,6 +75,14 @@ bool FREGetString(FREObject object, std::string& str) {
 	return true;
 }
 
+bool FREGetStringP(FREObject object, std::string* str) {
+	std::string s;
+	if (!FREGetString(object, s)) return false;
+
+	*str = s;
+	return true;
+}
+
 bool FREGetBool(FREObject object, uint32* val) {
 	return (FREGetObjectAsBool(object, val) == FRE_OK);
 }
@@ -107,28 +115,36 @@ bool FREGetUint64(FREObject object, uint64* val) {
 	return true;
 }
 
-// converts a FREObject string-array to a std::vector
-std::vector<std::string> extractStringArray(FREObject object) {
-	std::vector<std::string> tags;
+template<typename T, typename Converter>
+std::vector<T> getArray(FREObject object, Converter conv) {
+	std::vector<T> ret;
 
 	uint32 arrayLength;
 	if (FREGetArrayLength(object, &arrayLength) != FRE_OK)
-		return tags;
+		return ret;
 
-	tags.reserve(arrayLength);
+	if (!arrayLength)
+		return ret;
+
+	ret.reserve(arrayLength);
 	for (uint32 i = 0; i < arrayLength; ++i) {
 		FREObject value;
 		if (FREGetArrayElementAt(object, i, &value) != FRE_OK)
 			continue;
 
-		std::string strval;
-		if (!FREGetString(value, strval))
+		T val;
+		if (!conv(value, &val))
 			continue;
 
-		tags.push_back(strval);
+		ret.push_back(val);
 	}
 
-	return tags;
+	return ret;
+}
+
+// converts a FREObject string-array to a std::vector
+std::vector<std::string> extractStringArray(FREObject object) {
+	return getArray<std::string>(object, FREGetStringP);
 }
 
 #ifdef DEBUG

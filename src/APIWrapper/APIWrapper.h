@@ -53,7 +53,11 @@ int32 get_int();
 float get_float();
 std::string get_string();
 uint64 get_uint64();
-std::vector<std::string> get_array();
+
+template<typename T, typename Getter>
+std::vector<T> get_array(Getter get);
+
+std::vector<std::string> get_string_array();
 
 void steamWarningMessageHook(int severity, const char* msg);
 
