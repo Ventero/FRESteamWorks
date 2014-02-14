@@ -52,6 +52,7 @@ bool get_bool();
 int32 get_int();
 float get_float();
 std::string get_string();
+std::string get_bytearray();
 uint64 get_uint64();
 
 template<typename T, typename Getter>
