@@ -22,9 +22,10 @@ for type in Debug Release; do
 	    "@loader_path/libsteam_api.dylib" "@rpath/../Resources/libsteam_api.dylib" \
 	    "./FRESteamWorks.framework/FRESteamWorks"
 
+	mkdir -p FRESteamWorks.framework/Versions/Current/Resources
+
 	"$FLEX_SDK/bin/compc" +configname=air -source-path ../../../lib/src -optimize \
-	                      -include-classes com.amanitadesign.steam.FRESteamWorks \
-	                                       com.amanitadesign.steam.SteamConstants \
+	                      -include-sources ../../../lib/src/ \
 	                      -swf-version=11 -output FRESteamWorksLib.swc
 
 	unzip -o FRESteamWorksLib.swc
@@ -45,7 +46,7 @@ done
 
 pushd "$target"
 pushd "../../lib/bin/"
-./compileLibLinux.swc
+./compileLinuxSWC.sh
 popd
 
 cp Debug/FRESteamWorks.ane FRESteamWorks-Debug.ane
