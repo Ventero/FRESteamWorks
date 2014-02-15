@@ -362,6 +362,127 @@ void AIRSteam_ResetAllStats() {
 }
 
 /*
+ * leaderboards
+ */
+
+void AIRSteam_FindLeaderboard() {
+	std::string name = get_string();
+	if (!g_Steam || name.empty()) return send(false);
+
+	send(g_Steam->FindLeaderboard(name));
+}
+
+void AIRSteam_FindLeaderboardResult() {
+	if (!g_Steam) return send("0");
+
+	send(g_Steam->FindLeaderboardResult());
+}
+
+void AIRSteam_GetLeaderboardName() {
+	SteamLeaderboard_t handle = get_uint64();
+	if (!g_Steam || handle == 0) return send("");
+
+	send(g_Steam->GetLeaderboardName(handle));
+}
+
+void AIRSteam_GetLeaderboardEntryCount() {
+	SteamLeaderboard_t handle = get_uint64();
+	if (!g_Steam || handle == 0) return send(0);
+
+	send(g_Steam->GetLeaderboardEntryCount(handle));
+}
+
+void AIRSteam_GetLeaderboardSortMethod() {
+	SteamLeaderboard_t handle = get_uint64();
+	if (!g_Steam || handle == 0) return send(0);
+
+	send(g_Steam->GetLeaderboardSortMethod(handle));
+}
+
+void AIRSteam_GetLeaderboardDisplayType() {
+	SteamLeaderboard_t handle = get_uint64();
+	if (!g_Steam || handle == 0) return send(0);
+
+	send(g_Steam->GetLeaderboardDisplayType(handle));
+}
+
+void AIRSteam_UploadLeaderboardScore() {
+	SteamLeaderboard_t handle = get_uint64();
+	uint32 method = get_int();
+	int32 score = get_int();
+	std::vector<int32> details = get_array<int32>(get_int);
+
+	if (!g_Steam) return send(false);
+
+	send(g_Steam->UploadLeaderboardScore(handle,
+		ELeaderboardUploadScoreMethod(method), score,
+		details.data(), details.size()));
+}
+
+void AIRSteam_UploadLeaderboardScoreResult() {
+	if (!g_Steam) return send(nullptr);
+
+	auto details = g_Steam->UploadLeaderboardScoreResult();
+	if (!details) return send(nullptr);
+
+	AmfObjectTraits traits("com.amanitadesign.steam.UploadLeaderboardScoreResult", false, false);
+	AmfObject obj(traits);
+
+	obj.addSealedProperty("success", AmfBool(details->m_bSuccess));
+	obj.addSealedProperty("leaderboardHandle", AmfString(std::to_string(details->m_hSteamLeaderboard)));
+	obj.addSealedProperty("score", AmfInteger(details->m_nScore));
+	obj.addSealedProperty("scoreChanged", AmfBool(details->m_bScoreChanged));
+	obj.addSealedProperty("newGlobalRank", AmfInteger(details->m_nGlobalRankNew));
+	obj.addSealedProperty("previousGlobalRank", AmfInteger(details->m_nGlobalRankPrevious));
+
+	sendItem(obj);
+}
+
+void AIRSteam_DownloadLeaderboardEntries() {
+	SteamLeaderboard_t handle = get_uint64();
+	uint32 request = get_int();
+	int rangeStart = get_int();
+	int rangeEnd = get_int();
+
+	if (!g_Steam) return send(false);
+
+	send(g_Steam->DownloadLeaderboardEntries(handle,
+		ELeaderboardDataRequest(request), rangeStart, rangeEnd));
+}
+
+void AIRSteam_DownloadLeaderboardEntriesResult() {
+	int32 numDetails = get_int();
+	if (!g_Steam) return sendItem(AmfArray());
+
+	auto entries = g_Steam->DownloadLeaderboardEntriesResult(numDetails);
+	if (entries.empty()) return sendItem(AmfArray());
+
+	AmfArray array;
+	for (size_t i = 0; i < entries.size(); ++i) {
+		AmfObjectTraits traits("com.amanitadesign.steam.LeaderboardEntry", false, false);
+		AmfObject obj(traits);
+
+		LeaderboardEntry_t *e = &entries[i].entry;
+		obj.addSealedProperty("userID", AmfString(std::to_string(e->m_steamIDUser.ConvertToUint64())));
+		obj.addSealedProperty("globalRank", AmfInteger(e->m_nGlobalRank));
+		obj.addSealedProperty("score", AmfInteger(e->m_nScore));
+		obj.addSealedProperty("numDetails", AmfInteger(e->m_cDetails));
+
+		AmfArray details;
+		int32 dets = e->m_cDetails;
+		if (numDetails < dets) dets = numDetails;
+		for (int d = 0; d < dets; ++d) {
+			details.push_back(AmfInteger(entries[i].details[d]));
+		}
+		obj.addSealedProperty("details", details);
+
+		array.push_back(obj);
+	}
+
+	sendItem(array);
+}
+
+/*
  * remote storage
  */
 

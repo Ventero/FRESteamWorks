@@ -13,6 +13,7 @@
 	#define snprintf _snprintf
 #endif
 
+#include <algorithm>
 #include <map>
 #include <stdio.h>
 #include <string>
@@ -26,6 +27,9 @@ enum ResponseTypes {
 	RESPONSE_OnUserStatsReceived,
 	RESPONSE_OnUserStatsStored,
 	RESPONSE_OnAchievementStored,
+	RESPONSE_OnFindLeaderboard,
+	RESPONSE_OnUploadLeaderboardScore,
+	RESPONSE_OnDownloadLeaderboardEntries,
 	RESPONSE_OnGameOverlayActivated,
 	RESPONSE_OnFileShared,
 	RESPONSE_OnUGCDownload,
@@ -45,6 +49,44 @@ enum ResponseTypes {
 	RESPONSE_OnUpdateUserPublishedItemVote,
 	RESPONSE_OnSetUserPublishedFileAction,
 	RESPONSE_OnDLCInstalled
+};
+
+// used to store a LeaderboardEntry_t in combination with any possible details
+class LeaderboardEntry {
+public:
+	LeaderboardEntry(int maxDetails) :
+		max_details(maxDetails),
+		details(nullptr)
+	{
+		if (max_details) details = new int32[max_details];
+	}
+
+	LeaderboardEntry(const LeaderboardEntry& other) :
+		entry(other.entry),
+		max_details(other.max_details),
+		details(nullptr)
+	{
+		if (max_details) {
+			details = new int32[max_details];
+			std::copy(other.details, other.details + max_details, details);
+		}
+	}
+	
+	LeaderboardEntry& operator=(LeaderboardEntry other) {
+		std::swap(entry, other.entry);
+		std::swap(max_details, other.max_details);
+		std::swap(details, other.details);
+
+        return *this;
+	}
+
+	~LeaderboardEntry() {
+		delete[] details;
+	}
+
+	LeaderboardEntry_t entry;
+	int max_details;
+	int32 *details;
 };
 
 class CSteam {
@@ -70,6 +112,22 @@ public:
 	bool SetStat(std::string name, float value);
 	bool StoreStats();
 	bool ResetAllStats(bool bAchievementsToo);
+
+	// leaderboards
+	bool FindLeaderboard(std::string name);
+	SteamLeaderboard_t FindLeaderboardResult();
+	std::string GetLeaderboardName(SteamLeaderboard_t handle);
+	int GetLeaderboardEntryCount(SteamLeaderboard_t handle);
+	ELeaderboardSortMethod GetLeaderboardSortMethod(SteamLeaderboard_t handle);
+	ELeaderboardDisplayType GetLeaderboardDisplayType(SteamLeaderboard_t handle);
+	bool UploadLeaderboardScore(SteamLeaderboard_t handle,
+		ELeaderboardUploadScoreMethod method, int32 score,
+		const int32* scoreDetails, int detailscount);
+	LeaderboardScoreUploaded_t* UploadLeaderboardScoreResult();
+	bool DownloadLeaderboardEntries(SteamLeaderboard_t handle,
+		ELeaderboardDataRequest request,
+		int rangeStart, int rangeEnd);
+	std::vector<LeaderboardEntry> DownloadLeaderboardEntriesResult(int maxDetails);
 
 	// remote storage
 	int32 GetFileCount();
@@ -161,6 +219,9 @@ private:
 	bool m_bInitialized;
 
 	// the most recently received *Result
+	SteamLeaderboard_t m_CurrentLeaderboard;
+	LeaderboardScoreUploaded_t m_ScoreUpload;
+	LeaderboardScoresDownloaded_t m_ScoreDownloaded;
 	UGCHandle_t m_FileHandle;
 	std::map<UGCHandle_t, RemoteStorageDownloadUGCResult_t> m_DownloadResults;
 	PublishedFileId_t m_PublishedFileId;
@@ -191,6 +252,17 @@ private:
 	               m_CallbackUserStatsStored);
 	STEAM_CALLBACK(CSteam, OnAchievementStored,
 	               UserAchievementStored_t, m_CallbackAchievementStored);
+
+	// leaderboards
+	STEAM_CALLRESULT(CSteam, OnFindLeaderboard,
+	                 LeaderboardFindResult_t,
+	                 m_CallbackFindLeaderboard);
+	STEAM_CALLRESULT(CSteam, OnUploadLeaderboardScore,
+	                 LeaderboardScoreUploaded_t,
+	                 m_CallbackUploadLeaderboardScore);
+	STEAM_CALLRESULT(CSteam, OnDownloadLeaderboardEntries,
+	                 LeaderboardScoresDownloaded_t,
+	                 m_CallbackDownloadLeaderboardEntries);
 
 	// workshop
 	STEAM_CALLRESULT(CSteam, OnFileShare,

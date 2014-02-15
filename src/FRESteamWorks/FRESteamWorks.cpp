@@ -337,6 +337,145 @@ AIR_FUNC(AIRSteam_ResetAllStats) {
 }
 
 /*
+ * leaderboards
+ */
+AIR_FUNC(AIRSteam_FindLeaderboard) {
+	ARG_CHECK(1, FREBool(false));
+
+	std::string name;
+	if (!FREGetString(argv[0], name)) return FREBool(false);
+
+	return FREBool(g_Steam->FindLeaderboard(name));
+}
+
+AIR_FUNC(AIRSteam_FindLeaderboardResult) {
+	ARG_CHECK(0, FREUint64(0));
+
+	return FREUint64(g_Steam->FindLeaderboardResult());
+}
+
+AIR_FUNC(AIRSteam_GetLeaderboardName) {
+	ARG_CHECK(1, FREString(""));
+
+	SteamLeaderboard_t handle;
+	if (!FREGetUint64(argv[0], &handle)) return FREString("");
+
+	return FREString(g_Steam->GetLeaderboardName(handle));
+}
+
+AIR_FUNC(AIRSteam_GetLeaderboardEntryCount) {
+	ARG_CHECK(1, FREInt(0));
+
+	SteamLeaderboard_t handle;
+	if (!FREGetUint64(argv[0], &handle)) return FREInt(0);
+
+	return FREInt(g_Steam->GetLeaderboardEntryCount(handle));
+}
+
+AIR_FUNC(AIRSteam_GetLeaderboardSortMethod) {
+	ARG_CHECK(1, FREUint(0));
+
+	SteamLeaderboard_t handle;
+	if (!FREGetUint64(argv[0], &handle)) return FREInt(0);
+
+	return FREUint(g_Steam->GetLeaderboardSortMethod(handle));
+}
+
+AIR_FUNC(AIRSteam_GetLeaderboardDisplayType) {
+	ARG_CHECK(1, FREUint(0));
+
+	SteamLeaderboard_t handle;
+	if (!FREGetUint64(argv[0], &handle)) return FREInt(0);
+
+	return FREUint(g_Steam->GetLeaderboardDisplayType(handle));
+}
+
+AIR_FUNC(AIRSteam_UploadLeaderboardScore) {
+	ARG_CHECK(4, FREBool(false));
+
+	SteamLeaderboard_t handle;
+	uint32 method;
+	int32 score;
+	if (!FREGetUint64(argv[0], &handle) ||
+	    !FREGetUint32(argv[1], &method) ||
+	    !FREGetInt32(argv[2], &score)) return FREBool(false);
+
+	std::vector<int32> details = getArray<int32>(argv[3], FREGetInt32);
+
+	return FREBool(g_Steam->UploadLeaderboardScore(handle,
+		ELeaderboardUploadScoreMethod(method), score,
+		details.data(), details.size()));
+}
+
+AIR_FUNC(AIRSteam_UploadLeaderboardScoreResult) {
+	FREObject result;
+	FRENewObject((const uint8_t*)"com.amanitadesign.steam.UploadLeaderboardScoreResult", 0, NULL, &result, NULL);
+
+	ARG_CHECK(0, result);
+
+	auto details = g_Steam->UploadLeaderboardScoreResult();
+	if (!details) return result;
+
+	SET_PROP(result, "success",            FREBool(details->m_bSuccess != 0));
+	SET_PROP(result, "leaderboardHandle",  FREUint64(details->m_hSteamLeaderboard));
+	SET_PROP(result, "score",              FREInt(details->m_nScore));
+	SET_PROP(result, "scoreChanged",       FREBool(details->m_bScoreChanged != 0));
+	SET_PROP(result, "newGlobalRank",      FREInt(details->m_nGlobalRankNew));
+	SET_PROP(result, "previousGlobalRank", FREInt(details->m_nGlobalRankPrevious));
+
+	return result;
+}
+
+AIR_FUNC(AIRSteam_DownloadLeaderboardEntries) {
+	ARG_CHECK(4, FREBool(false));
+
+	SteamLeaderboard_t handle;
+	uint32 request;
+	int rangeStart, rangeEnd;
+	if (!FREGetUint64(argv[0], &handle) ||
+	    !FREGetUint32(argv[1], &request) ||
+	    !FREGetInt32(argv[2], &rangeStart) ||
+	    !FREGetInt32(argv[3], &rangeEnd)) return FREBool(false);
+
+	return FREBool(g_Steam->DownloadLeaderboardEntries(handle,
+		ELeaderboardDataRequest(request), rangeStart, rangeEnd));
+}
+
+AIR_FUNC(AIRSteam_DownloadLeaderboardEntriesResult) {
+	ARG_CHECK(1, FREArray(0));
+
+	int32 numDetails;
+	if (!FREGetInt32(argv[0], &numDetails)) return FREArray(0);
+
+	auto entries = g_Steam->DownloadLeaderboardEntriesResult(numDetails);
+	if (entries.empty()) return FREArray(0);
+
+	FREObject array = FREArray(entries.size());
+	for (size_t i = 0; i < entries.size(); ++i) {
+		FREObject el;
+		FRENewObject((const uint8_t*)"com.amanitadesign.steam.LeaderboardEntry", 0, NULL, &el, NULL);
+
+		LeaderboardEntry_t *e = &entries[i].entry;
+		SET_PROP(el, "userID",     FREUint64(e->m_steamIDUser.ConvertToUint64()));
+		SET_PROP(el, "globalRank", FREInt(e->m_nGlobalRank));
+		SET_PROP(el, "score",      FREInt(e->m_nScore));
+		SET_PROP(el, "numDetails", FREInt(e->m_cDetails));
+
+		int32 dets = e->m_cDetails;
+		if (numDetails < dets) dets = numDetails;
+		FREObject details = FREArray(dets);
+		for (int d = 0; d < dets; ++d) {
+			FRESetArrayElementAt(details, d, FREInt(entries[i].details[d]));
+		}
+		SET_PROP(el, "details", details);
+
+		FRESetArrayElementAt(array, i, el);
+	}
+
+	return array;
+}
+
+/*
  * cloud storage
  */
 

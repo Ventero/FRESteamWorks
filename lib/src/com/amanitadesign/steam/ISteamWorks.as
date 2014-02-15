@@ -40,6 +40,17 @@ package com.amanitadesign.steam {
 		function setStatFloat(name:String, value:Number):Boolean
 		function storeStats():Boolean
 		function resetAllStats(achievementsToo:Boolean):Boolean
+		/* leaderboards */
+		function findLeaderboard(name:String):Boolean
+		function findLeaderboardResult():String
+		function getLeaderboardName(handle:String):String
+		function getLeaderboardEntryCount(handle:String):int
+		function getLeaderboardSortMethod(handle:String):uint
+		function getLeaderboardDisplayType(handle:String):uint
+		function uploadLeaderboardScore(handle:String, method:uint, score:int, details:Array = null):Boolean
+		function uploadLeaderboardScoreResult():UploadLeaderboardScoreResult
+		function downloadLeaderboardEntries(handle:String, request:uint = UserStatsConstants.DATAREQUEST_GlobalAroundUser, rangeStart:int = -4, rangeEnd:int = 5):Boolean
+		function downloadLeaderboardEntriesResult(numDetails:int = 0):Array
 		/* cloud */
 		function getFileCount():int
 		function getFileSize(name:String):int

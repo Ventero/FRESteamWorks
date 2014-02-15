@@ -17,6 +17,17 @@ public function setStatInt(name:String, value:int):Boolean
 public function setStatFloat(name:String, value:Number):Boolean
 public function storeStats():Boolean
 public function resetAllStats(achievementsToo:Boolean):Boolean
+/* leaderboards */
+public function findLeaderboard(name:String):Boolean
+public function findLeaderboardResult():String
+public function getLeaderboardName(handle:String):String
+public function getLeaderboardEntryCount(handle:String):int
+public function getLeaderboardSortMethod(handle:String):uint
+public function getLeaderboardDisplayType(handle:String):uint
+public function uploadLeaderboardScore(handle:String, method:uint, score:int, details:Array = null):Boolean
+public function uploadLeaderboardScoreResult():UploadLeaderboardScoreResult
+public function downloadLeaderboardEntries(handle:String, request:uint = UserStatsConstants.DATAREQUEST_GlobalAroundUser, rangeStart:int = -4, rangeEnd:int = 5):Boolean
+public function downloadLeaderboardEntriesResult(numDetails:int = 0):Array
 /* cloud */
 public function getFileCount():int
 public function getFileSize(name:String):int

@@ -14,6 +14,10 @@ package {
 	import com.amanitadesign.steam.SteamEvent;
 	import com.amanitadesign.steam.SteamResults;
 
+	import com.amanitadesign.steam.LeaderboardEntry;
+	import com.amanitadesign.steam.UserStatsConstants;
+	import com.amanitadesign.steam.UploadLeaderboardScoreResult;
+
 	import com.amanitadesign.steam.SteamConstants;
 	import com.amanitadesign.steam.WorkshopConstants;
 
@@ -44,6 +48,7 @@ package {
 		private var _buttonContainer:Sprite;
 		private var _enumerateContainer:Sprite;
 		private var _overlayContainer:Sprite;
+		private var _leaderboardsContainer:Sprite;
 		private var _appId:uint;
 		private var _userId:String;
 
@@ -60,6 +65,7 @@ package {
 			_buttonContainer = new Sprite();
 			_enumerateContainer = new Sprite();
 			_overlayContainer = new Sprite();
+			_leaderboardsContainer = new Sprite();
 			_container.addChild(_buttonContainer);
 
 			addButton("Check stats/achievements", checkAchievements, _buttonContainer);
@@ -73,6 +79,7 @@ package {
 			addButton("Invalid API call", invalidCall, _buttonContainer);
 			addButton("Enumerate workshop", null, _buttonContainer, _enumerateContainer);
 			addButton("Show overlay", null, _buttonContainer, _overlayContainer);
+			addButton("Query leaderboard", null, _buttonContainer, _leaderboardsContainer);
 
 			addButton("Back", null, _enumerateContainer);
 			addButton("Sub'd files (unsub/dl/action)", enumerateSubscribedFiles, _enumerateContainer);
@@ -88,6 +95,16 @@ package {
 			addButton("Show webpage overlay", activateOverlayToWebpage, _overlayContainer);
 			addButton("Show store overlay", activateOverlayToStore, _overlayContainer);
 			addButton("Show overlay invite dialog", activateOverlayInvite, _overlayContainer);
+
+			addButton("Back", null, _leaderboardsContainer);
+			addButton("Get top global", getTopScores, _leaderboardsContainer);
+			addButton("Get user", getUserScore, _leaderboardsContainer);
+			addButton("Get user with data", getUserScoreWithData, _leaderboardsContainer);
+			addButton("Get around user", getScoresAroundUser, _leaderboardsContainer);
+			addButton("Get friends", getFriendScores, _leaderboardsContainer);
+			addButton("Upload, keep best", uploadScore, _leaderboardsContainer);
+			addButton("Upload, force", uploadForceScore, _leaderboardsContainer);
+			addButton("Upload with data", uploadScoreWithData, _leaderboardsContainer);
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
 			Steamworks.addOverlayWorkaround(stage, true);
@@ -116,6 +133,7 @@ package {
 				// TODO: find better appID to test this for (i.e. one that can
 				//       potentially be installed)
 				log("isDLCInstalled(999999) == " + Steamworks.isDLCInstalled(999999));
+				log("findLeaderboard('Feet Traveled') == " + Steamworks.findLeaderboard('Feet Traveled'));
 
 				var quota:Array = Steamworks.getQuota();
 				log("getQuota() == " + (quota ? "[" + quota.join(", ") + "]" : "null"));
@@ -361,9 +379,93 @@ package {
 			log("getPublishedFileDetails(undefined) == " + res);
 		}
 
+		private function getTopScores(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			if(!leaderboard) {
+				log("No Leaderboard handle set")
+				return;
+			}
+
+			log("downloadLeaderboardEntries(...) == " + Steamworks.downloadLeaderboardEntries(
+				leaderboard, UserStatsConstants.DATAREQUEST_Global, 1, 10));
+		}
+
+		private function getUserScore(e:Event = null):void {
+			getScoresAroundUser(e, 0, 0);
+		}
+
+		private function getUserScoreWithData(e:Event = null):void {
+			scoreDetails = 3;
+			getScoresAroundUser(e, 0, 0);
+		}
+
+		private function getScoresAroundUser(e:Event = null, start:int = -4, end:int = 5):void {
+			if(!Steamworks.isReady) return;
+
+			if(!leaderboard) {
+				log("No Leaderboard handle set")
+				return;
+			}
+
+			log("downloadLeaderboardEntries(...) == " + Steamworks.downloadLeaderboardEntries(
+				leaderboard, UserStatsConstants.DATAREQUEST_GlobalAroundUser, start, end));
+		}
+
+		private function getFriendScores(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			if(!leaderboard) {
+				log("No Leaderboard handle set")
+				return;
+			}
+
+			log("downloadLeaderboardEntries(...) == " + Steamworks.downloadLeaderboardEntries(
+				leaderboard, UserStatsConstants.DATAREQUEST_Friends));
+		}
+
+		private function uploadScore(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			if(!leaderboard) {
+				log("No Leaderboard handle set")
+				return;
+			}
+
+			log("uploadScore(...) == " + Steamworks.uploadLeaderboardScore(leaderboard,
+				UserStatsConstants.UPLOADSCOREMETHOD_KeepBest, 15))
+		}
+
+		private function uploadForceScore(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			if(!leaderboard) {
+				log("No Leaderboard handle set")
+				return;
+			}
+
+			log("uploadScore(...) == " + Steamworks.uploadLeaderboardScore(leaderboard,
+				UserStatsConstants.UPLOADSCOREMETHOD_ForceUpdate, 20))
+		}
+
+		private function uploadScoreWithData(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			if(!leaderboard) {
+				log("No Leaderboard handle set")
+				return;
+			}
+
+			scoreDetails = 3;
+			log("uploadScore(...) == " + Steamworks.uploadLeaderboardScore(leaderboard,
+				UserStatsConstants.UPLOADSCOREMETHOD_ForceUpdate, 20, [1, 2, 3]))
+		}
+
 		private var id:String;
 		private var ugcHandle:String;
 		private var publishedFile:String;
+		private var leaderboard:String;
+		private var scoreDetails:int = 0;
 		private function onSteamResponse(e:SteamEvent):void{
 			var apiCall:Boolean;
 			var i:int;
@@ -376,6 +478,39 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnAchievementStored:
 					log("RESPONSE_OnAchievementStored: "+e.response);
+					break;
+				case SteamConstants.RESPONSE_OnFindLeaderboard:
+					log("RESPONSE_OnFindLeaderboad: " + e.response);
+					if(e.response != SteamResults.OK) break;
+					leaderboard = Steamworks.findLeaderboardResult();
+					log("findLeaderboardResult() == " + leaderboard);
+					log("getLeaderboardName(...) == " + Steamworks.getLeaderboardName(leaderboard));
+					log("getLeaderboardEntryCount(...) == " + Steamworks.getLeaderboardEntryCount(leaderboard));
+					log("getLeaderboardSortMethod(...) == " + Steamworks.getLeaderboardSortMethod(leaderboard));
+					log("getLeaderboardDisplayType(...) == " + Steamworks.getLeaderboardDisplayType(leaderboard));
+					break;
+				case SteamConstants.RESPONSE_OnDownloadLeaderboardEntries:
+					log("RESPONSE_OnDownloadLeaderboardEntries: " + e.response);
+					if(e.response != SteamResults.OK) break;
+					var entries:Array = Steamworks.downloadLeaderboardEntriesResult(scoreDetails);
+					scoreDetails = 0;
+					log("downloadLeaderboardEntriesResult(" + scoreDetails + ") == " + (entries ? ("Array, size " + entries.length) : "null"));
+					for(i = 0; i < entries.length; ++i) {
+						var en:LeaderboardEntry = entries[i];
+						log(i + ": " + en.userID + ", " + en.globalRank + ", " + en.score + ", " + en.numDetails + "//" + en.details.length);
+						var actualDetails:int = Math.max(scoreDetails, en.details.length);
+						for(var d:int = 0; d < actualDetails; ++d)
+							log("\tdetails[" + d + "] == " + en.details[d]);
+					}
+					break;
+				case SteamConstants.RESPONSE_OnUploadLeaderboardScore:
+					log("RESPONSE_OnUploadLeaderboardScore: " + e.response);
+					if(e.response != SteamResults.OK) break;
+					var sr:UploadLeaderboardScoreResult = Steamworks.uploadLeaderboardScoreResult();
+					log("uploadLeaderboardScoreResult() == " + sr);
+					log("success: " + sr.success + ", score: " + sr.score + ", changed: " + sr.scoreChanged +
+						", rank: " + sr.previousGlobalRank + " -> " + sr.newGlobalRank);
+					getUserScore(null);
 					break;
 				case SteamConstants.RESPONSE_OnFileShared:
 					log("RESPONSE_OnFileShared: " + e.response);

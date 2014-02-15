@@ -180,6 +180,47 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_ResetAllStats", achievementsToo) as Boolean;
 		}
 
+		/* leaderboards */
+		public function findLeaderboard(name:String):Boolean {
+			return _ExtensionContext.call("AIRSteam_FindLeaderboard", name) as Boolean;
+		}
+
+		public function findLeaderboardResult():String {
+			return _ExtensionContext.call("AIRSteam_FindLeaderboardResult") as String;
+		}
+
+		public function getLeaderboardName(handle:String):String {
+			return _ExtensionContext.call("AIRSteam_GetLeaderboardName", handle) as String;
+		}
+
+		public function getLeaderboardEntryCount(handle:String):int {
+			return _ExtensionContext.call("AIRSteam_GetLeaderboardEntryCount", handle) as int;
+		}
+
+		public function getLeaderboardSortMethod(handle:String):uint {
+			return _ExtensionContext.call("AIRSteam_GetLeaderboardSortMethod", handle) as uint;
+		}
+
+		public function getLeaderboardDisplayType(handle:String):uint {
+			return _ExtensionContext.call("AIRSteam_GetLeaderboardDisplayType", handle) as uint;
+		}
+
+		public function uploadLeaderboardScore(handle:String, method:uint, score:int, details:Array = null):Boolean {
+			return _ExtensionContext.call("AIRSteam_UploadLeaderboardScore", handle, method, score, details) as Boolean;
+		}
+
+		public function uploadLeaderboardScoreResult():UploadLeaderboardScoreResult {
+			return _ExtensionContext.call("AIRSteam_UploadLeaderboardScoreResult") as UploadLeaderboardScoreResult;
+		}
+
+		public function downloadLeaderboardEntries(handle:String, request:uint = UserStatsConstants.DATAREQUEST_GlobalAroundUser, rangeStart:int = -4, rangeEnd:int = 5):Boolean {
+			return _ExtensionContext.call("AIRSteam_DownloadLeaderboardEntries", handle, request, rangeStart, rangeEnd) as Boolean;
+		}
+
+		public function downloadLeaderboardEntriesResult(numDetails:int = 0):Array {
+			return _ExtensionContext.call("AIRSteam_DownloadLeaderboardEntriesResult", numDetails) as Array;
+		}
+
 		/* cloud */
 		public function getFileCount():int {
 			return _ExtensionContext.call("AIRSteam_GetFileCount") as int;

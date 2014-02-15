@@ -130,6 +130,95 @@ bool CSteam::ResetAllStats(bool bAchievementsToo) {
 	return SteamUserStats()->StoreStats();
 }
 
+// leaderboard
+bool CSteam::FindLeaderboard(std::string name) {
+	if (!m_bInitialized) return false;
+
+	SteamAPICall_t result = SteamUserStats()->FindLeaderboard(name.c_str());
+	m_CallbackFindLeaderboard.Set(result, this, &CSteam::OnFindLeaderboard);
+
+	return true;
+}
+
+SteamLeaderboard_t CSteam::FindLeaderboardResult() {
+	if (!m_bInitialized || !m_CurrentLeaderboard) return 0;
+
+	return m_CurrentLeaderboard;
+}
+
+std::string CSteam::GetLeaderboardName(SteamLeaderboard_t handle) {
+	if (!m_bInitialized) return "";
+
+	return SteamUserStats()->GetLeaderboardName(handle);
+}
+
+int CSteam::GetLeaderboardEntryCount(SteamLeaderboard_t handle) {
+	if (!m_bInitialized) return 0;
+
+	return SteamUserStats()->GetLeaderboardEntryCount(handle);
+}
+
+ELeaderboardSortMethod CSteam::GetLeaderboardSortMethod(SteamLeaderboard_t handle) {
+	if (!m_bInitialized) return ELeaderboardSortMethod(0);
+
+	return SteamUserStats()->GetLeaderboardSortMethod(handle);
+}
+
+ELeaderboardDisplayType CSteam::GetLeaderboardDisplayType(SteamLeaderboard_t handle) {
+	if (!m_bInitialized) return ELeaderboardDisplayType(0);
+
+	return SteamUserStats()->GetLeaderboardDisplayType(handle);
+}
+
+
+bool CSteam::UploadLeaderboardScore(SteamLeaderboard_t handle,
+	ELeaderboardUploadScoreMethod method, int32 score,
+	const int32* scoreDetails, int detailscount) {
+	if (!m_bInitialized) return false;
+
+	SteamAPICall_t result = SteamUserStats()->UploadLeaderboardScore(handle,
+		method, score, scoreDetails, detailscount);
+	m_CallbackUploadLeaderboardScore.Set(result, this, &CSteam::OnUploadLeaderboardScore);
+
+	return true;
+}
+
+LeaderboardScoreUploaded_t* CSteam::UploadLeaderboardScoreResult() {
+	if (!m_bInitialized) return nullptr;
+
+	return &m_ScoreUpload;
+}
+
+bool CSteam::DownloadLeaderboardEntries(SteamLeaderboard_t handle,
+	ELeaderboardDataRequest request,
+	int rangeStart, int rangeEnd) {
+	if (!m_bInitialized) return false;
+
+	SteamAPICall_t result = SteamUserStats()->DownloadLeaderboardEntries(handle,
+		request, rangeStart, rangeEnd);
+	m_CallbackDownloadLeaderboardEntries.Set(result, this, &CSteam::OnDownloadLeaderboardEntries);
+
+	return true;
+}
+
+std::vector<LeaderboardEntry> CSteam::DownloadLeaderboardEntriesResult(int maxDetails) {
+	std::vector<LeaderboardEntry> res;
+	int cnt = m_ScoreDownloaded.m_cEntryCount;
+
+	if (!m_bInitialized || !cnt) return res;
+
+	res.reserve(cnt);
+	for (int i = 0; i < cnt; ++i) {
+		LeaderboardEntry entry(maxDetails);
+		SteamUserStats()->GetDownloadedLeaderboardEntry(m_ScoreDownloaded.m_hSteamLeaderboardEntries,
+			i, &entry.entry, entry.details, maxDetails);
+
+		res.push_back(entry);
+	}
+
+	return res;
+}
+
 // remote storage
 
 int32 CSteam::GetFileCount() {
@@ -603,6 +692,21 @@ void CSteam::OnAchievementStored(UserAchievementStored_t *pCallback) {
 	if (m_iAppID != pCallback->m_nGameID) return;
 
 	DispatchEvent(RESPONSE_OnAchievementStored, k_EResultOK);
+}
+
+void CSteam::OnFindLeaderboard(LeaderboardFindResult_t *result, bool failure) {
+	if (!failure) m_CurrentLeaderboard = result->m_hSteamLeaderboard;
+	DispatchEvent(RESPONSE_OnFindLeaderboard, result->m_bLeaderboardFound ? k_EResultOK : k_EResultFail);
+}
+
+void CSteam::OnUploadLeaderboardScore(LeaderboardScoreUploaded_t *result, bool failure) {
+	if (!failure) m_ScoreUpload = *result;
+	DispatchEvent(RESPONSE_OnUploadLeaderboardScore, result->m_bSuccess ? k_EResultOK : k_EResultFail);
+}
+
+void CSteam::OnDownloadLeaderboardEntries(LeaderboardScoresDownloaded_t *result, bool failure) {
+	if (!failure) m_ScoreDownloaded = *result;
+	DispatchEvent(RESPONSE_OnDownloadLeaderboardEntries, result->m_cEntryCount ? k_EResultOK : k_EResultFail);
 }
 
 void CSteam::OnFileShare(RemoteStorageFileShareResult_t *result, bool failure) {
