@@ -188,9 +188,9 @@ AIR_FUNC(AIRSteam_RunCallbacks) {
 }
 
 AIR_FUNC(AIRSteam_GetUserID) {
-	if (!g_Steam) return FREString("");
+	if (!g_Steam) return FREUint64(0);
 
-	return FREString(g_Steam->GetUserID());
+	return FREUint64(g_Steam->GetUserID().ConvertToUint64());
 }
 
 AIR_FUNC(AIRSteam_GetAppID) {
@@ -897,7 +897,7 @@ AIR_FUNC(AIRSteam_EnumerateUserSharedWorkshopFiles) {
 	createParamStringArray(required, &requiredArray);
 	createParamStringArray(excluded, &excludedArray);
 
-	bool ret = g_Steam->EnumerateUserSharedWorkshopFiles(steamID, start,
+	bool ret = g_Steam->EnumerateUserSharedWorkshopFiles(CSteamID(steamID), start,
 		&requiredArray, &excludedArray);
 
 	delete[] requiredArray.m_ppStrings;

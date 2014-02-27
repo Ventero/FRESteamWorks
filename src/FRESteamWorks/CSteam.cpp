@@ -38,13 +38,10 @@ bool CSteam::RequestStats() {
 	return SteamUserStats()->RequestCurrentStats();
 }
 
-std::string CSteam::GetUserID() {
-	if (!m_bInitialized) return "";
+CSteamID CSteam::GetUserID() {
+	if (!m_bInitialized) return k_steamIDNil;
 
-	uint64 id = SteamUser()->GetSteamID().ConvertToUint64();
-	std::stringstream stream;
-	stream << id;
-	return stream.str();
+	return SteamUser()->GetSteamID();
 }
 
 uint32 CSteam::GetAppID() {
@@ -429,14 +426,13 @@ RemoteStorageEnumerateUserSubscribedFilesResult_t* CSteam::EnumerateUserSubscrib
 	return &m_SubscribedFiles;
 }
 
-bool CSteam::EnumerateUserSharedWorkshopFiles(uint64 steamId, uint32 startIndex,
+bool CSteam::EnumerateUserSharedWorkshopFiles(CSteamID steamId, uint32 startIndex,
 	SteamParamStringArray_t *requiredTags, SteamParamStringArray_t *excludedTags) {
 
 	if(!m_bInitialized) return false;
 
-	CSteamID user(steamId);
 	SteamAPICall_t result = SteamRemoteStorage()->EnumerateUserSharedWorkshopFiles(
-		user, startIndex, requiredTags, excludedTags);
+		steamId, startIndex, requiredTags, excludedTags);
 	m_CallbackEnumerateUserSharedWorkshopFiles.Set(result, this, &CSteam::OnEnumerateUserSharedWorkshopFiles);
 
 	return true;

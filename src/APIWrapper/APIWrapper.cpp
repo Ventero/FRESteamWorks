@@ -230,9 +230,9 @@ void AIRSteam_RunCallbacks() {
 }
 
 void AIRSteam_GetUserID() {
-	if (!g_Steam) return send("");
+	if (!g_Steam) return send("0");
 
-	send(g_Steam->GetUserID());
+	send(g_Steam->GetUserID().ConvertToUint64());
 }
 
 void AIRSteam_GetAppID() {

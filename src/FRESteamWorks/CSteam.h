@@ -71,7 +71,7 @@ public:
 			std::copy(other.details, other.details + max_details, details);
 		}
 	}
-	
+
 	LeaderboardEntry& operator=(LeaderboardEntry other) {
 		std::swap(entry, other.entry);
 		std::swap(max_details, other.max_details);
@@ -95,7 +95,7 @@ public:
 	virtual ~CSteam();
 
 	// general stuff
-	std::string GetUserID();
+	CSteamID GetUserID();
 	uint32 GetAppID();
 	std::string GetAvailableGameLanguages();
 	std::string GetCurrentGameLanguage();
@@ -166,7 +166,7 @@ public:
 	bool EnumerateUserSubscribedFiles(uint32 startIndex);
 	RemoteStorageEnumerateUserSubscribedFilesResult_t* EnumerateUserSubscribedFilesResult();
 
-	bool EnumerateUserSharedWorkshopFiles(uint64 steamId, uint32 startIndex,
+	bool EnumerateUserSharedWorkshopFiles(CSteamID steamId, uint32 startIndex,
 		SteamParamStringArray_t *requiredTags, SteamParamStringArray_t *excludedTags);
 	RemoteStorageEnumerateUserSharedWorkshopFilesResult_t* EnumerateUserSharedWorkshopFilesResult();
 
