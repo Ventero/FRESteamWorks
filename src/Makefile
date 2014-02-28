@@ -48,7 +48,7 @@ $(wdir)/libamf.a: $(wdir)/amf-cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 clean:
-	rm -f $(obj) $(wdir)/FRESteamWorks.o $(wdir)/APIWrapper $(wdir)/libamf.a
+	rm -f $(obj) $(wdir)/FRESteamWorks.o $(wdir)/APIWrapper $(wdir)/APIWrapper.o $(wdir)/libamf.a
 	rm -f SteamSDK
 
 dist-clean: clean
