@@ -78,11 +78,11 @@ void send(float value) {
 }
 
 void send(std::string value) {
-	send(AmfString(value));
+	sendItem(AmfString(value));
 }
 
 void send(const char* value) {
-	send(AmfString(value));
+	sendItem(AmfString(value));
 }
 
 void send(std::nullptr_t) {
