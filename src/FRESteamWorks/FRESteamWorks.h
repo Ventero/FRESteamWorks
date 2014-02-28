@@ -26,7 +26,7 @@
 #include "CSteam.h"
 
 #define AIR_FUNC(name) \
-	FREObject name(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	FREObject name(FREContext ctx, void* funcData, uint32 argc, FREObject argv[])
 
 #define ARG_CHECK(arg_num, default) \
 	if (!g_Steam || argc != arg_num) return default
@@ -42,7 +42,7 @@ FREObject FREUint(uint32);
 FREObject FREUint64(uint64);
 FREObject FREString(std::string);
 FREObject FREString(const char*);
-FREObject FREArray(uint32_t);
+FREObject FREArray(uint32);
 bool FREGetBool(FREObject, uint32* val);
 bool FREGetDouble(FREObject, double* val);
 bool FREGetInt32(FREObject, int32* val);
@@ -66,7 +66,7 @@ class ANESteam : public CSteam {
 #undef X
 
 void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
-                        uint32_t* numFunctions, const FRENamedFunction** functions);
+                        uint32* numFunctions, const FRENamedFunction** functions);
 void ContextFinalizer(FREContext ctx);
 
 extern "C" {

@@ -57,7 +57,7 @@ FREObject FREUint64(uint64 value) {
 	return FREString(stream.str());
 }
 
-FREObject FREArray(uint32_t length) {
+FREObject FREArray(uint32 length) {
 	FREObject array;
 	FRENewObject((const uint8_t*)"Array", 0, NULL, &array, NULL);
 	FRESetArrayLength(array, length);
@@ -66,7 +66,7 @@ FREObject FREArray(uint32_t length) {
 }
 
 bool FREGetString(FREObject object, std::string& str) {
-	uint32_t len;
+	uint32 len;
 	const uint8_t* data;
 	FREResult res = FREGetObjectAsUTF8(object, &len, &data);
 	if (res != FRE_OK) return false;
@@ -327,7 +327,7 @@ AIR_FUNC(AIRSteam_StoreStats) {
 AIR_FUNC(AIRSteam_ResetAllStats) {
 	ARG_CHECK(1, FREBool(false));
 
-	uint32_t achievementsToo;
+	uint32 achievementsToo;
 	if (!FREGetBool(argv[0], &achievementsToo)) return FREBool(false);
 
 	return FREBool(g_Steam->ResetAllStats(achievementsToo != 0));
@@ -572,7 +572,7 @@ AIR_FUNC(AIRSteam_IsCloudEnabledForApp) {
 AIR_FUNC(AIRSteam_SetCloudEnabledForApp) {
 	ARG_CHECK(1, FREBool(false));
 
-	uint32_t enabled = 0;
+	uint32 enabled = 0;
 	if (!FREGetBool(argv[0], &enabled)) return FREBool(false);
 
 	return FREBool(g_Steam->SetCloudEnabledForApp(enabled != 0));
@@ -1137,7 +1137,7 @@ AIR_FUNC(AIRSteam_UpdateUserPublishedItemVote) {
 	ARG_CHECK(2, FREBool(false));
 
 	PublishedFileId_t file;
-	uint32_t upvote;
+	uint32 upvote;
 	if (!FREGetUint64(argv[0], &file) ||
 	    !FREGetBool(argv[1], &upvote)) return FREBool(false);
 
@@ -1195,7 +1195,7 @@ AIR_FUNC(AIRSteam_ActivateGameOverlayToWebPage) {
 AIR_FUNC(AIRSteam_ActivateGameOverlayToStore) {
 	ARG_CHECK(2, FREBool(false));
 
-	uint32_t appId, flag;
+	uint32 appId, flag;
 	if (!FREGetUint32(argv[0], &appId) ||
 	    !FREGetUint32(argv[1], &flag)) return FREBool(false);
 
@@ -1221,7 +1221,7 @@ AIR_FUNC(AIRSteam_IsOverlayEnabled) {
 AIR_FUNC(AIRSteam_IsSubscribedApp) {
 	ARG_CHECK(1, FREBool(false));
 
-	uint32_t appId;
+	uint32 appId;
 	if (!FREGetUint32(argv[0], &appId)) return FREBool(false);
 
 	return FREBool(g_Steam->IsSubscribedApp(appId));
@@ -1230,7 +1230,7 @@ AIR_FUNC(AIRSteam_IsSubscribedApp) {
 AIR_FUNC(AIRSteam_IsDLCInstalled) {
 	ARG_CHECK(1, FREBool(false));
 
-	uint32_t appId;
+	uint32 appId;
 	if (!FREGetUint32(argv[0], &appId)) return FREBool(false);
 
 	return FREBool(g_Steam->IsDLCInstalled(appId));
@@ -1245,7 +1245,7 @@ AIR_FUNC(AIRSteam_GetDLCCount) {
 AIR_FUNC(AIRSteam_InstallDLC) {
 	ARG_CHECK(1, FREBool(false));
 
-	uint32_t appId;
+	uint32 appId;
 	if (!FREGetUint32(argv[0], &appId)) return FREBool(false);
 
 	return FREBool(g_Steam->InstallDLC(appId));
@@ -1254,7 +1254,7 @@ AIR_FUNC(AIRSteam_InstallDLC) {
 AIR_FUNC(AIRSteam_UninstallDLC) {
 	ARG_CHECK(1, FREBool(false));
 
-	uint32_t appId;
+	uint32 appId;
 	if (!FREGetUint32(argv[0], &appId)) return FREBool(false);
 
 	return FREBool(g_Steam->UninstallDLC(appId));
@@ -1281,7 +1281,7 @@ static FRENamedFunction func[] = {
 
 // A native context instance is created
 void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
-                        uint32_t* numFunctions, const FRENamedFunction** functions) {
+                        uint32* numFunctions, const FRENamedFunction** functions) {
 	AIRContext = ctx;
 	*functions = func;
 	*numFunctions = sizeof(func) / sizeof(func[0]);
