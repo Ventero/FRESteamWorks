@@ -41,14 +41,14 @@ public function isCloudEnabledForApp():Boolean
 public function setCloudEnabledForApp(enabled:Boolean):Boolean
 public function getQuota():Array
 /* ugc/workshop */
-public function UGCDownload(handle:String, priority:int):Boolean
+public function UGCDownload(handle:String, priority:uint):Boolean
 public function UGCRead(handle:String, size:int, offset:uint, data:ByteArray):Boolean
 public function getUGCDownloadProgress(handle:String):Array
 public function getUGCDownloadResult(handle:String):DownloadUGCResult
 public function publishWorkshopFile(name:String, preview:String, appId:uint, title:String, description:String, visibility:uint, tags:Array, fileType:uint):Boolean
 public function publishWorkshopFileResult():String
 public function deletePublishedFile(file:String):Boolean
-public function getPublishedFileDetails(file:String, maxAge:int = 0):Boolean
+public function getPublishedFileDetails(file:String, maxAge:uint = 0):Boolean
 public function getPublishedFileDetailsResult(file:String):FileDetailsResult
 public function enumerateUserPublishedFiles(startIndex:uint):Boolean
 public function enumerateUserPublishedFilesResult():UserFilesResult

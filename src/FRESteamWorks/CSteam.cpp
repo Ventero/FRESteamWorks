@@ -364,7 +364,7 @@ bool CSteam::DeletePublishedFile(PublishedFileId_t file) {
 	return true;
 }
 
-bool CSteam::GetPublishedFileDetails(PublishedFileId_t file, int32 maxAge) {
+bool CSteam::GetPublishedFileDetails(PublishedFileId_t file, uint32 maxAge) {
 	if (!m_bInitialized) return false;
 
 	SteamAPICall_t result = SteamRemoteStorage()->GetPublishedFileDetails(file, maxAge);

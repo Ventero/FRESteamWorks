@@ -531,8 +531,8 @@ AIR_FUNC(AIRSteam_FileRead) {
 
 	bool ret = false;
 	char* data = NULL;
-	uint32 size = g_Steam->FileRead(name, &data);
-	if (size > 0 && size <= byteArray.length) {
+	int32 size = g_Steam->FileRead(name, &data);
+	if (size > 0 && static_cast<uint32>(size) <= byteArray.length) {
 		ret = true;
 		memcpy(byteArray.bytes, data, size);
 		delete[] data;
@@ -605,9 +605,8 @@ AIR_FUNC(AIRSteam_UGCDownload) {
 	UGCHandle_t handle;
 	if(!FREGetUint64(argv[0], &handle)) return FREBool(false);
 
-	int32 priority;
-	if(!FREGetInt32(argv[1], &priority)) return FREBool(false);
-
+	uint32 priority;
+	if(!FREGetUint32(argv[1], &priority)) return FREBool(false);
 	return FREBool(g_Steam->UGCDownload(handle, priority));
 }
 
@@ -633,7 +632,7 @@ AIR_FUNC(AIRSteam_UGCRead) {
 	char* data = NULL;
 	if (size > 0 && size <= byteArray.length) {
 		int32 result = g_Steam->UGCRead(handle, size, offset, &data);
-		if (result != 0) {
+		if (result > 0 && static_cast<uint32>(result) <= byteArray.length) {
 			ret = true;
 			memcpy(byteArray.bytes, data, result);
 		}
@@ -729,9 +728,9 @@ AIR_FUNC(AIRSteam_GetPublishedFileDetails) {
 	ARG_CHECK(2, FREBool(false));
 
 	PublishedFileId_t handle;
-	int32 maxAge;
+	uint32 maxAge;
 	if(!FREGetUint64(argv[0], &handle) ||
-	   !FREGetInt32(argv[1], &maxAge)) return FREBool(false);
+	   !FREGetUint32(argv[1], &maxAge)) return FREBool(false);
 
 	return FREBool(g_Steam->GetPublishedFileDetails(handle, maxAge));
 }
@@ -750,8 +749,8 @@ AIR_FUNC(AIRSteam_GetPublishedFileDetailsResult) {
 
 	SET_PROP(result, "result", FREInt(details->m_eResult));
 	SET_PROP(result, "file", FREUint64(details->m_nPublishedFileId));
-	SET_PROP(result, "creatorAppID", FREInt(details->m_nCreatorAppID));
-	SET_PROP(result, "consumerAppID", FREInt(details->m_nConsumerAppID));
+	SET_PROP(result, "creatorAppID", FREUint(details->m_nCreatorAppID));
+	SET_PROP(result, "consumerAppID", FREUint(details->m_nConsumerAppID));
 	SET_PROP(result, "title", FREString(details->m_rgchTitle));
 	SET_PROP(result, "description", FREString(details->m_rgchDescription));
 	SET_PROP(result, "fileHandle", FREUint64(details->m_hFile));

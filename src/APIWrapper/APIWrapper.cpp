@@ -12,8 +12,6 @@ using namespace amf;
 
 CLISteam* g_Steam = NULL;
 
-Serializer serializer;
-
 void CLISteam::DispatchEvent(char* code, char* level) {
 	// we abuse std::cerr for event dispatching, that way it doesn't interfere
 	// with the normal communication on stdout
@@ -582,7 +580,7 @@ void AIRSteam_GetQuota() {
  */
 void AIRSteam_UGCDownload() {
 	UGCHandle_t handle = get_uint64();
-	int32 priority = get_int();
+	uint32 priority = get_int();
 	if(!g_Steam || handle == 0) return send(false);
 
 	send(g_Steam->UGCDownload(handle, priority));
@@ -686,7 +684,7 @@ void AIRSteam_DeletePublishedFile() {
 
 void AIRSteam_GetPublishedFileDetails() {
 	PublishedFileId_t handle = get_uint64();
-	int32 maxAge = get_int();
+	uint32 maxAge = get_int();
 	if (!g_Steam || handle == 0) return send(false);
 
 	send(g_Steam->GetPublishedFileDetails(handle, maxAge));
