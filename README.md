@@ -44,7 +44,7 @@ to add `extendedDesktop` to the list of supported profiles.
 Since by default, Flash Builder uses its installation path as working directory
 when running applications, this however isn't enough to test your application in
 Flash Builder. This can be fixed by either adding the library's directory to the
-dynamic linker's search path (see [the AIR/Flex SDK section](#air-flex-sdk) on
+dynamic linker's search path (see [the AIR/Flex SDK section](#airflex-sdk) on
 how to do this), or by creating a new shortcut to Flash Builder where the working
 directory is set to your project's directory and adding the dynamic library to
 your project.
@@ -65,7 +65,7 @@ Flash Builder 4.7.
 Running an application including native extensions is not possible in Flash Builder
 4.6 on OS X. See [a thread on the Adobe forums](http://forums.adobe.com/thread/986589)
 for possible workarounds. You can also use a Shell/Batch script to run your application
-with the AIR Debug Launcher, see [the AIR/Flex SDK section](#air-flex-sdk) for more details.
+with the AIR Debug Launcher, see [the AIR/Flex SDK section](#airflex-sdk) for more details.
 
 ## AIR/Flex SDK ##
 
