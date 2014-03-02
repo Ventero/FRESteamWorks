@@ -100,7 +100,7 @@ in the top level of your build and add the path to a directory containing the
 `FRESteamWorks.ane` as `-extdir` to `adt`. For an example, see the test application's
 [packaging script](https://github.com/Ventero/FRESteamWorks/blob/master/test/bin-debug/packageWin.bat#L13-18).
 
-## Flash CS ##
+## Flash Professional ##
 
 ### Building ###
 
