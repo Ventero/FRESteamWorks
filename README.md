@@ -102,7 +102,26 @@ in the top level of your build and add the path to a directory containing the
 
 ## Flash CS ##
 
-TBD
+### Building ###
+
+First of all, make sure that your project's target is set to "AIR 3.0 for Desktop"
+(or any more recent AIR version). Then, in the AIR preferences (wrench icon next
+to target project's target), check the "Extended Desktop" profile and select
+"Output as: Application with runtime embedded".
+
+To include the ANE, go to the "Advanced ActionScript 3.0 Settings" (wrench icon
+next to the project's script settings), and in the "Library path" tab,
+click the native extension button and select `FRESteamWorks.ane`.
+
+### Running ###
+
+See the [Flash Builder section](#running)
+on running the application.
+
+### Packaging ###
+
+See the [Flash Builder section](#packaging)
+on packaging the application.
 
 # Linux #
 
