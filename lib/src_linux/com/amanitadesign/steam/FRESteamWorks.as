@@ -619,7 +619,7 @@ package com.amanitadesign.steam {
 		}
 
 		/* ugc/workshop */
-		public function UGCDownload(handle:String, priority:int):Boolean {
+		public function UGCDownload(handle:String, priority:uint):Boolean {
 			if(!callWrapper(AIRSteam_UGCDownload, [handle, priority])) return false;
 			return readBoolResponse();
 		}
@@ -649,7 +649,7 @@ package com.amanitadesign.steam {
 			return readBoolResponse();
 		}
 
-		public function getPublishedFileDetails(file:String, maxAge:int = 0):Boolean {
+		public function getPublishedFileDetails(file:String, maxAge:uint = 0):Boolean {
 			if(!callWrapper(AIRSteam_GetPublishedFileDetails, [file, maxAge])) return false;
 			return readBoolResponse();
 		}

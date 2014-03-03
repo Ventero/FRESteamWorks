@@ -267,7 +267,7 @@ package com.amanitadesign.steam {
 		}
 
 		/* ugc/workshop */
-		public function UGCDownload(handle:String, priority:int):Boolean {
+		public function UGCDownload(handle:String, priority:uint):Boolean {
 			return _ExtensionContext.call("AIRSteam_UGCDownload", handle, priority) as Boolean;
 		}
 
@@ -295,7 +295,7 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_DeletePublishedFile", file) as Boolean;
 		}
 
-		public function getPublishedFileDetails(file:String, maxAge:int = 0):Boolean {
+		public function getPublishedFileDetails(file:String, maxAge:uint = 0):Boolean {
 			return _ExtensionContext.call("AIRSteam_GetPublishedFileDetails", file, maxAge) as Boolean;
 		}
 

@@ -65,14 +65,14 @@ package com.amanitadesign.steam {
 		function setCloudEnabledForApp(enabled:Boolean):Boolean
 		function getQuota():Array
 		/* ugc/workshop */
-		function UGCDownload(handle:String, priority:int):Boolean
+		function UGCDownload(handle:String, priority:uint):Boolean
 		function UGCRead(handle:String, size:int, offset:uint, data:ByteArray):Boolean
 		function getUGCDownloadProgress(handle:String):Array
 		function getUGCDownloadResult(handle:String):DownloadUGCResult
 		function publishWorkshopFile(name:String, preview:String, appId:uint, title:String, description:String, visibility:uint, tags:Array, fileType:uint):Boolean
 		function publishWorkshopFileResult():String
 		function deletePublishedFile(file:String):Boolean
-		function getPublishedFileDetails(file:String, maxAge:int = 0):Boolean
+		function getPublishedFileDetails(file:String, maxAge:uint = 0):Boolean
 		function getPublishedFileDetailsResult(file:String):FileDetailsResult
 		function enumerateUserPublishedFiles(startIndex:uint):Boolean
 		function enumerateUserPublishedFilesResult():UserFilesResult
