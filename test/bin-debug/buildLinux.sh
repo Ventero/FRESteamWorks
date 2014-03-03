@@ -10,4 +10,5 @@ cp ../../src/APIWrapper/APIWrapper NativeApps/Linux
 
 "$FLEX_SDK/bin/amxmlc" -library-path+=../../lib/bin/FRESteamWorksLibLinux.swc \
                        -swf-version=11 -output FRESteamWorksTest_linux.swf \
+                       -define=CONFIG::linux,true \
                        ../src/FRESteamWorksTest.as

@@ -26,9 +26,7 @@ package com.amanitadesign.steam {
 	import flash.utils.setInterval;
 
 	public class FRESteamWorks extends EventDispatcher implements ISteamWorks {
-		private static const PATH:String = "NativeApps/Linux/APIWrapper";
 
-		private var _file:File;
 		private var _process:NativeProcess;
 		private var _tm:int;
 		private var _init:Boolean = false;
@@ -136,7 +134,6 @@ package com.amanitadesign.steam {
 		// END GENERATED VALUES
 
 		public function FRESteamWorks (target:IEventDispatcher = null) {
-			_file = File.applicationDirectory.resolvePath(PATH);
 			_process = new NativeProcess();
 			_process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, eventDispatched);
 			_process.addEventListener(IOErrorEvent.STANDARD_INPUT_IO_ERROR, errorCallback);
@@ -166,18 +163,20 @@ package com.amanitadesign.steam {
 			isReady = false;
 		}
 
-		private function startProcess():void {
+		private function startProcess(path:String):Boolean {
+			var file:File = File.applicationDirectory.resolvePath(path);
+			if (!file.exists) return false;
+
 			var startupInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
-			startupInfo.executable = _file;
+			startupInfo.executable = file;
 
 			_process.start(startupInfo);
+			return true;
 		}
 
-		public function init():Boolean {
-			if(!_file.exists) return false;
-
+		public function init(path:String = "NativeApps/Linux/APIWrapper"):Boolean {
 			try {
-				startProcess();
+				if (!startProcess(path)) return false;
 			} catch(e:Error) {
 				return false;
 			}
@@ -192,7 +191,7 @@ package com.amanitadesign.steam {
 			// process.running is unreliable, in that it's always set to true,
 			// even if the process didn't start at all
 			try {
-				startProcess();
+				startProcess(path);
 			} catch(e:Error) {
 				// no-op
 			}

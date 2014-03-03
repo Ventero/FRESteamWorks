@@ -13,7 +13,8 @@ package com.amanitadesign.steam {
 
 	public interface ISteamWorks extends IEventDispatcher {
 		[Event(name="steamResponse", type="com.amanitadesign.steam.SteamEvent")]
-		function init():Boolean;
+		// different signature depending on OS
+		//function init():Boolean;
 		function dispose():void;
 
 		function addOverlayWorkaround(container:DisplayObjectContainer,
