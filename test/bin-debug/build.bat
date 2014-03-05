@@ -5,5 +5,7 @@ if not exist ..\..\config.bat (
 )
 call ..\..\config.bat
 
-"%FLEX_SDK%/bin/amxmlc" -swf-version=11 -external-library-path+=../../lib/bin/FRESteamWorks.ane ^
+"%FLEX_SDK%/bin/amxmlc" -swf-version=11 ^
+                        -define=CONFIG::linux,false ^
+                        -external-library-path+=../../lib/bin/FRESteamWorks.ane ^
                         -output FRESteamWorksTest.swf ../src/FRESteamWorksTest.as
