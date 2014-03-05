@@ -18,12 +18,6 @@ for type in Debug Release; do
 	[ ! -d "FRESteamWorks.framework" ] && die "$dir/FRESteamWorks.framework missing"
 	[ ! -f "FRESteamWorks.dll" ] && die "$dir/FRESteamWorks.dll missing"
 
-	install_name_tool -change \
-	    "@loader_path/libsteam_api.dylib" "@rpath/../Resources/libsteam_api.dylib" \
-	    "./FRESteamWorks.framework/FRESteamWorks"
-
-	mkdir -p FRESteamWorks.framework/Versions/Current/Resources
-
 	"$FLEX_SDK/bin/compc" +configname=air -source-path ../../../lib/src -optimize \
 	                      -include-sources ../../../lib/src/ \
 	                      -swf-version=11 -output FRESteamWorksLib.swc

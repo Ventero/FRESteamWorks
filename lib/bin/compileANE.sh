@@ -4,13 +4,6 @@ set -xe
 [ ! -e ../../config.sh ] && die "FRESteamWorks/config.sh is not set up!"
 . ../../config.sh
 
-install_name_tool -change \
-    "@loader_path/libsteam_api.dylib" "@rpath/../Resources/libsteam_api.dylib" \
-    ./FRESteamWorks.framework/FRESteamWorks
-# XCode on OS X Mavericks creates frameworks with a broken symlink
-# Create that link's target so adt doesn't complain later on
-mkdir -p FRESteamWorks.framework/Versions/Current/Resources
-
 "$FLEX_SDK/bin/compc" +configname=air -source-path ../src -optimize \
                       -include-sources ../src/ \
                       -swf-version=11 -output FRESteamWorksLib.swc

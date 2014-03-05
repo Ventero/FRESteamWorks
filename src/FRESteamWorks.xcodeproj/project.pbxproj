@@ -141,7 +141,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "set -ex\nrm -rf \"$PROJECT_DIR/../lib/bin/$FULL_PRODUCT_NAME\"\ncp -R \"$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME\" \"$PROJECT_DIR/../lib/bin/\"\ncd \"$PROJECT_DIR/../lib/bin/\"\necho \"Compiling ANE...\"\n./compileANE.sh\n";
+			shellScript = "set -ex\nrm -rf \"$PROJECT_DIR/../lib/bin/$FULL_PRODUCT_NAME\"\n\n# XCode on OS X Mavericks creates frameworks with a broken symlink\n# Create that link's target so adt doesn't complain later on\nmkdir -p \"$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME/Versions/Current/Resources\"\n\n# Fix lookup path for libsteam_api.dylib (packaged into Resources directory)\ninstall_name_tool -change \\\n    \"@loader_path/libsteam_api.dylib\" \"@rpath/../Resources/libsteam_api.dylib\" \\\n    \"$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME/$EXECUTABLE_NAME\"\n\ncp -RL \"$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME\" \"$PROJECT_DIR/../lib/bin/\"\n\ncd \"$PROJECT_DIR/../lib/bin/\"\necho \"Compiling ANE...\"\n./compileANE.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
