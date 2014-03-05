@@ -47,7 +47,7 @@ Flash Builder. This can be fixed by either adding the library's directory to the
 dynamic linker's search path (see [the AIR/Flex SDK section](#airflex-sdk) on
 how to do this), or by creating a new shortcut to Flash Builder where the working
 directory is set to your project's directory and adding the dynamic library to
-your project.
+your project (this does not work on OS X).
 
 ### Packaging ###
 
@@ -58,14 +58,12 @@ that it gets included when packaging your application.
 
 Flash Builder 4.6 seems to have an issue with detecting classes that implement
 interfaces inside an ANE, which results in the `FRESteamWorks` class not being
-visible inside the ANE within Flash Builder. To work around this, please contact
-me for an ANE build that doesn't include any interfaces. This issue is fixed in
-Flash Builder 4.7.
+visible inside the ANE within Flash Builder when using earlier builds (older than
+v0.4-19) of the ANE. This issue is also fixed in Flash Builder 4.7.
 
-Running an application including native extensions is not possible in Flash Builder
-4.6 on OS X. See [a thread on the Adobe forums](http://forums.adobe.com/thread/986589)
-for possible workarounds. You can also use a Shell/Batch script to run your application
-with the AIR Debug Launcher, see [the AIR/Flex SDK section](#airflex-sdk) for more details.
+With older versions of the ANE (older than v0.4-19), running an application
+including that ANE is not possible in Flash Builder 4.6 on OS X. To fix this issue,
+simply download to a more recent ANE.
 
 ## AIR/Flex SDK ##
 
@@ -123,6 +121,19 @@ on running the application.
 See the [Flash Builder section](#packaging)
 on packaging the application.
 
+# FDT #
+
+FDT is very similar to [Flash Builder](#flash-builder). The main differences
+are that the ANE is automatically added to the project and packaged when copying
+it into the project's `lib` folder, so that the steps described in
+[Flash Builder's building section](#building) are not necessary. However, when adding
+the native Steamworks libraries, you have to make sure that they're packaged with
+the application by opening the project's properties and adding them under
+"FDT AIR Properties" -> "Desktop" -> "Package Contents".
+
+Please also make sure to follow the steps described in [the running section](#running)
+to debug your application from within FDT and see the [list of known issues](#known-issues).
+
 # Linux #
 
 The AIR runtime on Linux doesn't support native extensions. Instead, you'll have
@@ -169,7 +180,6 @@ Windows and OS X and then create an ANE that includes both of those. This is eas
 done by first running `mkdir.sh` in `builds/`, building FRESteamWorks.dll on Windows,
 copying it over to the directory created on OS X and then running `compile.sh`
 and `build.sh` in that order.
-running `
 
 ---
 
