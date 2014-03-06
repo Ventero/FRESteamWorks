@@ -18,39 +18,45 @@ endif
 
 .SUFFIXES:
 
+# Native extension objects
 dir := FRESteamWorks
-wdir := APIWrapper
 obj := $(dir)/FRESteamWorks.o $(dir)/CSteam.o
+# APIWrapper objects
+wdir := APIWrapper
+wrapperobj := $(wdir)/APIWrapper.o $(wdir)/WrapperIO.o $(dir)/CSteam.o $(wdir)/libamf.a
 
+# Targets
 .PHONY: all lib wrapper obj clean dist-clean
 all: lib wrapper
 lib: $(dir)/FRESteamWorks.so
 wrapper: $(wdir)/APIWrapper
-obj: SteamSDK
 
+# Rules
 SteamSDK:
 	ln -sf $(STEAM_SDK) $@
 
-$(dir)/FRESteamWorks.o: $(dir)/functions.h
 $(dir)/FRESteamWorks.so: $(obj)
 	$(CXX) -shared $^ $(LIB) -o $@
 
-$(wdir)/APIWrapper: $(wdir)/APIWrapper.o $(dir)/CSteam.o $(wdir)/libamf.a
-	$(CXX) $^ $(LIB) -o $@
+$(dir)/%.o: $(dir)/%.cpp $(dir)/%.h $(dir)/functions.h
+	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(wdir)/APIWrapper.o: $(wdir)/APIWrapper.cpp $(wdir)/APIWrapper.h $(dir)/functions.h SteamSDK
-	$(CXX) -c $(CXXFLAGS) -isystem $(wdir)/amf-cpp -I$(dir) $< -o $@
+$(wdir)/APIWrapper: $(wrapperobj)
+	$(CXX) $^ $(LIB) -o $@
 
 $(wdir)/libamf.a: $(wdir)/amf-cpp
 	$(MAKE) -C $(wdir)/amf-cpp 32bit
 	cp $(wdir)/amf-cpp/libamf.a $@
 
-%.o: %.cpp %.h
-	$(CXX) -c $(CXXFLAGS) $< -o $@
+$(wdir)/%.o: $(wdir)/%.cpp $(wdir)/%.h $(dir)/functions.h SteamSDK
+	$(CXX) -c $(CXXFLAGS) -isystem $(wdir)/amf-cpp -I$(dir) $< -o $@
 
 clean:
-	rm -f $(obj) $(wdir)/FRESteamWorks.o $(wdir)/APIWrapper $(wdir)/APIWrapper.o $(wdir)/libamf.a
+	rm -f $(obj) $(wrapperobj)
 	rm -f SteamSDK
 
 dist-clean: clean
 	$(MAKE) -C $(wdir)/amf-cpp clean
+
+# Dependencies
+$(wdir)/APIWrapper.o: $(wdir)/WrapperIO.h $(dir)/CSteam.h

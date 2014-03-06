@@ -6,60 +6,17 @@
  *  Copyright (c) 2012-2013 Level Up Labs, LLC. All rights reserved.
  */
 
-#include <algorithm>
-#include <cstdio>
-#include <cstring>
-#include <exception>
-#include <fstream>
-#include <functional>
-#include <ios>
-#include <iostream>
-#include <iterator>
-#include <sstream>
-#include <string>
-
-#include "CSteam.h"
-
-#include "amf-cpp/types/amfitem.hpp"
-#include "amf-cpp/types/amfbool.hpp"
-#include "amf-cpp/types/amfdouble.hpp"
-#include "amf-cpp/types/amfinteger.hpp"
-#include "amf-cpp/serializer.hpp"
+#ifndef APIWRAPPER_H
+#define APIWRAPPER_H
 
 #include <steam_api.h>
+
+#include "CSteam.h"
+#include "WrapperIO.h"
 
 class CLISteam : public CSteam {
 	void DispatchEvent(char* code, char* level);
 };
-
-void sendData(amf::Serializer&);
-void sendDataTempFile(amf::Serializer&);
-
-template<class T>
-void sendItem(T item);
-
-void send(bool value);
-void send(int32 value);
-void send(uint32 value);
-void send(uint64 value);
-void send(float value);
-void send(const char* value);
-void send(std::string value);
-void send(std::nullptr_t);
-
-std::string readTempFileBuf(size_t length);
-
-bool get_bool();
-int32 get_int();
-float get_float();
-std::string get_string();
-std::string get_bytearray();
-uint64 get_uint64();
-
-template<typename T, typename Getter>
-std::vector<T> get_array(Getter get);
-
-std::vector<std::string> get_string_array();
 
 void steamWarningMessageHook(int severity, const char* msg);
 
@@ -72,3 +29,5 @@ std::vector<std::function<void()>> apiFunctions {
 #include "functions.h"
 #undef X
 };
+
+#endif
