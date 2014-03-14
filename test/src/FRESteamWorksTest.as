@@ -513,15 +513,14 @@ package {
 					log("RESPONSE_OnDownloadLeaderboardEntries: " + e.response);
 					if(e.response != SteamResults.OK) break;
 					var entries:Array = Steamworks.downloadLeaderboardEntriesResult(scoreDetails);
-					scoreDetails = 0;
 					log("downloadLeaderboardEntriesResult(" + scoreDetails + ") == " + (entries ? ("Array, size " + entries.length) : "null"));
 					for(i = 0; i < entries.length; ++i) {
 						var en:LeaderboardEntry = entries[i];
 						log(i + ": " + en.userID + ", " + en.globalRank + ", " + en.score + ", " + en.numDetails + "//" + en.details.length);
-						var actualDetails:int = Math.max(scoreDetails, en.details.length);
-						for(var d:int = 0; d < actualDetails; ++d)
+						for(var d:int = 0; d < en.details.length; ++d)
 							log("\tdetails[" + d + "] == " + en.details[d]);
 					}
+					scoreDetails = 0;
 					break;
 				case SteamConstants.RESPONSE_OnUploadLeaderboardScore:
 					log("RESPONSE_OnUploadLeaderboardScore: " + e.response);
