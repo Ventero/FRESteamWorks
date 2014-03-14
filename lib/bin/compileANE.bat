@@ -5,9 +5,9 @@ if not exist ..\..\config.bat (
 )
 call ..\..\config.bat
 
-"%FLEX_SDK%\bin\compc" +configname=air -source-path ..\src -optimize ^
-                       -include-sources ..\src\ ^
-                       -swf-version=11 -output FRESteamWorksLib.swc
+call "%FLEX_SDK%\bin\compc" +configname=air -source-path ..\src -optimize ^
+                            -include-sources ..\src\ ^
+                            -swf-version=11 -output FRESteamWorksLib.swc
 
 "%UNZIP_BIN%" -o FRESteamWorksLib.swc
 
