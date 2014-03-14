@@ -331,7 +331,11 @@ bool CSteam::GetUGCDownloadProgress(UGCHandle_t handle, int32 *downloaded, int32
 RemoteStorageDownloadUGCResult_t* CSteam::GetUGCDownloadResult(UGCHandle_t handle) {
 	if (!m_bInitialized) return nullptr;
 
-	return &m_DownloadResults[handle];
+	auto it = m_DownloadResults.find(handle);
+	if (it == m_DownloadResults.end())
+		return nullptr;
+
+	return &it->second;
 }
 
 bool CSteam::PublishWorkshopFile(std::string name, std::string preview,
@@ -376,7 +380,11 @@ bool CSteam::GetPublishedFileDetails(PublishedFileId_t file, uint32 maxAge) {
 RemoteStorageGetPublishedFileDetailsResult_t* CSteam::GetPublishedFileDetailsResult(PublishedFileId_t file) {
 	if (!m_bInitialized) return nullptr;
 
-	return &m_PublishedFileDetails[file];
+	auto it = m_PublishedFileDetails.find(file);
+	if (it == m_PublishedFileDetails.end())
+		return nullptr;
+
+	return &it->second;
 }
 
 bool CSteam::EnumerateUserPublishedFiles(uint32 startIndex) {
