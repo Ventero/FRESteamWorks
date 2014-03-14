@@ -105,6 +105,7 @@ package {
 			addButton("Upload, keep best", uploadScore, _leaderboardsContainer);
 			addButton("Upload, force", uploadForceScore, _leaderboardsContainer);
 			addButton("Upload with data", uploadScoreWithData, _leaderboardsContainer);
+			addButton("Invalid download", invalidLeaderboardEntries, _leaderboardsContainer);
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
 			Steamworks.addOverlayWorkaround(stage, true);
@@ -467,6 +468,17 @@ package {
 			scoreDetails = 3;
 			log("uploadScore(...) == " + Steamworks.uploadLeaderboardScore(leaderboard,
 				UserStatsConstants.UPLOADSCOREMETHOD_ForceUpdate, 20, [1, 2, 3]))
+		}
+
+		private function invalidLeaderboardEntries(e:Event = null):void {
+			if (!Steamworks.isReady) return;
+
+			if (!leaderboard) {
+				log("No Leaderboard handle set, continuing anyway");
+			}
+
+			log("downloadLeaderboardEntriesResult(3) == " +
+				Steamworks.downloadLeaderboardEntriesResult(3));
 		}
 
 		private var id:String;
