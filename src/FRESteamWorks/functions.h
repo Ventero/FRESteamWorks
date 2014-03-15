@@ -93,4 +93,6 @@ X(AIRSteam_GetDLCCount) /* = 83 */
 X(AIRSteam_InstallDLC) /* = 84 */
 X(AIRSteam_UninstallDLC) /* = 85 */
 X(AIRSteam_DLCInstalledResult) /* = 86 */
+/* others */
+X(AIRSteam_GetEnv) /* = 87 */
 /* END GENERATED CODE */

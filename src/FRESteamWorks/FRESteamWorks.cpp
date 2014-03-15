@@ -10,6 +10,8 @@
 
 #include "FRESteamWorks.h"
 
+#include <cstdlib>
+
 // Used to dispatch event back to AIR
 FREContext AIRContext;
 
@@ -1218,6 +1220,10 @@ AIR_FUNC(AIRSteam_IsOverlayEnabled) {
 	return FREBool(g_Steam->IsOverlayEnabled());
 }
 
+/*
+ * DLC / subscriptions
+ */
+
 AIR_FUNC(AIRSteam_IsSubscribedApp) {
 	ARG_CHECK(1, FREBool(false));
 
@@ -1264,6 +1270,20 @@ AIR_FUNC(AIRSteam_DLCInstalledResult) {
 	ARG_CHECK(0, FREUint(0));
 
 	return FREUint(g_Steam->DLCInstalledResult());
+}
+
+/*
+ * other
+ */
+
+AIR_FUNC(AIRSteam_GetEnv) {
+	ARG_CHECK(1, FREString(""));
+
+	std::string name;
+	if (!FREGetString(argv[0], name)) return FREString("");
+
+	const char* ret = std::getenv(name.c_str());
+	return FREString(ret == nullptr ? "" : ret);
 }
 
 

@@ -9,6 +9,7 @@
 #include "APIWrapper.h"
 
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <exception>
 #include <fstream>
@@ -1018,6 +1019,14 @@ void AIRSteam_DLCInstalledResult() {
 	if (!g_Steam) return send(0);
 
 	send(g_Steam->DLCInstalledResult());
+}
+
+void AIRSteam_GetEnv() {
+	std::string name = get_string();
+	if (name.empty()) return send("");
+
+	const char* ret = std::getenv(name.c_str());
+	send(ret == nullptr ? "" : ret);
 }
 
 int main(int argc, char** argv) {

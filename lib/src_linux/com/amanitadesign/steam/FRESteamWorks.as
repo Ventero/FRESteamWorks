@@ -131,6 +131,8 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_InstallDLC:int = 84;
 		private static const AIRSteam_UninstallDLC:int = 85;
 		private static const AIRSteam_DLCInstalledResult:int = 86;
+		/* others */
+		private static const AIRSteam_GetEnv:int = 87;
 		// END GENERATED VALUES
 
 		public function FRESteamWorks (target:IEventDispatcher = null) {
@@ -854,6 +856,12 @@ package com.amanitadesign.steam {
 		public function DLCInstalledResult():uint {
 			if(!callWrapper(AIRSteam_DLCInstalledResult, [])) return 0;
 			return readIntResponse();
+		}
+
+		/* others */
+		public function getEnv(name:String):String {
+			if(!callWrapper(AIRSteam_GetEnv, [name])) return "";
+			return readStringResponse();
 		}
 
 		// END GENERATED CODE

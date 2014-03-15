@@ -91,3 +91,5 @@ public function getDLCCount():int
 public function installDLC(appId:uint):Boolean
 public function uninstallDLC(appId:uint):Boolean
 public function DLCInstalledResult():uint
+/* other */
+public function getEnv(name:String):String

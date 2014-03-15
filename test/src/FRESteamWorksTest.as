@@ -143,6 +143,7 @@ package {
 				//       potentially be installed)
 				log("isDLCInstalled(999999) == " + Steamworks.isDLCInstalled(999999));
 				log("findLeaderboard('Feet Traveled') == " + Steamworks.findLeaderboard('Feet Traveled'));
+				log("getEnv('SteamTenfoot') == " + Steamworks.getEnv("SteamTenfoot"));
 
 				var quota:Array = Steamworks.getQuota();
 				log("getQuota() == " + (quota ? "[" + quota.join(", ") + "]" : "null"));

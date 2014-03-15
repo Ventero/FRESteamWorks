@@ -461,6 +461,11 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_DLCInstalledResult") as uint;
 		}
 
+		/* others */
+		public function getEnv(name:String):String {
+			return _ExtensionContext.call("AIRSteam_GetEnv", name) as String;
+		}
+
 		// END GENERATED CODE
 	}
 }
