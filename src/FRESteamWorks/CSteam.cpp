@@ -201,7 +201,7 @@ bool CSteam::DownloadLeaderboardEntries(SteamLeaderboard_t handle,
 
 std::vector<LeaderboardEntry> CSteam::DownloadLeaderboardEntriesResult(int maxDetails) {
 	std::vector<LeaderboardEntry> res;
-	if (!m_bInitialized || !m_ScoreDownloaded) return res;
+	if (!m_bInitialized || m_ScoreDownloaded.get() == nullptr) return res;
 
 	int cnt = m_ScoreDownloaded->m_cEntryCount;
 	if (!cnt) return res;
