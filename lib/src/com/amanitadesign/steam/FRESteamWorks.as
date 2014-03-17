@@ -415,6 +415,19 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_SetUserPublishedFileAction", file, action) as Boolean;
 		}
 
+		/* friends */
+		public function getFriendCount(flags:uint):int {
+			return _ExtensionContext.call("AIRSteam_GetFriendCount", flags) as int;
+		}
+
+		public function getFriendByIndex(index:int, flags:uint):String {
+			return _ExtensionContext.call("AIRSteam_GetFriendByIndex", index, flags) as String;
+		}
+
+		public function getFriendPersonaName(id:String):String {
+			return _ExtensionContext.call("AIRSteam_GetFriendPersonaName", id) as String;
+		}
+
 		/* overlay */
 		public function activateGameOverlay(dialog:String):Boolean {
 			return _ExtensionContext.call("AIRSteam_ActivateGameOverlay", dialog) as Boolean;

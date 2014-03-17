@@ -102,6 +102,10 @@ package com.amanitadesign.steam {
 		function getUserPublishedItemVoteDetailsResult():UserVoteDetails
 		function updateUserPublishedItemVote(file:String, upvote:Boolean):Boolean
 		function setUserPublishedFileAction(file:String, action:uint):Boolean
+		/* friends */
+		function getFriendCount(flags:uint):int
+		function getFriendByIndex(index:int, flags:uint):String
+		function getFriendPersonaName(id:String):String
 		/* overlay */
 		function activateGameOverlay(dialog:String):Boolean
 		function activateGameOverlayToUser(dialog:String, steamId:String):Boolean

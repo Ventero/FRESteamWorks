@@ -942,6 +942,32 @@ void AIRSteam_SetUserPublishedFileAction() {
 }
 
 /*
+ * friends
+ */
+
+void AIRSteam_GetFriendCount() {
+	uint32 flags = get_int();
+	if (!g_Steam) return send(0);
+
+	send(g_Steam->GetFriendCount(flags));
+}
+
+void AIRSteam_GetFriendByIndex() {
+	int index = get_int();
+	uint32 flags = get_int();
+	if (!g_Steam) return send(0);
+
+	send(g_Steam->GetFriendByIndex(index, flags).ConvertToUint64());
+}
+
+void AIRSteam_GetFriendPersonaName() {
+	uint64 steamId = get_uint64();
+	if (!g_Steam) return send("");
+
+	send(g_Steam->GetFriendPersonaName(CSteamID(steamId)));
+}
+
+/*
  * overlay
  */
 void AIRSteam_ActivateGameOverlay() {

@@ -18,6 +18,7 @@ package {
 	import com.amanitadesign.steam.UserStatsConstants;
 	import com.amanitadesign.steam.UploadLeaderboardScoreResult;
 
+	import com.amanitadesign.steam.FriendConstants;
 	import com.amanitadesign.steam.SteamConstants;
 	import com.amanitadesign.steam.WorkshopConstants;
 
@@ -72,6 +73,7 @@ package {
 
 			addButton("Check stats/achievements", checkAchievements, _buttonContainer);
 			addButton("Toggle achievement", toggleAchievement, _buttonContainer);
+			addButton("Check friends", checkFriends, _buttonContainer);
 			addButton("Toggle cloud enabled", toggleCloudEnabled, _buttonContainer);
 			addButton("Toggle fullscreen", toggleFullscreen, _buttonContainer);
 			addButton("Invalid API call", invalidCall, _buttonContainer);
@@ -197,7 +199,7 @@ package {
 			log("getStatFloat('FeetTraveled') == "+Steamworks.getStatFloat('FeetTraveled'));
 		}
 
-		private function toggleAchievement(e:Event = null):void{
+		private function toggleAchievement(e:Event = null):void {
 			if(!Steamworks.isReady) return;
 
 			var result:Boolean = Steamworks.isAchievement("ACH_WIN_ONE_GAME");
@@ -206,6 +208,29 @@ package {
 				log("setAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.setAchievement("ACH_WIN_ONE_GAME"));
 			} else {
 				log("clearAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.clearAchievement("ACH_WIN_ONE_GAME"));
+			}
+		}
+
+		private function checkFriends(e:Event = null):void {
+			if (!Steamworks.isReady) return;
+
+			var flags:int = FriendConstants.FRIENDFLAG_Immediate;
+			var count:int = Steamworks.getFriendCount(flags);
+			var id:String;
+			log("getFriendCount(Immediate) == " + count);
+			if (count > 0) {
+				id = Steamworks.getFriendByIndex(0, flags);
+				log("getFriendByIndex(0, Immediate) == " + id);
+				log("getFriendPersonaName(" + id + ") == " + Steamworks.getFriendPersonaName(id));
+			}
+
+			flags = FriendConstants.FRIENDFLAG_Blocked | FriendConstants.FRIENDFLAG_Ignored;
+			count = Steamworks.getFriendCount(flags);
+			log("getFriendCount(Blocked | Ignored) == " + count);
+			if (count > 0) {
+				id = Steamworks.getFriendByIndex(0, flags);
+				log("getFriendByIndex(0, Blocked | Ignored) == " + id);
+				log("getFriendPersonaName(" + id + ") == " + Steamworks.getFriendPersonaName(id));
 			}
 		}
 

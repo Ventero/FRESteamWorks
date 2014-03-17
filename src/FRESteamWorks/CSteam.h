@@ -197,6 +197,11 @@ public:
 
 	bool SetUserPublishedFileAction(PublishedFileId_t file, EWorkshopFileAction action);
 
+	// friends
+	int GetFriendCount(int flags);
+	CSteamID GetFriendByIndex(int index, int flags);
+	std::string GetFriendPersonaName(CSteamID steamId);
+
 	// overlay
 	bool ActivateGameOverlay(std::string dialog);
 	bool ActivateGameOverlayToUser(std::string dialog, CSteamID steamId);

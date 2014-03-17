@@ -604,6 +604,27 @@ bool CSteam::SetUserPublishedFileAction(PublishedFileId_t file, EWorkshopFileAct
 	return true;
 }
 
+// friends
+int CSteam::GetFriendCount(int flags) {
+	if (!m_bInitialized) return 0;
+
+	return SteamFriends()->GetFriendCount(flags);
+}
+
+CSteamID CSteam::GetFriendByIndex(int index, int flags) {
+	if (!m_bInitialized) return k_steamIDNil;
+
+	return SteamFriends()->GetFriendByIndex(index, flags);
+}
+
+std::string CSteam::GetFriendPersonaName(CSteamID steamId) {
+	if (!m_bInitialized) return "";
+
+	return std::string(SteamFriends()->GetFriendPersonaName(steamId));
+}
+
+// overlay
+
 bool CSteam::ActivateGameOverlay(std::string dialog) {
 	if (!m_bInitialized) return false;
 

@@ -78,6 +78,10 @@ public function getUserPublishedItemVoteDetails(file:String):Boolean
 public function getUserPublishedItemVoteDetailsResult():UserVoteDetails
 public function updateUserPublishedItemVote(file:String, upvote:Boolean):Boolean
 public function setUserPublishedFileAction(file:String, action:uint):Boolean
+/* friends */
+public function getFriendCount(flags:uint):int
+public function getFriendByIndex(index:int, flags:uint):String
+public function getFriendPersonaName(id:String):String
 /* overlay */
 public function activateGameOverlay(dialog:String):Boolean
 public function activateGameOverlayToUser(dialog:String, steamId:String):Boolean

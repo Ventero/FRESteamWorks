@@ -1164,13 +1164,46 @@ AIR_FUNC(AIRSteam_SetUserPublishedFileAction) {
 	ARG_CHECK(2, FREBool(false));
 
 	PublishedFileId_t file;
-	if (!FREGetUint64(argv[0], &file)) return FREBool(false);
+	uint32 action;
+	if (!FREGetUint64(argv[0], &file) ||
+	    !FREGetUint32(argv[1], &action)) return FREBool(false);
 
-	uint32_t action;
-	if (!FREGetUint32(argv[1], &action)) return FREBool(false);
 
 	return FREBool(g_Steam->SetUserPublishedFileAction(file,
 		EWorkshopFileAction(action)));
+}
+
+/*
+ * friends
+ */
+
+AIR_FUNC(AIRSteam_GetFriendCount) {
+	ARG_CHECK(1, FREInt(0));
+
+	uint32 flags;
+	if (!FREGetUint32(argv[0], &flags)) return FREInt(0);
+
+	return FREInt(g_Steam->GetFriendCount(flags));
+}
+
+AIR_FUNC(AIRSteam_GetFriendByIndex) {
+	ARG_CHECK(2, FREUint64(0));
+
+	int32 index;
+	uint32 flags;
+	if (!FREGetInt32(argv[0], &index) ||
+		  !FREGetUint32(argv[1], &flags)) return FREUint64(0);
+
+	return FREUint64(g_Steam->GetFriendByIndex(index, flags).ConvertToUint64());
+}
+
+AIR_FUNC(AIRSteam_GetFriendPersonaName) {
+	ARG_CHECK(1, FREString(""));
+
+	uint64 steamId;
+	if (!FREGetUint64(argv[0], &steamId)) return FREString("");
+
+	return FREString(g_Steam->GetFriendPersonaName(CSteamID(steamId)));
 }
 
 /*

@@ -118,22 +118,26 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_GetUserPublishedItemVoteDetailsResult:int = 73;
 		private static const AIRSteam_UpdateUserPublishedItemVote:int = 74;
 		private static const AIRSteam_SetUserPublishedFileAction:int = 75;
+		/* friends */
+		private static const AIRSteam_GetFriendCount:int = 76;
+		private static const AIRSteam_GetFriendByIndex:int = 77;
+		private static const AIRSteam_GetFriendPersonaName:int = 78;
 		/* overlay */
-		private static const AIRSteam_ActivateGameOverlay:int = 76;
-		private static const AIRSteam_ActivateGameOverlayToUser:int = 77;
-		private static const AIRSteam_ActivateGameOverlayToWebPage:int = 78;
-		private static const AIRSteam_ActivateGameOverlayToStore:int = 79;
-		private static const AIRSteam_ActivateGameOverlayInviteDialog:int = 80;
-		private static const AIRSteam_IsOverlayEnabled:int = 81;
+		private static const AIRSteam_ActivateGameOverlay:int = 79;
+		private static const AIRSteam_ActivateGameOverlayToUser:int = 80;
+		private static const AIRSteam_ActivateGameOverlayToWebPage:int = 81;
+		private static const AIRSteam_ActivateGameOverlayToStore:int = 82;
+		private static const AIRSteam_ActivateGameOverlayInviteDialog:int = 83;
+		private static const AIRSteam_IsOverlayEnabled:int = 84;
 		/* DLC / subscriptions */
-		private static const AIRSteam_IsSubscribedApp:int = 82;
-		private static const AIRSteam_IsDLCInstalled:int = 83;
-		private static const AIRSteam_GetDLCCount:int = 84;
-		private static const AIRSteam_InstallDLC:int = 85;
-		private static const AIRSteam_UninstallDLC:int = 86;
-		private static const AIRSteam_DLCInstalledResult:int = 87;
+		private static const AIRSteam_IsSubscribedApp:int = 85;
+		private static const AIRSteam_IsDLCInstalled:int = 86;
+		private static const AIRSteam_GetDLCCount:int = 87;
+		private static const AIRSteam_InstallDLC:int = 88;
+		private static const AIRSteam_UninstallDLC:int = 89;
+		private static const AIRSteam_DLCInstalledResult:int = 90;
 		/* other */
-		private static const AIRSteam_GetEnv:int = 88;
+		private static const AIRSteam_GetEnv:int = 91;
 		// END GENERATED VALUES
 
 		public function FRESteamWorks (target:IEventDispatcher = null) {
@@ -800,6 +804,22 @@ package com.amanitadesign.steam {
 		public function setUserPublishedFileAction(file:String, action:uint):Boolean {
 			if(!callWrapper(AIRSteam_SetUserPublishedFileAction, [file, action])) return false;
 			return readBoolResponse();
+		}
+
+		/* friends */
+		public function getFriendCount(flags:uint):int {
+			if(!callWrapper(AIRSteam_GetFriendCount, [flags])) return 0;
+			return readIntResponse();
+		}
+
+		public function getFriendByIndex(index:int, flags:uint):String {
+			if(!callWrapper(AIRSteam_GetFriendByIndex, [index, flags])) return "";
+			return readStringResponse();
+		}
+
+		public function getFriendPersonaName(id:String):String {
+			if(!callWrapper(AIRSteam_GetFriendPersonaName, [id])) return "";
+			return readStringResponse();
 		}
 
 		/* overlay */

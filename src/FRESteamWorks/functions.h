@@ -80,20 +80,24 @@ X(AIRSteam_GetUserPublishedItemVoteDetails) /* = 72 */
 X(AIRSteam_GetUserPublishedItemVoteDetailsResult) /* = 73 */
 X(AIRSteam_UpdateUserPublishedItemVote) /* = 74 */
 X(AIRSteam_SetUserPublishedFileAction) /* = 75 */
+/* friends */
+X(AIRSteam_GetFriendCount) /* = 76 */
+X(AIRSteam_GetFriendByIndex) /* = 77 */
+X(AIRSteam_GetFriendPersonaName) /* = 78 */
 /* overlay */
-X(AIRSteam_ActivateGameOverlay) /* = 76 */
-X(AIRSteam_ActivateGameOverlayToUser) /* = 77 */
-X(AIRSteam_ActivateGameOverlayToWebPage) /* = 78 */
-X(AIRSteam_ActivateGameOverlayToStore) /* = 79 */
-X(AIRSteam_ActivateGameOverlayInviteDialog) /* = 80 */
-X(AIRSteam_IsOverlayEnabled) /* = 81 */
+X(AIRSteam_ActivateGameOverlay) /* = 79 */
+X(AIRSteam_ActivateGameOverlayToUser) /* = 80 */
+X(AIRSteam_ActivateGameOverlayToWebPage) /* = 81 */
+X(AIRSteam_ActivateGameOverlayToStore) /* = 82 */
+X(AIRSteam_ActivateGameOverlayInviteDialog) /* = 83 */
+X(AIRSteam_IsOverlayEnabled) /* = 84 */
 /* DLC / subscriptions */
-X(AIRSteam_IsSubscribedApp) /* = 82 */
-X(AIRSteam_IsDLCInstalled) /* = 83 */
-X(AIRSteam_GetDLCCount) /* = 84 */
-X(AIRSteam_InstallDLC) /* = 85 */
-X(AIRSteam_UninstallDLC) /* = 86 */
-X(AIRSteam_DLCInstalledResult) /* = 87 */
+X(AIRSteam_IsSubscribedApp) /* = 85 */
+X(AIRSteam_IsDLCInstalled) /* = 86 */
+X(AIRSteam_GetDLCCount) /* = 87 */
+X(AIRSteam_InstallDLC) /* = 88 */
+X(AIRSteam_UninstallDLC) /* = 89 */
+X(AIRSteam_DLCInstalledResult) /* = 90 */
 /* other */
-X(AIRSteam_GetEnv) /* = 88 */
+X(AIRSteam_GetEnv) /* = 91 */
 /* END GENERATED CODE */
