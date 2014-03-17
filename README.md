@@ -28,6 +28,21 @@ Since the AIR runtime on Linux doesn't support native extensions, an external
 binary is used to communicate with the Steamworks API. For more information
 on how to build and include this tool, see [the Linux section](#linux).
 
+## Known Issues ##
+
+Due to a bug in old versions of the AIR runtime, the runtime will crash as soon
+as a function is called that returns any of the `com.amanitadesign.steam.*` objects.
+For this reason, FRESteamWorks should only be used with AIR runtimes >= 3.7.
+
+Flash Builder 4.6 seems to have an issue with detecting classes that implement
+interfaces inside an ANE, which results in the `FRESteamWorks` class not being
+visible inside the ANE within Flash Builder when using earlier builds (older than
+v0.4-19) of the ANE. This issue is also fixed in Flash Builder 4.7.
+
+With older versions of the ANE (older than v0.4-19), running an application
+including that ANE is not possible in Flash Builder 4.6 on OS X. To fix this issue,
+simply download to a more recent ANE.
+
 ## Flash Builder ##
 
 ### Building ###
@@ -53,17 +68,6 @@ your project (this does not work on OS X).
 
 Just include the native Steamworks library at the top level of your project so
 that it gets included when packaging your application.
-
-### Known Issues ###
-
-Flash Builder 4.6 seems to have an issue with detecting classes that implement
-interfaces inside an ANE, which results in the `FRESteamWorks` class not being
-visible inside the ANE within Flash Builder when using earlier builds (older than
-v0.4-19) of the ANE. This issue is also fixed in Flash Builder 4.7.
-
-With older versions of the ANE (older than v0.4-19), running an application
-including that ANE is not possible in Flash Builder 4.6 on OS X. To fix this issue,
-simply download to a more recent ANE.
 
 ## AIR/Flex SDK ##
 
