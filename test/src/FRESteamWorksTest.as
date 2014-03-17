@@ -46,6 +46,7 @@ package {
 
 		private var _container:Sprite;
 		private var _buttonContainer:Sprite;
+		private var _fileContainer:Sprite;
 		private var _enumerateContainer:Sprite;
 		private var _overlayContainer:Sprite;
 		private var _leaderboardsContainer:Sprite;
@@ -63,6 +64,7 @@ package {
 			addChild(_container);
 
 			_buttonContainer = new Sprite();
+			_fileContainer = new Sprite();
 			_enumerateContainer = new Sprite();
 			_overlayContainer = new Sprite();
 			_leaderboardsContainer = new Sprite();
@@ -71,12 +73,9 @@ package {
 			addButton("Check stats/achievements", checkAchievements, _buttonContainer);
 			addButton("Toggle achievement", toggleAchievement, _buttonContainer);
 			addButton("Toggle cloud enabled", toggleCloudEnabled, _buttonContainer);
-			addButton("Toggle file", toggleFile, _buttonContainer);
-			addButton("Publish file", publishFile, _buttonContainer);
-			addButton("Delete published file", deletePublishedFile, _buttonContainer);
 			addButton("Toggle fullscreen", toggleFullscreen, _buttonContainer);
-			addButton("Update file", updateFile, _buttonContainer);
 			addButton("Invalid API call", invalidCall, _buttonContainer);
+			addButton("File actions", null, _buttonContainer, _fileContainer);
 			addButton("Enumerate workshop", null, _buttonContainer, _enumerateContainer);
 			addButton("Show overlay", null, _buttonContainer, _overlayContainer);
 			addButton("Query leaderboard", null, _buttonContainer, _leaderboardsContainer);
@@ -88,6 +87,12 @@ package {
 			addButton("All published files (vote)", enumerateWorkshopFiles, _enumerateContainer);
 			addButton("By Action (played)", enumeratePlayedFiles, _enumerateContainer);
 			addButton("By Action (completed)", enumerateCompletedFiles, _enumerateContainer);
+
+			addButton("Back", null, _fileContainer);
+			addButton("Toggle file", toggleFile, _fileContainer);
+			addButton("Publish file", publishFile, _fileContainer);
+			addButton("Delete published file", deletePublishedFile, _fileContainer);
+			addButton("Update file", updateFile, _fileContainer);
 
 			addButton("Back", null, _overlayContainer);
 			addButton("Show friends overlay", activateOverlay, _overlayContainer);
