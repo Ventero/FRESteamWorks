@@ -502,7 +502,10 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnFindLeaderboard:
 					log("RESPONSE_OnFindLeaderboad: " + e.response);
-					if(e.response != SteamResults.OK) break;
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
 
 					if (leaderboard) {
 						// result of findOrCreateLeaderboard
@@ -528,7 +531,11 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnDownloadLeaderboardEntries:
 					log("RESPONSE_OnDownloadLeaderboardEntries: " + e.response);
-					if(e.response != SteamResults.OK) break;
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
+
 					var entries:Array = Steamworks.downloadLeaderboardEntriesResult(scoreDetails);
 					log("downloadLeaderboardEntriesResult(" + scoreDetails + ") == " + (entries ? ("Array, size " + entries.length) : "null"));
 					for(i = 0; i < entries.length; ++i) {
@@ -541,7 +548,11 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnUploadLeaderboardScore:
 					log("RESPONSE_OnUploadLeaderboardScore: " + e.response);
-					if(e.response != SteamResults.OK) break;
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
+
 					var sr:UploadLeaderboardScoreResult = Steamworks.uploadLeaderboardScoreResult();
 					log("uploadLeaderboardScoreResult() == " + sr);
 					log("success: " + sr.success + ", score: " + sr.score + ", changed: " + sr.scoreChanged +
@@ -550,7 +561,11 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnFileShared:
 					log("RESPONSE_OnFileShared: " + e.response);
-					if(e.response != SteamResults.OK) return;
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
+
 					log("fileShareResult() == " + Steamworks.fileShareResult());
 					apiCall = Steamworks.publishWorkshopFile("test.txt", "", _appId,
 						"Test.txt", "Test.txt", WorkshopConstants.VISIBILITY_Private,
@@ -559,14 +574,22 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnPublishWorkshopFile:
 					log("RESPONSE_OnPublishWorkshopFile: " + e.response);
-					if(e.response != SteamResults.OK) return;
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
+
 					publishedFile = Steamworks.publishWorkshopFileResult();
 					log("File published as " + publishedFile);
 					log("subscribePublishedFile(...) == " + Steamworks.subscribePublishedFile(publishedFile));
 					break;
 				case SteamConstants.RESPONSE_OnEnumerateUserSubscribedFiles:
 					log("RESPONSE_OnEnumerateUserSubscribedFiles: " + e.response);
-					if(e.response != SteamResults.OK) return;
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
+
 					var subRes:SubscribedFilesResult = Steamworks.enumerateUserSubscribedFilesResult();
 					log("User subscribed files: " + subRes.resultsReturned + "/" + subRes.totalResults);
 					for(i = 0; i < subRes.resultsReturned; i++) {
@@ -613,7 +636,11 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnEnumeratePublishedWorkshopFiles:
 					log("RESPONSE_OnEnumeratePublishedWorkshopFiles: " + e.response);
-					if(e.response != SteamResults.OK) return;
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
+
 					var fileRes:WorkshopFilesResult = Steamworks.enumeratePublishedWorkshopFilesResult();
 					log("Workshop files: " + fileRes.resultsReturned + "/" + fileRes.totalResults);
 					for(i = 0; i < fileRes.resultsReturned; i++) {
@@ -631,7 +658,10 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnEnumeratePublishedFilesByUserAction:
 					log("RESPONSE_OnEnumeratePublishedFilesByUserAction: " + e.response);
-					if(e.response != SteamResults.OK) return;
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
 
 					var actionRes:FilesByUserActionResult = Steamworks.enumeratePublishedFilesByUserActionResult();
 					// TODO: m_eAction seems to be uninitialized?
@@ -649,7 +679,11 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnGetPublishedFileDetails:
 					log("RESPONSE_OnGetPublishedFileDetails: " + e.response);
-					if(e.response != SteamResults.OK) return;
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
+
 					var res:FileDetailsResult = Steamworks.getPublishedFileDetailsResult(id);
 					log("Result for " + id + ": " + res);
 					if(res) {
@@ -667,7 +701,11 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnUGCDownload:
 					log("RESPONSE_OnUGCDownload: " + e.response);
-					if(e.response != SteamResults.OK) return;
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
+
 					var ugcResult:DownloadUGCResult = Steamworks.getUGCDownloadResult(ugcHandle);
 					log("Result for " + ugcHandle + ": " + ugcResult);
 					if(ugcResult) {
@@ -684,7 +722,10 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnGetPublishedItemVoteDetails:
 					log("RESPONSE_OnGetPublishedItemVoteDetails: " + e.response);
-					if(e.response != SteamResults.OK) return;
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
 
 					var voteDetails:ItemVoteDetailsResult = Steamworks.getPublishedItemVoteDetailsResult();
 					log("getPublishedItemVoteDetails() == " + (voteDetails ? voteDetails.result : "null"));
@@ -696,7 +737,10 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnGetUserPublishedItemVoteDetails:
 					log("RESPONSE_OnGetUserPublishedItemVoteDetails: " + e.response);
-					if(e.response != SteamResults.OK) return;
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
 
 					var userVoteDetails:UserVoteDetails = Steamworks.getUserPublishedItemVoteDetailsResult();
 					log("getUserPublishedItemVoteDetails() == " + (userVoteDetails ? userVoteDetails.result : "null"));
