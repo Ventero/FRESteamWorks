@@ -138,6 +138,17 @@ bool CSteam::FindLeaderboard(std::string name) {
 	return true;
 }
 
+bool CSteam::FindOrCreateLeaderboard(std::string name, ELeaderboardSortMethod sort,
+		ELeaderboardDisplayType display) {
+	if (!m_bInitialized) return false;
+
+	SteamAPICall_t result = SteamUserStats()->FindOrCreateLeaderboard(
+		name.c_str(), sort, display);
+	m_CallbackFindLeaderboard.Set(result, this, &CSteam::OnFindLeaderboard);
+
+	return true;
+}
+
 SteamLeaderboard_t CSteam::FindLeaderboardResult() {
 	if (!m_bInitialized || !m_CurrentLeaderboard) return 0;
 

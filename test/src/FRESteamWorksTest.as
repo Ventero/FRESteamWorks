@@ -503,12 +503,28 @@ package {
 				case SteamConstants.RESPONSE_OnFindLeaderboard:
 					log("RESPONSE_OnFindLeaderboad: " + e.response);
 					if(e.response != SteamResults.OK) break;
+
+					if (leaderboard) {
+						// result of findOrCreateLeaderboard
+						var newLeaderboard:String = Steamworks.findLeaderboardResult();
+						log("findLeaderboardResult() == " + newLeaderboard);
+						if (newLeaderboard != leaderboard)
+							log("FAILURE: findOrCreateLeaderboard() returned different leaderboard");
+
+						break;
+					}
+
 					leaderboard = Steamworks.findLeaderboardResult();
+					var name:String = Steamworks.getLeaderboardName(leaderboard)
+					var sortMethod:int = Steamworks.getLeaderboardSortMethod(leaderboard);
+					var displayType:int = Steamworks.getLeaderboardDisplayType(leaderboard)
 					log("findLeaderboardResult() == " + leaderboard);
-					log("getLeaderboardName(...) == " + Steamworks.getLeaderboardName(leaderboard));
+					log("getLeaderboardName(...) == " + name);
 					log("getLeaderboardEntryCount(...) == " + Steamworks.getLeaderboardEntryCount(leaderboard));
-					log("getLeaderboardSortMethod(...) == " + Steamworks.getLeaderboardSortMethod(leaderboard));
-					log("getLeaderboardDisplayType(...) == " + Steamworks.getLeaderboardDisplayType(leaderboard));
+					log("getLeaderboardSortMethod(...) == " + sortMethod);
+					log("getLeaderboardDisplayType(...) == " + displayType);
+					log("findOrCreateLeaderboard(...) == " + Steamworks.findOrCreateLeaderboard(
+						name, sortMethod, displayType));
 					break;
 				case SteamConstants.RESPONSE_OnDownloadLeaderboardEntries:
 					log("RESPONSE_OnDownloadLeaderboardEntries: " + e.response);

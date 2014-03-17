@@ -116,6 +116,8 @@ public:
 
 	// leaderboards
 	bool FindLeaderboard(std::string name);
+	bool FindOrCreateLeaderboard(std::string name, ELeaderboardSortMethod sort,
+		ELeaderboardDisplayType display);
 	SteamLeaderboard_t FindLeaderboardResult();
 	std::string GetLeaderboardName(SteamLeaderboard_t handle);
 	int GetLeaderboardEntryCount(SteamLeaderboard_t handle);

@@ -224,6 +224,16 @@ void AIRSteam_FindLeaderboard() {
 	send(g_Steam->FindLeaderboard(name));
 }
 
+void AIRSteam_FindOrCreateLeaderboard() {
+	std::string name = get_string();
+	uint32 sort = get_int();
+	uint32 display = get_int();
+	if (!g_Steam || name.empty()) return send(false);
+
+	send(g_Steam->FindOrCreateLeaderboard(name,
+		ELeaderboardSortMethod(sort), ELeaderboardDisplayType(display)));
+}
+
 void AIRSteam_FindLeaderboardResult() {
 	if (!g_Steam) return send("0");
 

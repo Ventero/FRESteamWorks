@@ -185,6 +185,10 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_FindLeaderboard", name) as Boolean;
 		}
 
+		public function findOrCreateLeaderboard(name:String, sortMethod:uint, displayType:uint):Boolean {
+			return _ExtensionContext.call("AIRSteam_FindOrCreateLeaderboard", name, sortMethod, displayType) as Boolean;
+		}
+
 		public function findLeaderboardResult():String {
 			return _ExtensionContext.call("AIRSteam_FindLeaderboardResult") as String;
 		}
@@ -461,7 +465,7 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_DLCInstalledResult") as uint;
 		}
 
-		/* others */
+		/* other */
 		public function getEnv(name:String):String {
 			return _ExtensionContext.call("AIRSteam_GetEnv", name) as String;
 		}

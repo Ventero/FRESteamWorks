@@ -347,6 +347,19 @@ AIR_FUNC(AIRSteam_FindLeaderboard) {
 	return FREBool(g_Steam->FindLeaderboard(name));
 }
 
+AIR_FUNC(AIRSteam_FindOrCreateLeaderboard) {
+	ARG_CHECK(3, FREBool(false));
+
+	std::string name;
+	uint32 sort, display;
+	if (!FREGetString(argv[0], name) ||
+		  !FREGetUint32(argv[1], &sort) ||
+		  !FREGetUint32(argv[2], &display)) return FREBool(false);
+
+	return FREBool(g_Steam->FindOrCreateLeaderboard(name,
+		ELeaderboardSortMethod(sort), ELeaderboardDisplayType(display)));
+}
+
 AIR_FUNC(AIRSteam_FindLeaderboardResult) {
 	ARG_CHECK(0, FREUint64(0));
 

@@ -19,6 +19,7 @@ public function storeStats():Boolean
 public function resetAllStats(achievementsToo:Boolean):Boolean
 /* leaderboards */
 public function findLeaderboard(name:String):Boolean
+public function findOrCreateLeaderboard(name:String, sortMethod:uint, displayType:uint):Boolean
 public function findLeaderboardResult():String
 public function getLeaderboardName(handle:String):String
 public function getLeaderboardEntryCount(handle:String):int

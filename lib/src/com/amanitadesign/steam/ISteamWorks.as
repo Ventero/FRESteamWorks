@@ -43,6 +43,7 @@ package com.amanitadesign.steam {
 		function resetAllStats(achievementsToo:Boolean):Boolean
 		/* leaderboards */
 		function findLeaderboard(name:String):Boolean
+		function findOrCreateLeaderboard(name:String, sortMethod:uint, displayType:uint):Boolean
 		function findLeaderboardResult():String
 		function getLeaderboardName(handle:String):String
 		function getLeaderboardEntryCount(handle:String):int
@@ -115,7 +116,7 @@ package com.amanitadesign.steam {
 		function installDLC(appId:uint):Boolean
 		function uninstallDLC(appId:uint):Boolean
 		function DLCInstalledResult():uint
-		/* others */
+		/* other */
 		function getEnv(name:String):String
 		// END GENERATED CODE
 	}
