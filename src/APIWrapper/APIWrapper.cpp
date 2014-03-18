@@ -58,11 +58,15 @@ bool AIRSteam_Init() {
 	uint32 appId = SteamUtils()->GetAppID();
 	// WHITELIST is a comma separated list of app ids
 	uint32 whitelist[] = { WHITELIST };
+	bool found = false;
 	for (auto id : whitelist) {
-		if(id == appId) return;
+		if(id == appId) {
+			found = true;
+			break;
+		}
 	}
 
-	exit(1);
+	if (!found) exit(1);
 #endif
 
 #ifdef DEBUG
