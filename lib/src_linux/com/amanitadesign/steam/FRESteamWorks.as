@@ -424,22 +424,26 @@ package com.amanitadesign.steam {
 				var response:ByteArray = readByteArrayResponse();
 				data.writeBytes(response);
 				data.position = 0;
+				// dummy value
+				readBoolResponse();
 			}
 
-			return true;
+			return success;
 		}
 
 		public function UGCRead(handle:String, size:int, offset:uint, data:ByteArray):Boolean {
 			if(!callWrapper(AIRSteam_UGCRead, [handle, size, offset])) return false;
-			var success:Boolean = readBoolResponse();
 
+			var success:Boolean = readBoolResponse();
 			if(success) {
 				var response:ByteArray = readByteArrayResponse();
 				data.writeBytes(response);
 				data.position = 0;
+				// dummy value
+				readBoolResponse();
 			}
 
-			return true;
+			return success;
 		}
 
 		/*

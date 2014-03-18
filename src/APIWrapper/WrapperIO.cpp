@@ -80,13 +80,12 @@ void send(std::string value) {
 	sendItem(AmfString(value));
 }
 
-void send(const char* value) {
-	sendItem(AmfString(value));
+void send(const AmfItem& value) {
+	sendItem(value);
 }
 
-void send(std::nullptr_t) {
-	sendItem(AmfNull());
-}
+// sentinel for pseudo-void functions
+void send(std::nullptr_t) { }
 
 // TODO: replace this mess with AMF
 bool get_bool() {

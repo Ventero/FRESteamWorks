@@ -594,10 +594,10 @@ AIR_FUNC(AIRSteam_SetCloudEnabledForApp) {
 }
 
 AIR_FUNC(AIRSteam_GetQuota) {
-	if (!g_Steam) return FREObject();
+	if (!g_Steam) return FREArray(0);
 
 	int32 total, avail;
-	if (!g_Steam->GetQuota(&total, &avail)) return FREObject();
+	if (!g_Steam->GetQuota(&total, &avail)) return FREArray(0);
 
 	FREObject array = FREArray(2);
 	FRESetArrayElementAt(array, 0, FREInt(total));
@@ -656,14 +656,14 @@ AIR_FUNC(AIRSteam_UGCRead) {
 }
 
 AIR_FUNC(AIRSteam_GetUGCDownloadProgress) {
-	ARG_CHECK(1, FREObject());
+	ARG_CHECK(1, FREArray(0));
 
 	UGCHandle_t handle;
-	if (!FREGetUint64(argv[0], &handle)) return FREObject();
+	if (!FREGetUint64(argv[0], &handle)) return FREArray(0);
 
 	int32 downloaded, expected;
 	if (!g_Steam->GetUGCDownloadProgress(handle, &downloaded, &expected))
-		return FREObject();
+		return FREArray(0);
 
 	FREObject array = FREArray(2);
 	FRESetArrayElementAt(array, 0, FREInt(downloaded));

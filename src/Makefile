@@ -60,3 +60,4 @@ dist-clean: clean
 
 # Dependencies
 $(wdir)/APIWrapper.o: $(wdir)/WrapperIO.h $(dir)/CSteam.h
+$(wdir)/APIWrapper.o: CXXFLAGS += -Wno-missing-declarations

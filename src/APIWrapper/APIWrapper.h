@@ -20,14 +20,4 @@ class CLISteam : public CSteam {
 
 void steamWarningMessageHook(int severity, const char* msg);
 
-#define X(a) void a();
-#include "functions.h"
-#undef X
-
-std::vector<std::function<void()>> apiFunctions {
-#define X(a) std::function<void()>(a),
-#include "functions.h"
-#undef X
-};
-
 #endif
