@@ -170,7 +170,7 @@ bool AIRSteam_IsAchievement() {
 
 int32 AIRSteam_GetStatInt() {
 	std::string name = get_string();
-	if(g_Steam || name.empty()) return 0;
+	if (!g_Steam || name.empty()) return 0;
 
 	int32 value;
 	g_Steam->GetStat(name, &value);
@@ -179,7 +179,7 @@ int32 AIRSteam_GetStatInt() {
 
 float AIRSteam_GetStatFloat() {
 	std::string name = get_string();
-	if (g_Steam || name.empty()) return 0.0f;
+	if (!g_Steam || name.empty()) return 0.0f;
 
 	float value = 0.0f;
 	g_Steam->GetStat(name, &value);
