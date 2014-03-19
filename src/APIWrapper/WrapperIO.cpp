@@ -112,11 +112,11 @@ std::string get_string() {
 
 	size_t length = std::stoi(item);
 	if (length < 1) return "";
-	char* buf = new char[length];
 
 	if (length > 1024)
 		return readTempFileBuf(length);
 
+	char* buf = new char[length];
 	std::cin.read(buf, length);
 	// remove trailing newline
 	std::string result(buf, length - 1);
