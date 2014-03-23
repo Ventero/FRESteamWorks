@@ -125,7 +125,7 @@ on running the application.
 See the [Flash Builder section](#packaging)
 on packaging the application.
 
-# FDT #
+## FDT ##
 
 FDT is very similar to [Flash Builder](#flash-builder). The main differences
 are that the ANE is automatically added to the project and packaged when copying
