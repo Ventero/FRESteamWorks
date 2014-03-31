@@ -49,6 +49,8 @@ enum ResponseTypes {
 	RESPONSE_OnGetUserPublishedItemVoteDetails,
 	RESPONSE_OnUpdateUserPublishedItemVote,
 	RESPONSE_OnSetUserPublishedFileAction,
+	RESPONSE_OnGetAuthSessionTicketResponse,
+	RESPONSE_OnValidateAuthTicketResponse,
 	RESPONSE_OnDLCInstalled
 };
 
@@ -202,6 +204,14 @@ public:
 	CSteamID GetFriendByIndex(int index, int flags);
 	std::string GetFriendPersonaName(CSteamID steamId);
 
+	// authentication & ownership
+	HAuthTicket GetAuthSessionTicket(char** data, uint32* length);
+	HAuthTicket GetAuthSessionTicketResult();
+	EBeginAuthSessionResult BeginAuthSession(const void* data, int length, CSteamID steamId);
+	bool EndAuthSession(CSteamID steamId);
+	bool CancelAuthTicket(HAuthTicket handle);
+	EUserHasLicenseForAppResult UserHasLicenseForApp(CSteamID steamId, AppId_t appId);
+
 	// overlay
 	bool ActivateGameOverlay(std::string dialog);
 	bool ActivateGameOverlayToUser(std::string dialog, CSteamID steamId);
@@ -230,6 +240,7 @@ private:
 	SteamLeaderboard_t m_CurrentLeaderboard;
 	UGCHandle_t m_FileHandle;
 	PublishedFileId_t m_PublishedFileId;
+	HAuthTicket m_ActualAuthTicket;
 	AppId_t m_DLCInstalled;
 
 	std::map<UGCHandle_t, RemoteStorageDownloadUGCResult_t> m_DownloadResults;
@@ -326,6 +337,12 @@ private:
 	STEAM_CALLRESULT(CSteam, OnSetUserPublishedFileAction,
 	                 RemoteStorageSetUserPublishedFileActionResult_t,
 	                 m_CallbackSetUserPublishedFileAction);
+
+	// authentication & ownership
+	STEAM_CALLBACK(CSteam, OnGetAuthSessionTicketResponse, GetAuthSessionTicketResponse_t,
+	               m_CallbackGetAuthSessionTicketResponse);
+	STEAM_CALLBACK(CSteam, OnValidateAuthTicketResponse, ValidateAuthTicketResponse_t,
+	               m_OnValidateAuthTicketResponse);
 
 	// overlay
 	STEAM_CALLBACK(CSteam, OnGameOverlayActivated, GameOverlayActivated_t,

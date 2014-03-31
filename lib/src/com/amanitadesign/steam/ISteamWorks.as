@@ -106,6 +106,13 @@ package com.amanitadesign.steam {
 		function getFriendCount(flags:uint):int
 		function getFriendByIndex(index:int, flags:uint):String
 		function getFriendPersonaName(id:String):String
+		/* authentication & ownership */
+		function getAuthSessionTicket(ticket:ByteArray):uint
+		function getAuthSessionTicketResult():uint
+		function beginAuthSession(ticket:ByteArray, steamID:String):int
+		function endAuthSession(steamID:String):Boolean
+		function cancelAuthTicket(ticketHandle:uint):Boolean
+		function userHasLicenseForApp(steamID:String, appID:uint):int
 		/* overlay */
 		function activateGameOverlay(dialog:String):Boolean
 		function activateGameOverlayToUser(dialog:String, steamId:String):Boolean

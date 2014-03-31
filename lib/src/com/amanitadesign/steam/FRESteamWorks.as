@@ -428,6 +428,31 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_GetFriendPersonaName", id) as String;
 		}
 
+		/* authentication & ownership */
+		public function getAuthSessionTicket(ticket:ByteArray):uint {
+			return _ExtensionContext.call("AIRSteam_GetAuthSessionTicket", ticket) as uint;
+		}
+
+		public function getAuthSessionTicketResult():uint {
+			return _ExtensionContext.call("AIRSteam_GetAuthSessionTicketResult") as uint;
+		}
+
+		public function beginAuthSession(ticket:ByteArray, steamID:String):int {
+			return _ExtensionContext.call("AIRSteam_BeginAuthSession", ticket, steamID) as int;
+		}
+
+		public function endAuthSession(steamID:String):Boolean {
+			return _ExtensionContext.call("AIRSteam_EndAuthSession", steamID) as Boolean;
+		}
+
+		public function cancelAuthTicket(ticketHandle:uint):Boolean {
+			return _ExtensionContext.call("AIRSteam_CancelAuthTicket", ticketHandle) as Boolean;
+		}
+
+		public function userHasLicenseForApp(steamID:String, appID:uint):int {
+			return _ExtensionContext.call("AIRSteam_UserHasLicenseForApp", steamID, appID) as int;
+		}
+
 		/* overlay */
 		public function activateGameOverlay(dialog:String):Boolean {
 			return _ExtensionContext.call("AIRSteam_ActivateGameOverlay", dialog) as Boolean;

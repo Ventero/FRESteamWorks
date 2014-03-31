@@ -122,22 +122,29 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_GetFriendCount:int = 76;
 		private static const AIRSteam_GetFriendByIndex:int = 77;
 		private static const AIRSteam_GetFriendPersonaName:int = 78;
+		/* authentication & ownership */
+		private static const AIRSteam_GetAuthSessionTicket:int = 79;
+		private static const AIRSteam_GetAuthSessionTicketResult:int = 80;
+		private static const AIRSteam_BeginAuthSession:int = 81;
+		private static const AIRSteam_EndAuthSession:int = 82;
+		private static const AIRSteam_CancelAuthTicket:int = 83;
+		private static const AIRSteam_UserHasLicenseForApp:int = 84;
 		/* overlay */
-		private static const AIRSteam_ActivateGameOverlay:int = 79;
-		private static const AIRSteam_ActivateGameOverlayToUser:int = 80;
-		private static const AIRSteam_ActivateGameOverlayToWebPage:int = 81;
-		private static const AIRSteam_ActivateGameOverlayToStore:int = 82;
-		private static const AIRSteam_ActivateGameOverlayInviteDialog:int = 83;
-		private static const AIRSteam_IsOverlayEnabled:int = 84;
+		private static const AIRSteam_ActivateGameOverlay:int = 85;
+		private static const AIRSteam_ActivateGameOverlayToUser:int = 86;
+		private static const AIRSteam_ActivateGameOverlayToWebPage:int = 87;
+		private static const AIRSteam_ActivateGameOverlayToStore:int = 88;
+		private static const AIRSteam_ActivateGameOverlayInviteDialog:int = 89;
+		private static const AIRSteam_IsOverlayEnabled:int = 90;
 		/* DLC / subscriptions */
-		private static const AIRSteam_IsSubscribedApp:int = 85;
-		private static const AIRSteam_IsDLCInstalled:int = 86;
-		private static const AIRSteam_GetDLCCount:int = 87;
-		private static const AIRSteam_InstallDLC:int = 88;
-		private static const AIRSteam_UninstallDLC:int = 89;
-		private static const AIRSteam_DLCInstalledResult:int = 90;
+		private static const AIRSteam_IsSubscribedApp:int = 91;
+		private static const AIRSteam_IsDLCInstalled:int = 92;
+		private static const AIRSteam_GetDLCCount:int = 93;
+		private static const AIRSteam_InstallDLC:int = 94;
+		private static const AIRSteam_UninstallDLC:int = 95;
+		private static const AIRSteam_DLCInstalledResult:int = 96;
 		/* other */
-		private static const AIRSteam_GetEnv:int = 91;
+		private static const AIRSteam_GetEnv:int = 97;
 		// END GENERATED VALUES
 
 		public function FRESteamWorks (target:IEventDispatcher = null) {
@@ -444,6 +451,31 @@ package com.amanitadesign.steam {
 			}
 
 			return success;
+		}
+
+		public function getAuthSessionTicket(ticket:ByteArray):uint {
+			if(!callWrapper(AIRSteam_GetAuthSessionTicket, [])) return 0;
+
+			var pos:uint = ticket.position;
+			var response:ByteArray = readByteArrayResponse();
+			ticket.writeBytes(response);
+			ticket.position = pos;
+
+			return readIntResponse();
+		}
+
+		public function beginAuthSession(ticket:ByteArray, steamID:String):int {
+			if(!callWrapper(AIRSteam_BeginAuthSession, [ticket, steamID]))
+				return UserConstants.BEGINAUTH_InvalidTicket;
+
+			return readIntResponse();
+		}
+
+		public function userHasLicenseForApp(steamID:String, appID:uint):int {
+			if(!callWrapper(AIRSteam_UserHasLicenseForApp, [steamID, appID]))
+				return UserConstants.LICENSE_NoAuth;
+
+			return readIntResponse();
 		}
 
 		/*
@@ -824,6 +856,22 @@ package com.amanitadesign.steam {
 		public function getFriendPersonaName(id:String):String {
 			if(!callWrapper(AIRSteam_GetFriendPersonaName, [id])) return "";
 			return readStringResponse();
+		}
+
+		/* authentication & ownership */
+		public function getAuthSessionTicketResult():uint {
+			if(!callWrapper(AIRSteam_GetAuthSessionTicketResult, [])) return 0;
+			return readIntResponse();
+		}
+
+		public function endAuthSession(steamID:String):Boolean {
+			if(!callWrapper(AIRSteam_EndAuthSession, [steamID])) return false;
+			return readBoolResponse();
+		}
+
+		public function cancelAuthTicket(ticketHandle:uint):Boolean {
+			if(!callWrapper(AIRSteam_CancelAuthTicket, [ticketHandle])) return false;
+			return readBoolResponse();
 		}
 
 		/* overlay */

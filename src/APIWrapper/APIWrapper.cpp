@@ -980,6 +980,62 @@ std::string AIRSteam_GetFriendPersonaName() {
 }
 
 /*
+ * authentication & ownership
+ */
+
+uint32 AIRSteam_GetAuthSessionTicket() {
+	if (!g_Steam) return k_HAuthTicketInvalid;
+
+	char* data = nullptr;
+	uint32 length = 0;
+	HAuthTicket ret = g_Steam->GetAuthSessionTicket(&data, &length);
+
+	Serializer serializer;
+	serializer << AmfByteArray(data, data + length);
+	sendDataTempFile(serializer);
+
+	delete[] data;
+
+	return ret;
+}
+
+uint32 AIRSteam_GetAuthSessionTicketResult() {
+	if (!g_Steam) return k_HAuthTicketInvalid;
+
+	return g_Steam->GetAuthSessionTicketResult();
+}
+
+int AIRSteam_BeginAuthSession() {
+	std::string data = get_bytearray();
+	uint64 steamId = get_uint64();
+	if (!g_Steam || data.empty()) return k_EBeginAuthSessionResultInvalidTicket;
+
+	return g_Steam->BeginAuthSession(data.c_str(), data.length(), CSteamID(steamId));
+}
+
+bool AIRSteam_EndAuthSession() {
+	uint64 steamId = get_uint64();
+	if (!g_Steam) return false;
+
+	return g_Steam->EndAuthSession(CSteamID(steamId));
+}
+
+bool AIRSteam_CancelAuthTicket() {
+	uint32 ticketHandle = get_int();
+	if (!g_Steam) return false;
+
+	return g_Steam->CancelAuthTicket(ticketHandle);
+}
+
+bool AIRSteam_UserHasLicenseForApp() {
+	uint64 steamId = get_uint64();
+	uint32 appId = get_int();
+	if (!g_Steam) return false;
+
+	return g_Steam->UserHasLicenseForApp(CSteamID(steamId), appId);
+}
+
+/*
  * overlay
  */
 bool AIRSteam_ActivateGameOverlay() {
@@ -1109,7 +1165,11 @@ int main(int argc, char** argv) {
 
 			apiFunctions[func]();
 		} catch (std::exception& e) {
-			steamWarningMessageHook(2, e.what());
+			std::string msg("Exception: ");
+			msg += e.what();
+			msg += "\n";
+			msg += buf;
+			steamWarningMessageHook(2, msg.c_str());
 			continue;
 		} catch (...) {
 			// shouldn't happen, just read on and hope for the best

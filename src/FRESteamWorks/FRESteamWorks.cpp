@@ -1207,6 +1207,86 @@ AIR_FUNC(AIRSteam_GetFriendPersonaName) {
 }
 
 /*
+ * authentication & ownership
+ */
+
+AIR_FUNC(AIRSteam_GetAuthSessionTicket) {
+	ARG_CHECK(1, FREUint(k_HAuthTicketInvalid));
+
+	char* data = nullptr;
+	uint32 length = 0;
+	HAuthTicket ret = g_Steam->GetAuthSessionTicket(&data, &length);
+
+	SET_PROP(argv[0], "length", FREUint(length));
+
+	FREByteArray byteArray;
+	if (FREAcquireByteArray(argv[0], &byteArray) != FRE_OK) {
+		delete[] data;
+		return FREUint(k_HAuthTicketInvalid);
+	}
+
+	memcpy(byteArray.bytes, data, length);
+	delete[] data;
+
+	FREReleaseByteArray(argv[0]);
+
+	return FREUint(ret);
+}
+
+AIR_FUNC(AIRSteam_GetAuthSessionTicketResult) {
+	ARG_CHECK(0, FREUint(k_HAuthTicketInvalid));
+
+	return FREUint(g_Steam->GetAuthSessionTicketResult());
+}
+
+AIR_FUNC(AIRSteam_BeginAuthSession) {
+	FREObject result = FREInt(k_EBeginAuthSessionResultInvalidTicket);
+	ARG_CHECK(2, result);
+
+	FREByteArray byteArray;
+	if (FREAcquireByteArray(argv[0], &byteArray) != FRE_OK)
+		return result;
+
+	uint64 steamId;
+	if (!FREGetUint64(argv[1], &steamId)) return result;
+
+	EBeginAuthSessionResult ret = g_Steam->BeginAuthSession(byteArray.bytes,
+		byteArray.length, CSteamID(steamId));
+	FREReleaseByteArray(argv[0]);
+
+	return FREInt(ret);
+}
+
+AIR_FUNC(AIRSteam_EndAuthSession) {
+	ARG_CHECK(1, FREBool(false));
+
+	uint64 steamId;
+	if (!FREGetUint64(argv[0], &steamId)) return FREBool(false);
+
+	return FREBool(g_Steam->EndAuthSession(CSteamID(steamId)));
+}
+
+AIR_FUNC(AIRSteam_CancelAuthTicket) {
+	ARG_CHECK(1, FREBool(false));
+
+	HAuthTicket ticket;
+	if (!FREGetUint32(argv[0], &ticket)) return FREBool(false);
+
+	return FREBool(g_Steam->CancelAuthTicket(ticket));
+}
+
+AIR_FUNC(AIRSteam_UserHasLicenseForApp) {
+	ARG_CHECK(2, FREInt(k_EUserHasLicenseResultNoAuth));
+
+	uint64 steamId;
+	uint32 appId;
+	if (!FREGetUint64(argv[0], &steamId) ||
+		  !FREGetUint32(argv[1], &appId)) return FREInt(k_EUserHasLicenseResultNoAuth);
+
+	return FREInt(g_Steam->UserHasLicenseForApp(CSteamID(steamId), appId));
+}
+
+/*
  * overlay
  */
 

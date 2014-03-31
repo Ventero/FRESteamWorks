@@ -82,6 +82,13 @@ public function setUserPublishedFileAction(file:String, action:uint):Boolean
 public function getFriendCount(flags:uint):int
 public function getFriendByIndex(index:int, flags:uint):String
 public function getFriendPersonaName(id:String):String
+/* authentication & ownership */
+public function getAuthSessionTicket(ticket:ByteArray):uint
+public function getAuthSessionTicketResult():uint
+public function beginAuthSession(ticket:ByteArray, steamID:String):int
+public function endAuthSession(steamID:String):Boolean
+public function cancelAuthTicket(ticketHandle:uint):Boolean
+public function userHasLicenseForApp(steamID:String, appID:uint):int
 /* overlay */
 public function activateGameOverlay(dialog:String):Boolean
 public function activateGameOverlayToUser(dialog:String, steamId:String):Boolean

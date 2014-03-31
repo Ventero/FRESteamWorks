@@ -20,6 +20,8 @@ package {
 
 	import com.amanitadesign.steam.FriendConstants;
 	import com.amanitadesign.steam.SteamConstants;
+	import com.amanitadesign.steam.UserConstants;
+	import com.amanitadesign.steam.UserStatsConstants;
 	import com.amanitadesign.steam.WorkshopConstants;
 
 	import com.amanitadesign.steam.DownloadUGCResult;
@@ -76,6 +78,7 @@ package {
 			addButton("Check friends", checkFriends, _buttonContainer);
 			addButton("Toggle cloud enabled", toggleCloudEnabled, _buttonContainer);
 			addButton("Toggle fullscreen", toggleFullscreen, _buttonContainer);
+			addButton("Get auth ticket", getAuthTicket, _buttonContainer);
 			addButton("Invalid API call", invalidCall, _buttonContainer);
 			addButton("File actions", null, _buttonContainer, _fileContainer);
 			addButton("Enumerate workshop", null, _buttonContainer, _enumerateContainer);
@@ -145,6 +148,9 @@ package {
 				log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt'));
 				log("getDLCCount() == " + Steamworks.getDLCCount());
 				log("isSubscribedApp(" + _appId + ") == " + Steamworks.isSubscribedApp(_appId));
+				log("userHasLicenseForApp(...) == " + (
+					Steamworks.userHasLicenseForApp(_userId, _appId) == UserConstants.LICENSE_HasLicense));
+				log("userHasLicenseForApp(..., 999999) == " + Steamworks.userHasLicenseForApp(_userId, 999999));
 				log("isSubscribedApp(999999) == " + Steamworks.isSubscribedApp(999999));
 				// TODO: find better appID to test this for (i.e. one that can
 				//       potentially be installed)
@@ -286,6 +292,24 @@ package {
 				stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 			else
 				stage.displayState = StageDisplayState.NORMAL;
+		}
+
+		private function getAuthTicket(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+
+			authTicket = new ByteArray();
+			authHandle = Steamworks.getAuthSessionTicket(authTicket)
+			log("getAuthSessionTicket(ticket) == " + authHandle);
+			logTicket(authTicket);
+		}
+
+		private function logTicket(ticket:ByteArray):void {
+			var s:String = "";
+			for (var i:int = 0; i < ticket.length; ++i) {
+				var n:String = ticket[i].toString(16);
+				s += (n.length < 2 ? "0" : "") + n;
+			}
+			log("Ticket: " + ticket.bytesAvailable + "//" + ticket.length + "\n" + s);
 		}
 
 		private function activateOverlay(e:Event = null):void {
@@ -518,6 +542,8 @@ package {
 		private var publishedFile:String;
 		private var leaderboard:String;
 		private var scoreDetails:int = 0;
+		private var authHandle:uint = 0;
+		private var authTicket:ByteArray = null;
 		private function onSteamResponse(e:SteamEvent):void{
 			var apiCall:Boolean;
 			var i:int;
@@ -778,6 +804,40 @@ package {
 					if(!userVoteDetails) return;
 
 					log("vote: " + userVoteDetails.vote);
+					break;
+
+				case SteamConstants.RESPONSE_OnGetAuthSessionTicketResponse:
+					log("RESPONSE_OnGetAuthSessionTicketResponse: " + e.response);
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
+
+					if (authHandle == UserConstants.AUTHTICKET_Invalid) {
+						log("Invalid authHandle (cancelled?)");
+						break;
+					}
+
+					var realAuthHandle:uint = Steamworks.getAuthSessionTicketResult();
+					log("getAuthSessionTicketResult() == " + realAuthHandle);
+					log("equal to original handle? " + (realAuthHandle == authHandle));
+					authHandle = realAuthHandle;
+
+					log("beginAuthSession(ticket, " + _userId + ") == " + Steamworks.beginAuthSession(
+						authTicket, _userId));
+
+					break;
+				case SteamConstants.RESPONSE_OnValidateAuthTicketResponse:
+					log("RESPONSE_OnValidateAuthTicketResponse: " + e.response);
+					if(e.response != UserConstants.SESSION_OK) {
+						log("FAILED!");
+						break;
+					}
+
+					log("endAuthSession(" + _userId + ") == " + Steamworks.endAuthSession( _userId));
+					log("cancelAuthTicket(" + authHandle + ") == " + Steamworks.cancelAuthTicket(authHandle));
+					authHandle = UserConstants.AUTHTICKET_Invalid;
+
 					break;
 				default:
 					log("STEAMresponse type:"+e.req_type+" response:"+e.response);

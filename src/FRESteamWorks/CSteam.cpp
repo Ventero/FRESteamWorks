@@ -14,10 +14,13 @@ CSteam::CSteam():
 	m_CurrentLeaderboard(0),
 	m_FileHandle(k_UGCHandleInvalid),
 	m_PublishedFileId(0),
+	m_ActualAuthTicket(k_HAuthTicketInvalid),
 	m_DLCInstalled(0),
 	m_CallbackUserStatsReceived(this, &CSteam::OnUserStatsReceived),
 	m_CallbackUserStatsStored(this, &CSteam::OnUserStatsStored),
 	m_CallbackAchievementStored(this, &CSteam::OnAchievementStored),
+	m_CallbackGetAuthSessionTicketResponse(this, &CSteam::OnGetAuthSessionTicketResponse),
+	m_OnValidateAuthTicketResponse(this, &CSteam::OnValidateAuthTicketResponse),
 	m_CallbackGameOverlayActivated(this, &CSteam::OnGameOverlayActivated),
 	m_CallbackDLCInstalled(this, &CSteam::OnDLCInstalled)
 {
@@ -623,8 +626,53 @@ std::string CSteam::GetFriendPersonaName(CSteamID steamId) {
 	return std::string(SteamFriends()->GetFriendPersonaName(steamId));
 }
 
-// overlay
+// authentication & ownership
+HAuthTicket CSteam::GetAuthSessionTicket(char** data, uint32* length) {
+	if (!m_bInitialized) return k_HAuthTicketInvalid;
 
+	// the docs don't state a maximum length anywhere, so just use what their
+	// example app uses ...
+	const int bufsize = 1024;
+	char* buf = new char[bufsize];
+	HAuthTicket ret = SteamUser()->GetAuthSessionTicket(buf, bufsize, length);
+
+	*data = buf;
+	return ret;
+}
+
+HAuthTicket CSteam::GetAuthSessionTicketResult() {
+	if (!m_bInitialized) return k_HAuthTicketInvalid;
+
+	return m_ActualAuthTicket;
+}
+
+EBeginAuthSessionResult CSteam::BeginAuthSession(const void* data, int length, CSteamID steamId) {
+	if (!m_bInitialized) return k_EBeginAuthSessionResultInvalidTicket;
+
+	return SteamUser()->BeginAuthSession(data, length, steamId);
+}
+
+bool CSteam::EndAuthSession(CSteamID steamId) {
+	if (!m_bInitialized) return false;
+
+	SteamUser()->EndAuthSession(steamId);
+	return true;
+}
+
+bool CSteam::CancelAuthTicket(HAuthTicket handle) {
+	if (!m_bInitialized) return false;
+
+	SteamUser()->CancelAuthTicket(handle);
+	return true;
+}
+
+EUserHasLicenseForAppResult CSteam::UserHasLicenseForApp(CSteamID steamId, AppId_t appId) {
+	if (!m_bInitialized) return k_EUserHasLicenseResultNoAuth;
+
+	return SteamUser()->UserHasLicenseForApp(steamId, appId);
+}
+
+// overlay
 bool CSteam::ActivateGameOverlay(std::string dialog) {
 	if (!m_bInitialized) return false;
 
@@ -838,6 +886,17 @@ void CSteam::OnSetUserPublishedFileAction(RemoteStorageSetUserPublishedFileActio
 void CSteam::OnGameOverlayActivated(GameOverlayActivated_t *pCallback) {
 	DispatchEvent(RESPONSE_OnGameOverlayActivated, pCallback->m_bActive ? k_EResultOK : k_EResultFail);
 }
+
+void CSteam::OnGetAuthSessionTicketResponse(GetAuthSessionTicketResponse_t *pCallback) {
+	m_ActualAuthTicket = pCallback->m_hAuthTicket;
+	DispatchEvent(RESPONSE_OnGetAuthSessionTicketResponse, pCallback->m_eResult);
+}
+
+void CSteam::OnValidateAuthTicketResponse(ValidateAuthTicketResponse_t *pCallback) {
+	// ignoring m_SteamID, m_OwnerSteamID;
+	DispatchEvent(RESPONSE_OnValidateAuthTicketResponse, pCallback->m_eAuthSessionResponse);
+}
+
 
 void CSteam::OnDLCInstalled(DlcInstalled_t *pCallback) {
 	m_DLCInstalled = pCallback->m_nAppID;
