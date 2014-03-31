@@ -24,8 +24,8 @@ accompanied by testcases in the test application (`test/src/FRESteamWorksTest.as
 Thus, when adding new functionality to FRESteamWorks that is meant to be used from
 the AS3 side, you would have to modify all four parts of FRESteamWorks.
 
-Here's a quick step-by-step guide on how to add new functions to FRESteamWorks
-- if you're fixing a bug, some of these steps may be skipped:
+Here's a quick step-by-step guide on how to add new functions to FRESteamWorks -
+if you're fixing a bug, some of these steps may be skipped:
 
 1. Get the [necessary prerequisites](#prerequisites). Fork the repository,
 clone your fork (make sure to initialise the submodules with `git submodule update --init`)
