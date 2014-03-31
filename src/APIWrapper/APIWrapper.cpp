@@ -1027,10 +1027,10 @@ bool AIRSteam_CancelAuthTicket() {
 	return g_Steam->CancelAuthTicket(ticketHandle);
 }
 
-bool AIRSteam_UserHasLicenseForApp() {
+int AIRSteam_UserHasLicenseForApp() {
 	uint64 steamId = get_uint64();
 	uint32 appId = get_int();
-	if (!g_Steam) return false;
+	if (!g_Steam) return k_EUserHasLicenseResultNoAuth;
 
 	return g_Steam->UserHasLicenseForApp(CSteamID(steamId), appId);
 }

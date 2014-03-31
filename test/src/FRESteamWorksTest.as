@@ -148,9 +148,6 @@ package {
 				log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt'));
 				log("getDLCCount() == " + Steamworks.getDLCCount());
 				log("isSubscribedApp(" + _appId + ") == " + Steamworks.isSubscribedApp(_appId));
-				log("userHasLicenseForApp(...) == " + (
-					Steamworks.userHasLicenseForApp(_userId, _appId) == UserConstants.LICENSE_HasLicense));
-				log("userHasLicenseForApp(..., 999999) == " + Steamworks.userHasLicenseForApp(_userId, 999999));
 				log("isSubscribedApp(999999) == " + Steamworks.isSubscribedApp(999999));
 				// TODO: find better appID to test this for (i.e. one that can
 				//       potentially be installed)
@@ -833,6 +830,11 @@ package {
 						log("FAILED!");
 						break;
 					}
+
+					/* should be equal to UserConstants.LICENSE_HasLicense */
+					log("userHasLicenseForApp(...) == " + (Steamworks.userHasLicenseForApp(_userId, _appId)) +
+						"( == " + UserConstants.LICENSE_HasLicense + "?)");
+					log("userHasLicenseForApp(..., 999999) == " + Steamworks.userHasLicenseForApp(_userId, 999999));
 
 					log("endAuthSession(" + _userId + ") == " + Steamworks.endAuthSession( _userId));
 					log("cancelAuthTicket(" + authHandle + ") == " + Steamworks.cancelAuthTicket(authHandle));
