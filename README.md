@@ -7,6 +7,10 @@ OS X and Linux.
 
 This project initially started as a fork of [FRESteamWorks by Oldes/Amanita Design](https://github.com/Oldes/FRESteamWorks/).
 
+If you want to contribute to this project, please take a look at the
+[contributing guide](https://github.com/Ventero/FRESteamWorks/tree/master/CONTRIBUTING.md).
+
+
 # Download #
 
 Pre-built cross-platform ANEs (for both Windows and OS X), as well as Linux
@@ -184,6 +188,9 @@ Windows and OS X and then create an ANE that includes both of those. This is eas
 done by first running `mkdir.sh` in `builds/`, building FRESteamWorks.dll on Windows,
 copying it over to the directory created on OS X and then running `compile.sh`
 and `build.sh` in that order.
+
+For more details, please see the
+[contributing guide](https://github.com/Ventero/FRESteamWorks/tree/master/CONTRIBUTING.md).
 
 ---
 
