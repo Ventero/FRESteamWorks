@@ -20,7 +20,7 @@ endif
 
 # Native extension objects
 dir := FRESteamWorks
-obj := $(dir)/FRESteamWorks.o $(dir)/CSteam.o
+obj := $(dir)/FRESteamWorks.o $(dir)/FREConverters.o $(dir)/CSteam.o
 # APIWrapper objects
 wdir := APIWrapper
 wrapperobj := $(wdir)/APIWrapper.o $(wdir)/WrapperIO.o $(dir)/CSteam.o $(wdir)/libamf.a

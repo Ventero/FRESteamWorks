@@ -17,11 +17,7 @@
 	#define EXPORT __attribute__((visibility("default")))
 #endif
 
-#include <string>
-#include <vector>
-
 #include <FlashRuntimeExtensions.h>
-#include <steam_api.h>
 
 #include "CSteam.h"
 
@@ -34,27 +30,6 @@
 #define SET_PROP(object, property, value) \
 	FRESetObjectProperty(object, (const uint8_t*)property, value, NULL)
 
-// utility functions for conversion of FRE types
-FREObject FREBool(bool);
-FREObject FREDouble(double);
-FREObject FREInt(int32);
-FREObject FREUint(uint32);
-FREObject FREUint64(uint64);
-FREObject FREString(std::string);
-FREObject FREString(const char*);
-FREObject FREArray(uint32);
-bool FREGetBool(FREObject object, bool* val);
-bool FREGetDouble(FREObject, double* val);
-bool FREGetInt32(FREObject, int32* val);
-bool FREGetUint32(FREObject, uint32* val);
-bool FREGetUint64(FREObject, uint64* val);
-bool FREGetString(FREObject, std::string& val);
-bool FREGetStringP(FREObject, std::string* val);
-
-template<typename T, typename Converter>
-std::vector<T> getArray(FREObject object, Converter conv);
-
-std::vector<std::string> extractStringArray(FREObject object);
 void steamWarningMessageHook(int severity, const char* msg);
 
 class ANESteam : public CSteam {

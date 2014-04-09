@@ -12,147 +12,13 @@
 
 #include <cstdlib>
 
+#include "FREConverters.h"
+
 // Used to dispatch event back to AIR
 FREContext AIRContext;
 
 // Global access to Steam object
 CSteam*	g_Steam = NULL;
-
-// utility functions
-FREObject FREBool(bool value) {
-	FREObject result;
-	FRENewObjectFromBool(value, &result);
-	return result;
-}
-
-FREObject FREInt(int32 value) {
-	FREObject result;
-	FRENewObjectFromInt32(value, &result);
-	return result;
-}
-
-FREObject FREUint(uint32 value) {
-	FREObject result;
-	FRENewObjectFromUint32(value, &result);
-	return result;
-}
-
-FREObject FREDouble(double value) {
-	FREObject result;
-	FRENewObjectFromDouble(value, &result);
-	return result;
-}
-
-FREObject FREString(std::string value) {
-	FREObject result;
-	FRENewObjectFromUTF8(value.size() + 1, (const uint8_t*)value.c_str(), &result);
-	return result;
-}
-
-FREObject FREString(const char* value) {
-	return FREString(std::string(value));
-}
-
-FREObject FREUint64(uint64 value) {
-	std::stringstream stream;
-	stream << value;
-	return FREString(stream.str());
-}
-
-FREObject FREArray(uint32 length) {
-	FREObject array;
-	FRENewObject((const uint8_t*)"Array", 0, NULL, &array, NULL);
-	FRESetArrayLength(array, length);
-
-	return array;
-}
-
-bool FREGetString(FREObject object, std::string& str) {
-	uint32 len;
-	const uint8_t* data;
-	FREResult res = FREGetObjectAsUTF8(object, &len, &data);
-	if (res != FRE_OK) return false;
-
-	str = std::string((const char*)data, len);
-	return true;
-}
-
-bool FREGetStringP(FREObject object, std::string* str) {
-	std::string s;
-	if (!FREGetString(object, s)) return false;
-
-	*str = s;
-	return true;
-}
-
-bool FREGetBool(FREObject object, bool* val) {
-	uint32 int_val;
-
-	FREResult ret = FREGetObjectAsBool(object, &int_val);
-	*val = (int_val != 0);
-
-	return ret == FRE_OK;
-}
-
-bool FREGetDouble(FREObject object, double* val) {
-	return (FREGetObjectAsDouble(object, val) == FRE_OK);
-}
-
-bool FREGetInt32(FREObject object, int32* val) {
-	return (FREGetObjectAsInt32(object, val) == FRE_OK);
-}
-
-bool FREGetUint32(FREObject object, uint32* val) {
-	// really, Adobe ...?
-#ifdef LINUX
-	return (FREGetObjectAsUInt32(object, val) == FRE_OK);
-#else
-	return (FREGetObjectAsUint32(object, val) == FRE_OK);
-#endif
-}
-
-bool FREGetUint64(FREObject object, uint64* val) {
-	std::string str;
-	if (!FREGetString(object, str)) return false;
-
-	// Clang doesn't support std::stoull yet...
-	std::istringstream ss(str);
-	if (!(ss >> *val)) return false;
-
-	return true;
-}
-
-template<typename T, typename Converter>
-std::vector<T> getArray(FREObject object, Converter conv) {
-	std::vector<T> ret;
-
-	uint32 arrayLength;
-	if (FREGetArrayLength(object, &arrayLength) != FRE_OK)
-		return ret;
-
-	if (!arrayLength)
-		return ret;
-
-	ret.reserve(arrayLength);
-	for (uint32 i = 0; i < arrayLength; ++i) {
-		FREObject value;
-		if (FREGetArrayElementAt(object, i, &value) != FRE_OK)
-			continue;
-
-		T val;
-		if (!conv(value, &val))
-			continue;
-
-		ret.push_back(val);
-	}
-
-	return ret;
-}
-
-// converts a FREObject string-array to a std::vector
-std::vector<std::string> extractStringArray(FREObject object) {
-	return getArray<std::string>(object, FREGetStringP);
-}
 
 #ifdef DEBUG
 #include <iostream>
@@ -171,7 +37,7 @@ void ANESteam::DispatchEvent(char* code, char* level) {
 }
 
 /*
- * general function
+ * general functions
  */
 
 AIR_FUNC(AIRSteam_Init) {

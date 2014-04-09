@@ -97,10 +97,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FRESteamWorks\CSteam.cpp" />
+    <ClCompile Include="FRESteamWorks\FREConverters.cpp" />
     <ClCompile Include="FRESteamWorks\FRESteamWorks.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FRESteamWorks\CSteam.h" />
+    <ClInclude Include="FRESteamWorks\FREConverters.h" />
     <ClInclude Include="FRESteamWorks\FRESteamWorks.h" />
     <ClInclude Include="FRESteamWorks\functions.h" />
   </ItemGroup>
