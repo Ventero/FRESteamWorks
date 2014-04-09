@@ -246,6 +246,9 @@ private:
 	std::map<UGCHandle_t, RemoteStorageDownloadUGCResult_t> m_DownloadResults;
 	std::map<PublishedFileId_t, RemoteStorageGetPublishedFileDetailsResult_t> m_PublishedFileDetails;
 
+	// can't use unique_ptr because we need to target OS X 10.6 ...
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	std::auto_ptr<LeaderboardScoreUploaded_t> m_ScoreUpload;
 	std::auto_ptr<LeaderboardScoresDownloaded_t> m_ScoreDownloaded;
 	std::auto_ptr<RemoteStorageEnumerateUserPublishedFilesResult_t> m_UserPublishedFiles;
@@ -255,6 +258,7 @@ private:
 	std::auto_ptr<RemoteStorageEnumeratePublishedFilesByUserActionResult_t> m_PublishedFilesByAction;
 	std::auto_ptr<RemoteStorageGetPublishedItemVoteDetailsResult_t> m_PublishedItemVoteDetails;
 	std::auto_ptr<RemoteStorageUserVoteDetails_t> m_UserPublishedItemVoteDetails;
+#pragma GCC diagnostic pop
 
 	void DispatchEvent(const int req_type, const int response);
 
