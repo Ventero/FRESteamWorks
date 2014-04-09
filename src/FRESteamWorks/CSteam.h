@@ -9,7 +9,6 @@
  */
 
 #if defined(WIN32)
-	#define _CRT_SECURE_NO_WARNINGS
 	#define snprintf _snprintf
 #endif
 
