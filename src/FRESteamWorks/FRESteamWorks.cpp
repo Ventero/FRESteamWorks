@@ -85,8 +85,13 @@ bool FREGetStringP(FREObject object, std::string* str) {
 	return true;
 }
 
-bool FREGetBool(FREObject object, uint32* val) {
-	return (FREGetObjectAsBool(object, val) == FRE_OK);
+bool FREGetBool(FREObject object, bool* val) {
+	uint32 int_val;
+
+	FREResult ret = FREGetObjectAsBool(object, &int_val);
+	*val = (int_val != 0);
+
+	return ret == FRE_OK;
 }
 
 bool FREGetDouble(FREObject object, double* val) {
@@ -329,10 +334,10 @@ AIR_FUNC(AIRSteam_StoreStats) {
 AIR_FUNC(AIRSteam_ResetAllStats) {
 	ARG_CHECK(1, FREBool(false));
 
-	uint32 achievementsToo;
+	bool achievementsToo;
 	if (!FREGetBool(argv[0], &achievementsToo)) return FREBool(false);
 
-	return FREBool(g_Steam->ResetAllStats(achievementsToo != 0));
+	return FREBool(g_Steam->ResetAllStats(achievementsToo));
 }
 
 /*
@@ -587,10 +592,10 @@ AIR_FUNC(AIRSteam_IsCloudEnabledForApp) {
 AIR_FUNC(AIRSteam_SetCloudEnabledForApp) {
 	ARG_CHECK(1, FREBool(false));
 
-	uint32 enabled = 0;
+	bool enabled;
 	if (!FREGetBool(argv[0], &enabled)) return FREBool(false);
 
-	return FREBool(g_Steam->SetCloudEnabledForApp(enabled != 0));
+	return FREBool(g_Steam->SetCloudEnabledForApp(enabled));
 }
 
 AIR_FUNC(AIRSteam_GetQuota) {
@@ -1152,12 +1157,12 @@ AIR_FUNC(AIRSteam_UpdateUserPublishedItemVote) {
 	ARG_CHECK(2, FREBool(false));
 
 	PublishedFileId_t file;
-	uint32 upvote;
+	bool upvote;
 	if (!FREGetUint64(argv[0], &file) ||
 	    !FREGetBool(argv[1], &upvote)) return FREBool(false);
 
 
-	return FREBool(g_Steam->UpdateUserPublishedItemVote(file, upvote != 0));
+	return FREBool(g_Steam->UpdateUserPublishedItemVote(file, upvote));
 }
 
 AIR_FUNC(AIRSteam_SetUserPublishedFileAction) {

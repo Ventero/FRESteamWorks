@@ -43,7 +43,7 @@ FREObject FREUint64(uint64);
 FREObject FREString(std::string);
 FREObject FREString(const char*);
 FREObject FREArray(uint32);
-bool FREGetBool(FREObject, uint32* val);
+bool FREGetBool(FREObject object, bool* val);
 bool FREGetDouble(FREObject, double* val);
 bool FREGetInt32(FREObject, int32* val);
 bool FREGetUint32(FREObject, uint32* val);
