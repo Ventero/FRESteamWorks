@@ -18,7 +18,7 @@
 
 #include <FlashRuntimeExtensions.h>
 
-#include "CSteam.h"
+#include "CSteam/CSteam.h"
 
 #define AIR_FUNC(name) \
 	FREObject name(FREContext ctx, void* funcData, uint32 argc, FREObject argv[])

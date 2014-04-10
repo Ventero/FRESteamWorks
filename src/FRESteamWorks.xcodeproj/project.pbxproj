@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		1214331015298AAF003FF426 /* FRESteamWorks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1214330F15298AAF003FF426 /* FRESteamWorks.cpp */; };
 		5407FE0D18F5FA9E0097B5D3 /* FREConverters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5407FE0B18F5FA9E0097B5D3 /* FREConverters.cpp */; };
+		5407FE1218F767FE0097B5D3 /* CSteam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5407FE1018F767FE0097B5D3 /* CSteam.cpp */; };
 		546198A516A8B32100E9B390 /* libsteam_api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1214331815298C47003FF426 /* libsteam_api.dylib */; };
 		54B6962216AB356400CFBD85 /* Adobe AIR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B6962116AB356400CFBD85 /* Adobe AIR.framework */; };
-		54FA319D16C5B28E00BC2F1B /* CSteam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 54FA319B16C5B28E00BC2F1B /* CSteam.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,9 +21,10 @@
 		1214331815298C47003FF426 /* libsteam_api.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsteam_api.dylib; path = ../../SteamSDK/redistributable_bin/osx32/libsteam_api.dylib; sourceTree = SOURCE_ROOT; };
 		5407FE0B18F5FA9E0097B5D3 /* FREConverters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FREConverters.cpp; sourceTree = "<group>"; };
 		5407FE0C18F5FA9E0097B5D3 /* FREConverters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FREConverters.h; sourceTree = "<group>"; };
+		5407FE1018F767FE0097B5D3 /* CSteam.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CSteam.cpp; path = CSteam/CSteam.cpp; sourceTree = "<group>"; };
+		5407FE1118F767FE0097B5D3 /* CSteam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSteam.h; path = CSteam/CSteam.h; sourceTree = "<group>"; };
+		5407FE1318F7680F0097B5D3 /* functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = functions.h; sourceTree = "<group>"; };
 		54B6962116AB356400CFBD85 /* Adobe AIR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Adobe AIR.framework"; path = "../../AdobeAIRSDK/runtimes/air/mac/Adobe AIR.framework"; sourceTree = "<group>"; };
-		54FA319B16C5B28E00BC2F1B /* CSteam.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSteam.cpp; sourceTree = "<group>"; };
-		54FA319C16C5B28E00BC2F1B /* CSteam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSteam.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,7 +43,7 @@
 		121432F215298AAF003FF426 = {
 			isa = PBXGroup;
 			children = (
-				1214330715298AAF003FF426 /* FRESteamWorks */,
+				5407FE0F18F767DC0097B5D3 /* Source */,
 				1214330015298AAF003FF426 /* Frameworks */,
 				121432FF15298AAF003FF426 /* Products */,
 			);
@@ -70,11 +71,8 @@
 			children = (
 				5407FE0B18F5FA9E0097B5D3 /* FREConverters.cpp */,
 				5407FE0C18F5FA9E0097B5D3 /* FREConverters.h */,
-				54FA319B16C5B28E00BC2F1B /* CSteam.cpp */,
-				54FA319C16C5B28E00BC2F1B /* CSteam.h */,
 				1214330E15298AAF003FF426 /* FRESteamWorks.h */,
 				1214330F15298AAF003FF426 /* FRESteamWorks.cpp */,
-				1214330815298AAF003FF426 /* Supporting Files */,
 			);
 			path = FRESteamWorks;
 			sourceTree = "<group>";
@@ -85,6 +83,27 @@
 				1214331815298C47003FF426 /* libsteam_api.dylib */,
 			);
 			name = "Supporting Files";
+			path = FRESteamWorks;
+			sourceTree = "<group>";
+		};
+		5407FE0E18F767D30097B5D3 /* CSteam */ = {
+			isa = PBXGroup;
+			children = (
+				5407FE1018F767FE0097B5D3 /* CSteam.cpp */,
+				5407FE1118F767FE0097B5D3 /* CSteam.h */,
+			);
+			name = CSteam;
+			sourceTree = "<group>";
+		};
+		5407FE0F18F767DC0097B5D3 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				5407FE1318F7680F0097B5D3 /* functions.h */,
+				5407FE0E18F767D30097B5D3 /* CSteam */,
+				1214330715298AAF003FF426 /* FRESteamWorks */,
+				1214330815298AAF003FF426 /* Supporting Files */,
+			);
+			name = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -155,9 +174,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5407FE1218F767FE0097B5D3 /* CSteam.cpp in Sources */,
 				5407FE0D18F5FA9E0097B5D3 /* FREConverters.cpp in Sources */,
 				1214331015298AAF003FF426 /* FRESteamWorks.cpp in Sources */,
-				54FA319D16C5B28E00BC2F1B /* CSteam.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,6 +230,7 @@
 				HEADER_SEARCH_PATHS = (
 					../../SteamSDK/public/steam,
 					../../AdobeAIRSDK/include,
+					"$(SRCROOT)",
 				);
 				INFOPLIST_FILE = "";
 				INSTALL_PATH = "@rpath";
@@ -279,6 +299,7 @@
 				HEADER_SEARCH_PATHS = (
 					../../SteamSDK/public/steam,
 					../../AdobeAIRSDK/include,
+					"$(SRCROOT)",
 				);
 				INFOPLIST_FILE = "";
 				INSTALL_PATH = "@rpath";

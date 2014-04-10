@@ -52,7 +52,7 @@ files = [
 		:end => "END GENERATED VALUES"
 	},
 	{
-		:file => "../src/FRESteamWorks/functions.h",
+		:file => "../src/functions.h",
 		:ignore => [],
 		:format => -> line, func { "X(#{func[:air_name]}) /* = #{func[:num]} */" }
 	}

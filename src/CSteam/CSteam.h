@@ -12,17 +12,14 @@
 	#define snprintf _snprintf
 #endif
 
-#include <algorithm>
 #include <map>
 #include <memory>
-#include <stdio.h>
 #include <string>
-#include <sstream>
 #include <vector>
 
 #include <steam_api.h>
 
-// General result codes
+// General result codes, make sure this is identical to SteamConstants.as
 enum ResponseTypes {
 	RESPONSE_OnUserStatsReceived,
 	RESPONSE_OnUserStatsStored,
@@ -79,7 +76,7 @@ public:
 		std::swap(max_details, other.max_details);
 		std::swap(details, other.details);
 
-        return *this;
+		return *this;
 	}
 
 	~LeaderboardEntry() {

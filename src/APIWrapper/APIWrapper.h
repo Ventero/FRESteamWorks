@@ -11,7 +11,8 @@
 
 #include <steam_api.h>
 
-#include "CSteam.h"
+#include "CSteam/CSteam.h"
+
 #include "WrapperIO.h"
 
 class CLISteam : public CSteam {

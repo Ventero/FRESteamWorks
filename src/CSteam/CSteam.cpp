@@ -10,6 +10,10 @@
 
 #include "CSteam.h"
 
+#include <algorithm>
+#include <stdio.h>
+#include <sstream>
+
 CSteam::CSteam():
 	m_CurrentLeaderboard(0),
 	m_FileHandle(k_UGCHandleInvalid),
