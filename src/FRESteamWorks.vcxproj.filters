@@ -24,12 +24,18 @@
     <ClInclude Include="FRESteamWorks\functions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FRESteamWorks\FREConverters.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FRESteamWorks\FRESteamWorks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FRESteamWorks\CSteam.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FRESteamWorks\FREConverters.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
