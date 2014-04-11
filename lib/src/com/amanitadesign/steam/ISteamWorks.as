@@ -127,6 +127,8 @@ package com.amanitadesign.steam {
 		function installDLC(appId:uint):Boolean
 		function uninstallDLC(appId:uint):Boolean
 		function DLCInstalledResult():uint
+		/* Microtransaction */
+		function MicroTxnOrderIDResult():String
 		/* other */
 		function getEnv(name:String):String
 		// END GENERATED CODE

@@ -1126,6 +1126,16 @@ bool AIRSteam_DLCInstalledResult() {
 }
 
 /*
+ * Microtransaction
+ */
+
+uint64 AIRSteam_MicroTxnOrderIDResult() {
+	if (!g_Steam) return 0;;
+
+	return g_Steam->MicroTxnOrderIDResult();
+}
+
+/*
  * other
  */
 

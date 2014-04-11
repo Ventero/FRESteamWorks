@@ -503,6 +503,11 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_DLCInstalledResult") as uint;
 		}
 
+		/* Microtransaction */
+		public function MicroTxnOrderIDResult():String {
+			return _ExtensionContext.call("AIRSteam_MicroTxnOrderIDResult") as String;
+		}
+
 		/* other */
 		public function getEnv(name:String):String {
 			return _ExtensionContext.call("AIRSteam_GetEnv", name) as String;

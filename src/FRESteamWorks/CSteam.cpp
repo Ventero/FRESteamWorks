@@ -22,7 +22,8 @@ CSteam::CSteam():
 	m_CallbackGetAuthSessionTicketResponse(this, &CSteam::OnGetAuthSessionTicketResponse),
 	m_OnValidateAuthTicketResponse(this, &CSteam::OnValidateAuthTicketResponse),
 	m_CallbackGameOverlayActivated(this, &CSteam::OnGameOverlayActivated),
-	m_CallbackDLCInstalled(this, &CSteam::OnDLCInstalled)
+	m_CallbackDLCInstalled(this, &CSteam::OnDLCInstalled),
+	m_CallbackMicroTxnAuthorizationResponse(this, &CSteam::OnMicroTxnAuthorizationResponse)
 {
 	m_iAppID = SteamUtils()->GetAppID();
 	m_bInitialized = (SteamUserStats() != NULL && SteamUser() != NULL);
@@ -750,6 +751,16 @@ AppId_t CSteam::DLCInstalledResult() {
 	return m_DLCInstalled;
 }
 
+uint64_t CSteam::MicroTxnOrderIDResult() {
+	uint64_t orderID = 0UL;
+	if (!m_MicroTxnOrderIDs.empty())
+	{
+		orderID = m_MicroTxnOrderIDs.front();
+		m_MicroTxnOrderIDs.pop();
+	}
+	return orderID;
+}
+
 void CSteam::DispatchEvent(const int req_type, const int response) {
 	char type[5];
 	char value[5];
@@ -901,6 +912,13 @@ void CSteam::OnValidateAuthTicketResponse(ValidateAuthTicketResponse_t *pCallbac
 void CSteam::OnDLCInstalled(DlcInstalled_t *pCallback) {
 	m_DLCInstalled = pCallback->m_nAppID;
 	DispatchEvent(RESPONSE_OnDLCInstalled, k_EResultOK);
+}
+
+void CSteam::OnMicroTxnAuthorizationResponse(MicroTxnAuthorizationResponse_t *pCallback) {
+	// ignore callbacks for other games' transactions
+	if (m_iAppID != pCallback->m_unAppID) return;
+	m_MicroTxnOrderIDs.push(pCallback->m_ulOrderID);
+	DispatchEvent(RESPONSE_OnMicroTxnAuthorizationResponse, pCallback->m_bAuthorized ? k_EResultOK : k_EResultFail);
 }
 
 /*

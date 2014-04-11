@@ -38,6 +38,7 @@ package com.amanitadesign.steam {
 		public static const RESPONSE_OnGetAuthSessionTicketResponse:int = 24;
 		public static const RESPONSE_OnValidateAuthTicketResponse:int = 25;
 		public static const RESPONSE_OnDLCInstalled:int = 26;
+		public static const RESPONSE_OnMicroTxnAuthorizationResponse:int = 27;
 	}
 
 }
