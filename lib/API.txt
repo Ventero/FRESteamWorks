@@ -108,5 +108,7 @@ public function getDLCCount():int
 public function installDLC(appId:uint):Boolean
 public function uninstallDLC(appId:uint):Boolean
 public function DLCInstalledResult():uint
+/* Microtransaction */
+public function MicroTxnOrderIDResult():String
 /* other */
 public function getEnv(name:String):String

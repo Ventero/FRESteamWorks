@@ -1351,6 +1351,15 @@ AIR_FUNC(AIRSteam_DLCInstalledResult) {
 }
 
 /*
+ * Microtransaction
+ */
+AIR_FUNC(AIRSteam_MicroTxnOrderIDResult) {
+	ARG_CHECK(0, FREUint64(0));
+
+	return FREUint64(g_Steam->MicroTxnOrderIDResult());
+}
+
+/*
  * other
  */
 

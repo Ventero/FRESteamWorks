@@ -36,5 +36,6 @@ enum ResponseTypes {
 	RESPONSE_OnSetUserPublishedFileAction,
 	RESPONSE_OnGetAuthSessionTicketResponse,
 	RESPONSE_OnValidateAuthTicketResponse,
-	RESPONSE_OnDLCInstalled
+	RESPONSE_OnDLCInstalled,
+	RESPONSE_OnMicroTxnAuthorizationResponse
 };

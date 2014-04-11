@@ -16,6 +16,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <queue>
 
 #include <steam/steam_api.h>
 
@@ -198,6 +199,9 @@ public:
 	bool UninstallDLC(AppId_t appId);
 	AppId_t DLCInstalledResult();
 
+    // Microtransaction
+    uint64_t MicroTxnOrderIDResult();
+
 protected:
 	virtual void DispatchEvent(char* code, char* level) = 0;
 
@@ -212,6 +216,7 @@ private:
 	PublishedFileId_t m_PublishedFileId;
 	HAuthTicket m_ActualAuthTicket;
 	AppId_t m_DLCInstalled;
+    std::queue<uint64_t> m_MicroTxnOrderIDs;
 
 	std::map<UGCHandle_t, RemoteStorageDownloadUGCResult_t> m_DownloadResults;
 	std::map<PublishedFileId_t, RemoteStorageGetPublishedFileDetailsResult_t> m_PublishedFileDetails;
@@ -327,6 +332,10 @@ private:
 	// DLC / subscription
 	STEAM_CALLBACK(CSteam, OnDLCInstalled, DlcInstalled_t,
 	               m_CallbackDLCInstalled);
+
+    // Microtransaction
+    STEAM_CALLBACK(CSteam, OnMicroTxnAuthorizationResponse, MicroTxnAuthorizationResponse_t,
+                   m_CallbackMicroTxnAuthorizationResponse);
 
 };
 

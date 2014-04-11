@@ -148,8 +148,10 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_InstallDLC:int = 99;
 		private static const AIRSteam_UninstallDLC:int = 100;
 		private static const AIRSteam_DLCInstalledResult:int = 101;
+		/* Microtransaction */
+		private static const AIRSteam_MicroTxnOrderIDResult:int = 102;
 		/* other */
-		private static const AIRSteam_GetEnv:int = 102;
+		private static const AIRSteam_GetEnv:int = 103;
 		// END GENERATED VALUES
 
 		public function FRESteamWorks (target:IEventDispatcher = null) {
@@ -964,6 +966,12 @@ package com.amanitadesign.steam {
 		public function DLCInstalledResult():uint {
 			if(!callWrapper(AIRSteam_DLCInstalledResult, [])) return 0;
 			return readIntResponse();
+		}
+
+		/* Microtransaction */
+		public function MicroTxnOrderIDResult():String {
+			if(!callWrapper(AIRSteam_MicroTxnOrderIDResult, [])) return "";
+			return readStringResponse();
 		}
 
 		/* other */
