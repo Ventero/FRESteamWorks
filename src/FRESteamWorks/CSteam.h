@@ -53,7 +53,7 @@ enum ResponseTypes {
 	RESPONSE_OnGetAuthSessionTicketResponse,
 	RESPONSE_OnValidateAuthTicketResponse,
 	RESPONSE_OnDLCInstalled,
-    RESPONSE_OnMicroTxnAuthorizationResponse
+	RESPONSE_OnMicroTxnAuthorizationResponse
 };
 
 // used to store a LeaderboardEntry_t in combination with any possible details
@@ -229,9 +229,9 @@ public:
 	bool InstallDLC(AppId_t appId);
 	bool UninstallDLC(AppId_t appId);
 	AppId_t DLCInstalledResult();
-    
-    // Microtransaction
-    uint64_t MicroTxnOrderIDResult();
+
+	// Microtransaction
+	uint64_t MicroTxnOrderIDResult();
 
 protected:
 	virtual void DispatchEvent(char* code, char* level) = 0;
@@ -247,7 +247,7 @@ private:
 	PublishedFileId_t m_PublishedFileId;
 	HAuthTicket m_ActualAuthTicket;
 	AppId_t m_DLCInstalled;
-    std::queue<uint64_t> m_MicroTxnOrderIDs;
+	std::queue<uint64_t> m_MicroTxnOrderIDs;
 
 	std::map<UGCHandle_t, RemoteStorageDownloadUGCResult_t> m_DownloadResults;
 	std::map<PublishedFileId_t, RemoteStorageGetPublishedFileDetailsResult_t> m_PublishedFileDetails;
@@ -357,10 +357,10 @@ private:
 	// DLC / subscription
 	STEAM_CALLBACK(CSteam, OnDLCInstalled, DlcInstalled_t,
 	               m_CallbackDLCInstalled);
-    
-    // Microtransaction
-    STEAM_CALLBACK(CSteam, OnMicroTxnAuthorizationResponse, MicroTxnAuthorizationResponse_t,
-                   m_CallbackMicroTxnAuthorizationResponse);
+
+	// Microtransaction
+	STEAM_CALLBACK(CSteam, OnMicroTxnAuthorizationResponse, MicroTxnAuthorizationResponse_t,
+	               m_CallbackMicroTxnAuthorizationResponse);
 
 };
 
