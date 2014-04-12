@@ -44,7 +44,7 @@ void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
 void ContextFinalizer(FREContext ctx);
 
 extern "C" {
-	EXPORT void ExtInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerToSet,
+	EXPORT void ExtInitializerFRESteamWorks(void** extDataToSet, FREContextInitializer* ctxInitializerToSet,
 	                           FREContextFinalizer* ctxFinalizerToSet);
-	EXPORT void ExtFinalizer(void* extData);
+	EXPORT void ExtFinalizerFRESteamWorks(void* extData);
 }

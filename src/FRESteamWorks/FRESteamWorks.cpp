@@ -1316,7 +1316,7 @@ void ContextFinalizer(FREContext ctx) {
 
 extern "C" {
 	// Initialization function of each extension
-	EXPORT void ExtInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerToSet,
+	EXPORT void ExtInitializerFRESteamWorks(void** extDataToSet, FREContextInitializer* ctxInitializerToSet,
 	                           FREContextFinalizer* ctxFinalizerToSet) {
 		*extDataToSet = NULL;
 		*ctxInitializerToSet = &ContextInitializer;
@@ -1324,7 +1324,7 @@ extern "C" {
 	}
 
 	// Called when extension is unloaded
-	EXPORT void ExtFinalizer(void* extData) {
+	EXPORT void ExtFinalizerFRESteamWorks(void* extData) {
 		return;
 	}
 }

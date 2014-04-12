@@ -5,15 +5,15 @@
 		<platform name="Windows-x86">
 			<applicationDeployment>
 				<nativeLibrary>FRESteamWorks.dll</nativeLibrary>
-				<initializer>ExtInitializer</initializer>
-				<finalizer>ExtFinalizer</finalizer>
+				<initializer>ExtInitializerFRESteamWorks</initializer>
+				<finalizer>ExtFinalizerFRESteamWorks</finalizer>
 			</applicationDeployment>
 		</platform>
 		<platform name="MacOS-x86">
 			<applicationDeployment>
 				<nativeLibrary>FRESteamWorks.framework</nativeLibrary>
-				<initializer>ExtInitializer</initializer>
-				<finalizer>ExtFinalizer</finalizer>
+				<initializer>ExtInitializerFRESteamWorks</initializer>
+				<finalizer>ExtFinalizerFRESteamWorks</finalizer>
 			</applicationDeployment>
 		</platform>
 		<platform name="default">
