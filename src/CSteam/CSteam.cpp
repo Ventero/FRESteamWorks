@@ -14,6 +14,8 @@
 #include <stdio.h>
 #include <sstream>
 
+#include "ResponseTypes.h"
+
 CSteam::CSteam():
 	m_CurrentLeaderboard(0),
 	m_FileHandle(k_UGCHandleInvalid),
