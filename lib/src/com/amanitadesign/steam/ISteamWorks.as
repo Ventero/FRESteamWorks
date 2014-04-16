@@ -41,6 +41,11 @@ package com.amanitadesign.steam {
 		function setStatFloat(name:String, value:Number):Boolean
 		function storeStats():Boolean
 		function resetAllStats(achievementsToo:Boolean):Boolean
+		function requestGlobalStats(historyDays:int):Boolean
+		function getGlobalStatInt(name:String):Number
+		function getGlobalStatFloat(name:String):Number
+		function getGlobalStatHistoryInt(name:String, days:int):Array
+		function getGlobalStatHistoryFloat(name:String, days:int):Array
 		/* leaderboards */
 		function findLeaderboard(name:String):Boolean
 		function findOrCreateLeaderboard(name:String, sortMethod:uint, displayType:uint):Boolean

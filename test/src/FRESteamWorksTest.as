@@ -143,6 +143,8 @@ package {
 				log("Persona name: " + Steamworks.getPersonaName());
 				log("Current game language: " + Steamworks.getCurrentGameLanguage());
 				log("Available game languages: " + Steamworks.getAvailableGameLanguages());
+				log("requestStats() == " + Steamworks.requestStats());
+				log("requestGlobalStats(3) == " + Steamworks.requestGlobalStats(3));
 				log("isCloudEnabledForApp() == "+Steamworks.isCloudEnabledForApp());
 				log("getFileCount() == "+Steamworks.getFileCount());
 				log("fileExists('test.txt') == "+Steamworks.fileExists('test.txt'));
@@ -201,6 +203,20 @@ package {
 			Steamworks.storeStats();
 			log("getStatInt('NumGames') == "+Steamworks.getStatInt('NumGames'));
 			log("getStatFloat('FeetTraveled') == "+Steamworks.getStatFloat('FeetTraveled'));
+			log("getGlobalStatInt('NumGames') == "+Steamworks.getGlobalStatInt('NumGames'));
+			log("getGlobalStatFloat('FeetTraveled') == "+Steamworks.getGlobalStatFloat('FeetTraveled'));
+
+			var history:Array = Steamworks.getGlobalStatHistoryInt('NumGames', 3);
+			log("getGlobalStatHistoryInt('NumGames', 3) == " +
+				history + " " + (history ? history.length : "0"));
+			for (var i:int = 0; i < history.length; ++i)
+				log("history[" + i + "] == " + history[i]);
+
+			history = Steamworks.getGlobalStatHistoryFloat('FeetTraveled', 10);
+			log("getGlobalStatHistoryFloat('FeetTraveled', 10) == " +
+				history + " " + (history ? history.length : "0"));
+			for (i = 0; i < history.length; ++i)
+				log("history[" + i + "] == " + history[i]);
 		}
 
 		private function toggleAchievement(e:Event = null):void {
@@ -553,6 +569,9 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnAchievementStored:
 					log("RESPONSE_OnAchievementStored: "+e.response);
+					break;
+				case SteamConstants.RESPONSE_OnGlobalStatsReceived:
+					log("RESPONSE_OnGlobalStatsReceived: " + e.response);
 					break;
 				case SteamConstants.RESPONSE_OnFindLeaderboard:
 					log("RESPONSE_OnFindLeaderboad: " + e.response);

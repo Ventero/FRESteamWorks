@@ -180,6 +180,26 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_ResetAllStats", achievementsToo) as Boolean;
 		}
 
+		public function requestGlobalStats(historyDays:int):Boolean {
+			return _ExtensionContext.call("AIRSteam_RequestGlobalStats", historyDays) as Boolean;
+		}
+
+		public function getGlobalStatInt(name:String):Number {
+			return _ExtensionContext.call("AIRSteam_GetGlobalStatInt", name) as Number;
+		}
+
+		public function getGlobalStatFloat(name:String):Number {
+			return _ExtensionContext.call("AIRSteam_GetGlobalStatFloat", name) as Number;
+		}
+
+		public function getGlobalStatHistoryInt(name:String, days:int):Array {
+			return _ExtensionContext.call("AIRSteam_GetGlobalStatHistoryInt", name, days) as Array;
+		}
+
+		public function getGlobalStatHistoryFloat(name:String, days:int):Array {
+			return _ExtensionContext.call("AIRSteam_GetGlobalStatHistoryFloat", name, days) as Array;
+		}
+
 		/* leaderboards */
 		public function findLeaderboard(name:String):Boolean {
 			return _ExtensionContext.call("AIRSteam_FindLeaderboard", name) as Boolean;

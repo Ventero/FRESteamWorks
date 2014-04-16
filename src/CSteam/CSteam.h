@@ -24,6 +24,7 @@ enum ResponseTypes {
 	RESPONSE_OnUserStatsReceived,
 	RESPONSE_OnUserStatsStored,
 	RESPONSE_OnAchievementStored,
+	RESPONSE_OnGlobalStatsReceived,
 	RESPONSE_OnFindLeaderboard,
 	RESPONSE_OnUploadLeaderboardScore,
 	RESPONSE_OnDownloadLeaderboardEntries,
@@ -111,6 +112,11 @@ public:
 	bool SetStat(std::string name, float value);
 	bool StoreStats();
 	bool ResetAllStats(bool bAchievementsToo);
+	bool RequestGlobalStats(int days);
+	bool GetGlobalStat(std::string name, int64 *value);
+	bool GetGlobalStat(std::string name, double *value);
+	std::vector<int64> GetGlobalStatHistoryInt(std::string name, uint32 days);
+	std::vector<double> GetGlobalStatHistoryFloat(std::string name, uint32 days);
 
 	// leaderboards
 	bool FindLeaderboard(std::string name);
@@ -273,6 +279,8 @@ private:
 	               m_CallbackUserStatsStored);
 	STEAM_CALLBACK(CSteam, OnAchievementStored,
 	               UserAchievementStored_t, m_CallbackAchievementStored);
+	STEAM_CALLRESULT(CSteam, OnRequestGlobalStats,
+	                 GlobalStatsReceived_t, m_CallbackRequestGlobalStats);
 
 	// leaderboards
 	STEAM_CALLRESULT(CSteam, OnFindLeaderboard,

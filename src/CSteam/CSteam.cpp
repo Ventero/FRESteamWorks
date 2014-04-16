@@ -135,6 +135,49 @@ bool CSteam::ResetAllStats(bool bAchievementsToo) {
 	return SteamUserStats()->StoreStats();
 }
 
+bool CSteam::RequestGlobalStats(int days) {
+	if (!m_bInitialized) return false;
+
+	SteamAPICall_t result = SteamUserStats()->RequestGlobalStats(days);
+	m_CallbackRequestGlobalStats.Set(result, this, &CSteam::OnRequestGlobalStats);
+
+	return true;
+}
+
+bool CSteam::GetGlobalStat(std::string name, int64 *value) {
+	if (!m_bInitialized) return false;
+
+	return SteamUserStats()->GetGlobalStat(name.c_str(), value);
+}
+
+bool CSteam::GetGlobalStat(std::string name, double *value) {
+	if (!m_bInitialized) return false;
+
+	return SteamUserStats()->GetGlobalStat(name.c_str(), value);
+}
+
+std::vector<int64> CSteam::GetGlobalStatHistoryInt(std::string name, uint32 days) {
+	if (!m_bInitialized) return std::vector<int64>();
+
+	std::vector<int64> ret(days);
+	int32 actual = SteamUserStats()->GetGlobalStatHistory(name.c_str(), ret.data(),
+		days);
+	ret.resize(actual);
+
+	return ret;
+}
+
+std::vector<double> CSteam::GetGlobalStatHistoryFloat(std::string name, uint32 days) {
+	if (!m_bInitialized) return std::vector<double>();
+
+	std::vector<double> ret(days);
+	int32 actual = SteamUserStats()->GetGlobalStatHistory(name.c_str(), ret.data(),
+		days);
+	ret.resize(actual);
+
+	return ret;
+}
+
 // leaderboard
 bool CSteam::FindLeaderboard(std::string name) {
 	if (!m_bInitialized) return false;
@@ -782,6 +825,12 @@ void CSteam::OnAchievementStored(UserAchievementStored_t *pCallback) {
 	if (m_iAppID != pCallback->m_nGameID) return;
 
 	DispatchEvent(RESPONSE_OnAchievementStored, k_EResultOK);
+}
+
+void CSteam::OnRequestGlobalStats(GlobalStatsReceived_t *result, bool failure) {
+	if (m_iAppID != result->m_nGameID) return;
+
+	DispatchEvent(RESPONSE_OnGlobalStatsReceived, result->m_eResult);
 }
 
 void CSteam::OnFindLeaderboard(LeaderboardFindResult_t *result, bool failure) {

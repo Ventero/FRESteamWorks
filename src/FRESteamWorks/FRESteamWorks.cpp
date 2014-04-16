@@ -206,6 +206,87 @@ AIR_FUNC(AIRSteam_ResetAllStats) {
 	return FREBool(g_Steam->ResetAllStats(achievementsToo));
 }
 
+AIR_FUNC(AIRSteam_RequestGlobalStats) {
+	ARG_CHECK(1, FREBool(false));
+
+	int days;
+	if (!FREGetInt32(argv[0], &days))
+		return FREBool(false);
+
+	return FREBool(g_Steam->RequestGlobalStats(days));
+}
+
+// Since Flash doesn't have support for 64bit integer types, we just always
+// return a double (aka Number).
+AIR_FUNC(AIRSteam_GetGlobalStatInt) {
+	ARG_CHECK(1, FREDouble(0.0));
+
+	std::string name;
+	if (!FREGetString(argv[0], name))
+		return FREDouble(0.0);
+
+	int64 value = 0;
+	g_Steam->GetGlobalStat(name, &value);
+
+	return FREDouble(static_cast<double>(value));
+}
+
+AIR_FUNC(AIRSteam_GetGlobalStatFloat) {
+	ARG_CHECK(1, FREDouble(0.0));
+
+	std::string name;
+	if (!FREGetString(argv[0], name))
+		return FREDouble(0.0);
+
+	double value = 0;
+	g_Steam->GetGlobalStat(name, &value);
+
+	return FREDouble(static_cast<double>(value));
+}
+
+// See above for why double is used.
+AIR_FUNC(AIRSteam_GetGlobalStatHistoryInt) {
+	ARG_CHECK(2, FREArray(0));
+
+	std::string name;
+	uint32 days;
+	if (!FREGetString(argv[0], name) ||
+		  !FREGetUint32(argv[1], &days))
+		return FREArray(0);
+
+	auto history = g_Steam->GetGlobalStatHistoryInt(name, days);
+	size_t size = history.size();
+
+	FREObject array = FREArray(size);
+	for (size_t i = 0; i < size; ++i) {
+		double value = static_cast<double>(history.at(i));
+		FRESetArrayElementAt(array, i, FREDouble(value));
+	}
+
+	return array;
+}
+
+AIR_FUNC(AIRSteam_GetGlobalStatHistoryFloat) {
+	ARG_CHECK(2, FREArray(0));
+
+	std::string name;
+	uint32 days;
+	if (!FREGetString(argv[0], name) ||
+		  !FREGetUint32(argv[1], &days))
+		return FREArray(0);
+
+	auto history = g_Steam->GetGlobalStatHistoryFloat(name, days);
+	size_t size = history.size();
+
+	FREObject array = FREArray(size);
+	for (size_t i = 0; i < size; ++i) {
+		double value = history.at(i);
+		FRESetArrayElementAt(array, i, FREDouble(value));
+	}
+
+	return array;
+}
+
 /*
  * leaderboards
  */
