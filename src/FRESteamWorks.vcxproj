@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CSteam\CSteam.h" />
+    <ClInclude Include="CSteam\ResponseTypes.h" />
     <ClInclude Include="FRESteamWorks\FREConverters.h" />
     <ClInclude Include="FRESteamWorks\FRESteamWorks.h" />
     <ClInclude Include="functions.h" />

@@ -18,13 +18,16 @@
     <ClInclude Include="FRESteamWorks\FRESteamWorks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FRESteamWorks\CSteam.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FRESteamWorks\functions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FRESteamWorks\FREConverters.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSteam\CSteam.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSteam\ResponseTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,10 +35,10 @@
     <ClCompile Include="FRESteamWorks\FRESteamWorks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FRESteamWorks\CSteam.cpp">
+    <ClCompile Include="FRESteamWorks\FREConverters.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FRESteamWorks\FREConverters.cpp">
+    <ClCompile Include="CSteam\CSteam.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
