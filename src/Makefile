@@ -19,45 +19,45 @@ endif
 .SUFFIXES:
 
 # Native extension objects
-dir := FRESteamWorks
-obj := $(dir)/FRESteamWorks.o $(dir)/FREConverters.o $(dir)/CSteam.o
+obj := FRESteamWorks/FRESteamWorks.o FRESteamWorks/FREConverters.o CSteam/CSteam.o
 # APIWrapper objects
-wdir := APIWrapper
-wrapperobj := $(wdir)/APIWrapper.o $(wdir)/WrapperIO.o $(dir)/CSteam.o $(wdir)/libamf.a
+wrapperobj := APIWrapper/APIWrapper.o APIWrapper/WrapperIO.o CSteam/CSteam.o APIWrapper/libamf.a
 
 # Targets
-.PHONY: all lib wrapper obj clean dist-clean
+.PHONY: all lib wrapper clean dist-clean
 all: lib wrapper
-lib: $(dir)/FRESteamWorks.so
-wrapper: $(wdir)/APIWrapper
-
-# Rules
-SteamSDK:
-	ln -sf $(STEAM_SDK) $@
-
-$(dir)/FRESteamWorks.so: $(obj)
-	$(CXX) -shared $^ $(LIB) -o $@
-
-$(dir)/%.o: $(dir)/%.cpp $(dir)/%.h $(dir)/functions.h
-	$(CXX) -c $(CXXFLAGS) $< -o $@
-
-$(wdir)/APIWrapper: $(wrapperobj)
-	$(CXX) $^ $(LIB) -o $@
-
-$(wdir)/libamf.a: $(wdir)/amf-cpp
-	$(MAKE) -C $(wdir)/amf-cpp 32bit
-	cp $(wdir)/amf-cpp/libamf.a $@
-
-$(wdir)/%.o: $(wdir)/%.cpp $(wdir)/%.h $(dir)/functions.h SteamSDK
-	$(CXX) -c $(CXXFLAGS) -isystem $(wdir)/amf-cpp -I$(dir) $< -o $@
+lib: FRESteamWorks/FRESteamWorks.so
+wrapper: APIWrapper/APIWrapper
 
 clean:
 	rm -f $(obj) $(wrapperobj)
+	rm -f APIWrapper/libamf.a
 	rm -f SteamSDK
 
 dist-clean: clean
-	$(MAKE) -C $(wdir)/amf-cpp clean
+	$(MAKE) -C APIWrapper/amf-cpp clean
 
-# Dependencies
-$(wdir)/APIWrapper.o: $(wdir)/WrapperIO.h $(dir)/CSteam.h
-$(wdir)/APIWrapper.o: CXXFLAGS += -Wno-missing-declarations
+# Rules
+# Output objects
+FRESteamWorks/FRESteamWorks.so: $(obj)
+	$(CXX) -shared $^ $(LIB) -o $@
+
+APIWrapper/APIWrapper: $(wrapperobj)
+	$(CXX) $^ $(LIB) -o $@
+
+APIWrapper/libamf.a: APIWrapper/amf-cpp
+	$(MAKE) -C APIWrapper/amf-cpp 32bit
+	cp APIWrapper/amf-cpp/libamf.a $@
+
+# Generic rules
+SteamSDK:
+	ln -sf $(STEAM_SDK) $@
+
+%.o: %.cpp %.h functions.h SteamSDK
+	$(CXX) -c $(CXXFLAGS) -I. $< -o $@
+
+# Additional dependencies/flags
+FRESteamWorks/FRESteamWorks.o: FRESteamWorks/FREConverters.h CSteam/CSteam.h
+APIWrapper/APIWrapper.o: APIWrapper/WrapperIO.h CSteam/CSteam.h
+APIWrapper/APIWrapper.o: CXXFLAGS += -Wno-missing-declarations
+APIWrapper/%.o: CXXFLAGS += -isystem APIWrapper/amf-cpp

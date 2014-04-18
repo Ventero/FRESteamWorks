@@ -17,6 +17,11 @@ public function setStatInt(name:String, value:int):Boolean
 public function setStatFloat(name:String, value:Number):Boolean
 public function storeStats():Boolean
 public function resetAllStats(achievementsToo:Boolean):Boolean
+public function requestGlobalStats(historyDays:int):Boolean
+public function getGlobalStatInt(name:String):Number
+public function getGlobalStatFloat(name:String):Number
+public function getGlobalStatHistoryInt(name:String, days:int):Array
+public function getGlobalStatHistoryFloat(name:String, days:int):Array
 /* leaderboards */
 public function findLeaderboard(name:String):Boolean
 public function findOrCreateLeaderboard(name:String, sortMethod:uint, displayType:uint):Boolean

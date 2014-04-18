@@ -172,7 +172,7 @@ int32 AIRSteam_GetStatInt() {
 	std::string name = get_string();
 	if (!g_Steam || name.empty()) return 0;
 
-	int32 value;
+	int32 value = 0;
 	g_Steam->GetStat(name, &value);
 	return value;
 }
@@ -213,6 +213,68 @@ bool AIRSteam_ResetAllStats() {
 	if(!g_Steam) return false;
 
 	return g_Steam->ResetAllStats(achievementsToo);
+}
+
+bool AIRSteam_RequestGlobalStats() {
+	int days = get_int();
+	if (!g_Steam) return false;
+
+	return g_Steam->RequestGlobalStats(days);
+}
+
+// Since Flash doesn't have support for 64bit integer types, we just always
+// return a double, which gets sent to Flash as an AmfDouble (aka Number).
+double AIRSteam_GetGlobalStatInt() {
+	std::string name = get_string();
+	if (!g_Steam || name.empty()) return 0.;
+
+	int64 value = 0;
+	g_Steam->GetGlobalStat(name, &value);
+
+	return static_cast<double>(value);
+}
+
+double AIRSteam_GetGlobalStatFloat() {
+	std::string name = get_string();
+	if (!g_Steam || name.empty()) return 0.0;
+
+	double value = 0.0;
+	g_Steam->GetGlobalStat(name, &value);
+
+	return value;
+}
+
+// See above for why double is used.
+AmfArray AIRSteam_GetGlobalStatHistoryInt() {
+	AmfArray array;
+
+	std::string name = get_string();
+	uint32 days = get_int();
+	if (!g_Steam || name.empty() || days == 0)
+		return array;
+
+	auto history = g_Steam->GetGlobalStatHistoryInt(name, days);
+	for (int64 entry : history) {
+		array.push_back(AmfDouble(static_cast<double>(entry)));
+	}
+
+	return array;
+}
+
+AmfArray AIRSteam_GetGlobalStatHistoryFloat() {
+	AmfArray array;
+
+	std::string name = get_string();
+	uint32 days = get_int();
+	if (!g_Steam || name.empty() || days == 0)
+		return array;
+
+	auto history = g_Steam->GetGlobalStatHistoryFloat(name, days);
+	for (double entry : history) {
+		array.push_back(AmfDouble(entry));
+	}
+
+	return array;
 }
 
 /*

@@ -76,6 +76,10 @@ void send(float value) {
 	sendItem(AmfDouble(value));
 }
 
+void send(double value) {
+	sendItem(AmfDouble(value));
+}
+
 void send(std::string value) {
 	sendItem(AmfString(value));
 }

@@ -56,7 +56,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>USE_BREAKPAD_HANDLER;WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(USERPROFILE)\Documents\AdobeAIRSDK\include;$(USERPROFILE)\Documents\Steam\sdk\public\steam;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(USERPROFILE)\Documents\AdobeAIRSDK\include;$(USERPROFILE)\Documents\Steam\sdk\public\steam;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <DisableSpecificWarnings>4068</DisableSpecificWarnings>
     </ClCompile>
@@ -76,7 +76,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>USE_BREAKPAD_HANDLER;WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(USERPROFILE)\Documents\AdobeAIRSDK\include;$(USERPROFILE)\Documents\Steam\sdk\public\steam;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(USERPROFILE)\Documents\AdobeAIRSDK\include;$(USERPROFILE)\Documents\Steam\sdk\public\steam;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DisableSpecificWarnings>4068</DisableSpecificWarnings>
     </ClCompile>
@@ -98,15 +98,15 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="FRESteamWorks\CSteam.cpp" />
+    <ClCompile Include="CSteam\CSteam.cpp" />
     <ClCompile Include="FRESteamWorks\FREConverters.cpp" />
     <ClCompile Include="FRESteamWorks\FRESteamWorks.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FRESteamWorks\CSteam.h" />
+    <ClInclude Include="CSteam\CSteam.h" />
     <ClInclude Include="FRESteamWorks\FREConverters.h" />
     <ClInclude Include="FRESteamWorks\FRESteamWorks.h" />
-    <ClInclude Include="FRESteamWorks\functions.h" />
+    <ClInclude Include="functions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -27,6 +27,7 @@ void send(int32 value);
 void send(uint32 value);
 void send(uint64 value);
 void send(float value);
+void send(double value);
 void send(std::string value);
 void send(const amf::AmfItem& item);
 void send(std::nullptr_t);

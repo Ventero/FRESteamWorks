@@ -52,7 +52,7 @@ files = [
 		:end => "END GENERATED VALUES"
 	},
 	{
-		:file => "../src/FRESteamWorks/functions.h",
+		:file => "../src/functions.h",
 		:ignore => [],
 		:format => -> line, func { "X(#{func[:air_name]}) /* = #{func[:num]} */" }
 	}
@@ -79,17 +79,23 @@ def parse_prototype line
 	}
 end
 
+def find_markers content, from, to
+	start_idx = content.find_index{|line| line.include? from }
+	end_idx = content.find_index{|line| line.include? to  }
+	raise "Invalid indices: #{start_idx} - #{end_idx}" unless end_idx > start_idx
+
+	indentation = content[start_idx].scan(/^\s*/)[0]
+
+	[start_idx, end_idx, indentation]
+end
+
 def generate_api contents, files
 	files.each do |options|
 		file_content = File.read(options[:file]).split("\n")
 
 		start_marker = options[:start] || "START GENERATED CODE"
 		end_marker = options[:end] || "END GENERATED CODE"
-		start_idx = file_content.find_index{|line| line.include? start_marker }
-		end_idx = file_content.find_index{|line| line.include? end_marker  }
-		raise "Invalid indices: #{start_idx} - #{end_idx}" unless end_idx > start_idx
-
-		indentation = file_content[start_idx].scan(/^\s*/)[0]
+		from, to, indentation = find_markers file_content, start_marker, end_marker
 
 		func_num = -1
 		replacement = contents.map do |line|
@@ -105,7 +111,7 @@ def generate_api contents, files
 			options[:format].call(line, func).gsub(/^/, indentation)
 		end.reject{|a|a.nil?}
 
-		file_content[start_idx + 1 .. end_idx - 1] = replacement
+		file_content[from + 1 .. to - 1] = replacement
 
 		File.open(options[:file], "w") {|f|
 			f.puts file_content.join("\n")
@@ -113,5 +119,25 @@ def generate_api contents, files
 	end
 end
 
+def generate_response_types target, types
+	content = File.read(target).split("\n")
+
+	from, to, indentation = find_markers content, "START GENERATED CODE", "END GENERATED CODE"
+	replacement = types.grep(/RESPONSE/).map.with_index do |line, idx|
+		# remove indentation and trailing comma
+		type = line.lstrip.chomp(",")
+		"#{indentation}public static const #{type.lstrip}:int = #{idx};"
+	end
+
+	content[from + 1 .. to - 1] = replacement
+
+	File.open(target, "w") {|f|
+		f.puts content.join("\n")
+	}
+end
+
 contents = File.read("API.txt").split("\n")
 generate_api contents, files
+
+response_types = File.read("../src/CSteam/ResponseTypes.h").split("\n")
+generate_response_types "src/com/amanitadesign/steam/SteamConstants.as", response_types

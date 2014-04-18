@@ -12,48 +12,13 @@
 	#define snprintf _snprintf
 #endif
 
-#include <algorithm>
 #include <map>
 #include <memory>
-#include <stdio.h>
 #include <string>
-#include <sstream>
 #include <vector>
 #include <queue>
 
 #include <steam_api.h>
-
-// General result codes
-enum ResponseTypes {
-	RESPONSE_OnUserStatsReceived,
-	RESPONSE_OnUserStatsStored,
-	RESPONSE_OnAchievementStored,
-	RESPONSE_OnFindLeaderboard,
-	RESPONSE_OnUploadLeaderboardScore,
-	RESPONSE_OnDownloadLeaderboardEntries,
-	RESPONSE_OnGameOverlayActivated,
-	RESPONSE_OnFileShared,
-	RESPONSE_OnUGCDownload,
-	RESPONSE_OnPublishWorkshopFile,
-	RESPONSE_OnDeletePublishedFile,
-	RESPONSE_OnGetPublishedFileDetails,
-	RESPONSE_OnEnumerateUserPublishedFiles,
-	RESPONSE_OnEnumeratePublishedWorkshopFiles,
-	RESPONSE_OnEnumerateUserSubscribedFiles,
-	RESPONSE_OnEnumerateUserSharedWorkshopFiles,
-	RESPONSE_OnEnumeratePublishedFilesByUserAction,
-	RESPONSE_OnCommitPublishedFileUpdate,
-	RESPONSE_OnSubscribePublishedFile,
-	RESPONSE_OnUnsubscribePublishedFile,
-	RESPONSE_OnGetPublishedItemVoteDetails,
-	RESPONSE_OnGetUserPublishedItemVoteDetails,
-	RESPONSE_OnUpdateUserPublishedItemVote,
-	RESPONSE_OnSetUserPublishedFileAction,
-	RESPONSE_OnGetAuthSessionTicketResponse,
-	RESPONSE_OnValidateAuthTicketResponse,
-	RESPONSE_OnDLCInstalled,
-	RESPONSE_OnMicroTxnAuthorizationResponse
-};
 
 // used to store a LeaderboardEntry_t in combination with any possible details
 class LeaderboardEntry {
@@ -81,7 +46,7 @@ public:
 		std::swap(max_details, other.max_details);
 		std::swap(details, other.details);
 
-        return *this;
+		return *this;
 	}
 
 	~LeaderboardEntry() {
@@ -116,6 +81,11 @@ public:
 	bool SetStat(std::string name, float value);
 	bool StoreStats();
 	bool ResetAllStats(bool bAchievementsToo);
+	bool RequestGlobalStats(int days);
+	bool GetGlobalStat(std::string name, int64 *value);
+	bool GetGlobalStat(std::string name, double *value);
+	std::vector<int64> GetGlobalStatHistoryInt(std::string name, uint32 days);
+	std::vector<double> GetGlobalStatHistoryFloat(std::string name, uint32 days);
 
 	// leaderboards
 	bool FindLeaderboard(std::string name);
@@ -282,6 +252,8 @@ private:
 	               m_CallbackUserStatsStored);
 	STEAM_CALLBACK(CSteam, OnAchievementStored,
 	               UserAchievementStored_t, m_CallbackAchievementStored);
+	STEAM_CALLRESULT(CSteam, OnRequestGlobalStats,
+	                 GlobalStatsReceived_t, m_CallbackRequestGlobalStats);
 
 	// leaderboards
 	STEAM_CALLRESULT(CSteam, OnFindLeaderboard,
