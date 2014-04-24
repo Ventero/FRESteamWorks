@@ -25,6 +25,7 @@
 		5407FE1118F767FE0097B5D3 /* CSteam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSteam.h; path = CSteam/CSteam.h; sourceTree = "<group>"; };
 		5407FE1318F7680F0097B5D3 /* functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = functions.h; sourceTree = "<group>"; };
 		54B6962116AB356400CFBD85 /* Adobe AIR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Adobe AIR.framework"; path = "../../AdobeAIRSDK/runtimes/air/mac/Adobe AIR.framework"; sourceTree = "<group>"; };
+		54BD38FD19016834002DD39B /* ResponseTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ResponseTypes.h; path = CSteam/ResponseTypes.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +90,7 @@
 		5407FE0E18F767D30097B5D3 /* CSteam */ = {
 			isa = PBXGroup;
 			children = (
+				54BD38FD19016834002DD39B /* ResponseTypes.h */,
 				5407FE1018F767FE0097B5D3 /* CSteam.cpp */,
 				5407FE1118F767FE0097B5D3 /* CSteam.h */,
 			);

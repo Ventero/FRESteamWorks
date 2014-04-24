@@ -57,6 +57,7 @@ SteamSDK:
 	$(CXX) -c $(CXXFLAGS) -I. $< -o $@
 
 # Additional dependencies/flags
+CSteam/CSteam.o: CSteam/ResponseTypes.h
 FRESteamWorks/FRESteamWorks.o: FRESteamWorks/FREConverters.h CSteam/CSteam.h
 APIWrapper/APIWrapper.o: APIWrapper/WrapperIO.h CSteam/CSteam.h
 APIWrapper/APIWrapper.o: CXXFLAGS += -Wno-missing-declarations
