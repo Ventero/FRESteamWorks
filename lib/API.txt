@@ -6,6 +6,7 @@ public function getAvailableGameLanguages():String
 public function getCurrentGameLanguage():String
 public function getPersonaName():String
 public function useCrashHandler(appID:uint, version:String, date:String, time:String):Boolean
+public function restartAppIfNecessary(appID:uint):Boolean
 /* stats/achievements */
 public function requestStats():Boolean
 public function setAchievement(name:String):Boolean
