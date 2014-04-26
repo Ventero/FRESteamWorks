@@ -1192,7 +1192,7 @@ bool AIRSteam_DLCInstalledResult() {
  */
 
 uint64 AIRSteam_MicroTxnOrderIDResult() {
-	if (!g_Steam) return 0;;
+	if (!g_Steam) return 0;
 
 	return g_Steam->MicroTxnOrderIDResult();
 }

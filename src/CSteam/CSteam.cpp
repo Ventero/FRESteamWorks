@@ -802,8 +802,7 @@ AppId_t CSteam::DLCInstalledResult() {
 
 uint64_t CSteam::MicroTxnOrderIDResult() {
 	uint64_t orderID = 0UL;
-	if (!m_MicroTxnOrderIDs.empty())
-	{
+	if (!m_MicroTxnOrderIDs.empty()) {
 		orderID = m_MicroTxnOrderIDs.front();
 		m_MicroTxnOrderIDs.pop();
 	}
