@@ -4,7 +4,7 @@ CXXFLAGS = -std=c++0x -m32 -fvisibility=hidden
 CXXFLAGS += -Wall -Wextra -pedantic -Wno-unused-parameter -Wmissing-declarations
 CXXFLAGS += -Wconversion -Wcast-qual -Wno-sign-conversion
 CXXFLAGS += -DUSE_BREAKPAD_HANDLER -DLINUX
-CXXFLAGS += -isystem $(AIR_SDK)/include -isystem $(STEAM_SDK)/public/steam
+CXXFLAGS += -isystem $(AIR_SDK)/include -isystem $(STEAM_SDK)/public
 LIB = -m32 -L$(STEAM_SDK)/redistributable_bin/linux32 -lsteam_api
 
 # comma separated list of whitelisted app ids

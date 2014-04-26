@@ -11,7 +11,7 @@
 
 #include <FlashRuntimeExtensions.h>
 // includes definitions of {u,}int{32,64}
-#include <steamtypes.h>
+#include <steam/steamtypes.h>
 
 // Utility functions for conversion of FRE types
 FREObject FREBool(bool);

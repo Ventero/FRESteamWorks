@@ -9,10 +9,7 @@
 #ifndef APIWRAPPER_H
 #define APIWRAPPER_H
 
-#include <steam_api.h>
-
 #include "CSteam/CSteam.h"
-
 #include "WrapperIO.h"
 
 class CLISteam : public CSteam {

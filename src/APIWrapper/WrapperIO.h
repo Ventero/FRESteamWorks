@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-#include <steamtypes.h>
+#include <steam/steamtypes.h>
 
 #include "amf-cpp/types/amfitem.hpp"
 #include "amf-cpp/serializer.hpp"

@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-#include <steam_api.h>
+#include <steam/steam_api.h>
 
 // used to store a LeaderboardEntry_t in combination with any possible details
 class LeaderboardEntry {

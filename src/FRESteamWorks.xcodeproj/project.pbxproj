@@ -230,7 +230,7 @@
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					../../SteamSDK/public/steam,
+					../../SteamSDK/public,
 					../../AdobeAIRSDK/include,
 					"$(SRCROOT)",
 				);
@@ -299,7 +299,7 @@
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					../../SteamSDK/public/steam,
+					../../SteamSDK/public,
 					../../AdobeAIRSDK/include,
 					"$(SRCROOT)",
 				);
