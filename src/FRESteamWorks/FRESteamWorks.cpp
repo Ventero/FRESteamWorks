@@ -106,6 +106,15 @@ AIR_FUNC(AIRSteam_UseCrashHandler) {
 	return FREBool(true);
 }
 
+AIR_FUNC(AIRSteam_RestartAppIfNecessary) {
+	if (argc != 1) return FREBool(false);
+	uint32 appID = 0;
+	if (!FREGetUint32(argv[0], &appID)) return FREBool(false);
+
+	bool result = SteamAPI_RestartAppIfNecessary(appID);
+	return FREBool(result);
+}
+
 /*
  * stats / achievements
  */

@@ -139,6 +139,10 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_UseCrashHandler", appID, version, date, time) as Boolean;
 		}
 
+		public function restartAppIfNecessary(appID:uint):Boolean {
+			return _ExtensionContext.call("AIRSteam_RestartAppIfNecessary", appID) as Boolean;
+		}
+
 		/* stats/achievements */
 		public function requestStats():Boolean {
 			return _ExtensionContext.call("AIRSteam_RequestStats") as Boolean;
