@@ -289,7 +289,7 @@ package {
 		private function deletePublishedFile(e:Event = null):void {
 			if(!Steamworks.isReady) return;
 
-			if(!publishedFile) {
+			if(!publishedFile || publishedFile == WorkshopConstants.PUBLISHEDFILEID_Invalid) {
 				log("No file handle set, publish or enumerate first");
 				return;
 			}
@@ -410,7 +410,7 @@ package {
 		}
 
 		private function updateFile(e:Event = null):void {
-			if(!publishedFile) {
+			if(!publishedFile || publishedFile == WorkshopConstants.PUBLISHEDFILEID_Invalid) {
 				log("No file handle set, publish or enumerate first");
 				return;
 			}
@@ -654,6 +654,11 @@ package {
 
 					publishedFile = Steamworks.publishWorkshopFileResult();
 					log("File published as " + publishedFile);
+					if (publishedFile == WorkshopConstants.PUBLISHEDFILEID_Invalid) {
+						log("FAILED!");
+						break;
+					}
+
 					log("subscribePublishedFile(...) == " + Steamworks.subscribePublishedFile(publishedFile));
 					break;
 				case SteamConstants.RESPONSE_OnEnumerateUserSubscribedFiles:
