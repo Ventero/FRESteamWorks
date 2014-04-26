@@ -524,7 +524,7 @@ package com.amanitadesign.steam {
 		}
 
 		/* Microtransaction */
-		public function MicroTxnOrderIDResult():String {
+		public function microTxnOrderIDResult():String {
 			return _ExtensionContext.call("AIRSteam_MicroTxnOrderIDResult") as String;
 		}
 

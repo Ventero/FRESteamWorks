@@ -133,7 +133,7 @@ package com.amanitadesign.steam {
 		function uninstallDLC(appId:uint):Boolean
 		function DLCInstalledResult():uint
 		/* Microtransaction */
-		function MicroTxnOrderIDResult():String
+		function microTxnOrderIDResult():String
 		/* other */
 		function getEnv(name:String):String
 		// END GENERATED CODE

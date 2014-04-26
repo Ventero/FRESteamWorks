@@ -969,7 +969,7 @@ package com.amanitadesign.steam {
 		}
 
 		/* Microtransaction */
-		public function MicroTxnOrderIDResult():String {
+		public function microTxnOrderIDResult():String {
 			if(!callWrapper(AIRSteam_MicroTxnOrderIDResult, [])) return "";
 			return readStringResponse();
 		}
