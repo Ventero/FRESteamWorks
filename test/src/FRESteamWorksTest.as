@@ -860,6 +860,16 @@ package {
 					authHandle = UserConstants.AUTHTICKET_Invalid;
 
 					break;
+				case SteamConstants.RESPONSE_OnMicroTxnAuthorizationResponse:
+					log("RESPONSE_OnMicroTxnAuthorizationResponse: " + e.response);
+					log("MicroTxnOrderIDResult() == " + (Steamworks.MicroTxnOrderIDResult());
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+					} else {
+						log("SUCCESS!");
+					}
+
+					break;
 				default:
 					log("STEAMresponse type:"+e.req_type+" response:"+e.response);
 			}

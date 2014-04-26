@@ -110,6 +110,8 @@ X(AIRSteam_GetDLCCount) /* = 98 */
 X(AIRSteam_InstallDLC) /* = 99 */
 X(AIRSteam_UninstallDLC) /* = 100 */
 X(AIRSteam_DLCInstalledResult) /* = 101 */
+/* Microtransaction */
+X(AIRSteam_MicroTxnOrderIDResult) /* = 102 */
 /* other */
-X(AIRSteam_GetEnv) /* = 102 */
+X(AIRSteam_GetEnv) /* = 103 */
 /* END GENERATED CODE */
