@@ -47,5 +47,6 @@ package com.amanitadesign.steam {
 
 		public static const FILEUPDATEHANDLE_Invalid:String = "18446744073709551615"; // 0xffffffffffffffffull
 		public static const UGCHANDLE_Invalid:String = "18446744073709551615"; // 0xffffffffffffffffull
+		public static const PUBLISHEDFILEID_Invalid:String = "0";
 	}
 }
