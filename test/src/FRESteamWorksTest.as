@@ -867,7 +867,7 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnMicroTxnAuthorizationResponse:
 					log("RESPONSE_OnMicroTxnAuthorizationResponse: " + e.response);
-					log("MicroTxnOrderIDResult() == " + (Steamworks.MicroTxnOrderIDResult());
+					log("MicroTxnOrderIDResult() == " + Steamworks.microTxnOrderIDResult());
 					if(e.response != SteamResults.OK) {
 						log("FAILED!");
 					} else {
