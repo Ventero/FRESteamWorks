@@ -107,7 +107,8 @@ def generate_api contents, files
 			func = parse_prototype line
 			func[:num] = func_num
 
-			next nil if options[:ignore].include? func[:name]
+			next ["#{indentation}// manual implementation", "#{indentation}// #{line}",
+				""] if options[:ignore].include? func[:name]
 
 			options[:format].call(line, func).gsub(/^/, indentation)
 		end.reject{|a|a.nil?}

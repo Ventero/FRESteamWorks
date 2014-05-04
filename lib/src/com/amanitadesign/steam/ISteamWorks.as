@@ -23,6 +23,9 @@ package com.amanitadesign.steam {
 		// the below list was automatically generated with generateAPI.rb
 
 		// START GENERATED CODE
+		// manual implementation
+		// public function init():Boolean
+
 		function runCallbacks():Boolean
 		function getUserID():String
 		function getAppID():uint

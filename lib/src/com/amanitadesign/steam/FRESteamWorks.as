@@ -111,6 +111,9 @@ package com.amanitadesign.steam {
 		 */
 
 		// START GENERATED CODE
+		// manual implementation
+		// public function init():Boolean
+
 		public function runCallbacks():Boolean {
 			return _ExtensionContext.call("AIRSteam_RunCallbacks") as Boolean;
 		}

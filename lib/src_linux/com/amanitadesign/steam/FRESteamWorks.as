@@ -521,6 +521,12 @@ package com.amanitadesign.steam {
 		 */
 
 		// START GENERATED CODE
+		// manual implementation
+		// public function init():Boolean
+
+		// manual implementation
+		// public function runCallbacks():Boolean
+
 		public function getUserID():String {
 			if(!callWrapper(AIRSteam_GetUserID, [])) return "";
 			return readStringResponse();
@@ -545,6 +551,12 @@ package com.amanitadesign.steam {
 			if(!callWrapper(AIRSteam_GetPersonaName, [])) return "";
 			return readStringResponse();
 		}
+
+		// manual implementation
+		// public function useCrashHandler(appID:uint, version:String, date:String, time:String):Boolean
+
+		// manual implementation
+		// public function restartAppIfNecessary(appID:uint):Boolean
 
 		/* stats/achievements */
 		public function requestStats():Boolean {
@@ -699,6 +711,9 @@ package com.amanitadesign.steam {
 			return readBoolResponse();
 		}
 
+		// manual implementation
+		// public function fileRead(name:String, data:ByteArray):Boolean
+
 		public function fileDelete(name:String):Boolean {
 			if(!callWrapper(AIRSteam_FileDelete, [name])) return false;
 			return readBoolResponse();
@@ -734,6 +749,9 @@ package com.amanitadesign.steam {
 			if(!callWrapper(AIRSteam_UGCDownload, [handle, priority])) return false;
 			return readBoolResponse();
 		}
+
+		// manual implementation
+		// public function UGCRead(handle:String, size:int, offset:uint, data:ByteArray):Boolean
 
 		public function getUGCDownloadProgress(handle:String):Array {
 			if(!callWrapper(AIRSteam_GetUGCDownloadProgress, [handle])) return null;
@@ -922,10 +940,16 @@ package com.amanitadesign.steam {
 		}
 
 		/* authentication & ownership */
+		// manual implementation
+		// public function getAuthSessionTicket(ticket:ByteArray):uint
+
 		public function getAuthSessionTicketResult():uint {
 			if(!callWrapper(AIRSteam_GetAuthSessionTicketResult, [])) return 0;
 			return readIntResponse();
 		}
+
+		// manual implementation
+		// public function beginAuthSession(ticket:ByteArray, steamID:String):int
 
 		public function endAuthSession(steamID:String):Boolean {
 			if(!callWrapper(AIRSteam_EndAuthSession, [steamID])) return false;
@@ -936,6 +960,9 @@ package com.amanitadesign.steam {
 			if(!callWrapper(AIRSteam_CancelAuthTicket, [ticketHandle])) return false;
 			return readBoolResponse();
 		}
+
+		// manual implementation
+		// public function userHasLicenseForApp(steamID:String, appID:uint):int
 
 		/* overlay */
 		public function activateGameOverlay(dialog:String):Boolean {
