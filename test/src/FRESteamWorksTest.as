@@ -127,8 +127,6 @@ package {
 			Steamworks.addOverlayWorkaround(stage, true);
 			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
 			try {
-				processCommandLine(invokeEvent);
-
 				CONFIG::linux {
 					if(Steamworks.startProcess("invalid/path")) {
 						log("FAILED: Initialization with invalid path succeeded?!");
@@ -141,6 +139,9 @@ package {
 						return;
 					}
 				}
+
+				processCommandLine(invokeEvent);
+
 				//Steamworks.useCrashHandler(480, "1.0", "Feb 20 2013", "21:42:20");
 				if(!Steamworks.init()){
 					log("STEAMWORKS API is NOT available");
