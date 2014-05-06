@@ -184,20 +184,16 @@ package com.amanitadesign.steam {
 			isReady = false;
 		}
 
-		private function startProcess(path:String):Boolean {
+		// Call this before init or restartAppIfNecessary to start the APIWrapper process
+		public function startProcess(path:String = "NativeApps/Linux/APIWrapper"):Boolean {
+			var startupInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
 			var file:File = File.applicationDirectory.resolvePath(path);
 			if (!file.exists) return false;
 
-			var startupInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
 			startupInfo.executable = file;
 
-			_process.start(startupInfo);
-			return true;
-		}
-
-		public function init(path:String = "NativeApps/Linux/APIWrapper"):Boolean {
 			try {
-				if (!startProcess(path)) return false;
+				_process.start(startupInfo);
 			} catch(e:Error) {
 				return false;
 			}
@@ -205,20 +201,32 @@ package com.amanitadesign.steam {
 			// Try to start the process a second time, but this time ignoring any
 			// potential errors since we might get one about the process already
 			// running. This seems to give the runtime enough time to check if the
-			// initial call to startProcess() managed to start the process.
+			// initial attempt to start the process managed to start the process.
 			// process.running is unreliable, in that it's set to true even if the
 			// process exited shortly after starting. In that case, the callWrapper
-			// call below will fail though, propagating the error back to the caller.
+			// call in init will fail though, propagating the error back to the caller.
 			try {
-				startProcess(path);
+				_process.start(startupInfo);
 			} catch(e:Error) {
 				// no-op
 			}
 			if(!_process.running) return false;
 
+			return true;
+		}
+
+		// path argument is deprecated - use startProcess before calling init on Linux
+		public function init(path:String = "NativeApps/Linux/APIWrapper"):Boolean {
+			if (!_process.running) {
+				// Try to start the wrapper process now, but only if it wasn't
+				// started previously through an explicit call to startProcess();
+				if (!startProcess(path)) return false;
+			}
+
 			// initialization seems to be successful
 			_init = true;
 
+			// TODO: after the path argument is removed, this can be moved into useCrashHandler
 			// UseCrashHandler has to be called before Steam_Init
 			// but we still have to make sure the process is actually running
 			// so FRESteamWorks#useCrashHandler just sets _crashHandlerArgs
@@ -424,6 +432,17 @@ package com.amanitadesign.steam {
 		public function useCrashHandler(appID:uint, version:String, date:String, time:String):Boolean {
 			// only allow calls before SteamAPI_Init was called
 			if(_init) return false;
+			if (_process.running)
+			{
+				// call the wrapper immediately, if it was started
+				if(!callWrapper(AIRSteam_UseCrashHandler, _crashHandlerArgs))
+					return false;
+				else
+					return true;
+			}
+			// TODO: after removal of the path argument to init(), this can always happen immediately
+			// TODO: instead of waiting until init is called
+			// if(!_process.running) return false;
 			_crashHandlerArgs = [appID, version, date, time];
 			return true;
 		}
