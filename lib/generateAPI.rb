@@ -35,7 +35,7 @@ files = [
 	},
 	{
 		:file => "src/com/amanitadesign/steam/FRESteamWorks.as",
-		:ignore => ["init"],
+		:ignore => ["init","restartAppIfNecessary"],
 		:format => method(:create_lib)
 	},
 	{

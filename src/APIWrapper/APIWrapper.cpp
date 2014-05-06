@@ -130,6 +130,13 @@ std::nullptr_t AIRSteam_UseCrashHandler() {
 	return nullptr;
 }
 
+bool AIRSteam_RestartAppIfNecessary() {
+	uint32 appID = get_int();
+	bool ret = SteamAPI_RestartAppIfNecessary(appID);
+
+	return ret;
+}
+
 /*
  * stats / achievements
  */

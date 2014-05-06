@@ -38,6 +38,7 @@ package {
 	import flash.display.Sprite;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
+	import flash.events.InvokeEvent;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
@@ -57,6 +58,11 @@ package {
 		private var _userId:String;
 
 		public function FRESteamWorksTest() {
+			// wait for the invoke event before setting up UI etc
+			NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvoke);
+		}
+
+		public function onInvoke(invokeEvent:InvokeEvent):void {
 			tf = new TextField();
 			tf.x = 160;
 			tf.width = stage.stageWidth - tf.x;
@@ -133,6 +139,9 @@ package {
 						return;
 					}
 				}
+
+				processCommandLine(invokeEvent);
+
 				//Steamworks.useCrashHandler(480, "1.0", "Feb 20 2013", "21:42:20");
 				if(!Steamworks.init()){
 					log("STEAMWORKS API is NOT available");
@@ -173,9 +182,40 @@ package {
 			}
 
 		}
+
+		private function processCommandLine(invokeEvent:InvokeEvent):void {
+			// process command-line arguments
+			var argn:uint = 0;
+			var argCount:uint = invokeEvent.arguments.length;
+			while (argn < argCount) {
+				var arg:String = invokeEvent.arguments[argn];
+				++argn;
+				if (arg == '-appid') {
+					if (argn < argCount) {
+						testRestartAppIfNecessary(invokeEvent.arguments[argn]);
+						++argn;
+					} else {
+						log("FRESteamWorksTest: 'appid' requires a parameter");
+						NativeApplication.nativeApplication.exit(-1);
+					}
+				} else {
+					// invalid argument
+					log("FRESteamWorksTest called with invalid argument: " + arg);
+					NativeApplication.nativeApplication.exit(-1);
+				}
+			}
+		}
+
 		private function log(value:String):void{
 			tf.appendText(value+"\n");
 			tf.scrollV = tf.maxScrollV;
+		}
+
+		public function testRestartAppIfNecessary(appid:uint):void {
+			if (Steamworks.restartAppIfNecessary(appid)) {
+				log("App started outside of Steam with no app_id.txt : Steam will restart");
+				NativeApplication.nativeApplication.exit(0);
+			}
 		}
 
 		public function writeFileToCloud(fileName:String, data:String):Boolean {
