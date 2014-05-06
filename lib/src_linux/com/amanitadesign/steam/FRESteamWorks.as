@@ -534,6 +534,14 @@ package com.amanitadesign.steam {
 		}
 
 		public function restartAppIfNecessary(appID:uint):Boolean {
+			if(_init) throw new Error("restartAppIfNecessary must be called before init");
+			if(!_process.running) {
+				// API wrapper isn't running: try to start with the default path
+				if (!startProcess()) {
+					// still couldn't start the process - return
+					throw new Error("Steam API Wrapper process not started. Call startProcess first.");
+				}
+			}
 			if(!callWrapper(AIRSteam_RestartAppIfNecessary, [appID])) return false;
 			return readBoolResponse();
 		}
