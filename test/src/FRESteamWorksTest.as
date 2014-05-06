@@ -122,11 +122,15 @@ package {
 			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
 			try {
 				CONFIG::linux {
-					if(Steamworks.init("invalid/path")) {
-						log("Initialization with invalid path succeeded?!");
+					if(Steamworks.startProcess("invalid/path")) {
+						log("FAILED: Initialization with invalid path succeeded?!");
 						return;
 					} else {
-						log("Steamworks.init() with invalid path passed");
+						log("Steamworks.startProcess() with invalid path passed");
+					}
+					if (!Steamworks.startProcess()) {
+						log("FAILED: Steamworks.startProcess() with default path.");
+						return;
 					}
 				}
 				//Steamworks.useCrashHandler(480, "1.0", "Feb 20 2013", "21:42:20");
