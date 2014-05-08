@@ -17,6 +17,10 @@
 #include <iostream>
 #include <string>
 
+// For the low-level fd hackery in RestartAppIfNecessary.
+#include <fcntl.h>
+#include <unistd.h>
+
 #include "amf-cpp/types/amfbool.hpp"
 #include "amf-cpp/types/amfdouble.hpp"
 #include "amf-cpp/types/amfinteger.hpp"
@@ -132,7 +136,36 @@ std::nullptr_t AIRSteam_UseCrashHandler() {
 
 bool AIRSteam_RestartAppIfNecessary() {
 	uint32 appID = get_int();
+
+	// The call to SteamAPI_RestartAppIfNecessary below might fork the process
+	// to launch the Steam client in that subprocess. As that subprocess inherits
+	// all file descriptors from this parent process, its stdout/stderr fds are
+	// actually pipes to the AIR runtime this process was started from. If the
+	// AIR application terminates in response to RestartAppIfNecessary (because
+	// it's restarting the application through the Steam client), these pipes
+	// might be closed at any point, which leads to a termination through SIGPIPE
+	// if any process (including child processes) tries to write to them. This
+	// might happen when the Steam client prints any debug output to stdout.
+
+	// To work around this issue, we re-open stdout/stderr to /dev/null before
+	// calling RestartAppIfNecessary.
+	int fd = open("/dev/null", O_RDONLY);
+
+	// However, since we actually still need to communicate with the AIR runtime
+	// to pass on the return value, we have to restore the stdout/stderr fds
+	// again *after* the call to RestartAppIfNecessary.
+	int out = dup(1);
+	int err = dup(2);
+
+	// Point stdout/stderr to /dev/null for the child process ...
+	dup2(fd, 1);
+	dup2(fd, 2);
+
 	bool ret = SteamAPI_RestartAppIfNecessary(appID);
+
+	// ... and restore the actual stdout/stderr pipes for the parent process.
+	dup2(out, 1);
+	dup2(err, 2);
 
 	return ret;
 }
