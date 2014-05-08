@@ -10,6 +10,7 @@ This project initially started as a fork of [FRESteamWorks by Oldes/Amanita Desi
 If you want to contribute to this project, please take a look at the
 [contributing guide](https://github.com/Ventero/FRESteamWorks/tree/master/CONTRIBUTING.md).
 
+For a list of changes, see [the changelog](https://github.com/Ventero/FRESteamWorks/tree/master/CHANGELOG.md).
 
 # Download #
 
