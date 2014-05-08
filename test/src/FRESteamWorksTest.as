@@ -185,23 +185,17 @@ package {
 
 		private function processCommandLine(invokeEvent:InvokeEvent):void {
 			// process command-line arguments
-			var argn:uint = 0;
-			var argCount:uint = invokeEvent.arguments.length;
-			while (argn < argCount) {
-				var arg:String = invokeEvent.arguments[argn];
-				++argn;
-				if (arg == '-appid') {
-					if (argn < argCount) {
-						testRestartAppIfNecessary(invokeEvent.arguments[argn]);
-						++argn;
-					} else {
-						log("FRESteamWorksTest: 'appid' requires a parameter");
-						NativeApplication.nativeApplication.exit(-1);
-					}
-				} else {
-					// invalid argument
-					log("FRESteamWorksTest called with invalid argument: " + arg);
-					NativeApplication.nativeApplication.exit(-1);
+			var args:Array = invokeEvent.arguments;
+			for (var argn:int = 0; argn < args.length; ++argn) {
+				var arg:String = args[argn];
+
+				switch (arg) {
+					case "-appid":
+						testRestartAppIfNecessary(args[++argn]);
+						break;
+					default:
+						trace("FRESteamWorksTest called with invalid argument: " + arg);
+						NativeApplication.nativeApplication.exit(1);
 				}
 			}
 		}
@@ -212,8 +206,13 @@ package {
 		}
 
 		public function testRestartAppIfNecessary(appid:uint):void {
+			if (!appid) {
+				log("FRESteamWorkTest: -appid requires argument");
+				NativeApplication.nativeApplication.exit(1);
+			}
+
 			if (Steamworks.restartAppIfNecessary(appid)) {
-				log("App started outside of Steam with no app_id.txt : Steam will restart");
+				trace("App started outside of Steam with no app_id.txt: Steam will restart");
 				NativeApplication.nativeApplication.exit(0);
 			}
 		}
