@@ -33,6 +33,7 @@ void sendData(Serializer& serializer) {
 	std::copy(length.begin(), length.end(), std::ostream_iterator<u8>(std::cout));
 	// send actual data
 	std::copy(data.begin(), data.end(), std::ostream_iterator<u8>(std::cout));
+	std::cout << std::flush;
 }
 
 void sendDataTempFile(Serializer& serializer) {
