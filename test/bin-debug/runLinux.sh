@@ -5,7 +5,7 @@
 
 STEAM_LIB="$STEAM_SDK/redistributable_bin/linux32/libsteam_api.so"
 
-if [ -z "$SteamAppId" ] && [ ! -e "steam_appid.txt" ]; then
+if [ -z "$SteamAppId" ] && [ ! -e "steam_appid.txt" ] && [[ "$@" != *-appid* ]]; then
 	echo "\$SteamAppId not set and steam_appid.txt not found"
 	exit 1
 fi
@@ -22,4 +22,4 @@ if [ ! -x "NativeApps/Linux/APIWrapper" ]; then
 fi
 
 export LD_PRELOAD="$STEAM_LIB${LD_PRELOAD+:$LD_PRELOAD}"
-"$AIR_SDK/bin/adl" FRESteamWorksTest-linux.xml .
+"$AIR_SDK/bin/adl" FRESteamWorksTest-linux.xml . -- "$@"
