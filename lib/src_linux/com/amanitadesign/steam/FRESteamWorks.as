@@ -448,6 +448,19 @@ package com.amanitadesign.steam {
 			return true;
 		}
 
+		public function restartAppIfNecessary(appID:uint):Boolean {
+			if(_init) throw new Error("restartAppIfNecessary must be called before init");
+			if(!_process.running) {
+				// API wrapper isn't running: try to start with the default path
+				if (!startProcess()) {
+					// still couldn't start the process - return
+					throw new Error("Steam API Wrapper process not started. Call startProcess first.");
+				}
+			}
+			if(!callWrapper(AIRSteam_RestartAppIfNecessary, [appID])) return false;
+			return readBoolResponse();
+		}
+
 		public function fileRead(name:String, data:ByteArray):Boolean {
 			if(!callWrapper(AIRSteam_FileRead, [name])) return false;
 
@@ -531,19 +544,6 @@ package com.amanitadesign.steam {
 		public function getPersonaName():String {
 			if(!callWrapper(AIRSteam_GetPersonaName, [])) return "";
 			return readStringResponse();
-		}
-
-		public function restartAppIfNecessary(appID:uint):Boolean {
-			if(_init) throw new Error("restartAppIfNecessary must be called before init");
-			if(!_process.running) {
-				// API wrapper isn't running: try to start with the default path
-				if (!startProcess()) {
-					// still couldn't start the process - return
-					throw new Error("Steam API Wrapper process not started. Call startProcess first.");
-				}
-			}
-			if(!callWrapper(AIRSteam_RestartAppIfNecessary, [appID])) return false;
-			return readBoolResponse();
 		}
 
 		/* stats/achievements */
