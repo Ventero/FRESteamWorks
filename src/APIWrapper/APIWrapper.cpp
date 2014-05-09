@@ -154,18 +154,18 @@ bool AIRSteam_RestartAppIfNecessary() {
 	// However, since we actually still need to communicate with the AIR runtime
 	// to pass on the return value, we have to restore the stdout/stderr fds
 	// again *after* the call to RestartAppIfNecessary.
-	int out = dup(1);
-	int err = dup(2);
+	int out = dup(STDOUT_FILENO);
+	int err = dup(STDERR_FILENO);
 
 	// Point stdout/stderr to /dev/null for the child process ...
-	dup2(fd, 1);
-	dup2(fd, 2);
+	dup2(fd, STDOUT_FILENO);
+	dup2(fd, STDERR_FILENO);
 
 	bool ret = SteamAPI_RestartAppIfNecessary(appID);
 
 	// ... and restore the actual stdout/stderr pipes for the parent process.
-	dup2(out, 1);
-	dup2(err, 2);
+	dup2(out, STDOUT_FILENO);
+	dup2(err, STDERR_FILENO);
 
 	return ret;
 }
