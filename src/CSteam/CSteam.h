@@ -26,7 +26,7 @@
 // used to store a LeaderboardEntry_t in combination with any possible details
 class LeaderboardEntry {
 public:
-	LeaderboardEntry(int maxDetails) :
+	explicit LeaderboardEntry(int maxDetails) :
 		max_details(maxDetails),
 		details(nullptr)
 	{
