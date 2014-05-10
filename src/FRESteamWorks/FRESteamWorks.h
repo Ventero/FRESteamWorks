@@ -2,11 +2,14 @@
  *  FRESteamWorks.h
  *  This file is part of FRESteamWorks.
  *
- *  Created by David ´Oldes´ Oliva on 3/29/12.
+ *  Created by David Â´OldesÂ´ Oliva on 3/29/12.
  *  Contributors: Ventero <http://github.com/Ventero>
  *  Copyright (c) 2012 Amanita Design. All rights reserved.
  *  Copyright (c) 2012-2013 Level Up Labs, LLC. All rights reserved.
  */
+
+#ifndef FRESTEAMWORKS_H
+#define FRESTEAMWORKS_H
 
 #if defined(WIN32)
 	#define EXPORT __declspec(dllexport)
@@ -48,3 +51,5 @@ extern "C" {
 	                           FREContextFinalizer* ctxFinalizerToSet);
 	EXPORT void ExtFinalizerFRESteamWorks(void* extData);
 }
+
+#endif

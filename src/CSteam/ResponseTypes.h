@@ -6,6 +6,9 @@
  *  Copyright (c) 2014 Level Up Labs, LLC. All rights reserved.
  */
 
+#ifndef RESPONSETYPES_H
+#define RESPONSETYPES_H
+
 // General result codes
 // Remember to run lib/generateAPI.rb when changing this.
 enum ResponseTypes {
@@ -39,3 +42,5 @@ enum ResponseTypes {
 	RESPONSE_OnDLCInstalled,
 	RESPONSE_OnMicroTxnAuthorizationResponse
 };
+
+#endif

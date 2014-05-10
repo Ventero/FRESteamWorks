@@ -6,6 +6,9 @@
  *  Copyright (c) 2012-2014 Level Up Labs, LLC. All rights reserved.
  */
 
+#ifndef FRECONVERTERS_H
+#define FRECONVERTERS_H
+
 #include <string>
 #include <vector>
 
@@ -61,3 +64,5 @@ std::vector<T> getArray(FREObject object, Converter conv) {
 
 // Commonly used alias to extract a string array.
 std::vector<std::string> extractStringArray(FREObject object);
+
+#endif

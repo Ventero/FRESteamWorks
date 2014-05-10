@@ -8,6 +8,9 @@
  *  Copyright (c) 2012-2013 Level Up Labs, LLC. All rights reserved.
  */
 
+#ifndef CSTEAM_H
+#define CSTEAM_H
+
 #if defined(WIN32)
 	#define snprintf _snprintf
 #endif
@@ -342,3 +345,5 @@ private:
 // utility functions
 void createParamStringArray(std::vector<std::string> tags,
 	SteamParamStringArray_t* tagArray);
+
+#endif
