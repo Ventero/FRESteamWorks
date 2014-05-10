@@ -61,4 +61,4 @@ CSteam/CSteam.o: CSteam/ResponseTypes.h
 FRESteamWorks/FRESteamWorks.o: FRESteamWorks/FREConverters.h CSteam/CSteam.h
 APIWrapper/APIWrapper.o: APIWrapper/WrapperIO.h CSteam/CSteam.h
 APIWrapper/APIWrapper.o: CXXFLAGS += -Wno-missing-declarations
-APIWrapper/%.o: CXXFLAGS += -isystem APIWrapper/amf-cpp
+APIWrapper/%.o: CXXFLAGS += -isystem APIWrapper/amf-cpp/src

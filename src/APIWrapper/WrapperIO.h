@@ -14,8 +14,8 @@
 
 #include <steam/steamtypes.h>
 
-#include "amf-cpp/types/amfitem.hpp"
-#include "amf-cpp/serializer.hpp"
+#include <types/amfitem.hpp>
+#include <serializer.hpp>
 
 void sendData(amf::Serializer&);
 void sendDataTempFile(amf::Serializer&);

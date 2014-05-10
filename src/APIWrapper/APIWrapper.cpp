@@ -21,10 +21,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "amf-cpp/types/amfbool.hpp"
-#include "amf-cpp/types/amfdouble.hpp"
-#include "amf-cpp/types/amfinteger.hpp"
-#include "amf-cpp/serializer.hpp"
+#include <types/amfbool.hpp>
+#include <types/amfdouble.hpp>
+#include <types/amfinteger.hpp>
+#include <serializer.hpp>
 
 using namespace amf;
 
@@ -386,8 +386,7 @@ bool AIRSteam_UploadLeaderboardScore() {
 }
 
 AmfObject AIRSteam_UploadLeaderboardScoreResult() {
-	AmfObjectTraits traits("com.amanitadesign.steam.UploadLeaderboardScoreResult", false, false);
-	AmfObject obj(traits);
+	AmfObject obj("com.amanitadesign.steam.UploadLeaderboardScoreResult", false, false);
 
 	if (!g_Steam) return obj;
 
@@ -426,8 +425,7 @@ AmfArray AIRSteam_DownloadLeaderboardEntriesResult() {
 	if (entries.empty()) return array;
 
 	for (size_t i = 0; i < entries.size(); ++i) {
-		AmfObjectTraits traits("com.amanitadesign.steam.LeaderboardEntry", false, false);
-		AmfObject obj(traits);
+		AmfObject obj("com.amanitadesign.steam.LeaderboardEntry", false, false);
 
 		LeaderboardEntry_t *e = &entries[i].entry;
 		obj.addSealedProperty("userID", AmfString(std::to_string(e->m_steamIDUser.ConvertToUint64())));
@@ -597,8 +595,7 @@ AmfArray AIRSteam_GetUGCDownloadProgress() {
 }
 
 AmfObject AIRSteam_GetUGCDownloadResult() {
-	AmfObjectTraits traits("com.amanitadesign.steam.DownloadUGCResult", false, false);
-	AmfObject obj(traits);
+	AmfObject obj("com.amanitadesign.steam.DownloadUGCResult", false, false);
 
 	UGCHandle_t handle = get_uint64();
 	if (!g_Steam || handle == 0) return obj;
@@ -663,8 +660,7 @@ bool AIRSteam_GetPublishedFileDetails() {
 }
 
 AmfObject AIRSteam_GetPublishedFileDetailsResult() {
-	AmfObjectTraits traits("com.amanitadesign.steam.FileDetailsResult", false, false);
-	AmfObject obj(traits);
+	AmfObject obj("com.amanitadesign.steam.FileDetailsResult", false, false);
 
 	PublishedFileId_t file = get_uint64();
 	if (!g_Steam || file == 0) return obj;
@@ -704,8 +700,7 @@ bool AIRSteam_EnumerateUserPublishedFiles() {
 }
 
 AmfObject AIRSteam_EnumerateUserPublishedFilesResult() {
-	AmfObjectTraits traits("com.amanitadesign.steam.UserFilesResult", false, false);
-	AmfObject obj(traits);
+	AmfObject obj("com.amanitadesign.steam.UserFilesResult", false, false);
 
 	if (!g_Steam) return obj;
 
@@ -750,8 +745,7 @@ bool AIRSteam_EnumeratePublishedWorkshopFiles() {
 }
 
 AmfObject AIRSteam_EnumeratePublishedWorkshopFilesResult() {
-	AmfObjectTraits traits("com.amanitadesign.steam.WorkshopFilesResult", false, false);
-	AmfObject obj(traits);
+	AmfObject obj("com.amanitadesign.steam.WorkshopFilesResult", false, false);
 
 	if (!g_Steam) return obj;
 
@@ -782,8 +776,7 @@ bool AIRSteam_EnumerateUserSubscribedFiles() {
 }
 
 AmfObject AIRSteam_EnumerateUserSubscribedFilesResult() {
-	AmfObjectTraits traits("com.amanitadesign.steam.SubscribedFilesResult", false, false);
-	AmfObject obj(traits);
+	AmfObject obj("com.amanitadesign.steam.SubscribedFilesResult", false, false);
 
 	if (!g_Steam) return obj;
 
@@ -829,8 +822,7 @@ bool AIRSteam_EnumerateUserSharedWorkshopFiles() {
 }
 
 AmfObject AIRSteam_EnumerateUserSharedWorkshopFilesResult() {
-	AmfObjectTraits traits("com.amanitadesign.steam.UserFilesResult", false, false);
-	AmfObject obj(traits);
+	AmfObject obj("com.amanitadesign.steam.UserFilesResult", false, false);
 
 	if (!g_Steam) return obj;
 
@@ -861,8 +853,7 @@ bool AIRSteam_EnumeratePublishedFilesByUserAction() {
 }
 
 AmfObject AIRSteam_EnumeratePublishedFilesByUserActionResult() {
-	AmfObjectTraits traits("com.amanitadesign.steam.FilesByUserActionResult", false, false);
-	AmfObject obj(traits);
+	AmfObject obj("com.amanitadesign.steam.FilesByUserActionResult", false, false);
 
 	if (!g_Steam) return obj;
 
@@ -997,8 +988,7 @@ bool AIRSteam_GetPublishedItemVoteDetails() {
 }
 
 AmfObject AIRSteam_GetPublishedItemVoteDetailsResult() {
-	AmfObjectTraits traits("com.amanitadesign.steam.ItemVoteDetailsResult", false, false);
-	AmfObject obj(traits);
+	AmfObject obj("com.amanitadesign.steam.ItemVoteDetailsResult", false, false);
 
 	if (!g_Steam) return obj;
 
@@ -1023,8 +1013,7 @@ bool AIRSteam_GetUserPublishedItemVoteDetails() {
 }
 
 AmfObject AIRSteam_GetUserPublishedItemVoteDetailsResult() {
-	AmfObjectTraits traits("com.amanitadesign.steam.UserVoteDetails", false, false);
-	AmfObject obj(traits);
+	AmfObject obj("com.amanitadesign.steam.UserVoteDetails", false, false);
 
 	if (!g_Steam) return obj;
 
