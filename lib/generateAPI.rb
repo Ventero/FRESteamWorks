@@ -125,7 +125,7 @@ def generate_response_types target, types
 	content = File.read(target).split("\n")
 
 	from, to, indentation = find_markers content, "START GENERATED CODE", "END GENERATED CODE"
-	replacement = types.grep(/RESPONSE/).map.with_index do |line, idx|
+	replacement = types.grep(/RESPONSE_/).map.with_index do |line, idx|
 		# remove indentation and trailing comma
 		type = line.lstrip.chomp(",")
 		"#{indentation}public static const #{type.lstrip}:int = #{idx};"
