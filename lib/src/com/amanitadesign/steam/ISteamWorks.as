@@ -23,6 +23,9 @@ package com.amanitadesign.steam {
 		// the below list was automatically generated with generateAPI.rb
 
 		// START GENERATED CODE
+		/********************************/
+		/* General Steamworks functions */
+		/********************************/
 		// manual implementation
 		// public function init():Boolean
 
@@ -34,7 +37,9 @@ package com.amanitadesign.steam {
 		function getPersonaName():String
 		function useCrashHandler(appID:uint, version:String, date:String, time:String):Boolean
 		function restartAppIfNecessary(appID:uint):Boolean
-		/* stats/achievements */
+		/************************/
+		/* Stats / Achievements */
+		/************************/
 		function requestStats():Boolean
 		function setAchievement(name:String):Boolean
 		function clearAchievement(name:String):Boolean
@@ -50,7 +55,9 @@ package com.amanitadesign.steam {
 		function getGlobalStatFloat(name:String):Number
 		function getGlobalStatHistoryInt(name:String, days:int):Array
 		function getGlobalStatHistoryFloat(name:String, days:int):Array
-		/* leaderboards */
+		/****************/
+		/* Leaderboards */
+		/****************/
 		function findLeaderboard(name:String):Boolean
 		function findOrCreateLeaderboard(name:String, sortMethod:uint, displayType:uint):Boolean
 		function findLeaderboardResult():String
@@ -62,7 +69,9 @@ package com.amanitadesign.steam {
 		function uploadLeaderboardScoreResult():UploadLeaderboardScoreResult
 		function downloadLeaderboardEntries(handle:String, request:uint = UserStatsConstants.DATAREQUEST_GlobalAroundUser, rangeStart:int = -4, rangeEnd:int = 5):Boolean
 		function downloadLeaderboardEntriesResult(numDetails:int = 0):Array
-		/* cloud */
+		/**************************/
+		/* Cloud / Remote Storage */
+		/**************************/
 		function getFileCount():int
 		function getFileSize(name:String):int
 		function fileExists(name:String):Boolean
@@ -74,7 +83,9 @@ package com.amanitadesign.steam {
 		function isCloudEnabledForApp():Boolean
 		function setCloudEnabledForApp(enabled:Boolean):Boolean
 		function getQuota():Array
-		/* ugc/workshop */
+		/******************/
+		/* UGC / Workshop */
+		/******************/
 		function UGCDownload(handle:String, priority:uint):Boolean
 		function UGCRead(handle:String, size:int, offset:uint, data:ByteArray):Boolean
 		function getUGCDownloadProgress(handle:String):Array
@@ -111,34 +122,46 @@ package com.amanitadesign.steam {
 		function getUserPublishedItemVoteDetailsResult():UserVoteDetails
 		function updateUserPublishedItemVote(file:String, upvote:Boolean):Boolean
 		function setUserPublishedFileAction(file:String, action:uint):Boolean
-		/* friends */
+		/***********/
+		/* Friends */
+		/***********/
 		function getFriendCount(flags:uint):int
 		function getFriendByIndex(index:int, flags:uint):String
 		function getFriendPersonaName(id:String):String
-		/* authentication & ownership */
+		/******************************/
+		/* Authentication & Ownership */
+		/******************************/
 		function getAuthSessionTicket(ticket:ByteArray):uint
 		function getAuthSessionTicketResult():uint
 		function beginAuthSession(ticket:ByteArray, steamID:String):int
 		function endAuthSession(steamID:String):Boolean
 		function cancelAuthTicket(ticketHandle:uint):Boolean
 		function userHasLicenseForApp(steamID:String, appID:uint):int
-		/* overlay */
+		/***********/
+		/* Overlay */
+		/***********/
 		function activateGameOverlay(dialog:String):Boolean
 		function activateGameOverlayToUser(dialog:String, steamId:String):Boolean
 		function activateGameOverlayToWebPage(url:String):Boolean
 		function activateGameOverlayToStore(appId:uint, flag:uint):Boolean
 		function activateGameOverlayInviteDialog(steamIdLobby:String):Boolean
 		function isOverlayEnabled():Boolean
+		/***********************/
 		/* DLC / subscriptions */
+		/***********************/
 		function isSubscribedApp(appId:uint):Boolean
 		function isDLCInstalled(appId:uint):Boolean
 		function getDLCCount():int
 		function installDLC(appId:uint):Boolean
 		function uninstallDLC(appId:uint):Boolean
 		function DLCInstalledResult():uint
+		/********************/
 		/* Microtransaction */
+		/********************/
 		function microTxnOrderIDResult():String
-		/* other */
+		/**********************************/
+		/* Other non-Steamworks functions */
+		/**********************************/
 		function getEnv(name:String):String
 		// END GENERATED CODE
 	}

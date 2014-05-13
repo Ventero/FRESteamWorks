@@ -111,6 +111,9 @@ package com.amanitadesign.steam {
 		 */
 
 		// START GENERATED CODE
+		/********************************/
+		/* General Steamworks functions */
+		/********************************/
 		// manual implementation
 		// public function init():Boolean
 
@@ -146,7 +149,9 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_RestartAppIfNecessary", appID) as Boolean;
 		}
 
-		/* stats/achievements */
+		/************************/
+		/* Stats / Achievements */
+		/************************/
 		public function requestStats():Boolean {
 			return _ExtensionContext.call("AIRSteam_RequestStats") as Boolean;
 		}
@@ -207,7 +212,9 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_GetGlobalStatHistoryFloat", name, days) as Array;
 		}
 
-		/* leaderboards */
+		/****************/
+		/* Leaderboards */
+		/****************/
 		public function findLeaderboard(name:String):Boolean {
 			return _ExtensionContext.call("AIRSteam_FindLeaderboard", name) as Boolean;
 		}
@@ -252,7 +259,9 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_DownloadLeaderboardEntriesResult", numDetails) as Array;
 		}
 
-		/* cloud */
+		/**************************/
+		/* Cloud / Remote Storage */
+		/**************************/
 		public function getFileCount():int {
 			return _ExtensionContext.call("AIRSteam_GetFileCount") as int;
 		}
@@ -297,7 +306,9 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_GetQuota") as Array;
 		}
 
-		/* ugc/workshop */
+		/******************/
+		/* UGC / Workshop */
+		/******************/
 		public function UGCDownload(handle:String, priority:uint):Boolean {
 			return _ExtensionContext.call("AIRSteam_UGCDownload", handle, priority) as Boolean;
 		}
@@ -442,7 +453,9 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_SetUserPublishedFileAction", file, action) as Boolean;
 		}
 
-		/* friends */
+		/***********/
+		/* Friends */
+		/***********/
 		public function getFriendCount(flags:uint):int {
 			return _ExtensionContext.call("AIRSteam_GetFriendCount", flags) as int;
 		}
@@ -455,7 +468,9 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_GetFriendPersonaName", id) as String;
 		}
 
-		/* authentication & ownership */
+		/******************************/
+		/* Authentication & Ownership */
+		/******************************/
 		public function getAuthSessionTicket(ticket:ByteArray):uint {
 			return _ExtensionContext.call("AIRSteam_GetAuthSessionTicket", ticket) as uint;
 		}
@@ -480,7 +495,9 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_UserHasLicenseForApp", steamID, appID) as int;
 		}
 
-		/* overlay */
+		/***********/
+		/* Overlay */
+		/***********/
 		public function activateGameOverlay(dialog:String):Boolean {
 			return _ExtensionContext.call("AIRSteam_ActivateGameOverlay", dialog) as Boolean;
 		}
@@ -505,7 +522,9 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_IsOverlayEnabled") as Boolean;
 		}
 
+		/***********************/
 		/* DLC / subscriptions */
+		/***********************/
 		public function isSubscribedApp(appId:uint):Boolean {
 			return _ExtensionContext.call("AIRSteam_IsSubscribedApp", appId) as Boolean;
 		}
@@ -530,12 +549,16 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_DLCInstalledResult") as uint;
 		}
 
+		/********************/
 		/* Microtransaction */
+		/********************/
 		public function microTxnOrderIDResult():String {
 			return _ExtensionContext.call("AIRSteam_MicroTxnOrderIDResult") as String;
 		}
 
-		/* other */
+		/**********************************/
+		/* Other non-Steamworks functions */
+		/**********************************/
 		public function getEnv(name:String):String {
 			return _ExtensionContext.call("AIRSteam_GetEnv", name) as String;
 		}

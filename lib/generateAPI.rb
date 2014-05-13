@@ -100,8 +100,10 @@ def generate_api contents, files
 
 		func_num = -1
 		replacement = contents.map do |line|
-			next nil if line.empty?
-			next "#{indentation}#{line}" if line[0].chr == "/"
+			# ignore empty lines and documentation comments
+			next nil if line.empty? or line[/^\/\//]
+			# but copy block comments (used for grouping)
+			next "#{indentation}#{line}" if line[/^\/\*/]
 
 			func_num += 1
 			func = parse_prototype line

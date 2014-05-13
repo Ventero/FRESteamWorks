@@ -38,6 +38,9 @@ package com.amanitadesign.steam {
 
 		// function list automatically generated with generateAPI.rb
 		// START GENERATED VALUES
+		/********************************/
+		/* General Steamworks functions */
+		/********************************/
 		private static const AIRSteam_Init:int = 0;
 		private static const AIRSteam_RunCallbacks:int = 1;
 		private static const AIRSteam_GetUserID:int = 2;
@@ -47,7 +50,9 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_GetPersonaName:int = 6;
 		private static const AIRSteam_UseCrashHandler:int = 7;
 		private static const AIRSteam_RestartAppIfNecessary:int = 8;
-		/* stats/achievements */
+		/************************/
+		/* Stats / Achievements */
+		/************************/
 		private static const AIRSteam_RequestStats:int = 9;
 		private static const AIRSteam_SetAchievement:int = 10;
 		private static const AIRSteam_ClearAchievement:int = 11;
@@ -63,7 +68,9 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_GetGlobalStatFloat:int = 21;
 		private static const AIRSteam_GetGlobalStatHistoryInt:int = 22;
 		private static const AIRSteam_GetGlobalStatHistoryFloat:int = 23;
-		/* leaderboards */
+		/****************/
+		/* Leaderboards */
+		/****************/
 		private static const AIRSteam_FindLeaderboard:int = 24;
 		private static const AIRSteam_FindOrCreateLeaderboard:int = 25;
 		private static const AIRSteam_FindLeaderboardResult:int = 26;
@@ -75,7 +82,9 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_UploadLeaderboardScoreResult:int = 32;
 		private static const AIRSteam_DownloadLeaderboardEntries:int = 33;
 		private static const AIRSteam_DownloadLeaderboardEntriesResult:int = 34;
-		/* cloud */
+		/**************************/
+		/* Cloud / Remote Storage */
+		/**************************/
 		private static const AIRSteam_GetFileCount:int = 35;
 		private static const AIRSteam_GetFileSize:int = 36;
 		private static const AIRSteam_FileExists:int = 37;
@@ -87,7 +96,9 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_IsCloudEnabledForApp:int = 43;
 		private static const AIRSteam_SetCloudEnabledForApp:int = 44;
 		private static const AIRSteam_GetQuota:int = 45;
-		/* ugc/workshop */
+		/******************/
+		/* UGC / Workshop */
+		/******************/
 		private static const AIRSteam_UGCDownload:int = 46;
 		private static const AIRSteam_UGCRead:int = 47;
 		private static const AIRSteam_GetUGCDownloadProgress:int = 48;
@@ -124,34 +135,46 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_GetUserPublishedItemVoteDetailsResult:int = 79;
 		private static const AIRSteam_UpdateUserPublishedItemVote:int = 80;
 		private static const AIRSteam_SetUserPublishedFileAction:int = 81;
-		/* friends */
+		/***********/
+		/* Friends */
+		/***********/
 		private static const AIRSteam_GetFriendCount:int = 82;
 		private static const AIRSteam_GetFriendByIndex:int = 83;
 		private static const AIRSteam_GetFriendPersonaName:int = 84;
-		/* authentication & ownership */
+		/******************************/
+		/* Authentication & Ownership */
+		/******************************/
 		private static const AIRSteam_GetAuthSessionTicket:int = 85;
 		private static const AIRSteam_GetAuthSessionTicketResult:int = 86;
 		private static const AIRSteam_BeginAuthSession:int = 87;
 		private static const AIRSteam_EndAuthSession:int = 88;
 		private static const AIRSteam_CancelAuthTicket:int = 89;
 		private static const AIRSteam_UserHasLicenseForApp:int = 90;
-		/* overlay */
+		/***********/
+		/* Overlay */
+		/***********/
 		private static const AIRSteam_ActivateGameOverlay:int = 91;
 		private static const AIRSteam_ActivateGameOverlayToUser:int = 92;
 		private static const AIRSteam_ActivateGameOverlayToWebPage:int = 93;
 		private static const AIRSteam_ActivateGameOverlayToStore:int = 94;
 		private static const AIRSteam_ActivateGameOverlayInviteDialog:int = 95;
 		private static const AIRSteam_IsOverlayEnabled:int = 96;
+		/***********************/
 		/* DLC / subscriptions */
+		/***********************/
 		private static const AIRSteam_IsSubscribedApp:int = 97;
 		private static const AIRSteam_IsDLCInstalled:int = 98;
 		private static const AIRSteam_GetDLCCount:int = 99;
 		private static const AIRSteam_InstallDLC:int = 100;
 		private static const AIRSteam_UninstallDLC:int = 101;
 		private static const AIRSteam_DLCInstalledResult:int = 102;
+		/********************/
 		/* Microtransaction */
+		/********************/
 		private static const AIRSteam_MicroTxnOrderIDResult:int = 103;
-		/* other */
+		/**********************************/
+		/* Other non-Steamworks functions */
+		/**********************************/
 		private static const AIRSteam_GetEnv:int = 104;
 		// END GENERATED VALUES
 
@@ -521,6 +544,9 @@ package com.amanitadesign.steam {
 		 */
 
 		// START GENERATED CODE
+		/********************************/
+		/* General Steamworks functions */
+		/********************************/
 		// manual implementation
 		// public function init():Boolean
 
@@ -558,7 +584,9 @@ package com.amanitadesign.steam {
 		// manual implementation
 		// public function restartAppIfNecessary(appID:uint):Boolean
 
-		/* stats/achievements */
+		/************************/
+		/* Stats / Achievements */
+		/************************/
 		public function requestStats():Boolean {
 			if(!callWrapper(AIRSteam_RequestStats, [])) return false;
 			return readBoolResponse();
@@ -634,7 +662,9 @@ package com.amanitadesign.steam {
 			return readResponse() as Array;
 		}
 
-		/* leaderboards */
+		/****************/
+		/* Leaderboards */
+		/****************/
 		public function findLeaderboard(name:String):Boolean {
 			if(!callWrapper(AIRSteam_FindLeaderboard, [name])) return false;
 			return readBoolResponse();
@@ -690,7 +720,9 @@ package com.amanitadesign.steam {
 			return readResponse() as Array;
 		}
 
-		/* cloud */
+		/**************************/
+		/* Cloud / Remote Storage */
+		/**************************/
 		public function getFileCount():int {
 			if(!callWrapper(AIRSteam_GetFileCount, [])) return 0;
 			return readIntResponse();
@@ -744,7 +776,9 @@ package com.amanitadesign.steam {
 			return readResponse() as Array;
 		}
 
-		/* ugc/workshop */
+		/******************/
+		/* UGC / Workshop */
+		/******************/
 		public function UGCDownload(handle:String, priority:uint):Boolean {
 			if(!callWrapper(AIRSteam_UGCDownload, [handle, priority])) return false;
 			return readBoolResponse();
@@ -923,7 +957,9 @@ package com.amanitadesign.steam {
 			return readBoolResponse();
 		}
 
-		/* friends */
+		/***********/
+		/* Friends */
+		/***********/
 		public function getFriendCount(flags:uint):int {
 			if(!callWrapper(AIRSteam_GetFriendCount, [flags])) return 0;
 			return readIntResponse();
@@ -939,7 +975,9 @@ package com.amanitadesign.steam {
 			return readStringResponse();
 		}
 
-		/* authentication & ownership */
+		/******************************/
+		/* Authentication & Ownership */
+		/******************************/
 		// manual implementation
 		// public function getAuthSessionTicket(ticket:ByteArray):uint
 
@@ -964,7 +1002,9 @@ package com.amanitadesign.steam {
 		// manual implementation
 		// public function userHasLicenseForApp(steamID:String, appID:uint):int
 
-		/* overlay */
+		/***********/
+		/* Overlay */
+		/***********/
 		public function activateGameOverlay(dialog:String):Boolean {
 			if(!callWrapper(AIRSteam_ActivateGameOverlay, [dialog])) return false;
 			return readBoolResponse();
@@ -995,7 +1035,9 @@ package com.amanitadesign.steam {
 			return readBoolResponse();
 		}
 
+		/***********************/
 		/* DLC / subscriptions */
+		/***********************/
 		public function isSubscribedApp(appId:uint):Boolean {
 			if(!callWrapper(AIRSteam_IsSubscribedApp, [appId])) return false;
 			return readBoolResponse();
@@ -1026,13 +1068,17 @@ package com.amanitadesign.steam {
 			return readIntResponse();
 		}
 
+		/********************/
 		/* Microtransaction */
+		/********************/
 		public function microTxnOrderIDResult():String {
 			if(!callWrapper(AIRSteam_MicroTxnOrderIDResult, [])) return "";
 			return readStringResponse();
 		}
 
-		/* other */
+		/**********************************/
+		/* Other non-Steamworks functions */
+		/**********************************/
 		public function getEnv(name:String):String {
 			if(!callWrapper(AIRSteam_GetEnv, [name])) return "";
 			return readStringResponse();

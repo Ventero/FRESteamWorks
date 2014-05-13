@@ -1,115 +1,695 @@
+//--------------------------------//
+// FRESteamWorks API description //
+//--------------------------------//
+
+// This document describes the public API of FRESteamWorks.
+// Each AS3 function prototype below contains some information in the comments
+// above it:
+//  - the corresponding Steamworks API function in the format
+//    ISteamInterface#FunctionName(args), if applicable (if only a function name
+//    is show, the interface is listed at the top of the current block)
+//    "..." in the argument list means the argument is handled by FRESteamWorks
+//  - a default return value (denoted by @default value), returned in case the
+//    API call fails (e.g. when the API couldn't be initialized, or when the
+//    Linux APIWrapper binary isn't running)
+//  - a description of the return value, if it differs from that of the
+//    corresponding Steamworks API function (or no such function exists)
+//  - a description of the arguments, if they differ from the native function's
+//    arguments, or if their values are restricted to certain constants
+//  - any events the function might generate, including what the event's
+//    "response" property is set to (in general, response = SteamResults.OK
+//    means the API call was successfull and any other value means it failed,
+//    but there are some exceptions). "response = m_eFoo" means that the event's
+//    response property is set to the value of m_eFoo of the underlying native
+//    event
+//  - additional information (e.g. what events to listen for before calling the
+//    function)
+
+/********************************/
+/* General Steamworks functions */
+/********************************/
+
+// SteamAPI_Init()
+// @default false
+// @event RESPONSE_OnUserStatsReceived, response = m_eResult
 public function init():Boolean
+
+// SteamAPI_RunCallbacks()
+// @default false
+// This function is automatically called every 100 ms after the API was
+// successfully initialized.
 public function runCallbacks():Boolean
+
+// ISteamUser#GetSteamID()
+// @default "0"
 public function getUserID():String
+
+// ISteamUtils#GetAppID()
+// @default 0
 public function getAppID():uint
+
+// ISteamApps#GetAvailableGameLanguages()
+// @default ""
 public function getAvailableGameLanguages():String
+
+// ISteamApps#GetCurrentGameLanguage()
+// @default ""
 public function getCurrentGameLanguage():String
+
+// ISteamFriends#GetPersonaName()
+// @default ""
 public function getPersonaName():String
+
+// deprecated, do not use
 public function useCrashHandler(appID:uint, version:String, date:String, time:String):Boolean
+
+// SteamAPI_RestartAppIfNecessary(appID)
+// @default false
+// Must be called before init()
+// If using a non-default path for the APIWrapper binary on Linux, call
+// startProcess(path:String) first
 public function restartAppIfNecessary(appID:uint):Boolean
-/* stats/achievements */
+
+/************************/
+/* Stats / Achievements */
+/************************/
+// ISteamUserStats
+
+// RequestCurrentStats()
+// @default false
+// @event RESPONSE_OnUserStatsReceived, response = m_eResult
 public function requestStats():Boolean
+
+// SetAchievement(name)
+// @default false
+// @event RESPONSE_OnUserStatsStored, response = m_eResult
+// @event RESPONSE_OnAchievementStored, response = SteamResults.OK
 public function setAchievement(name:String):Boolean
+
+// ClearAchievement(name)
+// @default false
+// @event RESPONSE_OnUserStatsStored, response = m_eResult
 public function clearAchievement(name:String):Boolean
+
+// GetAchievement(name)
+// @default false
+// somewhat poorly named ...
 public function isAchievement(name:String):Boolean
+
+// GetStat(name, int*)
+// @default 0
 public function getStatInt(name:String):int
+
+// GetStat(name, float*)
+// @default 0
 public function getStatFloat(name:String):Number
+
+// SetStat(name, int*)
+// @default false
 public function setStatInt(name:String, value:int):Boolean
+
+// SetStat(name, float*)
+// @default false
 public function setStatFloat(name:String, value:Number):Boolean
+
+// StoreStats()
+// @default false
+// @event RESPONSE_OnUserStatsStored, response = m_eResult
 public function storeStats():Boolean
+
+// ResetAllStats(achievementsToo)
+// @default false
+// @event RESPONSE_OnUserStatsStored, response = m_eResult
+// calls StoreStats() afterwards, return value is the return value of that call
 public function resetAllStats(achievementsToo:Boolean):Boolean
+
+// RequestGlobalStats(days)
+// @default false
+// @event RESPONSE_OnGlobalStatsReceived, response = m_eResult
 public function requestGlobalStats(historyDays:int):Boolean
+
+// GetGlobalStat(name, int*)
+// @default 0
+// Returns the value as a Number, as AS3 doesn't have an int64 type. This can
+// lead to inaccurate values being returned, if the value can not be accurately
+// described by a double (i.e. is larger than 2^53).
 public function getGlobalStatInt(name:String):Number
+
+// GetGlobalStat(name, float*)
+// @default 0
 public function getGlobalStatFloat(name:String):Number
+
+// GetGlobalStatHistory(name, int64*, days)
+// @default []
+// This is returned as an Array of Numbers, see above.
 public function getGlobalStatHistoryInt(name:String, days:int):Array
+
+// GetGlobalStatHistory(name, float*, days)
+// @default []
 public function getGlobalStatHistoryFloat(name:String, days:int):Array
-/* leaderboards */
+
+/****************/
+/* Leaderboards */
+/****************/
+// ISteamUserStats
+
+// FindLeaderboard(name)
+// @default false
+// @event RESPONSE_OnFindLeaderboard
+//  - response = SteamResults.OK if m_bLeaderboardFound is true
+//  - response = SteamResults.Fail otherwise
+// If response = OK, call findLeaderboardResult to get the leaderboard handle.
 public function findLeaderboard(name:String):Boolean
+
+// FindOrCreateLeaderboard(name, sortMethod, displayType)
+// @default false
+// @arg sortMethod should be one of the UserStatsConstants.SORTMETHOD_* constants
+// @arg displayType should be one of the UserStatsConstants.DISPLAYTYPE_* constants
+// See FindLeaderboard.
 public function findOrCreateLeaderboard(name:String, sortMethod:uint, displayType:uint):Boolean
+
+// @default "0"
+// Returns the SteamLeaderboard_t m_hSteamLeaderboard of the leaderboard
+// returned by a successfull call (i.e. response = OK of the corresponding
+// event) to findLeaderboard or findOrCreateLeaderboard, or "0" if no such call
+// was made.
 public function findLeaderboardResult():String
+
+// GetLeaderboardName(handle)
+// @default ""
+// @arg handle is a leaderbard handle returned by find(OrCreate)Leaderboard()
+// handle is the value returned by findLeaderboardResult()
 public function getLeaderboardName(handle:String):String
+
+// GetLeaderboardEntryCount(handle)
+// @default 0
+// @arg handle is a leaderbard handle returned by find(OrCreate)Leaderboard()
 public function getLeaderboardEntryCount(handle:String):int
+
+// GetLeaderboardSortMethod(handle)
+// @default UserStatsConstants.SORTMETHOD_None
+// @arg handle is a leaderbard handle returned by find(OrCreate)Leaderboard()
+// Returns one of the UserStatsConstants.SORTMETHOD_* constants.
 public function getLeaderboardSortMethod(handle:String):uint
+
+// GetLeaderboardDisplayType(handle)
+// @default UserStatsConstants.DISPLAYTYPE_None
+// @arg handle is a leaderbard handle returned by find(OrCreate)Leaderboard()
+// Returns one of the UserStatsConstants.DISPLAYTYPE_* constants.
 public function getLeaderboardDisplayType(handle:String):uint
+
+// UploadLeaderboardScore(handle, method, score, details, details.length)
+// @default false
+// @arg handle is a leaderbard handle returned by find(OrCreate)Leaderboard()
+// @arg method should be one of the UserStatsConstants.UPLOADSCOREMETHOD_* constants
+// @arg details should be an Array of ints
+// @event RESPONSE_OnUploadLeaderboardScore
+//  - response = SteamResults.OK if m_bSuccess is true
+//  - response = SteamResults.Fail otherwise
+// If response = OK, call uploadLeaderboardScoreResult to get the corresponding
+// result object.
 public function uploadLeaderboardScore(handle:String, method:uint, score:int, details:Array = null):Boolean
+
+// @default null
+// Returns the UploadLeaderboardScoreResult object corresponding to the most
+// recent successfull call to uploadLeaderboardScore, or null if no such call
+// was made.
 public function uploadLeaderboardScoreResult():UploadLeaderboardScoreResult
+
+// DownloadLeaderboardEntries(handle, request, rangeStart, rangeEnd)
+// @default false
+// @arg handle is a leaderbard handle returned by find(OrCreate)Leaderboard()
+// @arg request should be one of the UserStatsConstants_DATAREQUEST_* constants
+// @event RESPONSE_OnDownloadLeaderboardEntries
+//  - response = SteamResults.OK if m_cEntryCount was greater than 0
+//  - response = SteamResults.Fail otherwise
+// If response = OK, call downloadLeaderboardEntriesResult to get the
+// corresponding entries leaderboard entries.
 public function downloadLeaderboardEntries(handle:String, request:uint = UserStatsConstants.DATAREQUEST_GlobalAroundUser, rangeStart:int = -4, rangeEnd:int = 5):Boolean
+
+// @default []
+// Returns an Array of LeaderboardEntry objects corresponding to the most recent
+// succesfull call to downloadLeaderboardEntries call by calling
+// GetDownloadLeaderboardEntry(..., numDetails)
+// for each entry, or an empty array if no succesfull call to
+// downloadLeaderboardEntries was made.
 public function downloadLeaderboardEntriesResult(numDetails:int = 0):Array
-/* cloud */
+
+/**************************/
+/* Cloud / Remote Storage */
+/**************************/
+// ISteamRemoteStorage
+
+// GetFileCount()
+// @default 0
 public function getFileCount():int
+
+// GetFileSize(name)
+// @default 0
 public function getFileSize(name:String):int
+
+// FileExists(name)
+// @default false
 public function fileExists(name:String):Boolean
+
+// FileWrite(name, data, data.length)
+// @default false
 public function fileWrite(name:String, data:ByteArray):Boolean
+
+// FileRead(name, ...)
+// @default false
+// The data read by the API call is written into the data ByteArray passed.
+// The ByteArray needs to be large enough to contain the whole file (i.e.
+// data.length >= getFileSize(name) is required), otherwise the call fails.
 public function fileRead(name:String, data:ByteArray):Boolean
+
+// FileDelete(name)
+// @default false
 public function fileDelete(name:String):Boolean
+
+// FileShare(name)
+// @default false
+// @event RESPONSE_OnFileShared event, response = m_eResult
+// If response = SteamResults.OK, call fileShareResult to get the file handle of
+// the shared file.
 public function fileShare(name:String):Boolean
+
+// @default WorkshopConstants.UGCHANDLE_Invalid
+// Returns the corresponding file handle of the last file that was successfully
+// shared with a call to fileShare(), or WorkshopConstants.UGCHANDLE_Invalid if
+// no such call was made.
 public function fileShareResult():String
+
+// IsCloudEnabledForApp()
+// @default false
 public function isCloudEnabledForApp():Boolean
+
+// SetCloudEnabledForApp(enabled)
+// @default false
+// The return value is that of IsCloudEnabledForApp() called afterwards.
 public function setCloudEnabledForApp(enabled:Boolean):Boolean
+
+// GetQuota(...)
+// @default []
+// Returns an Array containing two ints, total and available bytes, in that order.
 public function getQuota():Array
-/* ugc/workshop */
+
+/******************/
+/* UGC / Workshop */
+/******************/
+// ISteamUGC
+
+// UGCDownload(handle, priority)
+// @default false
+// @arg handle is a UGC handle obtained from fileShareResult() or FileDetailsResult
+// @event RESPONSE_OnUGCDownload, response = m_eResult.
+// Call getUGCDownloadResult to get the corresponding DownloadUGCResult object.
 public function UGCDownload(handle:String, priority:uint):Boolean
+
+// UGCRead(handle, data, size, offset, k_EUGCRead_ContinueReadingUntilFinished)
+// @default false
+// @arg handle is a UGC handle (see UGCDownload for details)
+// Reads the file contents into the data ByteArray, which needs to be large
+// enough to contain the requested data (i.e. data.length >= size is required).
+// Otherwise, the call fails.
 public function UGCRead(handle:String, size:int, offset:uint, data:ByteArray):Boolean
+
+// GetUGCDownloadProgress(handle, ...)
+// @arg handle is a UGC handle (see UGCDownload for details)
+// @default []
+// Returns as an Array containing two ints, bytesDownloaded and bytesExpected,
+// in that order.
 public function getUGCDownloadProgress(handle:String):Array
+
+// @default null
+// @arg handle is a UGC handle (see UGCDownload for details)
+// Returns a DownloadUGCResult corresponding to the last successfull call to
+// UGCDownload(handle), or null if no such call was made.
+// Since one such result is stored per file handle, it's safe to call
+// UGCDownload on multiple files at the same time.
 public function getUGCDownloadResult(handle:String):DownloadUGCResult
+
+// PublishWorkshopFile(name, preview, appId, title, description, visibility, tags, fileType)
+// @default false
+// @arg visibility should be one of the WorkshopConstants.VISIBILITY_* constants
+// @arg tags should be an Array of Strings, or null.
+// @arg fileType should be one of the WorkshopConstants.FILETYPE_* constants
+// @event RESPONSE_OnPublishWorkshopFile, response = m_eResult
+// If response = SteamResult.OK, call publishWorkshopFileResult to get the
+// corresponding published file id.
 public function publishWorkshopFile(name:String, preview:String, appId:uint, title:String, description:String, visibility:uint, tags:Array, fileType:uint):Boolean
+
+// @default WorkshopConstants.PUBLISHEDFILEID_Invalid
+// Returns the file id of the last file successfully shared with a call to
+// publishWorkshopFile, or WorkshopConstants.PUBLISHEDFILEID_Invalid if no such
+// call was made.
 public function publishWorkshopFileResult():String
+
+// DeletePublishedFile(file)
+// @default false
+// @arg file is a published file id returned by publishWorkshopFileResult() or
+//      obtained by enumerating the workshop
+// @event RESPONSE_OnDeletePublishedFile, response = m_eResult
+// indicating successful deletion of the file.
 public function deletePublishedFile(file:String):Boolean
+
+// GetPublishedFileDetails(file, maxAge)
+// @default false
+// @arg file is a published file id (see deletePublishedFile for details)
+// @event RESPONSE_OnGetPublishedFileDetails, response = m_eResult
+// If response = SteamResults.OK, call getPublishedFileDetailsResult to get the
+// corresponding FileDetailsResult object.
 public function getPublishedFileDetails(file:String, maxAge:uint = 0):Boolean
+
+// @default null
+// @arg file is a published file id (see deletePublishedFile for details)
+// Returns the FileDetailsResult corresponding to the last successfull call to
+// getPublishedFileDetails(file), or null otherwise.
+// Since one such object is stored per file, it's safe to call
+// getPublishedFileDetails for multiple files at once.
 public function getPublishedFileDetailsResult(file:String):FileDetailsResult
+
+// EnumerateUserPublishedFiles(startIndex)
+// @default false
+// @event RESPONSE_OnEnumerateUserPublishedFiles, response = m_eResult
+// If the call was successfull, call enumerateUserPublishedFilesResult to get
+// the corresponding UserFilesResult object.
 public function enumerateUserPublishedFiles(startIndex:uint):Boolean
+
+// @default null
+// Returns a UserFilesResult object corresponding to the last successfull call
+// to enumerateUserPublishedFiles, or null if no such call was made.
 public function enumerateUserPublishedFilesResult():UserFilesResult
+
+// EnumeratePublishedWorkshopFiles(type, start, count, days, tags, userTags)
+// @default false
+// @arg type should be one of the WorkshopConstants.ENUMTYPE_* constants
+// @arg tags and userTags should be Arrays of Strings, or null
+// @event RESPONSE_OnEnumeratePublishedWorkshopFiles, response = m_eResult
+// If the call was successfull, call enumeratePublishedWorkshopFilesResult to
+// get the corresponding WorkshopFilesResult object.
 public function enumeratePublishedWorkshopFiles(type:uint, start:uint, count:uint, days:uint, tags:Array, userTags:Array):Boolean
+
+// @default null
+// Returns a WorkshopFilesResult object corresponding to the last successfull
+// call to enumeratePublishedWorkshopFilesResult, or null if no such call was made.
 public function enumeratePublishedWorkshopFilesResult():WorkshopFilesResult
+
+// EnumerateUserSubscribedFiles(startIndex)
+// @default false
+// @event RESPONSE_OnEnumerateUserSubscribedFiles, response = m_eResult
+// If the call was successfull, call enumerateUserSubscribedFilesResult to get
+// the corresponding SubscribedFilesResult object.
 public function enumerateUserSubscribedFiles(startIndex:uint):Boolean
+
+// @default null
+// Returns a SubscribedFilesResult object corresponding to the last successfull
+// call to enumerateUserSubscribedFiles, or null if no such call was made.
 public function enumerateUserSubscribedFilesResult():SubscribedFilesResult
+
+// EnumerateUserSharedWorkshopFiles(steamID, start, required, excluded)
+// @default false
+// @arg required and excluded should be Arrays of Strings, or null
+// @event RESPONSE_OnEnumerateUserSharedWorkshopFiles, response = m_eResult
+// If the call was successfull, call
+// enumerateUserSharedWorkshopFilesResult to get the corresponding UserFilesResult
+// object.
 public function enumerateUserSharedWorkshopFiles(steamID:String, start:uint, required:Array, excluded:Array):Boolean
+
+// @default null
+// Returns a UserFilesResult object corresponding to the last successfull
+// call to enumerateUserSharedWorkshopFiles, or null if no such call was made.
 public function enumerateUserSharedWorkshopFilesResult():UserFilesResult
+
+// EnumeratePublishedFilesByUserAction(action, startIndex)
+// @default false
+// @arg action should be one of the WorkshopConstants.FILEACTION_* constants
+// @event RESPONSE_OnEnumeratePublishedFilesByUserAction, response = m_eResult
+// If the call was successfull, call
+// enumerateUserSharedWorkshopFilesResult to get the corresponding
+// FilesByUserActionResult object.
 public function enumeratePublishedFilesByUserAction(action:uint, startIndex:uint):Boolean
+
+// @default null
+// Returns a FilesByUserActionResult object corresponding to the last successfull
+// call to enumeratePublishedFilesByUserAction, or null if no such call was made.
 public function enumeratePublishedFilesByUserActionResult():FilesByUserActionResult
+
+// SubscribePublishedFile(file)
+// @default false
+// @arg file is a published file id (see deletePublishedFile for details)
+// Generates a RESPONSE_OnSubscribePublishedFile event with response = m_eResult.
 public function subscribePublishedFile(file:String):Boolean
+
+// UnsubscribePublishedFile(file)
+// @default false
+// @arg file is a published file id (see deletePublishedFile for details)
+// Generates a RESPONSE_OnUnsubscribePublishedFile event with response = m_eResult.
 public function unsubscribePublishedFile(file:String):Boolean
+
+// CreatePublishedFileUpdateRequest(file)
+// @default WorkshopConstants.FILEUPDATEHANDLE_Invalid
+// @arg file is a published file id (see deletePublishedFile for details)
 public function createPublishedFileUpdateRequest(file:String):String
+
+// UpdatePublishedFileFile(handle, file)
+// @default false
+// @arg handle is a update request handle returned by createPublishedFileUpdateRequest
 public function updatePublishedFileFile(handle:String, file:String):Boolean
+
+// UpdatePublishedFilePreviewFile(handle, preview)
+// @default false
+// @arg handle is a update request handle returned by createPublishedFileUpdateRequest
 public function updatePublishedFilePreviewFile(handle:String, preview:String):Boolean
+
+// UpdatePublishedFileTitle(handle, title)
+// @default false
+// @arg handle is a update request handle returned by createPublishedFileUpdateRequest
 public function updatePublishedFileTitle(handle:String, title:String):Boolean
+
+// UpdatePublishedFileDescription(handle, description)
+// @default false
+// @arg handle is a update request handle returned by createPublishedFileUpdateRequest
 public function updatePublishedFileDescription(handle:String, description:String):Boolean
+
+// UpdatePublishedFileSetChangeDescription(handle, changeDesc)
+// @default false
+// @arg handle is a update request handle returned by createPublishedFileUpdateRequest
 public function updatePublishedFileSetChangeDescription(handle:String, changeDesc:String):Boolean
+
+// UpdatePublishedFileVisibility(handle, visibility)
+// @default false
+// @arg handle is a update request handle returned by createPublishedFileUpdateRequest
+// @arg visibility should be one of the WorkshopConstants.VISIBILITY_* constants
 public function updatePublishedFileVisibility(handle:String, visibility:uint):Boolean
+
+// UpdatePublishedFileTags(handle, tags)
+// @default false
+// @arg handle is a update request handle returned by createPublishedFileUpdateRequest
+// @arg tags should be an Array of Strings
 public function updatePublishedFileTags(handle:String, tags:Array):Boolean
+
+// CommitPublishedFileUpdate(handle)
+// @default false
+// @arg handle is a update request handle returned by createPublishedFileUpdateRequest
+// @event RESPONSE_OnCommitPublishedFileUpdate, response = m_eResult
 public function commitPublishedFileUpdate(handle:String):Boolean
+
+// GetPublishedItemVoteDetails(file)
+// @default false
+// @event RESPONSE_OnGetPublishedItemVoteDetails, response = m_eResult
+// If the call was successfull, call enumerateUserSharedWorkshopFilesResult to
+// get the corresponding UserFilesResult object.
 public function getPublishedItemVoteDetails(file:String):Boolean
+
+// @default null
+// Returns a ItemVoteDetailsResult object corresponding to the last successfull
+// call to getPublishedItemVoteDetails, or null if no such call was made.
 public function getPublishedItemVoteDetailsResult():ItemVoteDetailsResult
+
+// GetUserPublishedItemVoteDetails(file)
+// @default false
+// @arg file is a published file id (see deletePublishedFile for details)
+// @event RESPONSE_OnGetUserPublishedItemVoteDetails, response = m_eResult
+// If the call was successfull, call enumerateUserSharedWorkshopFilesResult to
+// get the corresponding UserVoteDetails object.
 public function getUserPublishedItemVoteDetails(file:String):Boolean
+
+// @default null
+// Returns a UserVoteDetails object corresponding to the last successfull call
+// to getUserPublishedItemVoteDetails, or null if no such call was made.
 public function getUserPublishedItemVoteDetailsResult():UserVoteDetails
+
+// UpdateUserPublishedItemVote(file, upvote)
+// @default false
+// @arg file is a published file id (see deletePublishedFile for details)
+// @event RESPONSE_OnUpdateUserPublishedItemVote, response = m_eResult
 public function updateUserPublishedItemVote(file:String, upvote:Boolean):Boolean
+
+// SetUserPublishedFileAction(file, action)
+// @default false
+// @arg file is a published file id (see deletePublishedFile for details)
+// @arg action should be one one of the WorkshopConstants.FILEACTION_* constants.
+// @event RESPONSE_OnSetUserPublishedFileAction, response = m_eResult
 public function setUserPublishedFileAction(file:String, action:uint):Boolean
-/* friends */
+
+/***********/
+/* Friends */
+/***********/
+// ISteamFriends
+
+// GetFriendCount(flags)
+// @default 0
+// @arg flags is a combination (bitwise OR) of the FriendConstants.FRIENDFLAG_*
+//      constants.
 public function getFriendCount(flags:uint):int
+
+// GetFriendByIndex(index, flags)
+// @default "0"
+// For a description of flags, see getFriendCount.
 public function getFriendByIndex(index:int, flags:uint):String
+
+// GetFriendPersonaName(id)
+// @default ""
 public function getFriendPersonaName(id:String):String
-/* authentication & ownership */
+
+/******************************/
+/* Authentication & Ownership */
+/******************************/
+// ISteamUser
+
+// GetAuthSessionTicket(...)
+// @default UserConstants.AUTHTICKET_Invalid
+// @event RESPONSE_OnGetAuthSessionTicketResponse event
+//  - response = m_eAuthSessionResponse (one of the UserConstants.SESSION_* constants)
+// The session ticket will be written to the passed ByteArray.
+// Returns the return value of GetAuthSessionTicket() (the ticket handle), or
+// UserConstants.AUTHTICKET_Invalid on failure.
+// If response = UserConstants.SESSION_OK, call getAuthSessionTicketResult to
+// get the actual valid ticket handle.
 public function getAuthSessionTicket(ticket:ByteArray):uint
+
+// @default UserConstants.AUTHTICKET_Invalid
+// Returns the ticket handle of the last successfull call to getAuthSessionTicket
+// that could be validated, or UserConstants.AUTHTICKET_Invalid if no such call
+// was made.
 public function getAuthSessionTicketResult():uint
+
+// BeginAuthSession(ticket, ticket.length, steamID)
+// @default UserConstants.BEGINAUTH_InvalidTicket
+// @event RESPONSE_OnValidateAuthTicketResponse
+//  - response = m_eAuthSessionResponse (one of the UserConstants.SESSION_* constants)
+// Returns the return value of BeginAuthSession as one of the
+// UserConstants.BEGINAUTH_* constants, or UserConstants.BEGINAUTH_InvalidTicket
+// on failure.
 public function beginAuthSession(ticket:ByteArray, steamID:String):int
+
+// EndAuthSession(steamID)
+// @default false
 public function endAuthSession(steamID:String):Boolean
+
+// CancelAUthTicket(handle)
+// @default false
 public function cancelAuthTicket(ticketHandle:uint):Boolean
+
+// UserHasLicenseForApp(steamID, appID)
+// @default UserConstants.LICENSE_NoAuth
+// Returns the return value of UserHasLicenseForApp as one of the
+// UserConstants.LICENSE_* constants, or UserConstants.LICENSE_NoAuth on failure.
+// Only call this after receiving a RESPONSE_OnValidateAuthTicketResponse event
+// with response = USerConstants.SESSION_OK.
 public function userHasLicenseForApp(steamID:String, appID:uint):int
-/* overlay */
+
+/***********/
+/* Overlay */
+/***********/
+// ISteamFriends
+
+// A RESPONSE_OnGameOverlayActivated is fired whenever the user manually
+// triggers the Steam overlay, with
+//  - response = SteamResults.OK if the overlay was enabled
+//  - response = SteamResults.Fail if it was disabled
+
+// ActivateGameOverlay(dialog)
+// @default false
+// @event RESPONSE_OnGameOverlayActivated, response = SteamResults.OK
+// For a list of valid dialog names, see the Steamworks documentation.
 public function activateGameOverlay(dialog:String):Boolean
+
+// ActivateGameOverlayToUser(dialog, steamId)
+// @default false
+// @event RESPONSE_OnGameOverlayActivated, response = SteamResults.OK
 public function activateGameOverlayToUser(dialog:String, steamId:String):Boolean
+
+// ActivateGameOverlayToWebPage(url)
+// @default false
+// @event RESPONSE_OnGameOverlayActivated, response = SteamResults.OK
 public function activateGameOverlayToWebPage(url:String):Boolean
+
+// ActivateGameOverlayToStore(appId, flag)
+// @default false
+// @arg flag should be one of the FriendConstants.STOREFLAG_* constants.
+// @event RESPONSE_OnGameOverlayActivated, response = SteamResults.OK
 public function activateGameOverlayToStore(appId:uint, flag:uint):Boolean
+
+// ActivateGameOverlayInviteDialog(steamIdLobby)
+// @default false
+// @event RESPONSE_OnGameOverlayActivated, response = SteamResults.OK
 public function activateGameOverlayInviteDialog(steamIdLobby:String):Boolean
+
+// IsOverlayEnabled()
+// @default false
 public function isOverlayEnabled():Boolean
+
+/***********************/
 /* DLC / subscriptions */
+/***********************/
+// ISteamApps
+
+// BIsSubscribedApp(appId)
+// @default false
 public function isSubscribedApp(appId:uint):Boolean
+
+// BIsDLCInstalled(appId)
+// @default false
 public function isDLCInstalled(appId:uint):Boolean
+
+// GetDLCCount()
+// @default 0
 public function getDLCCount():int
+
+// InstallDLC(appId)
+// @default false
+// @event RESPONSE_OnDLCInstalled, response = SteamResults.OK
 public function installDLC(appId:uint):Boolean
+
+// UninstallDLC(appId)
+// @default false
 public function uninstallDLC(appId:uint):Boolean
+
+// @default 0
+// Returns the app id of the DLC that was just installed, or 0 if no DLC was
+// installed. Call this whenever receiving a RESPONSE_OnDLCInstalled event.
 public function DLCInstalledResult():uint
+
+/********************/
 /* Microtransaction */
+/********************/
+
+// @default "0"
+// Returns the order ID of a successfull microtransaction authorization response
+// or "0" by default.
+// Call this whenever receiving a RESPONSE_OnMicroTxnAuthorizationResponse event.
+// For each event you receive, the event's response property indicates if the
+// transaction was successfull (SteamResults.OK if m_bAuthorized is true, else
+// SteamResults.Fail), call this function to obtain the corresponding order ID.
 public function microTxnOrderIDResult():String
-/* other */
+
+/**********************************/
+/* Other non-Steamworks functions */
+/**********************************/
+
+// @default ""
+// Returns the value of the environment variable with the given name as returned
+// by std::getenv() or the empty String, if getenv() returned a null pointer.
 public function getEnv(name:String):String

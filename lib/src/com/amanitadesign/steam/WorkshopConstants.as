@@ -37,6 +37,7 @@ package com.amanitadesign.steam {
 		public static const VISIBILITY_FriendsOnly:int = 1;
 		public static const VISIBILITY_Private:int = 2;
 
+		// Deprecated, use FriendConstants.STOREFLAG_* instead.
 		public static const OVERLAYSTOREFLAG_None:int = 0;
 		public static const OVERLAYSTOREFLAG_AddToCart:int = 1;
 		public static const OVERLAYSTOREFLAG_AddToCartAndShow:int = 2;
