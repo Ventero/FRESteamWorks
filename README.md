@@ -18,6 +18,17 @@ Pre-built cross-platform ANEs (for both Windows and OS X), as well as Linux
 SWCs can be found on http://dump.ventero.de/FRESteamWorks/. The Linux wrapper
 binary has to be built manually, see [the Linux section](#linux) for more details.
 
+# API Documentation #
+
+For a full list of all supported functions with some accompanying documentation,
+see [lib/API.txt](https://github.com/Ventero/FRESteamWorks/blob/master/lib/API.txt).
+In general, the FRESteamWorks API functions try to be a close representation of
+the native Steamworks SDK functions. Thus, for detailed documentation, see the
+Steamworks SDK docs.
+
+The objects returned by certain API functions are plain data structures.
+For a list of available properties, see [the corresponding source files](https://github.com/Ventero/FRESteamWorks/tree/master/lib/src/com/amanitadesign/steam).
+
 # Usage #
 
 For Windows/OS X builds, you'll only have to include the ANE in your project like
@@ -32,17 +43,6 @@ the testing of Steam applications, please refer to the Steamworks SDK documentat
 Since the AIR runtime on Linux doesn't support native extensions, an external
 binary is used to communicate with the Steamworks API. For more information
 on how to build and include this tool, see [the Linux section](#linux).
-
-# API Documentation #
-
-For a full list of all supported functions with some accompanying documentation,
-see [lib/API.txt](https://github.com/Ventero/FRESteamWorks/blob/master/lib/API.txt).
-In general, the FRESteamWorks API functions try to be a close representation of
-the native Steamworks SDK functions. Thus, for detailed documentation, see the
-Steamworks SDK docs.
-
-The objects returned by certain API functions are plain data structures.
-For a list of available properties, see [the corresponding source files](https://github.com/Ventero/FRESteamWorks/tree/master/lib/src/com/amanitadesign/steam).
 
 ## Known Issues ##
 
