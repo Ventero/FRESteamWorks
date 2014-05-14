@@ -86,7 +86,7 @@ std::nullptr_t AIRSteam_RunCallbacks() {
 }
 
 uint64 AIRSteam_GetUserID() {
-	if (!g_Steam) return 0;;
+	if (!g_Steam) return 0;
 
 	return g_Steam->GetUserID().ConvertToUint64();
 }
@@ -639,7 +639,7 @@ bool AIRSteam_PublishWorkshopFile() {
 }
 
 PublishedFileId_t AIRSteam_PublishWorkshopFileResult() {
-	if (!g_Steam) return 0;;
+	if (!g_Steam) return 0;
 
 	return g_Steam->PublishWorkshopFileResult();
 }
