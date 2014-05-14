@@ -34,6 +34,11 @@
 // @event RESPONSE_OnUserStatsReceived, response = m_eResult
 public function init():Boolean
 
+// SteamAPI_Shutdown()
+// @nogen
+// Call this function when shutting down your application.
+public function dispose():void
+
 // SteamAPI_RunCallbacks()
 // @default false
 // This function is automatically called every 100 ms after the API was
@@ -693,3 +698,16 @@ public function microTxnOrderIDResult():String
 // Returns the value of the environment variable with the given name as returned
 // by std::getenv() or the empty String, if getenv() returned a null pointer.
 public function getEnv(name:String):String
+
+// The Steam overlay requires the application to constantly redraw the screen
+// when the overlay is triggered to display the fade in/out animation. However,
+// under some circumstances, the Adobe AIR runtime doesn't do this, causing the
+// overlay to get stuck during fade in/out. To work around this problem, call
+// this function, which adds a constantly "rotating" pixel to the stage as soon
+// as the overlay is triggered, forcing AIR to redraw.
+// @arg container The display object container to add the pixel to (usually stage)
+// @arg alwaysVisible If the pixel should stay visible, even if the overlay
+//      currently isn't up
+// @arg color The pixel's color
+// @nogen
+public function addOverlayWorkaround(container:DisplayObjectContainer, alwaysVisible:Boolean = false, color:uint = 0x000000):void

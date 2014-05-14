@@ -101,18 +101,26 @@ def generate_api contents, files
 
 		func_num = -1
 		default_ret = ""
+		skip = false
 		replacement = contents.map do |line|
 			# try to extract the default return value
 			default_match = line.match(/^\/\/ @default (.+)/)
 			default_ret = default_match[1] if default_match
+
+			# check if this function should be skipped during code generation
+			skip = true if line["// @nogen"]
 
 			# ignore empty lines and documentation comments
 			next nil if line.empty? or line[/^\/\//]
 			# but copy block comments (used for grouping)
 			next "#{indentation}#{line}" if line[/^\/\*/]
 
-			func_num += 1
 			func = parse_prototype line
+
+			# If this function is marked as "nogen", skip it
+			(skip = false; next nil) if skip
+
+			func_num += 1
 			func[:num] = func_num
 			func[:default] = default_ret unless default_ret.empty?
 
