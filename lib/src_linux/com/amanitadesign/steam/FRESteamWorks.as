@@ -653,12 +653,12 @@ package com.amanitadesign.steam {
 		}
 
 		public function getGlobalStatHistoryInt(name:String, days:int):Array {
-			if(!callWrapper(AIRSteam_GetGlobalStatHistoryInt, [name, days])) return null;
+			if(!callWrapper(AIRSteam_GetGlobalStatHistoryInt, [name, days])) return [];
 			return readResponse() as Array;
 		}
 
 		public function getGlobalStatHistoryFloat(name:String, days:int):Array {
-			if(!callWrapper(AIRSteam_GetGlobalStatHistoryFloat, [name, days])) return null;
+			if(!callWrapper(AIRSteam_GetGlobalStatHistoryFloat, [name, days])) return [];
 			return readResponse() as Array;
 		}
 
@@ -716,7 +716,7 @@ package com.amanitadesign.steam {
 		}
 
 		public function downloadLeaderboardEntriesResult(numDetails:int = 0):Array {
-			if(!callWrapper(AIRSteam_DownloadLeaderboardEntriesResult, [numDetails])) return null;
+			if(!callWrapper(AIRSteam_DownloadLeaderboardEntriesResult, [numDetails])) return [];
 			return readResponse() as Array;
 		}
 
@@ -772,7 +772,7 @@ package com.amanitadesign.steam {
 		}
 
 		public function getQuota():Array {
-			if(!callWrapper(AIRSteam_GetQuota, [])) return null;
+			if(!callWrapper(AIRSteam_GetQuota, [])) return [];
 			return readResponse() as Array;
 		}
 
@@ -788,7 +788,7 @@ package com.amanitadesign.steam {
 		// public function UGCRead(handle:String, size:int, offset:uint, data:ByteArray):Boolean
 
 		public function getUGCDownloadProgress(handle:String):Array {
-			if(!callWrapper(AIRSteam_GetUGCDownloadProgress, [handle])) return null;
+			if(!callWrapper(AIRSteam_GetUGCDownloadProgress, [handle])) return [];
 			return readResponse() as Array;
 		}
 

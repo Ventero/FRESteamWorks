@@ -10,6 +10,7 @@ end
 
 @lib_lin_defaults = Hash.new { |h,k| h[k] = ["readResponse() as #{k}", "null"] }
 @lib_lin_defaults.merge!({
+	"Array" => ["readResponse() as Array", "[]"],
 	"Boolean" => ["readBoolResponse()", "false"],
 	"Number" => ["readFloatResponse()", "0.0"],
 	"int" => ["readIntResponse()", "0"],
