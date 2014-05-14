@@ -33,6 +33,17 @@ Since the AIR runtime on Linux doesn't support native extensions, an external
 binary is used to communicate with the Steamworks API. For more information
 on how to build and include this tool, see [the Linux section](#linux).
 
+# API Documentation #
+
+For a full list of all supported functions with some accompanying documentation,
+see [lib/API.txt](https://github.com/Ventero/FRESteamWorks/blob/master/lib/API.txt).
+In general, the FRESteamWorks API functions try to be a close representation of
+the native Steamworks SDK functions. Thus, for detailed documentation, see the
+Steamworks SDK docs.
+
+The objects returned by certain API functions are plain data structures.
+For a list of available properties, see [the corresponding source files](https://github.com/Ventero/FRESteamWorks/tree/master/lib/src/com/amanitadesign/steam).
+
 ## Known Issues ##
 
 Due to a bug in old versions of the AIR runtime, the runtime will crash as soon
@@ -149,16 +160,6 @@ The AIR runtime on Linux doesn't support native extensions. Instead, you'll have
 to compile your AS3 application against `FRESteamWorksLibLinux.swc` and compile
 a wrapper binary that handles the communication between AIR and the Steamworks API.
 For details on how to do that, please contact me directly (email address see profile).
-
-# API Documentation #
-
-For a full list of all supported functions, see [lib/API.txt](https://github.com/Ventero/FRESteamWorks/blob/master/lib/API.txt).
-In general, the FRESteamWorks API functions are as close representation of the
-native Steamworks SDK functions. Thus, for detailed documentation, see the
-Steamworks SDK docs.
-
-The objects returned by certain API functions are plain data structures.
-For a list of available properties, see [the corresponding source file](https://github.com/Ventero/FRESteamWorks/tree/master/lib/src/com/amanitadesign/steam).
 
 # Building FRESteamWorks #
 
