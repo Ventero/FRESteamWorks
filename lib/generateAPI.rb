@@ -19,6 +19,7 @@ end
 })
 def create_lib_linux line, func
 	type, default = @lib_lin_defaults[func[:ret]]
+	default = func[:default] if func[:default]
 
 	<<-EOD
 #{line} {
@@ -42,8 +43,7 @@ files = [
 	{
 		:file => "src_linux/com/amanitadesign/steam/FRESteamWorks.as",
 		:ignore => ["init", "runCallbacks", "useCrashHandler", "fileRead", "UGCRead",
-			"getAuthSessionTicket", "beginAuthSession", "userHasLicenseForApp",
-			"restartAppIfNecessary"],
+			"getAuthSessionTicket", "restartAppIfNecessary"],
 		:format => method(:create_lib_linux)
 	},
 	{
@@ -100,7 +100,12 @@ def generate_api contents, files
 		from, to, indentation = find_markers file_content, start_marker, end_marker
 
 		func_num = -1
+		default_ret = ""
 		replacement = contents.map do |line|
+			# try to extract the default return value
+			default_match = line.match(/^\/\/ @default (.+)/)
+			default_ret = default_match[1] if default_match
+
 			# ignore empty lines and documentation comments
 			next nil if line.empty? or line[/^\/\//]
 			# but copy block comments (used for grouping)
@@ -109,6 +114,10 @@ def generate_api contents, files
 			func_num += 1
 			func = parse_prototype line
 			func[:num] = func_num
+			func[:default] = default_ret unless default_ret.empty?
+
+			# Reset for the next function
+			default_ret = ""
 
 			next ["#{indentation}// manual implementation", "#{indentation}// #{line}",
 				""] if options[:ignore].include? func[:name]
