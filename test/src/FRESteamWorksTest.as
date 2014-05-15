@@ -100,6 +100,7 @@ package {
 			addButton("By Action (completed)", enumerateCompletedFiles, _enumerateContainer);
 
 			addButton("Back", null, _fileContainer);
+			addButton("Read file", readTestFile, _fileContainer);
 			addButton("Toggle file", toggleFile, _fileContainer);
 			addButton("Publish file", publishFile, _fileContainer);
 			addButton("Delete published file", deletePublishedFile, _fileContainer);
@@ -225,14 +226,10 @@ package {
 
 		public function readFileFromCloud(fileName:String):String {
 			var dataIn:ByteArray = new ByteArray();
-			var result:String;
-			dataIn.position = 0;
-			dataIn.length = Steamworks.getFileSize(fileName);
+			if (Steamworks.fileRead(fileName, dataIn))
+				return dataIn.readUTFBytes(dataIn.length);
 
-			if(dataIn.length>0 && Steamworks.fileRead(fileName,dataIn)){
-				result = dataIn.readUTFBytes(dataIn.length);
-			}
-			return result;
+			return "";
 		}
 
 		private function checkAchievements(e:Event = null):void {
@@ -304,6 +301,12 @@ package {
 			log("isCloudEnabledForApp() == " + enabled);
 			log("setCloudEnabledForApp(" + !enabled + ") == " + Steamworks.setCloudEnabledForApp(!enabled));
 			log("isCloudEnabledForApp() == " + Steamworks.isCloudEnabledForApp());
+		}
+
+		private function readTestFile(e:Event = null):void {
+			if (!Steamworks.isReady) return;
+
+			log("readFileFromCloud('test.txt') == " + readFileFromCloud('test.txt'));
 		}
 
 		private function toggleFile(e:Event = null):void {
@@ -832,7 +835,6 @@ package {
 					if(ugcResult) {
 						log("File: " + ugcResult.fileName + ", handle: " + ugcResult.fileHandle + ", size: " + ugcResult.size);
 						var ba:ByteArray = new ByteArray();
-						ba.length = ugcResult.size;
 						apiCall = Steamworks.UGCRead(ugcResult.fileHandle, ugcResult.size, 0, ba);
 						log("UGCRead(...) == " + apiCall);
 						if(apiCall) {
@@ -899,8 +901,9 @@ package {
 					}
 
 					/* should be equal to UserConstants.LICENSE_HasLicense */
-					log("userHasLicenseForApp(...) == " + (Steamworks.userHasLicenseForApp(_userId, _appId)) +
-						"( == " + UserConstants.LICENSE_HasLicense + "?)");
+					var license:uint = Steamworks.userHasLicenseForApp(_userId, _appId);
+					log("userHasLicenseForApp(...) == " + license +
+						"(" + (license == UserConstants.LICENSE_HasLicense) + ")");
 					log("userHasLicenseForApp(..., 999999) == " + Steamworks.userHasLicenseForApp(_userId, 999999));
 
 					log("endAuthSession(" + _userId + ") == " + Steamworks.endAuthSession( _userId));

@@ -563,11 +563,13 @@ bool AIRSteam_UGCRead() {
 
 	char* data = nullptr;
 	int32 result = 0;
-	if (size > 0) {
-		result = g_Steam->UGCRead(handle, size, offset, &data);
-	}
+	if (size <= 0) return false;
 
-	if(result == 0) return false;
+	result = g_Steam->UGCRead(handle, size, offset, &data);
+	if(result <= 0) {
+		delete[] data;
+		return false;
+	}
 
 	send(true);
 	Serializer serializer;

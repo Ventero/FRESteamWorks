@@ -489,9 +489,9 @@ package com.amanitadesign.steam {
 
 			var success:Boolean = readBoolResponse();
 			if(success) {
-				var response:ByteArray = readByteArrayResponse();
-				data.writeBytes(response);
-				data.position = 0;
+				data.clear();
+				data.writeBytes(readByteArrayResponse());
+				data.position = 0,
 				// dummy value
 				readBoolResponse();
 			}
@@ -504,9 +504,9 @@ package com.amanitadesign.steam {
 
 			var success:Boolean = readBoolResponse();
 			if(success) {
-				var response:ByteArray = readByteArrayResponse();
-				data.writeBytes(response);
-				data.position = 0;
+				data.clear();
+				data.writeBytes(readByteArrayResponse());
+				data.position = 0,
 				// dummy value
 				readBoolResponse();
 			}
@@ -517,10 +517,9 @@ package com.amanitadesign.steam {
 		public function getAuthSessionTicket(ticket:ByteArray):uint {
 			if(!callWrapper(AIRSteam_GetAuthSessionTicket, [])) return 0;
 
-			var pos:uint = ticket.position;
-			var response:ByteArray = readByteArrayResponse();
-			ticket.writeBytes(response);
-			ticket.position = pos;
+			ticket.clear();
+			ticket.writeBytes(readByteArrayResponse());
+			ticket.position = 0;
 
 			return readIntResponse();
 		}

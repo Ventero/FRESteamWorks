@@ -498,21 +498,24 @@ AIR_FUNC(AIRSteam_FileRead) {
 	std::string name;
 	if (!FREGetString(argv[0], name)) return FREBool(false);
 
-	FREByteArray byteArray;
-	if (FREAcquireByteArray(argv[1], &byteArray) != FRE_OK)
-		return FREBool(false);
-
-	bool ret = false;
 	char* data = NULL;
 	int32 size = g_Steam->FileRead(name, &data);
-	if (size > 0 && static_cast<uint32>(size) <= byteArray.length) {
-		ret = true;
-		memcpy(byteArray.bytes, data, size);
-		delete[] data;
-	}
-	FREReleaseByteArray(argv[1]);
 
-	return FREBool(ret);
+	// ensure the bytearray is big enough
+	SET_PROP(argv[1], "length", FREUint(size));
+
+	FREByteArray byteArray;
+	if (FREAcquireByteArray(argv[1], &byteArray) != FRE_OK) {
+		delete[] data;
+		return FREBool(false);
+	}
+
+	memcpy(byteArray.bytes, data, size);
+
+	FREReleaseByteArray(argv[1]);
+	delete[] data;
+
+	return FREBool(true);
 }
 
 AIR_FUNC(AIRSteam_FileDelete) {
@@ -593,25 +596,27 @@ AIR_FUNC(AIRSteam_UGCRead) {
 	    !FREGetInt32(argv[1], &_size) ||
 	    !FREGetUint32(argv[2], &offset)) return FREBool(false);
 
-	if (_size < 0) return FREBool(false);
+	if (_size <= 0) return FREBool(false);
 	uint32 size = _size;
+
+	// ensure the bytearray is big enough
+	SET_PROP(argv[3], "length", FREUint(size));
 
 	FREByteArray byteArray;
 	if (FREAcquireByteArray(argv[3], &byteArray) != FRE_OK)
 		return FREBool(false);
 
-	bool ret = false;
 	char* data = NULL;
-	if (size > 0 && size <= byteArray.length) {
-		int32 result = g_Steam->UGCRead(handle, size, offset, &data);
-		if (result > 0 && static_cast<uint32>(result) <= byteArray.length) {
-			ret = true;
-			memcpy(byteArray.bytes, data, result);
-		}
+	int32 result = g_Steam->UGCRead(handle, size, offset, &data);
 
-		delete[] data;
+	bool ret = false;
+	if (result > 0 && static_cast<uint32>(result) <= byteArray.length) {
+		ret = true;
+		memcpy(byteArray.bytes, data, result);
 	}
+
 	FREReleaseByteArray(argv[3]);
+	delete[] data;
 
 	return FREBool(ret);
 }

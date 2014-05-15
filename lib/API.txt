@@ -263,9 +263,9 @@ public function fileWrite(name:String, data:ByteArray):Boolean
 
 // FileRead(name, ...)
 // @default false
-// The data read by the API call is written into the data ByteArray passed.
-// The ByteArray needs to be large enough to contain the whole file (i.e.
-// data.length >= getFileSize(name) is required), otherwise the call fails.
+// The data read by the API call is written into the "data" ByteArray passed.
+// Any potential data in that ByteArray is cleared before reading the file into
+// it.
 public function fileRead(name:String, data:ByteArray):Boolean
 
 // FileDelete(name)
@@ -314,9 +314,7 @@ public function UGCDownload(handle:String, priority:uint):Boolean
 // UGCRead(handle, data, size, offset, k_EUGCRead_ContinueReadingUntilFinished)
 // @default false
 // @arg handle is a UGC handle (see UGCDownload for details)
-// Reads the file contents into the data ByteArray, which needs to be large
-// enough to contain the requested data (i.e. data.length >= size is required).
-// Otherwise, the call fails.
+// Reads the file contents into the data ByteArray after clearing it first.
 public function UGCRead(handle:String, size:int, offset:uint, data:ByteArray):Boolean
 
 // GetUGCDownloadProgress(handle, ...)
@@ -567,7 +565,8 @@ public function getFriendPersonaName(id:String):String
 // @default UserConstants.AUTHTICKET_Invalid
 // @event RESPONSE_OnGetAuthSessionTicketResponse event
 //  - response = m_eAuthSessionResponse (one of the UserConstants.SESSION_* constants)
-// The session ticket will be written to the passed ByteArray.
+// The session ticket will be written to the passed ByteArray, after clearing
+// it first.
 // Returns the return value of GetAuthSessionTicket() (the ticket handle), or
 // UserConstants.AUTHTICKET_Invalid on failure.
 // If response = UserConstants.SESSION_OK, call getAuthSessionTicketResult to
