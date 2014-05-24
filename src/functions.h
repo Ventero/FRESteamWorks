@@ -133,7 +133,7 @@ X(AIRSteam_DLCInstalledResult) /* = 102 */
 /********************/
 /* Microtransaction */
 /********************/
-X(AIRSteam_MicroTxnOrderIDResult) /* = 103 */
+X(AIRSteam_MicroTxnResult) /* = 103 */
 /**********************************/
 /* Other non-Steamworks functions */
 /**********************************/

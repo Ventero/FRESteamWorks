@@ -171,7 +171,7 @@ package com.amanitadesign.steam {
 		/********************/
 		/* Microtransaction */
 		/********************/
-		private static const AIRSteam_MicroTxnOrderIDResult:int = 103;
+		private static const AIRSteam_MicroTxnResult:int = 103;
 		/**********************************/
 		/* Other non-Steamworks functions */
 		/**********************************/
@@ -189,6 +189,7 @@ package com.amanitadesign.steam {
 			registerClassAlias("com.amanitadesign.steam.FilesByUserActionResult", FilesByUserActionResult);
 			registerClassAlias("com.amanitadesign.steam.ItemVoteDetailsResult", ItemVoteDetailsResult);
 			registerClassAlias("com.amanitadesign.steam.LeaderboardEntry", LeaderboardEntry);
+			registerClassAlias("com.amanitadesign.steam.MicroTxnAuthorizationResponse", MicroTxnAuthorizationResponse);
 			registerClassAlias("com.amanitadesign.steam.SubscribedFilesResult", SubscribedFilesResult);
 			registerClassAlias("com.amanitadesign.steam.UploadLeaderboardScoreResult", UploadLeaderboardScoreResult);
 			registerClassAlias("com.amanitadesign.steam.UserFilesResult", UserFilesResult);
@@ -1060,9 +1061,9 @@ package com.amanitadesign.steam {
 		/********************/
 		/* Microtransaction */
 		/********************/
-		public function microTxnOrderIDResult():String {
-			if(!callWrapper(AIRSteam_MicroTxnOrderIDResult, [])) return "0";
-			return readStringResponse();
+		public function microTxnResult():MicroTxnAuthorizationResponse {
+			if(!callWrapper(AIRSteam_MicroTxnResult, [])) return null;
+			return readResponse() as MicroTxnAuthorizationResponse;
 		}
 
 		/**********************************/

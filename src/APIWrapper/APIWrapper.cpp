@@ -1222,10 +1222,18 @@ bool AIRSteam_DLCInstalledResult() {
  * Microtransaction
  */
 
-uint64 AIRSteam_MicroTxnOrderIDResult() {
-	if (!g_Steam) return 0;
+AmfObject AIRSteam_MicroTxnResult() {
+	AmfObject obj("com.amanitadesign.steam.MicroTxnAuthorizationResponse", false, false);
+	if (!g_Steam) return obj;
 
-	return g_Steam->MicroTxnOrderIDResult();
+	MicroTxnAuthorizationResponse_t res;
+	if (!g_Steam->MicroTxnResult(&res)) return obj;
+
+	obj.addSealedProperty("appID", AmfInteger(res.m_unAppID));
+	obj.addSealedProperty("orderID", AmfString(std::to_string(res.m_ulOrderID)));
+	obj.addSealedProperty("vote", AmfBool(res.m_bAuthorized));
+
+	return obj;
 }
 
 /*

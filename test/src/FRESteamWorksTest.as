@@ -28,6 +28,7 @@ package {
 	import com.amanitadesign.steam.FileDetailsResult;
 	import com.amanitadesign.steam.FilesByUserActionResult;
 	import com.amanitadesign.steam.ItemVoteDetailsResult;
+	import com.amanitadesign.steam.MicroTxnAuthorizationResponse;
 	import com.amanitadesign.steam.SubscribedFilesResult;
 	import com.amanitadesign.steam.UserFilesResult;
 	import com.amanitadesign.steam.UserVoteDetails;
@@ -913,11 +914,13 @@ package {
 					break;
 				case SteamConstants.RESPONSE_OnMicroTxnAuthorizationResponse:
 					log("RESPONSE_OnMicroTxnAuthorizationResponse: " + e.response);
-					log("MicroTxnOrderIDResult() == " + Steamworks.microTxnOrderIDResult());
-					if(e.response != SteamResults.OK) {
-						log("FAILED!");
-					} else {
-						log("SUCCESS!");
+
+					var microTxnResponse:MicroTxnAuthorizationResponse;
+					while ((microTxnResponse = Steamworks.microTxnResult()) != null) {
+						log("MicroTxnOrderIDResult() == " + microTxnResponse +
+							" (app: " + microTxnResponse.appID +
+							", order: " + microTxnResponse.orderID +
+							", authorized: " + microTxnResponse.authorized + ")");
 					}
 
 					break;

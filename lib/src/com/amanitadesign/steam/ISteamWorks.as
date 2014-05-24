@@ -158,7 +158,7 @@ package com.amanitadesign.steam {
 		/********************/
 		/* Microtransaction */
 		/********************/
-		function microTxnOrderIDResult():String
+		function microTxnResult():MicroTxnAuthorizationResponse
 		/**********************************/
 		/* Other non-Steamworks functions */
 		/**********************************/

@@ -203,7 +203,7 @@ public:
 	AppId_t DLCInstalledResult();
 
 	// Microtransaction
-	uint64_t MicroTxnOrderIDResult();
+	bool MicroTxnResult(MicroTxnAuthorizationResponse_t* out);
 
 protected:
 	virtual void DispatchEvent(char* code, char* level) = 0;
@@ -219,10 +219,10 @@ private:
 	PublishedFileId_t m_PublishedFileId;
 	HAuthTicket m_ActualAuthTicket;
 	AppId_t m_DLCInstalled;
-	std::queue<uint64_t> m_MicroTxnOrderIDs;
 
 	std::map<UGCHandle_t, RemoteStorageDownloadUGCResult_t> m_DownloadResults;
 	std::map<PublishedFileId_t, RemoteStorageGetPublishedFileDetailsResult_t> m_PublishedFileDetails;
+	std::queue<MicroTxnAuthorizationResponse_t> m_MicroTxnResponses;
 
 	// can't use unique_ptr because we need to target OS X 10.6 ...
 #pragma GCC diagnostic push

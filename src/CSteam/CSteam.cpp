@@ -800,13 +800,15 @@ AppId_t CSteam::DLCInstalledResult() {
 	return m_DLCInstalled;
 }
 
-uint64_t CSteam::MicroTxnOrderIDResult() {
-	uint64_t orderID = 0UL;
-	if (!m_MicroTxnOrderIDs.empty()) {
-		orderID = m_MicroTxnOrderIDs.front();
-		m_MicroTxnOrderIDs.pop();
+bool CSteam::MicroTxnResult(MicroTxnAuthorizationResponse_t* out) {
+	if (!m_MicroTxnResponses.empty()) {
+		*out = m_MicroTxnResponses.front();
+		m_MicroTxnResponses.pop();
+
+		return true;
 	}
-	return orderID;
+
+	return false;
 }
 
 void CSteam::DispatchEvent(const int req_type, const int response) {
@@ -971,7 +973,7 @@ void CSteam::OnDLCInstalled(DlcInstalled_t *pCallback) {
 void CSteam::OnMicroTxnAuthorizationResponse(MicroTxnAuthorizationResponse_t *pCallback) {
 	// ignore callbacks for other games' transactions
 	if (m_iAppID != pCallback->m_unAppID) return;
-	m_MicroTxnOrderIDs.push(pCallback->m_ulOrderID);
+	m_MicroTxnResponses.push(*pCallback);
 	DispatchEvent(RESPONSE_OnMicroTxnAuthorizationResponse, pCallback->m_bAuthorized ? k_EResultOK : k_EResultFail);
 }
 
