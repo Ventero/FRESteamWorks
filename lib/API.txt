@@ -18,7 +18,7 @@
 //    arguments, or if their values are restricted to certain constants
 //  - any events the function might generate, including what the event's
 //    "response" property is set to (in general, response = SteamResults.OK
-//    means the API call was successfull and any other value means it failed,
+//    means the API call was successful and any other value means it failed,
 //    but there are some exceptions). "response = m_eFoo" means that the event's
 //    response property is set to the value of m_eFoo of the underlying native
 //    event
@@ -42,7 +42,7 @@ public function dispose():void
 // SteamAPI_RunCallbacks()
 // @default false
 // This function is automatically called every 100 ms after the API was
-// successfully initialized.
+// successfuly initialized.
 public function runCallbacks():Boolean
 
 // ISteamUser#GetSteamID()
@@ -175,7 +175,7 @@ public function findOrCreateLeaderboard(name:String, sortMethod:uint, displayTyp
 
 // @default "0"
 // Returns the SteamLeaderboard_t m_hSteamLeaderboard of the leaderboard
-// returned by a successfull call (i.e. response = OK of the corresponding
+// returned by a successful call (i.e. response = OK of the corresponding
 // event) to findLeaderboard or findOrCreateLeaderboard, or "0" if no such call
 // was made.
 public function findLeaderboardResult():String
@@ -217,7 +217,7 @@ public function uploadLeaderboardScore(handle:String, method:uint, score:int, de
 
 // @default null
 // Returns the UploadLeaderboardScoreResult object corresponding to the most
-// recent successfull call to uploadLeaderboardScore, or null if no such call
+// recent successful call to uploadLeaderboardScore, or null if no such call
 // was made.
 public function uploadLeaderboardScoreResult():UploadLeaderboardScoreResult
 
@@ -280,7 +280,7 @@ public function fileDelete(name:String):Boolean
 public function fileShare(name:String):Boolean
 
 // @default WorkshopConstants.UGCHANDLE_Invalid
-// Returns the corresponding file handle of the last file that was successfully
+// Returns the corresponding file handle of the last file that was successfuly
 // shared with a call to fileShare(), or WorkshopConstants.UGCHANDLE_Invalid if
 // no such call was made.
 public function fileShareResult():String
@@ -326,7 +326,7 @@ public function getUGCDownloadProgress(handle:String):Array
 
 // @default null
 // @arg handle is a UGC handle (see UGCDownload for details)
-// Returns a DownloadUGCResult corresponding to the last successfull call to
+// Returns a DownloadUGCResult corresponding to the last successful call to
 // UGCDownload(handle), or null if no such call was made.
 // Since one such result is stored per file handle, it's safe to call
 // UGCDownload on multiple files at the same time.
@@ -343,7 +343,7 @@ public function getUGCDownloadResult(handle:String):DownloadUGCResult
 public function publishWorkshopFile(name:String, preview:String, appId:uint, title:String, description:String, visibility:uint, tags:Array, fileType:uint):Boolean
 
 // @default WorkshopConstants.PUBLISHEDFILEID_Invalid
-// Returns the file id of the last file successfully shared with a call to
+// Returns the file id of the last file successfuly shared with a call to
 // publishWorkshopFile, or WorkshopConstants.PUBLISHEDFILEID_Invalid if no such
 // call was made.
 public function publishWorkshopFileResult():String
@@ -366,7 +366,7 @@ public function getPublishedFileDetails(file:String, maxAge:uint = 0):Boolean
 
 // @default null
 // @arg file is a published file id (see deletePublishedFile for details)
-// Returns the FileDetailsResult corresponding to the last successfull call to
+// Returns the FileDetailsResult corresponding to the last successful call to
 // getPublishedFileDetails(file), or null otherwise.
 // Since one such object is stored per file, it's safe to call
 // getPublishedFileDetails for multiple files at once.
@@ -375,12 +375,12 @@ public function getPublishedFileDetailsResult(file:String):FileDetailsResult
 // EnumerateUserPublishedFiles(startIndex)
 // @default false
 // @event RESPONSE_OnEnumerateUserPublishedFiles, response = m_eResult
-// If the call was successfull, call enumerateUserPublishedFilesResult to get
+// If the call was successful, call enumerateUserPublishedFilesResult to get
 // the corresponding UserFilesResult object.
 public function enumerateUserPublishedFiles(startIndex:uint):Boolean
 
 // @default null
-// Returns a UserFilesResult object corresponding to the last successfull call
+// Returns a UserFilesResult object corresponding to the last successful call
 // to enumerateUserPublishedFiles, or null if no such call was made.
 public function enumerateUserPublishedFilesResult():UserFilesResult
 
@@ -389,24 +389,24 @@ public function enumerateUserPublishedFilesResult():UserFilesResult
 // @arg type should be one of the WorkshopConstants.ENUMTYPE_* constants
 // @arg tags and userTags should be Arrays of Strings, or null
 // @event RESPONSE_OnEnumeratePublishedWorkshopFiles, response = m_eResult
-// If the call was successfull, call enumeratePublishedWorkshopFilesResult to
+// If the call was successful, call enumeratePublishedWorkshopFilesResult to
 // get the corresponding WorkshopFilesResult object.
 public function enumeratePublishedWorkshopFiles(type:uint, start:uint, count:uint, days:uint, tags:Array, userTags:Array):Boolean
 
 // @default null
-// Returns a WorkshopFilesResult object corresponding to the last successfull
+// Returns a WorkshopFilesResult object corresponding to the last successful
 // call to enumeratePublishedWorkshopFilesResult, or null if no such call was made.
 public function enumeratePublishedWorkshopFilesResult():WorkshopFilesResult
 
 // EnumerateUserSubscribedFiles(startIndex)
 // @default false
 // @event RESPONSE_OnEnumerateUserSubscribedFiles, response = m_eResult
-// If the call was successfull, call enumerateUserSubscribedFilesResult to get
+// If the call was successful, call enumerateUserSubscribedFilesResult to get
 // the corresponding SubscribedFilesResult object.
 public function enumerateUserSubscribedFiles(startIndex:uint):Boolean
 
 // @default null
-// Returns a SubscribedFilesResult object corresponding to the last successfull
+// Returns a SubscribedFilesResult object corresponding to the last successful
 // call to enumerateUserSubscribedFiles, or null if no such call was made.
 public function enumerateUserSubscribedFilesResult():SubscribedFilesResult
 
@@ -414,13 +414,13 @@ public function enumerateUserSubscribedFilesResult():SubscribedFilesResult
 // @default false
 // @arg required and excluded should be Arrays of Strings, or null
 // @event RESPONSE_OnEnumerateUserSharedWorkshopFiles, response = m_eResult
-// If the call was successfull, call
+// If the call was successful, call
 // enumerateUserSharedWorkshopFilesResult to get the corresponding UserFilesResult
 // object.
 public function enumerateUserSharedWorkshopFiles(steamID:String, start:uint, required:Array, excluded:Array):Boolean
 
 // @default null
-// Returns a UserFilesResult object corresponding to the last successfull
+// Returns a UserFilesResult object corresponding to the last successful
 // call to enumerateUserSharedWorkshopFiles, or null if no such call was made.
 public function enumerateUserSharedWorkshopFilesResult():UserFilesResult
 
@@ -428,13 +428,13 @@ public function enumerateUserSharedWorkshopFilesResult():UserFilesResult
 // @default false
 // @arg action should be one of the WorkshopConstants.FILEACTION_* constants
 // @event RESPONSE_OnEnumeratePublishedFilesByUserAction, response = m_eResult
-// If the call was successfull, call
+// If the call was successful, call
 // enumerateUserSharedWorkshopFilesResult to get the corresponding
 // FilesByUserActionResult object.
 public function enumeratePublishedFilesByUserAction(action:uint, startIndex:uint):Boolean
 
 // @default null
-// Returns a FilesByUserActionResult object corresponding to the last successfull
+// Returns a FilesByUserActionResult object corresponding to the last successful
 // call to enumeratePublishedFilesByUserAction, or null if no such call was made.
 public function enumeratePublishedFilesByUserActionResult():FilesByUserActionResult
 
@@ -501,12 +501,12 @@ public function commitPublishedFileUpdate(handle:String):Boolean
 // GetPublishedItemVoteDetails(file)
 // @default false
 // @event RESPONSE_OnGetPublishedItemVoteDetails, response = m_eResult
-// If the call was successfull, call enumerateUserSharedWorkshopFilesResult to
+// If the call was successful, call enumerateUserSharedWorkshopFilesResult to
 // get the corresponding UserFilesResult object.
 public function getPublishedItemVoteDetails(file:String):Boolean
 
 // @default null
-// Returns a ItemVoteDetailsResult object corresponding to the last successfull
+// Returns a ItemVoteDetailsResult object corresponding to the last successful
 // call to getPublishedItemVoteDetails, or null if no such call was made.
 public function getPublishedItemVoteDetailsResult():ItemVoteDetailsResult
 
@@ -514,12 +514,12 @@ public function getPublishedItemVoteDetailsResult():ItemVoteDetailsResult
 // @default false
 // @arg file is a published file id (see deletePublishedFile for details)
 // @event RESPONSE_OnGetUserPublishedItemVoteDetails, response = m_eResult
-// If the call was successfull, call enumerateUserSharedWorkshopFilesResult to
+// If the call was successful, call enumerateUserSharedWorkshopFilesResult to
 // get the corresponding UserVoteDetails object.
 public function getUserPublishedItemVoteDetails(file:String):Boolean
 
 // @default null
-// Returns a UserVoteDetails object corresponding to the last successfull call
+// Returns a UserVoteDetails object corresponding to the last successful call
 // to getUserPublishedItemVoteDetails, or null if no such call was made.
 public function getUserPublishedItemVoteDetailsResult():UserVoteDetails
 
@@ -574,7 +574,7 @@ public function getFriendPersonaName(id:String):String
 public function getAuthSessionTicket(ticket:ByteArray):uint
 
 // @default UserConstants.AUTHTICKET_Invalid
-// Returns the ticket handle of the last successfull call to getAuthSessionTicket
+// Returns the ticket handle of the last successful call to getAuthSessionTicket
 // that could be validated, or UserConstants.AUTHTICKET_Invalid if no such call
 // was made.
 public function getAuthSessionTicketResult():uint
