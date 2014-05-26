@@ -65,6 +65,8 @@ class CSteam {
 public:
 	CSteam();
 	virtual ~CSteam();
+	bool Initialize();
+	void SetWarningMessageHook(SteamAPIWarningMessageHook_t hook);
 
 	// general stuff
 	CSteamID GetUserID();
@@ -209,6 +211,7 @@ protected:
 	virtual void DispatchEvent(char* code, char* level) = 0;
 
 private:
+	CSteamAPIContext m_ctx;
 	// Our current appId
 	uint32 m_iAppID;
 	bool m_bInitialized;

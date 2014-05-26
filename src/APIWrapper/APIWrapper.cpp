@@ -54,27 +54,25 @@ void steamWarningMessageHook(int severity, const char* msg) {
 bool AIRSteam_Init() {
 	if (g_Steam) return true;
 
-	if (!SteamAPI_Init()) return false;
-
 	g_Steam = new CLISteam();
 
-#ifdef WHITELIST
-	uint32 appId = SteamUtils()->GetAppID();
-	// WHITELIST is a comma separated list of app ids
-	uint32 whitelist[] = { WHITELIST };
-	bool found = false;
-	for (auto id : whitelist) {
-		if(id == appId) {
-			found = true;
-			break;
-		}
+	if (!g_Steam->Initialize()) {
+		delete g_Steam;
+		g_Steam = nullptr;
+		return false;
 	}
 
-	if (!found) exit(1);
+#ifdef WHITELIST
+	uint32 appId = g_Steam->GetAppID();
+	// WHITELIST is a comma separated list of app ids
+	uint32 whitelist[] = { WHITELIST };
+	auto found = std::find(std::begin(whitelist), std::end(whitelist), appId);
+	if (found == std::end(whitelist))
+		exit(1);
 #endif
 
 #ifdef DEBUG
-	SteamUtils()->SetWarningMessageHook(steamWarningMessageHook);
+	g_Steam->SetWarningMessageHook(steamWarningMessageHook);
 #endif
 
 	return true;

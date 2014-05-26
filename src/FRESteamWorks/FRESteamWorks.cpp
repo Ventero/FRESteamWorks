@@ -18,7 +18,7 @@
 FREContext AIRContext;
 
 // Global access to Steam object
-CSteam*	g_Steam = NULL;
+ANESteam* g_Steam = NULL;
 
 #ifdef DEBUG
 #include <iostream>
@@ -44,12 +44,15 @@ AIR_FUNC(AIRSteam_Init) {
 	// check if already initialized
 	if (g_Steam) return FREBool(true);
 
-	if (!SteamAPI_Init()) return FREBool(false);
-
 	g_Steam = new ANESteam();
+	if (!g_Steam->Initialize()) {
+		delete g_Steam;
+		g_Steam = nullptr;
+		return FREBool(false);
+	}
 
 #ifdef DEBUG
-	SteamUtils()->SetWarningMessageHook(steamWarningMessageHook);
+	g_Steam->SetWarningMessageHook(steamWarningMessageHook);
 #endif
 
 	return FREBool(true);
