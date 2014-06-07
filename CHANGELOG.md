@@ -5,11 +5,12 @@ The builds described in this file can be [downloaded here](http://dump.ventero.d
 A full list of implemented functions can be found by following the link in the
 version number.
 
-### [In development](https://github.com/Ventero/FRESteamWorks/blob/master/lib/API.txt)
+### [v0.5](https://github.com/Ventero/FRESteamWorks/blob/v0.5/lib/API.txt)
+ - Implemented `setOverlayNotificationPosition`
  - Added a callback for microtransaction authorizations (thanks to @Unsanctioned)
  - Added `restartAppIfNecessary` (again, thanks to @Unsanctioned)
  - Exposed `startProcess(path:String)` on Linux, which has to be called before any other API function if the API wrapper binary is in a non-standard location
- - Deprecated the (undocumented) `path` argument to `init` on Linux
+ - Deprecated the (undocumented) `path` argument to `init` on Linux and `useCrashHandler`
 
 ### [v0.4-54-gdd1b399](https://github.com/Ventero/FRESteamWorks/blob/v0.4-54-gdd1b399/lib/API.txt)
  - Implemented global stats

@@ -1,6 +1,6 @@
 <extension xmlns="http://ns.adobe.com/air/extension/2.5">
 	<id>com.amanitadesign.steam.FRESteamWorks</id>
-	<versionNumber>0.4</versionNumber>
+	<versionNumber>0.5</versionNumber>
 	<platforms>
 		<platform name="Windows-x86">
 			<applicationDeployment>
