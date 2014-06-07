@@ -64,7 +64,7 @@ package com.amanitadesign.steam {
 			if (!_redrawContainer || _redrawPixel) return;
 			_redrawPixel = new Sprite();
 			_redrawPixel.width = 1;
-			_redrawPixel.width = 1;
+			_redrawPixel.height = 1;
 			// we need to draw something in the pixel for it to actually trigger
 			// a re-render
 			_redrawPixel.graphics.beginFill(_color);
