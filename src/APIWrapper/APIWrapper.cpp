@@ -1173,6 +1173,13 @@ bool AIRSteam_IsOverlayEnabled() {
 	return g_Steam->IsOverlayEnabled();
 }
 
+bool AIRSteam_SetOverlayNotificationPosition() {
+	uint32 pos = get_int();
+	if (!g_Steam) return false;
+
+	return g_Steam->SetOverlayNotificationPosition(ENotificationPosition(pos));
+}
+
 /*
  * DLC / subscription
  */

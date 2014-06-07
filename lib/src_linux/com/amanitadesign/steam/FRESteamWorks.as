@@ -159,23 +159,24 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_ActivateGameOverlayToStore:int = 94;
 		private static const AIRSteam_ActivateGameOverlayInviteDialog:int = 95;
 		private static const AIRSteam_IsOverlayEnabled:int = 96;
+		private static const AIRSteam_SetOverlayNotificationPosition:int = 97;
 		/***********************/
 		/* DLC / subscriptions */
 		/***********************/
-		private static const AIRSteam_IsSubscribedApp:int = 97;
-		private static const AIRSteam_IsDLCInstalled:int = 98;
-		private static const AIRSteam_GetDLCCount:int = 99;
-		private static const AIRSteam_InstallDLC:int = 100;
-		private static const AIRSteam_UninstallDLC:int = 101;
-		private static const AIRSteam_DLCInstalledResult:int = 102;
+		private static const AIRSteam_IsSubscribedApp:int = 98;
+		private static const AIRSteam_IsDLCInstalled:int = 99;
+		private static const AIRSteam_GetDLCCount:int = 100;
+		private static const AIRSteam_InstallDLC:int = 101;
+		private static const AIRSteam_UninstallDLC:int = 102;
+		private static const AIRSteam_DLCInstalledResult:int = 103;
 		/********************/
 		/* Microtransaction */
 		/********************/
-		private static const AIRSteam_MicroTxnResult:int = 103;
+		private static const AIRSteam_MicroTxnResult:int = 104;
 		/**********************************/
 		/* Other non-Steamworks functions */
 		/**********************************/
-		private static const AIRSteam_GetEnv:int = 104;
+		private static const AIRSteam_GetEnv:int = 105;
 		// END GENERATED VALUES
 
 		public function FRESteamWorks (target:IEventDispatcher = null) {
@@ -1022,6 +1023,11 @@ package com.amanitadesign.steam {
 
 		public function isOverlayEnabled():Boolean {
 			if(!callWrapper(AIRSteam_IsOverlayEnabled, [])) return false;
+			return readBoolResponse();
+		}
+
+		public function setOverlayNotificationPosition(position:uint):Boolean {
+			if(!callWrapper(AIRSteam_SetOverlayNotificationPosition, [position])) return false;
 			return readBoolResponse();
 		}
 

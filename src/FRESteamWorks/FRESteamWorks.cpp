@@ -1315,6 +1315,17 @@ AIR_FUNC(AIRSteam_IsOverlayEnabled) {
 	return FREBool(g_Steam->IsOverlayEnabled());
 }
 
+AIR_FUNC(AIRSteam_SetOverlayNotificationPosition) {
+	ARG_CHECK(1, FREBool(false));
+
+	uint32 pos;
+	if (!FREGetUint32(argv[0], &pos))
+		return FREBool(false);
+
+	return FREBool(g_Steam->SetOverlayNotificationPosition(
+		ENotificationPosition(pos)));
+}
+
 /*
  * DLC / subscriptions
  */

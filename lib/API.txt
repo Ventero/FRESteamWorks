@@ -645,6 +645,11 @@ public function activateGameOverlayInviteDialog(steamIdLobby:String):Boolean
 // @default false
 public function isOverlayEnabled():Boolean
 
+// SetOverlayNotificationPosition(position)
+// @default false
+// @arg position should be one of the UtilsConstants.OVERLAYPOSITION_* constants.
+public function setOverlayNotificationPosition(position:uint):Boolean
+
 /***********************/
 /* DLC / subscriptions */
 /***********************/

@@ -146,6 +146,7 @@ package com.amanitadesign.steam {
 		function activateGameOverlayToStore(appId:uint, flag:uint):Boolean
 		function activateGameOverlayInviteDialog(steamIdLobby:String):Boolean
 		function isOverlayEnabled():Boolean
+		function setOverlayNotificationPosition(position:uint):Boolean
 		/***********************/
 		/* DLC / subscriptions */
 		/***********************/

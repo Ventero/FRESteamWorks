@@ -195,6 +195,7 @@ public:
 	bool ActivateGameOverlayToStore(AppId_t appId, EOverlayToStoreFlag flag);
 	bool ActivateGameOverlayInviteDialog(CSteamID lobbyId);
 	bool IsOverlayEnabled();
+	bool SetOverlayNotificationPosition(ENotificationPosition pos);
 
 	// DLC / subscriptions
 	bool IsSubscribedApp(AppId_t appId);

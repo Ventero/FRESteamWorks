@@ -522,6 +522,10 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_IsOverlayEnabled") as Boolean;
 		}
 
+		public function setOverlayNotificationPosition(position:uint):Boolean {
+			return _ExtensionContext.call("AIRSteam_SetOverlayNotificationPosition", position) as Boolean;
+		}
+
 		/***********************/
 		/* DLC / subscriptions */
 		/***********************/

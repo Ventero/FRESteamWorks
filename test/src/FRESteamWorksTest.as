@@ -22,6 +22,7 @@ package {
 	import com.amanitadesign.steam.SteamConstants;
 	import com.amanitadesign.steam.UserConstants;
 	import com.amanitadesign.steam.UserStatsConstants;
+	import com.amanitadesign.steam.UtilsConstants;
 	import com.amanitadesign.steam.WorkshopConstants;
 
 	import com.amanitadesign.steam.DownloadUGCResult;
@@ -260,9 +261,12 @@ package {
 				log("history[" + i + "] == " + history[i]);
 		}
 
+		private var overlayPosition:uint = UtilsConstants.OVERLAYPOSITION_TopLeft;
 		private function toggleAchievement(e:Event = null):void {
 			if(!Steamworks.isReady) return;
 
+			log("setOverlayNotificationPosition(" + overlayPosition + ") == " +
+				Steamworks.setOverlayNotificationPosition(overlayPosition));
 			var result:Boolean = Steamworks.isAchievement("ACH_WIN_ONE_GAME");
 			log("isAchievement('ACH_WIN_ONE_GAME') == " + result);
 			if(!result) {
@@ -270,6 +274,8 @@ package {
 			} else {
 				log("clearAchievement('ACH_WIN_ONE_GAME') == "+Steamworks.clearAchievement("ACH_WIN_ONE_GAME"));
 			}
+
+			overlayPosition = (overlayPosition + 1) % (UtilsConstants.OVERLAYPOSITION_BottomRight + 1);
 		}
 
 		private function checkFriends(e:Event = null):void {

@@ -798,6 +798,14 @@ bool CSteam::IsOverlayEnabled() {
 	return m_ctx.SteamUtils()->IsOverlayEnabled();
 }
 
+bool CSteam::SetOverlayNotificationPosition(ENotificationPosition pos) {
+	if (!m_bInitialized) return false;
+
+	m_ctx.SteamUtils()->SetOverlayNotificationPosition(pos);
+	return true;
+}
+
+// DLC / subscription
 bool CSteam::IsSubscribedApp(AppId_t appId) {
 	if (!m_bInitialized) return false;
 
