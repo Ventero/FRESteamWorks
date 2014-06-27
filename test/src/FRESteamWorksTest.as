@@ -923,7 +923,7 @@ package {
 
 					var microTxnResponse:MicroTxnAuthorizationResponse;
 					while ((microTxnResponse = Steamworks.microTxnResult()) != null) {
-						log("MicroTxnOrderIDResult() == " + microTxnResponse +
+						log("MicroTxnOrderIDResult() == " + microTxnResponse + "\n" +
 							" (app: " + microTxnResponse.appID +
 							", order: " + microTxnResponse.orderID +
 							", authorized: " + microTxnResponse.authorized + ")");

@@ -1382,17 +1382,17 @@ AIR_FUNC(AIRSteam_DLCInstalledResult) {
  * Microtransaction
  */
 AIR_FUNC(AIRSteam_MicroTxnResult) {
+	ARG_CHECK(0, nullptr);
+
+	MicroTxnAuthorizationResponse_t response;
+	if (!g_Steam->MicroTxnResult(&response)) return nullptr;
+
 	FREObject result;
 	FRENewObject((const uint8_t*)"com.amanitadesign.steam.MicroTxnAuthorizationResponse", 0, NULL, &result, NULL);
 
-	ARG_CHECK(0, result);
-
-	MicroTxnAuthorizationResponse_t response;
-	if (!g_Steam->MicroTxnResult(&response)) return result;
-
 	SET_PROP(result, "appID", FREInt(response.m_unAppID));
 	SET_PROP(result, "orderID", FREUint64(response.m_ulOrderID));
-	SET_PROP(result, "vote", FREBool(response.m_bAuthorized != 0));
+	SET_PROP(result, "authorized", FREBool(response.m_bAuthorized != 0));
 
 	return result;
 }

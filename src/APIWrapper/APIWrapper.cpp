@@ -1227,18 +1227,21 @@ bool AIRSteam_DLCInstalledResult() {
  * Microtransaction
  */
 
-AmfObject AIRSteam_MicroTxnResult() {
-	AmfObject obj("com.amanitadesign.steam.MicroTxnAuthorizationResponse", false, false);
-	if (!g_Steam) return obj;
-
+// FIXME: sends either an object or null
+std::nullptr_t AIRSteam_MicroTxnResult() {
 	MicroTxnAuthorizationResponse_t res;
-	if (!g_Steam->MicroTxnResult(&res)) return obj;
+	if (!g_Steam || !g_Steam->MicroTxnResult(&res)) {
+		send(AmfNull());
+		return nullptr;
+	}
 
+	AmfObject obj("com.amanitadesign.steam.MicroTxnAuthorizationResponse", false, false);
 	obj.addSealedProperty("appID", AmfInteger(res.m_unAppID));
 	obj.addSealedProperty("orderID", AmfString(std::to_string(res.m_ulOrderID)));
-	obj.addSealedProperty("vote", AmfBool(res.m_bAuthorized));
+	obj.addSealedProperty("authorized", AmfBool(res.m_bAuthorized));
 
-	return obj;
+	send(obj);
+	return nullptr;
 }
 
 /*
