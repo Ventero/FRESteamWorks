@@ -690,10 +690,16 @@ public function DLCInstalledResult():uint
 // receiving a microtransaction authorization callback. Note that each such
 // object is only returned once by this function. If no unreturned microtransaction
 // authorization response are left, this function returns null.
+//
 // Call this whenever receiving a RESPONSE_OnMicroTxnAuthorizationResponse event.
 // The event's response property indicates if the transaction was successful,
 // (SteamResults.OK if m_bAuthorized is true, else SteamResults.Fail), but
 // regardless of the value, a response object is created.
+//
+// On Linux, this event can never be fired (since the overlay does not work on
+// Linux, the only way to do microtransactions on Linux is through web-based
+// purchasing), so microTxnResult() always returns null.
+//
 // A usage pattern for this function might look like this:
 // public function handleSteamEvent(e:SteamEvent):void {
 // 	if (e.req_type == SteamConstants.RESPONSE_OnMicroTxnAuthorizationResponse) {
