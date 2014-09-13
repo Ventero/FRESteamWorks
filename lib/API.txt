@@ -724,6 +724,8 @@ public function getEnv(name:String):String
 // @default false
 // Sets (or overwrites) the environment variable with the given name to value.
 // Returns true on success and false on failure.
+// Note that on Linux, this only affects the environment of the APIWrapper
+// process, not the AIR process itself.
 public function setEnv(name:String, value:String):Boolean
 
 // The Steam overlay requires the application to constantly redraw the screen
