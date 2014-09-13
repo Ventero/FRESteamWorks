@@ -567,6 +567,10 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_GetEnv", name) as String;
 		}
 
+		public function setEnv(name:String, value:String):Boolean {
+			return _ExtensionContext.call("AIRSteam_SetEnv", name, value) as Boolean;
+		}
+
 		// END GENERATED CODE
 	}
 }

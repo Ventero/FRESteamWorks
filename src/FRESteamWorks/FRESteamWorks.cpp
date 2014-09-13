@@ -1407,8 +1407,20 @@ AIR_FUNC(AIRSteam_GetEnv) {
 	std::string name;
 	if (!FREGetString(argv[0], name)) return FREString("");
 
-	const char* ret = std::getenv(name.c_str());
+	const char* ret = ::getenv(name.c_str());
 	return FREString(ret == nullptr ? "" : ret);
+}
+
+AIR_FUNC(AIRSteam_SetEnv) {
+	ARG_CHECK(2, FREBool(false));
+
+	std::string name, value;
+	if (!FREGetString(argv[0], name) ||
+		  !FREGetString(argv[1], value)) return FREBool(false);
+
+	int ret = ::setenv(name.c_str(), value.c_str(), 1);
+
+	return FREBool(ret == 0);
 }
 
 

@@ -1252,8 +1252,19 @@ std::string AIRSteam_GetEnv() {
 	std::string name = get_string();
 	if (name.empty()) return "";
 
-	const char* ret = std::getenv(name.c_str());
+	const char* ret = ::getenv(name.c_str());
 	return ret == nullptr ? "" : ret;
+}
+
+bool AIRSteam_SetEnv() {
+	std::string name = get_string();
+	std::string value = get_string();
+
+	if (name.empty()) return false;
+
+	int ret = ::setenv(name.c_str(), value.c_str(), 1);
+
+	return ret == 0;
 }
 
 /*

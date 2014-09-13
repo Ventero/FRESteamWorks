@@ -139,4 +139,5 @@ X(AIRSteam_MicroTxnResult) /* = 104 */
 /* Other non-Steamworks functions */
 /**********************************/
 X(AIRSteam_GetEnv) /* = 105 */
+X(AIRSteam_SetEnv) /* = 106 */
 /* END GENERATED CODE */

@@ -164,6 +164,7 @@ package com.amanitadesign.steam {
 		/* Other non-Steamworks functions */
 		/**********************************/
 		function getEnv(name:String):String
+		function setEnv(name:String, value:String):Boolean
 		// END GENERATED CODE
 	}
 }

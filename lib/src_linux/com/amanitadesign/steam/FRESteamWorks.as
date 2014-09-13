@@ -177,6 +177,7 @@ package com.amanitadesign.steam {
 		/* Other non-Steamworks functions */
 		/**********************************/
 		private static const AIRSteam_GetEnv:int = 105;
+		private static const AIRSteam_SetEnv:int = 106;
 		// END GENERATED VALUES
 
 		public function FRESteamWorks (target:IEventDispatcher = null) {
@@ -1078,6 +1079,11 @@ package com.amanitadesign.steam {
 		public function getEnv(name:String):String {
 			if(!callWrapper(AIRSteam_GetEnv, [name])) return "";
 			return readStringResponse();
+		}
+
+		public function setEnv(name:String, value:String):Boolean {
+			if(!callWrapper(AIRSteam_SetEnv, [name, value])) return false;
+			return readBoolResponse();
 		}
 
 		// END GENERATED CODE
