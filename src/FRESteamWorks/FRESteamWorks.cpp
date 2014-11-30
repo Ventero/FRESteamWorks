@@ -774,7 +774,7 @@ AIR_FUNC(AIRSteam_EnumerateUserPublishedFilesResult) {
 
 	FREObject ids = FREArray(details->m_nResultsReturned);
 	for (int32 i = 0; i < details->m_nResultsReturned; ++i) {
-		FRESetArrayElementAt(ids, 0, FREUint64(details->m_rgPublishedFileId[i]));
+		FRESetArrayElementAt(ids, i, FREUint64(details->m_rgPublishedFileId[i]));
 	}
 	SET_PROP(result, "publishedFileId", ids);
 
