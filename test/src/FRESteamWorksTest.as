@@ -174,6 +174,7 @@ package {
 				log("getEnv('HOME') == " + Steamworks.getEnv("HOME"));
 				log("getEnv('HopefullyNotSet') == " + Steamworks.getEnv('HopefullyNotSet'));
 				log("setEnv('HopefullyNotSet', 'foobar') == " + Steamworks.setEnv('HopefullyNotSet', 'foobar'));
+				log("getEnv('HopefullyNotSet') == " + Steamworks.getEnv('HopefullyNotSet'));
 
 				var quota:Array = Steamworks.getQuota();
 				log("getQuota() == " + (quota ? "[" + quota.join(", ") + "]" : "null"));
