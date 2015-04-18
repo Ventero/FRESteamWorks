@@ -1,12 +1,4 @@
-/*
- *  WrapperIO.cpp
- *  This file is part of FRESteamWorks.
- *
- *  Created by Ventero <http://github.com/Ventero>
- *  Copyright (c) 2012-2014 Level Up Labs, LLC. All rights reserved.
- */
-
-#include "WrapperIO.h"
+#include "CLISteam.h"
 
 #include <algorithm>
 #include <fstream>
@@ -18,7 +10,13 @@
 
 using namespace amf;
 
-void sendData(Serializer& serializer) {
+void CLISteam::DispatchEvent(char* code, char* level) {
+	// we abuse std::cerr for event dispatching, that way it doesn't interfere
+	// with the normal communication on stdout
+	std::cerr << "__event__<" << code << "," << level << ">" << std::endl;
+}
+
+void CLISteam::sendData(Serializer& serializer) {
 	std::vector<u8> data = serializer.data();
 	if(data.size() > 1024) {
 		// due to output buffering, large outputs need to be sent via a tempfile
@@ -36,7 +34,7 @@ void sendData(Serializer& serializer) {
 	std::cout << std::flush;
 }
 
-void sendDataTempFile(Serializer& serializer) {
+void CLISteam::sendDataTempFile(Serializer& serializer) {
 	std::vector<u8> data = serializer.data();
 	serializer.clear();
 
@@ -51,67 +49,74 @@ void sendDataTempFile(Serializer& serializer) {
 	send(filename);
 }
 
-void sendItem(const AmfItem& item) {
+void CLISteam::sendItem(const AmfItem& item) {
 	Serializer serializer;
 	serializer << item;
 	sendData(serializer);
 }
 
-void send(bool value) {
+// Specialization for byte arrays to always go through temp files.
+void CLISteam::send(const amf::AmfByteArray& byte_array) {
+	Serializer serializer;
+	serializer << byte_array;
+	sendDataTempFile(serializer);
+}
+
+void CLISteam::send(bool value) {
 	sendItem(AmfBool(value));
 }
 
-void send(int32 value) {
+void CLISteam::send(int32 value) {
 	sendItem(AmfInteger(value));
 }
 
-void send(uint32 value) {
+void CLISteam::send(uint32 value) {
 	sendItem(AmfInteger(value));
 }
 
-void send(uint64 value) {
+void CLISteam::send(uint64 value) {
 	sendItem(AmfString(std::to_string(value)));
 }
 
-void send(float value) {
+void CLISteam::send(float value) {
 	sendItem(AmfDouble(value));
 }
 
-void send(double value) {
+void CLISteam::send(double value) {
 	sendItem(AmfDouble(value));
 }
 
-void send(std::string value) {
+void CLISteam::send(std::string value) {
 	sendItem(AmfString(value));
 }
 
-void send(const AmfItem& value) {
+void CLISteam::send(const AmfItem& value) {
 	sendItem(value);
 }
 
 // sentinel for pseudo-void functions
-void send(std::nullptr_t) { }
+void CLISteam::send(std::nullptr_t) { }
 
 // TODO: replace this mess with AMF
-bool get_bool() {
+bool CLISteam::get_bool() {
 	std::string item;
 	std::getline(std::cin, item);
 	return item == "true";
 }
 
-int32 get_int() {
+int32 CLISteam::get_int() {
 	std::string item;
 	std::getline(std::cin, item);
 	return std::stoi(item);
 }
 
-float get_float() {
+float CLISteam::get_float() {
 	std::string item;
 	std::getline(std::cin, item);
 	return std::stof(item);
 }
 
-std::string get_string() {
+std::string CLISteam::get_string() {
 	std::string item;
 	std::getline(std::cin, item);
 
@@ -130,7 +135,7 @@ std::string get_string() {
 	return result;
 }
 
-std::string get_bytearray() {
+std::string CLISteam::get_bytearray() {
 	std::string item;
 	std::getline(std::cin, item);
 
@@ -139,7 +144,7 @@ std::string get_bytearray() {
 	return readTempFileBuf(length);
 }
 
-uint64 get_uint64() {
+uint64 CLISteam::get_uint64() {
 	std::string str = get_string();
 	std::istringstream ss(str);
 
@@ -149,11 +154,15 @@ uint64 get_uint64() {
 	return val;
 }
 
-std::vector<std::string> get_string_array() {
-	return get_array<std::string>(get_string);
+std::vector<int> CLISteam::get_int_array() {
+	return get_array<int>(&CLISteam::get_int);
 }
 
-std::string readTempFileBuf(size_t length) {
+std::vector<std::string> CLISteam::get_string_array() {
+	return get_array<std::string>(&CLISteam::get_string);
+}
+
+std::string CLISteam::readTempFileBuf(size_t length) {
 	std::string filename;
 	std::getline(std::cin, filename);
 	std::ifstream tempfile(filename, std::ios::in | std::ios::binary);

@@ -21,7 +21,8 @@ endif
 # Native extension objects
 obj := FRESteamWorks/FRESteamWorks.o FRESteamWorks/FREConverters.o CSteam/CSteam.o
 # APIWrapper objects
-wrapperobj := APIWrapper/APIWrapper.o APIWrapper/WrapperIO.o CSteam/CSteam.o APIWrapper/libamf.a
+wrapperobj := APIWrapper/APIFunctions.o APIWrapper/CLISteam.o \
+              CSteam/CSteam.o APIWrapper/libamf.a
 
 # Targets
 .PHONY: all lib wrapper clean dist-clean
@@ -42,7 +43,7 @@ dist-clean: clean
 FRESteamWorks/FRESteamWorks.so: $(obj)
 	$(CXX) -shared $^ $(LIB) -o $@
 
-APIWrapper/APIWrapper: $(wrapperobj)
+APIWrapper/APIWrapper: APIWrapper/APIWrapper.o $(wrapperobj)
 	$(CXX) $^ $(LIB) -o $@
 
 APIWrapper/libamf.a: APIWrapper/amf-cpp
@@ -59,6 +60,7 @@ SteamSDK:
 # Additional dependencies/flags
 CSteam/CSteam.o: CSteam/ResponseTypes.h
 FRESteamWorks/FRESteamWorks.o: FRESteamWorks/FREConverters.h CSteam/CSteam.h
-APIWrapper/APIWrapper.o: APIWrapper/WrapperIO.h CSteam/CSteam.h
-APIWrapper/APIWrapper.o: CXXFLAGS += -Wno-missing-declarations
+APIWrapper/APIFunctions.o: APIWrapper/SteamWrapper.h CSteam/CSteam.h
+APIWrapper/APIWrapper.o: APIWrapper/APIFunctions.h APIWrapper/CLISteam.h APIWrapper/SteamWrapper.h CSteam/CSteam.h
+APIWrapper/CLISteam.o: APIWrapper/SteamWrapper.h CSteam/CSteam.h
 APIWrapper/%.o: CXXFLAGS += -isystem APIWrapper/amf-cpp/src

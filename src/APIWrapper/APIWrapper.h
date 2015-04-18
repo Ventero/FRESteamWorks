@@ -9,13 +9,6 @@
 #ifndef APIWRAPPER_H
 #define APIWRAPPER_H
 
-#include "CSteam/CSteam.h"
-#include "WrapperIO.h"
-
-class CLISteam : public CSteam {
-	void DispatchEvent(char* code, char* level);
-};
-
 void steamWarningMessageHook(int severity, const char* msg);
 
 #endif

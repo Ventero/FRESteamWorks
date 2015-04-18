@@ -66,6 +66,7 @@ public:
 	CSteam();
 	virtual ~CSteam();
 	bool Initialize();
+	bool Initialized() const { return m_bInitialized; }
 	void SetWarningMessageHook(SteamAPIWarningMessageHook_t hook);
 
 	// general stuff
