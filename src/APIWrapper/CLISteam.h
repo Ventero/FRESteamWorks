@@ -28,9 +28,9 @@ public:
 	virtual void send(double value);
 	virtual void send(std::string value);
 	virtual void send(const amf::AmfItem& item);
+	virtual void sendBuffer(const amf::AmfItem& item);
 	virtual void send(std::nullptr_t);
 
-	void send(const amf::AmfByteArray& byte_array);
 
 	// Functions for getting data.
 	virtual bool get_bool();

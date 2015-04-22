@@ -35,6 +35,8 @@ public:
 	virtual void send(double value) = 0;
 	virtual void send(std::string value) = 0;
 	virtual void send(const amf::AmfItem& item) = 0;
+	// Used for sending large buffers.
+	virtual void sendBuffer(const amf::AmfItem& item) = 0;
 	// Required for functions that don't return any data.
 	virtual void send(std::nullptr_t) = 0;
 

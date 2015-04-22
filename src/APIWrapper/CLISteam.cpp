@@ -55,13 +55,6 @@ void CLISteam::sendItem(const AmfItem& item) {
 	sendData(serializer);
 }
 
-// Specialization for byte arrays to always go through temp files.
-void CLISteam::send(const amf::AmfByteArray& byte_array) {
-	Serializer serializer;
-	serializer << byte_array;
-	sendDataTempFile(serializer);
-}
-
 void CLISteam::send(bool value) {
 	sendItem(AmfBool(value));
 }
@@ -92,6 +85,13 @@ void CLISteam::send(std::string value) {
 
 void CLISteam::send(const AmfItem& value) {
 	sendItem(value);
+}
+
+// Specialization for byte arrays/large objects to always go through temp files.
+void CLISteam::sendBuffer(const AmfItem& byte_array) {
+	Serializer serializer;
+	serializer << byte_array;
+	sendDataTempFile(serializer);
 }
 
 // sentinel for pseudo-void functions

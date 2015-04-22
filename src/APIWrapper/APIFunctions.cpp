@@ -462,7 +462,7 @@ bool AIRSteam_FileRead() {
 	if (size == 0) return false;
 
 	g_Steam->send(true);
-	g_Steam->send(AmfByteArray(data, data + size));
+	g_Steam->sendBuffer(AmfByteArray(data, data + size));
 	delete[] data;
 
 	return true;
@@ -544,7 +544,7 @@ bool AIRSteam_UGCRead() {
 	}
 
 	g_Steam->send(true);
-	g_Steam->send(AmfByteArray(data, data + result));
+	g_Steam->sendBuffer(AmfByteArray(data, data + result));
 	delete[] data;
 
 	return true;
@@ -1053,7 +1053,7 @@ uint32 AIRSteam_GetAuthSessionTicket() {
 	uint32 length = 0;
 	HAuthTicket ret = g_Steam->GetAuthSessionTicket(&data, &length);
 
-	g_Steam->send(AmfByteArray(data, data + length));
+	g_Steam->sendBuffer(AmfByteArray(data, data + length));
 	delete[] data;
 
 	return ret;
