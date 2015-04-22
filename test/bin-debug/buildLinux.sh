@@ -6,7 +6,8 @@ set -e
 . ../../config.sh
 
 make -C ../../src DEBUG=1 wrapper
-cp ../../src/APIWrapper/APIWrapper NativeApps/Linux
+mkdir -p NativeApps/Linux/
+cp ../../src/APIWrapper/APIWrapper NativeApps/Linux/
 
 "$FLEX_SDK/bin/amxmlc" -library-path+=../../lib/bin/FRESteamWorksLibLinux.swc \
                        -swf-version=11 -output FRESteamWorksTest_linux.swf \
