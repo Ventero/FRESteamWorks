@@ -291,7 +291,7 @@ package {
 
 			var result:Boolean = Steamworks.indicateAchievementProgress(
 				'ACH_TRAVEL_FAR_SINGLE', 1, 3);
-			log("indicateAchievementProgress('ACH_TRAVEL_FAR_SINGLE', 1, 3 == " + result);
+			log("indicateAchievementProgress('ACH_TRAVEL_FAR_SINGLE', 1, 3) == " + result);
 		}
 
 		private function checkFriends(e:Event = null):void {
