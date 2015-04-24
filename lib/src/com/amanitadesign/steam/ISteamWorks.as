@@ -44,6 +44,7 @@ package com.amanitadesign.steam {
 		function setAchievement(name:String):Boolean
 		function clearAchievement(name:String):Boolean
 		function isAchievement(name:String):Boolean
+		function indicateAchievementProgress(name:String, currentProgress:int, maxProgress:int):Boolean
 		function getStatInt(name:String):int
 		function getStatFloat(name:String):Number
 		function setStatInt(name:String, value:int):Boolean

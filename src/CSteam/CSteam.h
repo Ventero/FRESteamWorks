@@ -81,6 +81,8 @@ public:
 	bool SetAchievement(std::string name);
 	bool ClearAchievement(std::string name);
 	bool IsAchievement(std::string name);
+	bool IndicateAchievementProgress(std::string name, uint32 currentProgress,
+		uint32 maxProgress);
 	bool GetStat(std::string name, int32 *value);
 	bool GetStat(std::string name, float *value);
 	bool SetStat(std::string name, int32 value);

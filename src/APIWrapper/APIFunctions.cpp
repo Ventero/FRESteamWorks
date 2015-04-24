@@ -182,6 +182,16 @@ bool AIRSteam_IsAchievement() {
 	return g_Steam->IsAchievement(name);
 }
 
+bool AIRSteam_IndicateAchievementProgress() {
+	std::string name = g_Steam->get_string();
+	uint32 current_progress = g_Steam->get_int();
+	uint32 max_progress = g_Steam->get_int();
+	if (!g_Steam || name.empty()) return false;
+
+	return g_Steam->IndicateAchievementProgress(name, current_progress,
+		max_progress);
+}
+
 int32 AIRSteam_GetStatInt() {
 	std::string name = g_Steam->get_string();
 	if (!g_Steam || name.empty()) return 0;

@@ -101,6 +101,10 @@ public function clearAchievement(name:String):Boolean
 // somewhat poorly named ...
 public function isAchievement(name:String):Boolean
 
+// IndicateAchievementProgress(name, currentProgress, maxProgress)
+// @default false
+public function indicateAchievementProgress(name:String, currentProgress:int, maxProgress:int):Boolean
+
 // GetStat(name, int*)
 // @default 0
 public function getStatInt(name:String):int

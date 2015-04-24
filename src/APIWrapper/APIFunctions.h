@@ -29,6 +29,7 @@ bool AIRSteam_RequestStats();
 bool AIRSteam_SetAchievement();
 bool AIRSteam_ClearAchievement();
 bool AIRSteam_IsAchievement();
+bool AIRSteam_IndicateAchievementProgress();
 int32 AIRSteam_GetStatInt();
 float AIRSteam_GetStatFloat();
 bool AIRSteam_SetStatInt();

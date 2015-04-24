@@ -125,6 +125,14 @@ bool CSteam::IsAchievement(std::string name) {
 	return result;
 }
 
+bool CSteam::IndicateAchievementProgress(std::string name,
+	uint32 currentProgress, uint32 maxProgress) {
+	if (!m_bInitialized) return false;
+
+	return m_ctx.SteamUserStats()->IndicateAchievementProgress(
+		name.c_str(), currentProgress, maxProgress);
+}
+
 bool CSteam::GetStat(std::string name, int32 *value) {
 	if (!m_bInitialized) return false;
 

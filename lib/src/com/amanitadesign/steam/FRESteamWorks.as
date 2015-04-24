@@ -168,6 +168,10 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_IsAchievement", name) as Boolean;
 		}
 
+		public function indicateAchievementProgress(name:String, currentProgress:int, maxProgress:int):Boolean {
+			return _ExtensionContext.call("AIRSteam_IndicateAchievementProgress", name, currentProgress, maxProgress) as Boolean;
+		}
+
 		public function getStatInt(name:String):int {
 			return _ExtensionContext.call("AIRSteam_GetStatInt", name) as int;
 		}

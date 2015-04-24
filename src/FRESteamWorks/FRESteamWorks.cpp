@@ -160,6 +160,22 @@ AIR_FUNC(AIRSteam_IsAchievement) {
 	return FREBool(g_Steam->IsAchievement(name));
 }
 
+AIR_FUNC(AIRSteam_IndicateAchievementProgress) {
+	ARG_CHECK(3, FREBool(false));
+
+	std::string name;
+	uint32 current_progress = 0;
+	uint32 max_progress = 0;
+
+	if (!FREGetString(argv[0], name) ||
+		!FREGetUint32(argv[1], &current_progress) ||
+		!FREGetUint32(argv[2], &max_progress))
+		return FREBool(false);
+
+	return FREBool(g_Steam->IndicateAchievementProgress(name,
+		current_progress, max_progress));
+}
+
 AIR_FUNC(AIRSteam_GetStatInt) {
 	ARG_CHECK(1, FREInt(0));
 

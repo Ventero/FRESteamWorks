@@ -51,6 +51,7 @@ package {
 		public var tf:TextField;
 
 		private var _container:Sprite;
+		private var _statsContainer:Sprite;
 		private var _buttonContainer:Sprite;
 		private var _fileContainer:Sprite;
 		private var _enumerateContainer:Sprite;
@@ -74,6 +75,7 @@ package {
 			_container = new Sprite();
 			addChild(_container);
 
+			_statsContainer = new Sprite();
 			_buttonContainer = new Sprite();
 			_fileContainer = new Sprite();
 			_enumerateContainer = new Sprite();
@@ -81,17 +83,21 @@ package {
 			_leaderboardsContainer = new Sprite();
 			_container.addChild(_buttonContainer);
 
-			addButton("Check stats/achievements", checkAchievements, _buttonContainer);
-			addButton("Toggle achievement", toggleAchievement, _buttonContainer);
+			addButton("Stats/achievements", null, _buttonContainer, _statsContainer);
+			addButton("File actions", null, _buttonContainer, _fileContainer);
+			addButton("Enumerate workshop", null, _buttonContainer, _enumerateContainer);
+			addButton("Show overlay", null, _buttonContainer, _overlayContainer);
+			addButton("Query leaderboard", null, _buttonContainer, _leaderboardsContainer);
 			addButton("Check friends", checkFriends, _buttonContainer);
 			addButton("Toggle cloud enabled", toggleCloudEnabled, _buttonContainer);
 			addButton("Toggle fullscreen", toggleFullscreen, _buttonContainer);
 			addButton("Get auth ticket", getAuthTicket, _buttonContainer);
 			addButton("Invalid API call", invalidCall, _buttonContainer);
-			addButton("File actions", null, _buttonContainer, _fileContainer);
-			addButton("Enumerate workshop", null, _buttonContainer, _enumerateContainer);
-			addButton("Show overlay", null, _buttonContainer, _overlayContainer);
-			addButton("Query leaderboard", null, _buttonContainer, _leaderboardsContainer);
+
+			addButton("Back", null, _statsContainer);
+			addButton("Check stats/achievements", checkAchievements, _statsContainer);
+			addButton("Toggle achievement", toggleAchievement, _statsContainer);
+			addButton("Indicate progress", indicateProgress, _statsContainer)
 
 			addButton("Back", null, _enumerateContainer);
 			addButton("Sub'd files (unsub/dl/action)", enumerateSubscribedFiles, _enumerateContainer);
@@ -278,6 +284,14 @@ package {
 			}
 
 			overlayPosition = (overlayPosition + 1) % (UtilsConstants.OVERLAYPOSITION_BottomRight + 1);
+		}
+
+		private function indicateProgress(e:Event = null):void {
+			if (!Steamworks.isReady) return;
+
+			var result:Boolean = Steamworks.indicateAchievementProgress(
+				'ACH_TRAVEL_FAR_SINGLE', 1, 3);
+			log("indicateAchievementProgress('ACH_TRAVEL_FAR_SINGLE', 1, 3 == " + result);
 		}
 
 		private function checkFriends(e:Event = null):void {
