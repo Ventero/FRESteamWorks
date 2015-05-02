@@ -10,135 +10,134 @@ X(AIRSteam_GetAppID) /* = 3 */
 X(AIRSteam_GetAvailableGameLanguages) /* = 4 */
 X(AIRSteam_GetCurrentGameLanguage) /* = 5 */
 X(AIRSteam_GetPersonaName) /* = 6 */
-X(AIRSteam_UseCrashHandler) /* = 7 */
-X(AIRSteam_RestartAppIfNecessary) /* = 8 */
+X(AIRSteam_RestartAppIfNecessary) /* = 7 */
 /************************/
 /* Stats / Achievements */
 /************************/
-X(AIRSteam_RequestStats) /* = 9 */
-X(AIRSteam_SetAchievement) /* = 10 */
-X(AIRSteam_ClearAchievement) /* = 11 */
-X(AIRSteam_IsAchievement) /* = 12 */
-X(AIRSteam_IndicateAchievementProgress) /* = 13 */
-X(AIRSteam_GetStatInt) /* = 14 */
-X(AIRSteam_GetStatFloat) /* = 15 */
-X(AIRSteam_SetStatInt) /* = 16 */
-X(AIRSteam_SetStatFloat) /* = 17 */
-X(AIRSteam_StoreStats) /* = 18 */
-X(AIRSteam_ResetAllStats) /* = 19 */
-X(AIRSteam_RequestGlobalStats) /* = 20 */
-X(AIRSteam_GetGlobalStatInt) /* = 21 */
-X(AIRSteam_GetGlobalStatFloat) /* = 22 */
-X(AIRSteam_GetGlobalStatHistoryInt) /* = 23 */
-X(AIRSteam_GetGlobalStatHistoryFloat) /* = 24 */
+X(AIRSteam_RequestStats) /* = 8 */
+X(AIRSteam_SetAchievement) /* = 9 */
+X(AIRSteam_ClearAchievement) /* = 10 */
+X(AIRSteam_IsAchievement) /* = 11 */
+X(AIRSteam_IndicateAchievementProgress) /* = 12 */
+X(AIRSteam_GetStatInt) /* = 13 */
+X(AIRSteam_GetStatFloat) /* = 14 */
+X(AIRSteam_SetStatInt) /* = 15 */
+X(AIRSteam_SetStatFloat) /* = 16 */
+X(AIRSteam_StoreStats) /* = 17 */
+X(AIRSteam_ResetAllStats) /* = 18 */
+X(AIRSteam_RequestGlobalStats) /* = 19 */
+X(AIRSteam_GetGlobalStatInt) /* = 20 */
+X(AIRSteam_GetGlobalStatFloat) /* = 21 */
+X(AIRSteam_GetGlobalStatHistoryInt) /* = 22 */
+X(AIRSteam_GetGlobalStatHistoryFloat) /* = 23 */
 /****************/
 /* Leaderboards */
 /****************/
-X(AIRSteam_FindLeaderboard) /* = 25 */
-X(AIRSteam_FindOrCreateLeaderboard) /* = 26 */
-X(AIRSteam_FindLeaderboardResult) /* = 27 */
-X(AIRSteam_GetLeaderboardName) /* = 28 */
-X(AIRSteam_GetLeaderboardEntryCount) /* = 29 */
-X(AIRSteam_GetLeaderboardSortMethod) /* = 30 */
-X(AIRSteam_GetLeaderboardDisplayType) /* = 31 */
-X(AIRSteam_UploadLeaderboardScore) /* = 32 */
-X(AIRSteam_UploadLeaderboardScoreResult) /* = 33 */
-X(AIRSteam_DownloadLeaderboardEntries) /* = 34 */
-X(AIRSteam_DownloadLeaderboardEntriesResult) /* = 35 */
+X(AIRSteam_FindLeaderboard) /* = 24 */
+X(AIRSteam_FindOrCreateLeaderboard) /* = 25 */
+X(AIRSteam_FindLeaderboardResult) /* = 26 */
+X(AIRSteam_GetLeaderboardName) /* = 27 */
+X(AIRSteam_GetLeaderboardEntryCount) /* = 28 */
+X(AIRSteam_GetLeaderboardSortMethod) /* = 29 */
+X(AIRSteam_GetLeaderboardDisplayType) /* = 30 */
+X(AIRSteam_UploadLeaderboardScore) /* = 31 */
+X(AIRSteam_UploadLeaderboardScoreResult) /* = 32 */
+X(AIRSteam_DownloadLeaderboardEntries) /* = 33 */
+X(AIRSteam_DownloadLeaderboardEntriesResult) /* = 34 */
 /**************************/
 /* Cloud / Remote Storage */
 /**************************/
-X(AIRSteam_GetFileCount) /* = 36 */
-X(AIRSteam_GetFileSize) /* = 37 */
-X(AIRSteam_FileExists) /* = 38 */
-X(AIRSteam_FileWrite) /* = 39 */
-X(AIRSteam_FileRead) /* = 40 */
-X(AIRSteam_FileDelete) /* = 41 */
-X(AIRSteam_FileShare) /* = 42 */
-X(AIRSteam_FileShareResult) /* = 43 */
-X(AIRSteam_IsCloudEnabledForApp) /* = 44 */
-X(AIRSteam_SetCloudEnabledForApp) /* = 45 */
-X(AIRSteam_GetQuota) /* = 46 */
+X(AIRSteam_GetFileCount) /* = 35 */
+X(AIRSteam_GetFileSize) /* = 36 */
+X(AIRSteam_FileExists) /* = 37 */
+X(AIRSteam_FileWrite) /* = 38 */
+X(AIRSteam_FileRead) /* = 39 */
+X(AIRSteam_FileDelete) /* = 40 */
+X(AIRSteam_FileShare) /* = 41 */
+X(AIRSteam_FileShareResult) /* = 42 */
+X(AIRSteam_IsCloudEnabledForApp) /* = 43 */
+X(AIRSteam_SetCloudEnabledForApp) /* = 44 */
+X(AIRSteam_GetQuota) /* = 45 */
 /******************/
 /* UGC / Workshop */
 /******************/
-X(AIRSteam_UGCDownload) /* = 47 */
-X(AIRSteam_UGCRead) /* = 48 */
-X(AIRSteam_GetUGCDownloadProgress) /* = 49 */
-X(AIRSteam_GetUGCDownloadResult) /* = 50 */
-X(AIRSteam_PublishWorkshopFile) /* = 51 */
-X(AIRSteam_PublishWorkshopFileResult) /* = 52 */
-X(AIRSteam_DeletePublishedFile) /* = 53 */
-X(AIRSteam_GetPublishedFileDetails) /* = 54 */
-X(AIRSteam_GetPublishedFileDetailsResult) /* = 55 */
-X(AIRSteam_EnumerateUserPublishedFiles) /* = 56 */
-X(AIRSteam_EnumerateUserPublishedFilesResult) /* = 57 */
-X(AIRSteam_EnumeratePublishedWorkshopFiles) /* = 58 */
-X(AIRSteam_EnumeratePublishedWorkshopFilesResult) /* = 59 */
-X(AIRSteam_EnumerateUserSubscribedFiles) /* = 60 */
-X(AIRSteam_EnumerateUserSubscribedFilesResult) /* = 61 */
-X(AIRSteam_EnumerateUserSharedWorkshopFiles) /* = 62 */
-X(AIRSteam_EnumerateUserSharedWorkshopFilesResult) /* = 63 */
-X(AIRSteam_EnumeratePublishedFilesByUserAction) /* = 64 */
-X(AIRSteam_EnumeratePublishedFilesByUserActionResult) /* = 65 */
-X(AIRSteam_SubscribePublishedFile) /* = 66 */
-X(AIRSteam_UnsubscribePublishedFile) /* = 67 */
-X(AIRSteam_CreatePublishedFileUpdateRequest) /* = 68 */
-X(AIRSteam_UpdatePublishedFileFile) /* = 69 */
-X(AIRSteam_UpdatePublishedFilePreviewFile) /* = 70 */
-X(AIRSteam_UpdatePublishedFileTitle) /* = 71 */
-X(AIRSteam_UpdatePublishedFileDescription) /* = 72 */
-X(AIRSteam_UpdatePublishedFileSetChangeDescription) /* = 73 */
-X(AIRSteam_UpdatePublishedFileVisibility) /* = 74 */
-X(AIRSteam_UpdatePublishedFileTags) /* = 75 */
-X(AIRSteam_CommitPublishedFileUpdate) /* = 76 */
-X(AIRSteam_GetPublishedItemVoteDetails) /* = 77 */
-X(AIRSteam_GetPublishedItemVoteDetailsResult) /* = 78 */
-X(AIRSteam_GetUserPublishedItemVoteDetails) /* = 79 */
-X(AIRSteam_GetUserPublishedItemVoteDetailsResult) /* = 80 */
-X(AIRSteam_UpdateUserPublishedItemVote) /* = 81 */
-X(AIRSteam_SetUserPublishedFileAction) /* = 82 */
+X(AIRSteam_UGCDownload) /* = 46 */
+X(AIRSteam_UGCRead) /* = 47 */
+X(AIRSteam_GetUGCDownloadProgress) /* = 48 */
+X(AIRSteam_GetUGCDownloadResult) /* = 49 */
+X(AIRSteam_PublishWorkshopFile) /* = 50 */
+X(AIRSteam_PublishWorkshopFileResult) /* = 51 */
+X(AIRSteam_DeletePublishedFile) /* = 52 */
+X(AIRSteam_GetPublishedFileDetails) /* = 53 */
+X(AIRSteam_GetPublishedFileDetailsResult) /* = 54 */
+X(AIRSteam_EnumerateUserPublishedFiles) /* = 55 */
+X(AIRSteam_EnumerateUserPublishedFilesResult) /* = 56 */
+X(AIRSteam_EnumeratePublishedWorkshopFiles) /* = 57 */
+X(AIRSteam_EnumeratePublishedWorkshopFilesResult) /* = 58 */
+X(AIRSteam_EnumerateUserSubscribedFiles) /* = 59 */
+X(AIRSteam_EnumerateUserSubscribedFilesResult) /* = 60 */
+X(AIRSteam_EnumerateUserSharedWorkshopFiles) /* = 61 */
+X(AIRSteam_EnumerateUserSharedWorkshopFilesResult) /* = 62 */
+X(AIRSteam_EnumeratePublishedFilesByUserAction) /* = 63 */
+X(AIRSteam_EnumeratePublishedFilesByUserActionResult) /* = 64 */
+X(AIRSteam_SubscribePublishedFile) /* = 65 */
+X(AIRSteam_UnsubscribePublishedFile) /* = 66 */
+X(AIRSteam_CreatePublishedFileUpdateRequest) /* = 67 */
+X(AIRSteam_UpdatePublishedFileFile) /* = 68 */
+X(AIRSteam_UpdatePublishedFilePreviewFile) /* = 69 */
+X(AIRSteam_UpdatePublishedFileTitle) /* = 70 */
+X(AIRSteam_UpdatePublishedFileDescription) /* = 71 */
+X(AIRSteam_UpdatePublishedFileSetChangeDescription) /* = 72 */
+X(AIRSteam_UpdatePublishedFileVisibility) /* = 73 */
+X(AIRSteam_UpdatePublishedFileTags) /* = 74 */
+X(AIRSteam_CommitPublishedFileUpdate) /* = 75 */
+X(AIRSteam_GetPublishedItemVoteDetails) /* = 76 */
+X(AIRSteam_GetPublishedItemVoteDetailsResult) /* = 77 */
+X(AIRSteam_GetUserPublishedItemVoteDetails) /* = 78 */
+X(AIRSteam_GetUserPublishedItemVoteDetailsResult) /* = 79 */
+X(AIRSteam_UpdateUserPublishedItemVote) /* = 80 */
+X(AIRSteam_SetUserPublishedFileAction) /* = 81 */
 /***********/
 /* Friends */
 /***********/
-X(AIRSteam_GetFriendCount) /* = 83 */
-X(AIRSteam_GetFriendByIndex) /* = 84 */
-X(AIRSteam_GetFriendPersonaName) /* = 85 */
+X(AIRSteam_GetFriendCount) /* = 82 */
+X(AIRSteam_GetFriendByIndex) /* = 83 */
+X(AIRSteam_GetFriendPersonaName) /* = 84 */
 /******************************/
 /* Authentication & Ownership */
 /******************************/
-X(AIRSteam_GetAuthSessionTicket) /* = 86 */
-X(AIRSteam_GetAuthSessionTicketResult) /* = 87 */
-X(AIRSteam_BeginAuthSession) /* = 88 */
-X(AIRSteam_EndAuthSession) /* = 89 */
-X(AIRSteam_CancelAuthTicket) /* = 90 */
-X(AIRSteam_UserHasLicenseForApp) /* = 91 */
+X(AIRSteam_GetAuthSessionTicket) /* = 85 */
+X(AIRSteam_GetAuthSessionTicketResult) /* = 86 */
+X(AIRSteam_BeginAuthSession) /* = 87 */
+X(AIRSteam_EndAuthSession) /* = 88 */
+X(AIRSteam_CancelAuthTicket) /* = 89 */
+X(AIRSteam_UserHasLicenseForApp) /* = 90 */
 /***********/
 /* Overlay */
 /***********/
-X(AIRSteam_ActivateGameOverlay) /* = 92 */
-X(AIRSteam_ActivateGameOverlayToUser) /* = 93 */
-X(AIRSteam_ActivateGameOverlayToWebPage) /* = 94 */
-X(AIRSteam_ActivateGameOverlayToStore) /* = 95 */
-X(AIRSteam_ActivateGameOverlayInviteDialog) /* = 96 */
-X(AIRSteam_IsOverlayEnabled) /* = 97 */
-X(AIRSteam_SetOverlayNotificationPosition) /* = 98 */
+X(AIRSteam_ActivateGameOverlay) /* = 91 */
+X(AIRSteam_ActivateGameOverlayToUser) /* = 92 */
+X(AIRSteam_ActivateGameOverlayToWebPage) /* = 93 */
+X(AIRSteam_ActivateGameOverlayToStore) /* = 94 */
+X(AIRSteam_ActivateGameOverlayInviteDialog) /* = 95 */
+X(AIRSteam_IsOverlayEnabled) /* = 96 */
+X(AIRSteam_SetOverlayNotificationPosition) /* = 97 */
 /***********************/
 /* DLC / subscriptions */
 /***********************/
-X(AIRSteam_IsSubscribedApp) /* = 99 */
-X(AIRSteam_IsDLCInstalled) /* = 100 */
-X(AIRSteam_GetDLCCount) /* = 101 */
-X(AIRSteam_InstallDLC) /* = 102 */
-X(AIRSteam_UninstallDLC) /* = 103 */
-X(AIRSteam_DLCInstalledResult) /* = 104 */
+X(AIRSteam_IsSubscribedApp) /* = 98 */
+X(AIRSteam_IsDLCInstalled) /* = 99 */
+X(AIRSteam_GetDLCCount) /* = 100 */
+X(AIRSteam_InstallDLC) /* = 101 */
+X(AIRSteam_UninstallDLC) /* = 102 */
+X(AIRSteam_DLCInstalledResult) /* = 103 */
 /********************/
 /* Microtransaction */
 /********************/
-X(AIRSteam_MicroTxnResult) /* = 105 */
+X(AIRSteam_MicroTxnResult) /* = 104 */
 /**********************************/
 /* Other non-Steamworks functions */
 /**********************************/
-X(AIRSteam_GetEnv) /* = 106 */
-X(AIRSteam_SetEnv) /* = 107 */
+X(AIRSteam_GetEnv) /* = 105 */
+X(AIRSteam_SetEnv) /* = 106 */
 /* END GENERATED CODE */

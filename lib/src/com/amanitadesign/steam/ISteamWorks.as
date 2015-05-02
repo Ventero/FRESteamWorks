@@ -35,7 +35,6 @@ package com.amanitadesign.steam {
 		function getAvailableGameLanguages():String
 		function getCurrentGameLanguage():String
 		function getPersonaName():String
-		function useCrashHandler(appID:uint, version:String, date:String, time:String):Boolean
 		function restartAppIfNecessary(appID:uint):Boolean
 		/************************/
 		/* Stats / Achievements */

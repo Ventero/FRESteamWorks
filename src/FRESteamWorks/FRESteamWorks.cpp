@@ -93,22 +93,6 @@ AIR_FUNC(AIRSteam_GetPersonaName) {
 	return FREString(g_Steam->GetPersonaName());
 }
 
-AIR_FUNC(AIRSteam_UseCrashHandler) {
-	if (argc != 4) return FREBool(false);
-
-	uint32 appID = 0;
-	std::string version, date, time;
-	if (!FREGetUint32(argv[0], &appID) ||
-	    !FREGetString(argv[1], version) ||
-	    !FREGetString(argv[2], date) ||
-	    !FREGetString(argv[3], time)) return FREBool(false);
-
-	SteamAPI_SetBreakpadAppID(appID);
-	SteamAPI_UseBreakpadCrashHandler(version.c_str(), date.c_str(), time.c_str(),
-		false, NULL, NULL);
-	return FREBool(true);
-}
-
 AIR_FUNC(AIRSteam_RestartAppIfNecessary) {
 	if (argc != 1) return FREBool(false);
 	uint32 appID = 0;
