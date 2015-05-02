@@ -10,6 +10,11 @@
 #include "SteamWrapper.h"
 
 #include <types/amfbool.hpp>
+#include <types/amfbytearray.hpp>
+#include <types/amfdouble.hpp>
+#include <types/amfinteger.hpp>
+#include <types/amfnull.hpp>
+#include <types/amfstring.hpp>
 #include <serializer.hpp>
 
 // For the low-level fd hackery in RestartAppIfNecessary.

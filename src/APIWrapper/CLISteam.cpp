@@ -8,6 +8,11 @@
 #include <iterator>
 #include <sstream>
 
+#include <types/amfbool.hpp>
+#include <types/amfdouble.hpp>
+#include <types/amfinteger.hpp>
+#include <types/amfstring.hpp>
+
 using namespace amf;
 
 void CLISteam::DispatchEvent(char* code, char* level) {
