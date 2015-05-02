@@ -17,6 +17,7 @@
 #include <types/amfstring.hpp>
 #include <serializer.hpp>
 
+#include <cstdlib>
 // For the low-level fd hackery in RestartAppIfNecessary.
 #include <fcntl.h>
 #include <unistd.h>
