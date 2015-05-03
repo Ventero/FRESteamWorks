@@ -23,7 +23,6 @@ uint32 AIRSteam_GetAppID();
 std::string AIRSteam_GetAvailableGameLanguages();
 std::string AIRSteam_GetCurrentGameLanguage();
 std::string AIRSteam_GetPersonaName();
-std::nullptr_t AIRSteam_UseCrashHandler();
 bool AIRSteam_RestartAppIfNecessary();
 bool AIRSteam_RequestStats();
 bool AIRSteam_SetAchievement();

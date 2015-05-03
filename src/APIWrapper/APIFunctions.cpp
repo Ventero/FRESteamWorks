@@ -94,25 +94,6 @@ std::string AIRSteam_GetPersonaName() {
 	return g_Steam->GetPersonaName();
 }
 
-// this is a void function even though the actual API function is a bool,
-// because it's not immediately called when FRESteamWorks.useCrashHandler
-// is called, as the APIWrapper process is not actually be running at that
-// point in time. instead, this function is called as soon as the binary
-// has started.
-std::nullptr_t AIRSteam_UseCrashHandler() {
-	uint32 appID = g_Steam->get_int();
-	std::string version = g_Steam->get_string();
-	std::string date = g_Steam->get_string();
-	std::string time = g_Steam->get_string();
-	if (!g_Steam) return nullptr;
-
-	SteamAPI_SetBreakpadAppID(appID);
-	SteamAPI_UseBreakpadCrashHandler(version.c_str(), date.c_str(), time.c_str(),
-		false, NULL, NULL);
-
-	return nullptr;
-}
-
 bool AIRSteam_RestartAppIfNecessary() {
 	uint32 appID = g_Steam->get_int();
 
