@@ -6,7 +6,6 @@
  *  Copyright (c) 2012-2013 Level Up Labs, LLC. All rights reserved.
  */
 
-#include "APIWrapper.h"
 #include "APIFunctions.h"
 #include "CLISteam.h"
 #include "SteamWrapper.h"
@@ -16,17 +15,6 @@
 #include <ios>
 #include <iostream>
 #include <string>
-
-#ifdef DEBUG
-void steamWarningMessageHook(int severity, const char* msg) {
-	std::fstream f("/tmp/steam.log", std::ios::out | std::ios::app);
-	f << "Severity " << severity << ": " << msg << std::endl;
-}
-#else
-void steamWarningMessageHook(int severity, const char* msg) {
-	// silently ignore
-}
-#endif
 
 CLISteam *g_Steam = NULL;
 

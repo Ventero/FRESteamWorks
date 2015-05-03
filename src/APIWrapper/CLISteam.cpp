@@ -15,6 +15,17 @@
 
 using namespace amf;
 
+#ifdef DEBUG
+void steamWarningMessageHook(int severity, const char* msg) {
+	std::fstream f("/tmp/steam.log", std::ios::out | std::ios::app);
+	f << "Severity " << severity << ": " << msg << std::endl;
+}
+#else
+void steamWarningMessageHook(int severity, const char* msg) {
+	// silently ignore
+}
+#endif
+
 void CLISteam::DispatchEvent(char* code, char* level) {
 	// we abuse std::cerr for event dispatching, that way it doesn't interfere
 	// with the normal communication on stdout

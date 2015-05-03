@@ -25,6 +25,7 @@
 using namespace amf;
 
 extern SteamWrapper* g_Steam;
+extern void steamWarningMessageHook(int severity, const char* msg);
 
 /*
  * general functions

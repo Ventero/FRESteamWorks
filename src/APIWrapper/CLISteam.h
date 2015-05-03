@@ -14,6 +14,8 @@
 #include <types/amfitem.hpp>
 #include <serializer.hpp>
 
+void steamWarningMessageHook(int severity, const char* msg);
+
 class CLISteam : public SteamWrapper {
 public:
 	// Event dispatching.
