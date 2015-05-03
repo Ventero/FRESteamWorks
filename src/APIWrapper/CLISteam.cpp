@@ -112,9 +112,6 @@ void CLISteam::sendBuffer(const AmfItem& byte_array) {
 	sendDataTempFile(serializer);
 }
 
-// sentinel for pseudo-void functions
-void CLISteam::send(std::nullptr_t) { }
-
 std::string CLISteam::readTempFileBuf(size_t length) {
 	std::string filename;
 	std::getline(std::cin, filename);

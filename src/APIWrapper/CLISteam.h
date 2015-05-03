@@ -19,19 +19,19 @@ void steamWarningMessageHook(int severity, const char* msg);
 class CLISteam : public SteamWrapper {
 public:
 	// Event dispatching.
-	virtual void DispatchEvent(char* code, char* level);
+	virtual void DispatchEvent(char* code, char* level) override;
 
 	// Functions for sending data to the AS3 side.
-	virtual void send(bool value);
-	virtual void send(int32 value);
-	virtual void send(uint32 value);
-	virtual void send(uint64 value);
-	virtual void send(float value);
-	virtual void send(double value);
-	virtual void send(std::string value);
-	virtual void send(const amf::AmfItem& item);
-	virtual void sendBuffer(const amf::AmfItem& item);
-	virtual void send(std::nullptr_t);
+	virtual void send(Void) override { };
+	virtual void send(bool value) override;
+	virtual void send(int32 value) override;
+	virtual void send(uint32 value) override;
+	virtual void send(uint64 value) override;
+	virtual void send(float value) override;
+	virtual void send(double value) override;
+	virtual void send(std::string value) override;
+	virtual void send(const amf::AmfItem& item) override;
+	virtual void sendBuffer(const amf::AmfItem& item) override;
 
 private:
 	void sendData(amf::Serializer&);

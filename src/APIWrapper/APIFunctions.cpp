@@ -102,9 +102,9 @@ void AIRSteam_Shutdown(const AmfArray& args) {
 	SteamAPI_Shutdown();
 }
 
-std::nullptr_t AIRSteam_RunCallbacks(const AmfArray& args) {
+Void AIRSteam_RunCallbacks(const AmfArray& args) {
 	SteamAPI_RunCallbacks();
-	return nullptr;
+	return {};
 }
 
 uint64 AIRSteam_GetUserID(const AmfArray& args) {
@@ -1368,11 +1368,11 @@ bool AIRSteam_DLCInstalledResult(const AmfArray& args) {
  */
 
 // FIXME: sends either an object or null
-std::nullptr_t AIRSteam_MicroTxnResult(const AmfArray& args) {
+Void AIRSteam_MicroTxnResult(const AmfArray& args) {
 	MicroTxnAuthorizationResponse_t res;
 	if (!g_Steam || !g_Steam->MicroTxnResult(&res)) {
 		g_Steam->send(AmfNull());
-		return nullptr;
+		return {};
 	}
 
 	AmfObject obj("com.amanitadesign.steam.MicroTxnAuthorizationResponse", false, false);
@@ -1381,7 +1381,7 @@ std::nullptr_t AIRSteam_MicroTxnResult(const AmfArray& args) {
 	obj.addSealedProperty("authorized", AmfBool(res.m_bAuthorized));
 
 	g_Steam->send(obj);
-	return nullptr;
+	return {};
 }
 
 /*

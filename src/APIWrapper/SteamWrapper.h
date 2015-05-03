@@ -19,6 +19,10 @@
 
 #include "CSteam/CSteam.h"
 
+// Marker to indicate that no return value.
+// Necessary because send(f()) with void f() is not allowed.
+struct Void { };
+
 /* A wrapper class around CSteam that also defines an interface for communication
  * with the AS3 side.
  */
@@ -28,6 +32,7 @@ public:
 	virtual void DispatchEvent(char* code, char* level) = 0;
 
 	// Functions for sending data to the AS3 side.
+	virtual void send(Void) = 0;
 	virtual void send(bool value) = 0;
 	virtual void send(int32 value) = 0;
 	virtual void send(uint32 value) = 0;
@@ -38,8 +43,6 @@ public:
 	virtual void send(const amf::AmfItem& item) = 0;
 	// Used for sending large buffers.
 	virtual void sendBuffer(const amf::AmfItem& item) = 0;
-	// Required for functions that don't return any data.
-	virtual void send(std::nullptr_t) = 0;
 };
 
 #endif // STEAMWRAPPER_H

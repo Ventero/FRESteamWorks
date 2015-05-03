@@ -15,9 +15,11 @@
 #include <types/amfarray.hpp>
 #include <types/amfobject.hpp>
 
+struct Void;
+
 bool AIRSteam_Init(const amf::AmfArray &);
 void AIRSteam_Shutdown(const amf::AmfArray &);
-std::nullptr_t AIRSteam_RunCallbacks(const amf::AmfArray &);
+Void AIRSteam_RunCallbacks(const amf::AmfArray &);
 uint64 AIRSteam_GetUserID(const amf::AmfArray &);
 uint32 AIRSteam_GetAppID(const amf::AmfArray &);
 std::string AIRSteam_GetAvailableGameLanguages(const amf::AmfArray &);
@@ -120,7 +122,7 @@ int32 AIRSteam_GetDLCCount(const amf::AmfArray &);
 bool AIRSteam_InstallDLC(const amf::AmfArray &);
 bool AIRSteam_UninstallDLC(const amf::AmfArray &);
 bool AIRSteam_DLCInstalledResult(const amf::AmfArray &);
-std::nullptr_t AIRSteam_MicroTxnResult(const amf::AmfArray &);
+Void AIRSteam_MicroTxnResult(const amf::AmfArray &);
 std::string AIRSteam_GetEnv(const amf::AmfArray &);
 bool AIRSteam_SetEnv(const amf::AmfArray &);
 
