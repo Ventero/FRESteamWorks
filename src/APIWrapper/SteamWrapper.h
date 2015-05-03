@@ -13,6 +13,7 @@
 #include <vector>
 
 #include <types/amfitem.hpp>
+#include <types/amfarray.hpp>
 
 #include <steam/steamtypes.h>
 
@@ -39,16 +40,6 @@ public:
 	virtual void sendBuffer(const amf::AmfItem& item) = 0;
 	// Required for functions that don't return any data.
 	virtual void send(std::nullptr_t) = 0;
-
-	// Functions for getting data.
-	virtual bool get_bool() = 0;
-	virtual int32 get_int() = 0;
-	virtual float get_float() = 0;
-	virtual std::string get_string() = 0;
-	virtual std::string get_bytearray() = 0;
-	virtual uint64 get_uint64() = 0;
-	virtual std::vector<int> get_int_array() = 0;
-	virtual std::vector<std::string> get_string_array() = 0;
 };
 
 #endif // STEAMWRAPPER_H

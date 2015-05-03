@@ -33,39 +33,12 @@ public:
 	virtual void sendBuffer(const amf::AmfItem& item);
 	virtual void send(std::nullptr_t);
 
-
-	// Functions for getting data.
-	virtual bool get_bool();
-	virtual int32 get_int();
-	virtual float get_float();
-	virtual std::string get_string();
-	virtual std::string get_bytearray();
-	virtual uint64 get_uint64();
-	virtual std::vector<int> get_int_array();
-	virtual std::vector<std::string> get_string_array();
-
 private:
 	void sendData(amf::Serializer&);
 	void sendDataTempFile(amf::Serializer&);
-
 	void sendItem(const amf::AmfItem& item);
 
 	std::string readTempFileBuf(size_t length);
-
-	template<typename T, typename Getter>
-	std::vector<T> get_array(Getter get) {
-		int length = get_int();
-		std::vector<T> v;
-		if (length < 1) return v;
-
-		v.reserve(length);
-		for(int i = 0; i < length; ++i) {
-			T val = (this->*get)();
-			v.push_back(val);
-		}
-
-		return v;
-	}
 };
 
 #endif // CLISTEAM_H

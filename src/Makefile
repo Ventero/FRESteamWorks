@@ -29,7 +29,7 @@ endif
 # Native extension objects
 obj := FRESteamWorks/FRESteamWorks.o FRESteamWorks/FREConverters.o CSteam/CSteam.o
 # APIWrapper objects
-wrapperobj := APIWrapper/APIFunctions.o APIWrapper/CLISteam.o \
+wrapperobj := APIWrapper/APIWrapper.o APIWrapper/APIFunctions.o APIWrapper/CLISteam.o \
               CSteam/CSteam.o APIWrapper/libamf.a
 
 # Targets

@@ -9,9 +9,11 @@
 #include <sstream>
 
 #include <types/amfbool.hpp>
+#include <types/amfbytearray.hpp>
 #include <types/amfdouble.hpp>
 #include <types/amfinteger.hpp>
 #include <types/amfstring.hpp>
+#include <utils/amfitemptr.hpp>
 
 using namespace amf;
 
@@ -112,71 +114,6 @@ void CLISteam::sendBuffer(const AmfItem& byte_array) {
 
 // sentinel for pseudo-void functions
 void CLISteam::send(std::nullptr_t) { }
-
-// TODO: replace this mess with AMF
-bool CLISteam::get_bool() {
-	std::string item;
-	std::getline(std::cin, item);
-	return item == "true";
-}
-
-int32 CLISteam::get_int() {
-	std::string item;
-	std::getline(std::cin, item);
-	return std::stoi(item);
-}
-
-float CLISteam::get_float() {
-	std::string item;
-	std::getline(std::cin, item);
-	return std::stof(item);
-}
-
-std::string CLISteam::get_string() {
-	std::string item;
-	std::getline(std::cin, item);
-
-	size_t length = std::stoi(item);
-	if (length < 1) return "";
-
-	if (length > 1024)
-		return readTempFileBuf(length);
-
-	char* buf = new char[length];
-	std::cin.read(buf, length);
-	// remove trailing newline
-	std::string result(buf, length - 1);
-
-	delete[] buf;
-	return result;
-}
-
-std::string CLISteam::get_bytearray() {
-	std::string item;
-	std::getline(std::cin, item);
-
-	size_t length = std::stoi(item);
-	if (length < 1) return "";
-	return readTempFileBuf(length);
-}
-
-uint64 CLISteam::get_uint64() {
-	std::string str = get_string();
-	std::istringstream ss(str);
-
-	uint64 val;
-	if(!(ss >> val)) return 0;
-
-	return val;
-}
-
-std::vector<int> CLISteam::get_int_array() {
-	return get_array<int>(&CLISteam::get_int);
-}
-
-std::vector<std::string> CLISteam::get_string_array() {
-	return get_array<std::string>(&CLISteam::get_string);
-}
 
 std::string CLISteam::readTempFileBuf(size_t length) {
 	std::string filename;

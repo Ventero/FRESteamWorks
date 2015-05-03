@@ -18,6 +18,7 @@ package com.amanitadesign.steam {
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	import flash.net.ObjectEncoding;
 	import flash.net.registerClassAlias;
 	import flash.utils.ByteArray;
 	import flash.utils.IDataInput;
@@ -285,56 +286,18 @@ package com.amanitadesign.steam {
 			if(!_process.running) return false;
 
 			var stdin:IDataOutput = _process.standardInput;
-			stdin.writeUTFBytes(funcName + "\n");
+			stdin.objectEncoding = ObjectEncoding.AMF3;
 
-			if (params) {
-				for(var i:int = 0; i < params.length; ++i) {
-					var outbuf:ByteArray = new ByteArray();
-					var needTemp:Boolean = writeValue(outbuf, params[i]);
-					outbuf.position = 0;
-					if (needTemp || outbuf.length > 1024) {
-						// send data via tempfile, see readResponse for an explanation
-						var tempfile:File = File.createTempFile();
-						var stream:FileStream = new FileStream();
-						stream.open(tempfile, FileMode.WRITE);
-						stream.writeBytes(outbuf);
-						stream.close();
-						stdin.writeUTFBytes(outbuf.length + "\n");
-						stdin.writeUTFBytes(tempfile.nativePath + "\n");
-					} else {
-						stdin.writeBytes(outbuf);
-					}
-				}
-			}
+			var b:ByteArray = new ByteArray();
+			b.writeObject(funcName);
+			b.writeObject(params || []);
+
+			b.position = 0;
+			stdin.writeUTFBytes(String(b.bytesAvailable + 1) + "\n");
+			stdin.writeBytes(b);
+			stdin.writeUTFBytes("\n");
 
 			return !_error;
-		}
-
-		private function writeValue(output:IDataOutput, value:*):Boolean {
-			if (value === null || value === undefined) {
-				// no data, so length 0
-				output.writeUTFBytes(0 + "\n");
-			} else if(value is ByteArray) {
-				// byte arrays are passed through external files, so we don't need a
-				// length marker here
-				output.writeBytes(value);
-				output.writeUTFBytes("\n");
-				return true;
-			} else if(value is String) {
-				output.writeUTFBytes(String(value.length + 1) + "\n" + value + "\n");
-			} else if(value is Array) {
-				output.writeUTFBytes(value.length + "\n");
-				for (var el:int = 0; el < value.length; ++el) {
-					if(!(value[el] is String) && !(value[el] is Number))
-						throw new ArgumentError("Only arrays of strings/numbers are supported");
-					writeValue(output, value[el]);
-				}
-			} else if(value is int || value is uint || value is Number || value is Boolean) {
-				output.writeUTFBytes(String(value) + "\n");
-			} else {
-				throw new ArgumentError("Cannot write value " + value);
-			}
-			return false;
 		}
 
 		private function waitForData(output:IDataInput, length:uint = 1):uint {

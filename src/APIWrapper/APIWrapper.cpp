@@ -10,11 +10,15 @@
 #include "CLISteam.h"
 #include "SteamWrapper.h"
 
+#include "deserializer.hpp"
+#include "types/amfinteger.hpp"
+
 #include <exception>
 #include <fstream>
 #include <ios>
 #include <iostream>
 #include <string>
+#include <sstream>
 
 CLISteam *g_Steam = NULL;
 
@@ -22,8 +26,8 @@ CLISteam *g_Steam = NULL;
  * Wrappers
  */
 
-std::vector<std::function<void()>> apiFunctions {
-#define X(a) []() { g_Steam->send(a()); },
+std::vector<std::function<void(const amf::AmfArray&)>> apiFunctions {
+#define X(a) [](const amf::AmfArray& ptr) { g_Steam->send(a(ptr)); },
 #include "functions.h"
 #undef X
 };
@@ -33,18 +37,28 @@ int main(int argc, char** argv) {
 
 	std::ios::sync_with_stdio(false);
 
+	amf::Deserializer deserializer;
 	while (std::cin.good()) {
 		std::string buf;
 		std::getline(std::cin, buf);
-
 		if (buf.empty()) break;
 
+		size_t length = std::stoi(buf);
+		amf::v8 data(length);
+		std::cin.read(reinterpret_cast<char*>(data.data()), length);
+
 		unsigned int func;
+		amf::AmfArray args;
 		try {
-			func = std::stoi(buf);
+			auto it = data.cbegin();
+			auto end = data.cend();
+
+			func = deserializer.deserialize(it, end).as<amf::AmfInteger>().value;
+			args = deserializer.deserialize(it, end).as<amf::AmfArray>();
+			deserializer.clearContext();
 		} catch (std::exception& e) {
-			// conversion failed, either stdin was closed or I/O is desynced
-			// either way, abort
+			// reading function index or arguments failed, probably due to
+			// desynced I/O
 			break;
 		}
 
@@ -52,13 +66,12 @@ int main(int argc, char** argv) {
 			continue;
 
 		try {
-			apiFunctions[func]();
+			apiFunctions[func](args);
 		} catch (std::exception& e) {
-			std::string msg("Exception: ");
-			msg += e.what();
-			msg += "\n";
-			msg += buf;
-			steamWarningMessageHook(2, msg.c_str());
+			std::ostringstream oss;
+			oss << "Exception while calling " << func << ":\n"
+			    << e.what() << "\n" << buf << std::endl;
+			steamWarningMessageHook(2, oss.str().c_str());
 			continue;
 		} catch (...) {
 			// shouldn't happen, just read on and hope for the best
@@ -67,6 +80,6 @@ int main(int argc, char** argv) {
 		}
 	}
 
-	AIRSteam_Shutdown();
+	AIRSteam_Shutdown(amf::AmfArray());
 	return 0;
 }

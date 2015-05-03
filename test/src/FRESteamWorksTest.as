@@ -329,6 +329,7 @@ package {
 			if (!Steamworks.isReady) return;
 
 			log("readFileFromCloud('test.txt') == " + readFileFromCloud('test.txt'));
+			log("readFileFromCloud('updated_test.txt') == "+readFileFromCloud('updated_test.txt') );
 		}
 
 		private function toggleFile(e:Event = null):void {
@@ -338,10 +339,11 @@ package {
 			log("fileExists('test.txt') == " + result);
 			if(result){
 				log("readFileFromCloud('test.txt') == "+readFileFromCloud('test.txt') );
+				log("readFileFromCloud('updated_test.txt') == "+readFileFromCloud('updated_test.txt') );
 				log("fileDelete('test.txt') == "+Steamworks.fileDelete('test.txt'));
 				log("fileDelete('updated_test.txt') == "+Steamworks.fileDelete('updated_test.txt'));
 			} else {
-				log("writeFileToCloud('test.txt','click') == "+writeFileToCloud('test.txt','click'));
+				log("writeFileToCloud('test.txt','click') == "+writeFileToCloud('test.txt','click2222'));
 				log("writeFileToCloud('updated_test.txt',...) == "+writeFileToCloud('updated_test.txt','updated content'));
 			}
 		}
@@ -911,8 +913,10 @@ package {
 					log("equal to original handle? " + (realAuthHandle == authHandle));
 					authHandle = realAuthHandle;
 
-					log("beginAuthSession(ticket, " + _userId + ") == " + Steamworks.beginAuthSession(
-						authTicket, _userId));
+					if (_userId) {
+						log("beginAuthSession(ticket, " + _userId + ") == " + Steamworks.beginAuthSession(
+							authTicket, _userId));
+					}
 
 					break;
 				case SteamConstants.RESPONSE_OnValidateAuthTicketResponse:
