@@ -5,6 +5,12 @@ The builds described in this file can be [downloaded here](http://dump.ventero.d
 A full list of implemented functions can be found by following the link in the
 version number.
 
+### [HEAD](https://github.com/Ventero/FRESteamWorks/blob/HEAD/lib/API.txt)
+ - Added `setEnv` to allow setting environment variables.
+ - Fixed `enumerateUserPublishedFilesResult` to correctly return all results (issue #13).
+ - Implemented `indicateAchievementProgress`.
+ - Removed the deprecated (and broken) `useCrashHandler`.
+
 ### [v0.5-2-gf59d5ba](https://github.com/Ventero/FRESteamWorks/blob/v0.5-2-gf59d5ba/lib/API.txt)
  - Fixed `microTxnResult` to properly return null if no results available, and correctly initialize the `authorized` property for returned objects.
 
