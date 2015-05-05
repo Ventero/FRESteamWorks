@@ -7,7 +7,7 @@ version number.
 
 ### [HEAD](https://github.com/Ventero/FRESteamWorks/blob/HEAD/lib/API.txt)
  - Added `setEnv` to allow setting environment variables.
- - Fixed `enumerateUserPublishedFilesResult` to correctly return all results (issue #13).
+ - Fixed `enumerateUserPublishedFilesResult` to correctly return all results ([issue #13](https://github.com/Ventero/FRESteamWorks/issues/13)).
  - Implemented `indicateAchievementProgress`.
  - Removed the deprecated (and broken) `useCrashHandler`.
 
