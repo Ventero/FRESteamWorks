@@ -1,6 +1,6 @@
 include ../config.sh
 
-CXXFLAGS = -std=c++0x -m32 -fvisibility=hidden
+CXXFLAGS = -std=c++0x -m32 -fvisibility=hidden -I.
 CXXFLAGS += -Wall -Wextra -pedantic -Wno-unused-parameter -Wmissing-declarations
 CXXFLAGS += -Wconversion -Wcast-qual -Wno-sign-conversion
 CXXFLAGS += -DUSE_BREAKPAD_HANDLER -DVERSION_SAFE_STEAM_API_INTERFACES
@@ -29,8 +29,11 @@ endif
 # Native extension objects
 obj := FRESteamWorks/FRESteamWorks.o FRESteamWorks/FREConverters.o CSteam/CSteam.o
 # APIWrapper objects
-wrapperobj := APIWrapper/APIFunctions.o APIWrapper/CLISteam.o \
-              CSteam/CSteam.o APIWrapper/libamf.a
+wrapperobj := APIWrapper/APIWrapper.o APIWrapper/APIFunctions.o APIWrapper/CLISteam.o \
+              CSteam/CSteam.o
+amf := APIWrapper/libamf.a
+# All source files
+src := $(obj:.o=.cpp) $(wrapperobj:.o=.cpp)
 
 # Targets
 .PHONY: all lib wrapper clean dist-clean
@@ -39,7 +42,7 @@ lib: FRESteamWorks/FRESteamWorks.so
 wrapper: APIWrapper/APIWrapper
 
 clean:
-	rm -f $(obj) $(wrapperobj)
+	rm -f $(obj) $(wrapperobj) $(amf)
 	rm -f APIWrapper/libamf.a
 	rm -f SteamSDK
 
@@ -51,7 +54,7 @@ dist-clean: clean
 FRESteamWorks/FRESteamWorks.so: $(obj)
 	$(CXX) -shared $^ $(LIB) -o $@
 
-APIWrapper/APIWrapper: APIWrapper/APIWrapper.o $(wrapperobj)
+APIWrapper/APIWrapper: $(wrapperobj) $(amf)
 	$(CXX) $^ $(LIB) -o $@
 
 APIWrapper/libamf.a: APIWrapper/amf-cpp
@@ -62,13 +65,16 @@ APIWrapper/libamf.a: APIWrapper/amf-cpp
 SteamSDK:
 	ln -sf $(STEAM_SDK) $@
 
-%.o: %.cpp %.h functions.h SteamSDK
-	$(CXX) -c $(CXXFLAGS) -I. $< -o $@
+%.o: | SteamSDK
+	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-# Additional dependencies/flags
-CSteam/CSteam.o: CSteam/ResponseTypes.h
-FRESteamWorks/FRESteamWorks.o: FRESteamWorks/FREConverters.h CSteam/CSteam.h
-APIWrapper/APIFunctions.o: APIWrapper/SteamWrapper.h CSteam/CSteam.h
-APIWrapper/APIWrapper.o: APIWrapper/APIFunctions.h APIWrapper/CLISteam.h APIWrapper/SteamWrapper.h CSteam/CSteam.h
-APIWrapper/CLISteam.o: APIWrapper/SteamWrapper.h CSteam/CSteam.h
+# Additional flags
 APIWrapper/%.o: CXXFLAGS += -isystem APIWrapper/amf-cpp/src
+
+.dep: $(src)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -isystem APIWrapper/amf-cpp/src -MM $(src) | \
+		sed '/^[^[:space:]]/s,^[^:]*: \([^[:space:]]*\)/,\1/&,;s,:, $@:,' > $@
+
+ifeq ($(filter $(MAKECMDGOALS),clean dist-clean),)
+-include .dep
+endif
