@@ -4,6 +4,7 @@ config.bat
 config.sh
 src/APIWrapper/APIWrapper
 src/SteamSDK
+src/.dep
 test/bin-debug/FRESteamWorksTest
 test/bin-debug/FRESteamWorksTest.app
 test/bin-debug/adt*.tmp
