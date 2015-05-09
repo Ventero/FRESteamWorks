@@ -347,6 +347,8 @@ private:
 	STEAM_CALLBACK(CSteam, OnMicroTxnAuthorizationResponse, MicroTxnAuthorizationResponse_t,
 	               m_CallbackMicroTxnAuthorizationResponse);
 
+#undef STEAM_CALLRESULT
+
 };
 
 // utility functions

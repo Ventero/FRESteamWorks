@@ -23,24 +23,11 @@
 
 #include "CSteam/CSteam.h"
 
-#define AIR_FUNC(name) \
-	FREObject name(FREContext ctx, void* funcData, uint32 argc, FREObject argv[])
-
-#define ARG_CHECK(arg_num, default) \
-	if (!g_Steam || argc != arg_num) return default
-
-#define SET_PROP(object, property, value) \
-	FRESetObjectProperty(object, (const uint8_t*)property, value, NULL)
-
 void steamWarningMessageHook(int severity, const char* msg);
 
 class ANESteam : public CSteam {
 	void DispatchEvent(char* code, char* level);
 };
-
-#define X(a) AIR_FUNC(a);
-#include "functions.h"
-#undef X
 
 void ContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx,
                         uint32* numFunctions, const FRENamedFunction** functions);

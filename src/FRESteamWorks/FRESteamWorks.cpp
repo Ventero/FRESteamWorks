@@ -36,6 +36,24 @@ void ANESteam::DispatchEvent(char* code, char* level) {
 	FREDispatchStatusEventAsync(AIRContext, (const uint8_t*)code, (const uint8_t*)level);
 }
 
+// Utility macros
+#define ARG_CHECK(arg_num, default) \
+	if (!g_Steam || argc != arg_num) return default
+
+#define SET_PROP(object, property, value) \
+	FRESetObjectProperty(object, (const uint8_t*)property, value, NULL)
+
+#define AIR_FUNC(name) \
+	FREObject name(FREContext ctx, void* funcData, uint32 argc, FREObject argv[])
+
+
+/*
+ * prototype declarations
+ */
+#define X(a) AIR_FUNC(a);
+#include "functions.h"
+#undef X
+
 /*
  * general functions
  */
