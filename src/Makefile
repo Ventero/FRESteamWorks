@@ -31,9 +31,10 @@ obj := FRESteamWorks/FRESteamWorks.o FRESteamWorks/FREConverters.o CSteam/CSteam
 # APIWrapper objects
 wrapperobj := APIWrapper/APIWrapper.o APIWrapper/APIFunctions.o APIWrapper/CLISteam.o \
               CSteam/CSteam.o
-amf := APIWrapper/libamf.a
 # All source files
 src := $(obj:.o=.cpp) $(wrapperobj:.o=.cpp)
+# Destination for libamf
+amf := APIWrapper/libamf.a
 
 # Targets
 .PHONY: all lib wrapper clean dist-clean
@@ -43,7 +44,6 @@ wrapper: APIWrapper/APIWrapper
 
 clean:
 	rm -f $(obj) $(wrapperobj) $(amf)
-	rm -f APIWrapper/libamf.a
 	rm -f SteamSDK
 
 dist-clean: clean
@@ -57,7 +57,7 @@ FRESteamWorks/FRESteamWorks.so: $(obj)
 APIWrapper/APIWrapper: $(wrapperobj) $(amf)
 	$(CXX) $^ $(LIB) -o $@
 
-APIWrapper/libamf.a: APIWrapper/amf-cpp
+$(amf): APIWrapper/amf-cpp
 	$(MAKE) -C APIWrapper/amf-cpp 32bit
 	cp APIWrapper/amf-cpp/libamf.a $@
 
