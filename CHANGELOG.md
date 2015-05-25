@@ -6,6 +6,8 @@ A full list of implemented functions can be found by following the link in the
 version number.
 
 ### [HEAD](https://github.com/Ventero/FRESteamWorks/blob/HEAD/lib/API.txt)
+
+### [v0.5-29-gea3356b](https://github.com/Ventero/FRESteamWorks/blob/v0.5-29-gea3356b/lib/API.txt)
  - Added `setEnv` to allow setting environment variables.
  - Fixed `enumerateUserPublishedFilesResult` to correctly return all results ([issue #13](https://github.com/Ventero/FRESteamWorks/issues/13)).
  - Implemented `indicateAchievementProgress`.
