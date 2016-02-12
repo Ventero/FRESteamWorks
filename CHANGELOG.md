@@ -6,6 +6,7 @@ A full list of implemented functions can be found by following the link in the
 version number.
 
 ### [HEAD](https://github.com/Ventero/FRESteamWorks/blob/HEAD/lib/API.txt)
+ - Added support for 64-bit version of Adobe AIR (20+) on Mac OS X .
 
 ### [v0.5-29-gea3356b](https://github.com/Ventero/FRESteamWorks/blob/v0.5-29-gea3356b/lib/API.txt)
  - Added `setEnv` to allow setting environment variables.
