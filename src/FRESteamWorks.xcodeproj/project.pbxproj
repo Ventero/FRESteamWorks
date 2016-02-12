@@ -11,6 +11,7 @@
 		5407FE0D18F5FA9E0097B5D3 /* FREConverters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5407FE0B18F5FA9E0097B5D3 /* FREConverters.cpp */; };
 		5407FE1218F767FE0097B5D3 /* CSteam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5407FE1018F767FE0097B5D3 /* CSteam.cpp */; };
 		546198A516A8B32100E9B390 /* libsteam_api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1214331815298C47003FF426 /* libsteam_api.dylib */; };
+		5492A2981C6E6F92005AC59A /* Adobe AIR_64 in Frameworks */ = {isa = PBXBuildFile; fileRef = 5492A2971C6E6F92005AC59A /* Adobe AIR_64 */; };
 		54B6962216AB356400CFBD85 /* Adobe AIR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B6962116AB356400CFBD85 /* Adobe AIR.framework */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,7 @@
 		5407FE1118F767FE0097B5D3 /* CSteam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSteam.h; path = CSteam/CSteam.h; sourceTree = "<group>"; };
 		5407FE1318F7680F0097B5D3 /* functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = functions.h; sourceTree = "<group>"; };
 		54B6962116AB356400CFBD85 /* Adobe AIR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Adobe AIR.framework"; path = "../../AdobeAIRSDK/runtimes/air/mac/Adobe AIR.framework"; sourceTree = "<group>"; };
+		5492A2971C6E6F92005AC59A /* Adobe AIR_64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "Adobe AIR_64"; path = "../../AdobeAIRSDK/runtimes/air/mac/Adobe AIR.framework/Versions/1.0/Adobe AIR_64"; sourceTree = "<group>"; };
 		54BD38FD19016834002DD39B /* ResponseTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ResponseTypes.h; path = CSteam/ResponseTypes.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -34,6 +36,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				546198A516A8B32100E9B390 /* libsteam_api.dylib in Frameworks */,
+				5492A2981C6E6F92005AC59A /* Adobe AIR_64 in Frameworks */,
 				54B6962216AB356400CFBD85 /* Adobe AIR.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -61,6 +64,7 @@
 		1214330015298AAF003FF426 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5492A2971C6E6F92005AC59A /* Adobe AIR_64 */,
 				54B6962116AB356400CFBD85 /* Adobe AIR.framework */,
 				1214331815298C47003FF426 /* libsteam_api.dylib */,
 			);
@@ -189,7 +193,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_LINK_OBJC_RUNTIME = NO;
@@ -241,14 +245,14 @@
 				LIBRARY_SEARCH_PATHS = ../../SteamSDK/redistributable_bin/osx32;
 				MACH_O_TYPE = mh_dylib;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				PRIVATE_HEADERS_FOLDER_PATH = FRESteamWorks.framework/Versions/A/PrivateHeaders;
 				PRODUCT_NAME = FRESteamWorks;
 				PUBLIC_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/Headers";
 				SDKROOT = macosx;
 				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_STYLE = debugging;
-				VALID_ARCHS = i386;
+				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wextra",
@@ -262,7 +266,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_LINK_OBJC_RUNTIME = NO;
@@ -311,14 +315,14 @@
 				LIBRARY_SEARCH_PATHS = ../../SteamSDK/redistributable_bin/osx32;
 				MACH_O_TYPE = mh_dylib;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				PRIVATE_HEADERS_FOLDER_PATH = FRESteamWorks.framework/Versions/A/PrivateHeaders;
 				PRODUCT_NAME = FRESteamWorks;
 				PUBLIC_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/Headers";
 				SDKROOT = macosx;
 				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_STYLE = debugging;
-				VALID_ARCHS = i386;
+				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wextra",
