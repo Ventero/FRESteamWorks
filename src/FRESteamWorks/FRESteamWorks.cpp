@@ -285,10 +285,10 @@ AIR_FUNC(AIRSteam_GetGlobalStatHistoryInt) {
 		return FREArray(0);
 
 	auto history = g_Steam->GetGlobalStatHistoryInt(name, days);
-	size_t size = history.size();
+	uint32 size = static_cast<uint32>(history.size());
 
 	FREObject array = FREArray(size);
-	for (size_t i = 0; i < size; ++i) {
+	for (uint32 i = 0; i < size; ++i) {
 		double value = static_cast<double>(history.at(i));
 		FRESetArrayElementAt(array, i, FREDouble(value));
 	}
@@ -306,10 +306,10 @@ AIR_FUNC(AIRSteam_GetGlobalStatHistoryFloat) {
 		return FREArray(0);
 
 	auto history = g_Steam->GetGlobalStatHistoryFloat(name, days);
-	size_t size = history.size();
+	uint32 size = static_cast<uint32>(history.size());
 
 	FREObject array = FREArray(size);
-	for (size_t i = 0; i < size; ++i) {
+	for (uint32 i = 0; i < size; ++i) {
 		double value = history.at(i);
 		FRESetArrayElementAt(array, i, FREDouble(value));
 	}
@@ -395,10 +395,11 @@ AIR_FUNC(AIRSteam_UploadLeaderboardScore) {
 	    !FREGetInt32(argv[2], &score)) return FREBool(false);
 
 	std::vector<int32> details = getArray<int32>(argv[3], FREGetInt32);
+	int num_details = static_cast<int>(details.size());
 
 	return FREBool(g_Steam->UploadLeaderboardScore(handle,
 		ELeaderboardUploadScoreMethod(method), score,
-		details.data(), details.size()));
+		details.data(), num_details));
 }
 
 AIR_FUNC(AIRSteam_UploadLeaderboardScoreResult) {
@@ -444,8 +445,9 @@ AIR_FUNC(AIRSteam_DownloadLeaderboardEntriesResult) {
 	auto entries = g_Steam->DownloadLeaderboardEntriesResult(numDetails);
 	if (entries.empty()) return FREArray(0);
 
-	FREObject array = FREArray(entries.size());
-	for (size_t i = 0; i < entries.size(); ++i) {
+	uint32 size = static_cast<uint32>(entries.size());
+	FREObject array = FREArray(size);
+	for (uint32 i = 0; i < size; ++i) {
 		FREObject el;
 		FRENewObject((const uint8_t*)"com.amanitadesign.steam.LeaderboardEntry", 0, NULL, &el, NULL);
 

@@ -1045,6 +1045,6 @@ void createParamStringArray(std::vector<std::string> tags,
 		tagstrings[i] = tags[i].c_str();
 	}
 
-	tagArray->m_nNumStrings = arrayLength;
+	tagArray->m_nNumStrings = static_cast<int>(arrayLength);
 	tagArray->m_ppStrings = tagstrings;
 }

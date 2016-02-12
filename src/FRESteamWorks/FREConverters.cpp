@@ -40,7 +40,10 @@ FREObject FREDouble(double value) {
 
 FREObject FREString(std::string value) {
 	FREObject result;
-	FRENewObjectFromUTF8(value.size() + 1, (const uint8_t*)value.c_str(), &result);
+	FRENewObjectFromUTF8(
+		static_cast<uint32>(value.size()) + 1,
+		(const uint8_t*)value.c_str(),
+		&result);
 	return result;
 }
 
