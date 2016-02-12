@@ -12,7 +12,6 @@
 		5407FE1218F767FE0097B5D3 /* CSteam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5407FE1018F767FE0097B5D3 /* CSteam.cpp */; };
 		546198A516A8B32100E9B390 /* libsteam_api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1214331815298C47003FF426 /* libsteam_api.dylib */; };
 		5492A2981C6E6F92005AC59A /* Adobe AIR_64 in Frameworks */ = {isa = PBXBuildFile; fileRef = 5492A2971C6E6F92005AC59A /* Adobe AIR_64 */; };
-		54B6962216AB356400CFBD85 /* Adobe AIR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B6962116AB356400CFBD85 /* Adobe AIR.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,7 +36,6 @@
 			files = (
 				546198A516A8B32100E9B390 /* libsteam_api.dylib in Frameworks */,
 				5492A2981C6E6F92005AC59A /* Adobe AIR_64 in Frameworks */,
-				54B6962216AB356400CFBD85 /* Adobe AIR.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
