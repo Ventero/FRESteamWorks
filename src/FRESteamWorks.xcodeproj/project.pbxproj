@@ -25,8 +25,8 @@
 		5407FE1018F767FE0097B5D3 /* CSteam.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CSteam.cpp; path = CSteam/CSteam.cpp; sourceTree = "<group>"; };
 		5407FE1118F767FE0097B5D3 /* CSteam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSteam.h; path = CSteam/CSteam.h; sourceTree = "<group>"; };
 		5407FE1318F7680F0097B5D3 /* functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = functions.h; sourceTree = "<group>"; };
-		54B6962116AB356400CFBD85 /* Adobe AIR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Adobe AIR.framework"; path = "AdobeAIRSDK/runtimes/air/mac/Adobe AIR.framework"; sourceTree = "<group>"; };
 		5492A2971C6E6F92005AC59A /* Adobe AIR_64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "Adobe AIR_64"; path = "AdobeAIRSDK/runtimes/air/mac/Adobe AIR.framework/Versions/1.0/Adobe AIR_64"; sourceTree = "<group>"; };
+		54B6962116AB356400CFBD85 /* Adobe AIR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Adobe AIR.framework"; path = "AdobeAIRSDK/runtimes/air/mac/Adobe AIR.framework"; sourceTree = "<group>"; };
 		54BD38FD19016834002DD39B /* ResponseTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ResponseTypes.h; path = CSteam/ResponseTypes.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -85,7 +85,6 @@
 		1214330815298AAF003FF426 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				1214331815298C47003FF426 /* libsteam_api.dylib */,
 			);
 			name = "Supporting Files";
 			path = FRESteamWorks;
@@ -172,6 +171,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "set -ex\nrm -rf \"$PROJECT_DIR/../lib/bin/$FULL_PRODUCT_NAME\"\n\n# XCode on OS X Mavericks creates frameworks with a broken symlink\n# Create that link's target so adt doesn't complain later on\nmkdir -p \"$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME/Versions/Current/Resources\"\n\n# Fix lookup path for libsteam_api.dylib (packaged into Resources directory)\ninstall_name_tool -change \\\n    \"@loader_path/libsteam_api.dylib\" \"@rpath/../Resources/libsteam_api.dylib\" \\\n    \"$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME/$EXECUTABLE_NAME\"\n\ncp -RL \"$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME\" \"$PROJECT_DIR/../lib/bin/\"\n\ncd \"$PROJECT_DIR/../lib/bin/\"\necho \"Compiling ANE...\"\n./compileANE.sh\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
