@@ -2,6 +2,7 @@ NativeApps
 builds/v*
 config.bat
 config.sh
+src/AdobeAIRSDK
 src/APIWrapper/APIWrapper
 src/SteamSDK
 src/.dep
