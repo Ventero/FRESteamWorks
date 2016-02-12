@@ -19,7 +19,7 @@ fi
 "$AIR_SDK"/bin/adt -package -target ane FRESteamWorks.ane descriptor.xml \
                    -swc FRESteamWorksLib.swc \
                    -platform Windows-x86 library.swf FRESteamWorks.dll \
-                   -platform MacOS-x86 library.swf FRESteamWorks.framework \
+                   -platform MacOS-x86-64 library.swf FRESteamWorks.framework \
                    -platform default library.swf
 
 rm -rf FRESteamWorks.Unpacked.ane

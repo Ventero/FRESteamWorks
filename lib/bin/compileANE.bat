@@ -14,7 +14,7 @@ call "%FLEX_SDK%\bin\compc" +configname=air -source-path ..\src -optimize ^
 call "%AIR_SDK%\bin\adt" -package -target ane FRESteamWorks.ane descriptor.xml ^
                          -swc FRESteamWorksLib.swc ^
                          -platform Windows-x86 library.swf FRESteamWorks.dll ^
-                         -platform MacOS-x86 library.swf FRESteamWorks.framework ^
+                         -platform MacOS-x86-64 library.swf FRESteamWorks.framework ^
                          -platform default library.swf
 
 del library.swf

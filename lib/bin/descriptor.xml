@@ -9,7 +9,7 @@
 				<finalizer>ExtFinalizerFRESteamWorks</finalizer>
 			</applicationDeployment>
 		</platform>
-		<platform name="MacOS-x86">
+		<platform name="MacOS-x86-64">
 			<applicationDeployment>
 				<nativeLibrary>FRESteamWorks.framework</nativeLibrary>
 				<initializer>ExtInitializerFRESteamWorks</initializer>
