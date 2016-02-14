@@ -1,18 +1,21 @@
 include ../config.sh
 
-CXXFLAGS = -std=c++0x -m32 -fvisibility=hidden -I.
+CXXFLAGS = -std=c++0x -fvisibility=hidden -I.
 CXXFLAGS += -Wall -Wextra -pedantic -Wno-unused-parameter -Wmissing-declarations
 CXXFLAGS += -Wconversion -Wcast-qual -Wno-sign-conversion
 CXXFLAGS += -DUSE_BREAKPAD_HANDLER -DVERSION_SAFE_STEAM_API_INTERFACES
 CXXFLAGS += -isystem $(AIR_SDK)/include -isystem $(STEAM_SDK)/public
-LIB = -m32 -lsteam_api
+LDFLAGS = -lsteam_api
 
 ifeq ($(shell uname), Darwin)
-	CXXFLAGS += -DOSX
-	LIB += -L$(STEAM_SDK)/redistributable_bin/osx32
+	CXXFLAGS += -m64 -DOSX
+	LDFLAGS += -m64 -L$(STEAM_SDK)/redistributable_bin/osx32
+	LDFLAGS += $(AIR_SDK)/runtimes/air/mac/Adobe\ AIR.framework/Versions/1.0/Adobe\ AIR_64
+	AMF_CPP_ARCH =
 else
-	CXXFLAGS += -DLINUX
-	LIB += -L$(STEAM_SDK)/redistributable_bin/linux32
+	CXXFLAGS += -m32 -DLINUX
+	LDFLAGS += -m32 -L$(STEAM_SDK)/redistributable_bin/linux32
+	AMF_CPP_ARCH = 32bit
 endif
 
 # comma separated list of whitelisted app ids
@@ -52,13 +55,13 @@ dist-clean: clean
 # Rules
 # Output objects
 FRESteamWorks/FRESteamWorks.so: $(obj)
-	$(CXX) -shared $^ $(LIB) -o $@
+	$(CXX) -shared $^ $(LDFLAGS) -o $@
 
 APIWrapper/APIWrapper: $(wrapperobj) $(amf)
-	$(CXX) $^ $(LIB) -o $@
+	$(CXX) $^ $(LDFLAGS) -o $@
 
 $(amf): APIWrapper/amf-cpp
-	$(MAKE) -C APIWrapper/amf-cpp 32bit
+	$(MAKE) -C APIWrapper/amf-cpp $(AMF_CPP_ARCH)
 	cp APIWrapper/amf-cpp/libamf.a $@
 
 # Generic rules
