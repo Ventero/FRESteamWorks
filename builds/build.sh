@@ -18,9 +18,16 @@ for type in Debug Release; do
 	[ ! -d "FRESteamWorks.framework" ] && die "$dir/FRESteamWorks.framework missing"
 	[ ! -f "FRESteamWorks.dll" ] && die "$dir/FRESteamWorks.dll missing"
 
-	"$FLEX_SDK/bin/compc" +configname=air -source-path ../../../lib/src -optimize \
+	if [ "$type" = "Debug" ]; then
+		compc_flags="-debug=true"
+	else
+		compc_flags="-debug=false -optimize"
+	fi
+
+	"$FLEX_SDK/bin/compc" +configname=air -source-path ../../../lib/src \
 	                      -include-sources ../../../lib/src/ \
-	                      -swf-version=11 -output FRESteamWorksLib.swc
+	                      -swf-version=11 -output FRESteamWorksLib.swc \
+	                      ${compc_flags}
 
 	unzip -o FRESteamWorksLib.swc
 
