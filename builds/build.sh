@@ -39,6 +39,16 @@ for type in Debug Release; do
 done
 
 pushd "$target"
+
+steam_sdk_version=$(grep -m1 -F v1. "$STEAM_SDK/Readme.txt")
+cat <<EOD > README.txt
+FRESteamWorks ${target}
+
+https://github.com/Ventero/FRESteamWorks/commits/${target}
+
+Built against Steam SDK ${steam_sdk_version}
+EOD
+
 pushd "../../lib/bin/"
 ./compileLinuxSWC.sh
 popd
@@ -51,6 +61,6 @@ popd
 
 if [ -n "$UPLOAD_URL" ]; then
 	curl --ftp-create-dirs -nT \
-	     "{$target/FRESteamWorks-Debug.ane,$target/FRESteamWorks.ane,$target/FRESteamWorksLibLinux.swc}" \
+	     "{$target/FRESteamWorks-Debug.ane,$target/FRESteamWorks.ane,$target/FRESteamWorksLibLinux.swc,README.txt}" \
 	     "$UPLOAD_URL/$target/"
 fi
