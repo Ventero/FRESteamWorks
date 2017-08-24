@@ -124,7 +124,7 @@ public:
 	UGCHandle_t FileShareResult();
 	bool IsCloudEnabledForApp();
 	bool SetCloudEnabledForApp(bool enabled);
-	bool GetQuota(int32 *total, int32 *available);
+	bool GetQuota(uint64 *total, uint64 *available);
 
 	// workshop/ugc
 	bool UGCDownload(UGCHandle_t handle, uint32 priority);
@@ -190,6 +190,8 @@ public:
 	bool EndAuthSession(CSteamID steamId);
 	bool CancelAuthTicket(HAuthTicket handle);
 	EUserHasLicenseForAppResult UserHasLicenseForApp(CSteamID steamId, AppId_t appId);
+	bool RequestEncryptedAppTicket();
+	bool GetEncryptedAppTicket(char** data, uint32* length);
 
 	// overlay
 	bool ActivateGameOverlay(std::string dialog);
@@ -334,6 +336,9 @@ private:
 	               m_CallbackGetAuthSessionTicketResponse);
 	STEAM_CALLBACK(CSteam, OnValidateAuthTicketResponse, ValidateAuthTicketResponse_t,
 	               m_OnValidateAuthTicketResponse);
+	STEAM_CALLRESULT(CSteam, OnEncryptedAppTicketResponse, EncryptedAppTicketResponse_t,
+		m_CallbackEncryptedAppTicketResponse);
+
 
 	// overlay
 	STEAM_CALLBACK(CSteam, OnGameOverlayActivated, GameOverlayActivated_t,

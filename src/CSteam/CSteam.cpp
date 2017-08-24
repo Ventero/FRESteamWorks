@@ -391,7 +391,7 @@ bool CSteam::SetCloudEnabledForApp(bool enabled) {
 	return enabled == m_ctx.SteamRemoteStorage()->IsCloudEnabledForApp();
 }
 
-bool CSteam::GetQuota(int32 *total, int32 *available) {
+bool CSteam::GetQuota(uint64 *total, uint64 *available) {
 	if (!m_bInitialized) return false;
 
 	return m_ctx.SteamRemoteStorage()->GetQuota(total, available);
@@ -764,6 +764,27 @@ EUserHasLicenseForAppResult CSteam::UserHasLicenseForApp(CSteamID steamId, AppId
 	return m_ctx.SteamUser()->UserHasLicenseForApp(steamId, appId);
 }
 
+bool CSteam::RequestEncryptedAppTicket()
+{
+	if (!m_bInitialized) return false;
+	uint16 k_unSecretData = 0x4040;
+	SteamAPICall_t result = m_ctx.SteamUser()->RequestEncryptedAppTicket(&k_unSecretData, sizeof(k_unSecretData));
+	m_CallbackEncryptedAppTicketResponse.Set(result, this, &CSteam::OnEncryptedAppTicketResponse);
+	return true;
+}
+
+bool CSteam::GetEncryptedAppTicket(char** data, uint32* length) {
+	if (!m_bInitialized) return false;
+
+	// the docs don't state a maximum length anywhere, so just use what their
+	// example app uses ...
+	const int bufsize = 1024;
+	char* buf = new char[bufsize];
+	bool ret = m_ctx.SteamUser()->GetEncryptedAppTicket(buf, bufsize, length);
+	*data = buf;
+	return ret;
+}
+
 // overlay
 bool CSteam::ActivateGameOverlay(std::string dialog) {
 	if (!m_bInitialized) return false;
@@ -1014,6 +1035,9 @@ void CSteam::OnValidateAuthTicketResponse(ValidateAuthTicketResponse_t *pCallbac
 	DispatchEvent(RESPONSE_OnValidateAuthTicketResponse, pCallback->m_eAuthSessionResponse);
 }
 
+void CSteam::OnEncryptedAppTicketResponse(EncryptedAppTicketResponse_t *pCallback, bool failure) {
+	DispatchEvent(RESPONSE_OnEncryptedAppTicketResponse, pCallback->m_eResult);
+}
 
 void CSteam::OnDLCInstalled(DlcInstalled_t *pCallback) {
 	m_DLCInstalled = pCallback->m_nAppID;

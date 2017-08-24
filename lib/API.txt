@@ -297,7 +297,7 @@ public function setCloudEnabledForApp(enabled:Boolean):Boolean
 
 // GetQuota(...)
 // @default []
-// Returns an Array containing two ints, total and available bytes, in that order.
+// Returns an Array containing two strings, total and available bytes count, in that order.
 public function getQuota():Array
 
 /******************/
@@ -604,6 +604,18 @@ public function cancelAuthTicket(ticketHandle:uint):Boolean
 // Only call this after receiving a RESPONSE_OnValidateAuthTicketResponse event
 // with response = USerConstants.SESSION_OK.
 public function userHasLicenseForApp(steamID:String, appID:uint):int
+
+// RequestEncryptedAppTicket()
+// @default false
+// @event RESPONSE_OnEncryptedAppTicketResponse, response = m_eResult
+// Requests an application ticket encrypted with the secret "encrypted app ticket key".
+// If response = SteamResults.OK, call GetEncryptedAppTicket to get the ticket data.
+public function requestEncryptedAppTicket():Boolean
+
+// GetEncryptedAppTicket(...)
+// @default false
+// The encrypted app ticket will be written to the passed ByteArray, after clearing it first.
+public function getEncryptedAppTicket(ticket:ByteArray):Boolean
 
 /***********/
 /* Overlay */

@@ -92,6 +92,7 @@ package {
 			addButton("Toggle cloud enabled", toggleCloudEnabled, _buttonContainer);
 			addButton("Toggle fullscreen", toggleFullscreen, _buttonContainer);
 			addButton("Get auth ticket", getAuthTicket, _buttonContainer);
+			addButton("Get encrypted app ticket", requestEncryptedAppTicket, _buttonContainer);
 			addButton("Invalid API call", invalidCall, _buttonContainer);
 
 			addButton("Back", null, _statsContainer);
@@ -391,6 +392,22 @@ package {
 				s += (n.length < 2 ? "0" : "") + n;
 			}
 			log("Ticket: " + ticket.bytesAvailable + "//" + ticket.length + "\n" + s);
+		}
+
+		private function requestEncryptedAppTicket(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+			log("Try to request encrypted app ticket");
+			var result:Boolean = Steamworks.requestEncryptedAppTicket();
+			log("Request encrypted app ticket result: " + result);
+		}
+
+		private function logEncryptedAppTicket(ticket:ByteArray):void {
+			var s:String = "";
+			for (var i:int = 0; i < ticket.length; ++i) {
+				var n:String = ticket[i].toString(16);
+				s += (n.length < 2 ? "0" : "") + n;
+			}
+			log("Encrypted app ticket: " + ticket.bytesAvailable + "//" + ticket.length + "\n" + s);
 		}
 
 		private function activateOverlay(e:Event = null):void {
@@ -914,6 +931,16 @@ package {
 					log("beginAuthSession(ticket, " + _userId + ") == " + Steamworks.beginAuthSession(
 						authTicket, _userId));
 
+					break;
+				case SteamConstants.RESPONSE_OnEncryptedAppTicketResponse:
+					log("RESPONSE_OnGetEncryptedAppKeyResponse: " + e.response);
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
+					var encryptedAppTicket:ByteArray = new ByteArray();
+					Steamworks.getEncryptedAppTicket(encryptedAppTicket);
+					logEncryptedAppTicket(encryptedAppTicket);
 					break;
 				case SteamConstants.RESPONSE_OnValidateAuthTicketResponse:
 					log("RESPONSE_OnValidateAuthTicketResponse: " + e.response);

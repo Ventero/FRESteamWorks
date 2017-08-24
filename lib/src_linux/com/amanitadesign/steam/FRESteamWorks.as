@@ -150,34 +150,36 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_EndAuthSession:int = 88;
 		private static const AIRSteam_CancelAuthTicket:int = 89;
 		private static const AIRSteam_UserHasLicenseForApp:int = 90;
+		private static const AIRSteam_RequestEncryptedAppTicket:int = 91;
+		private static const AIRSteam_GetEncryptedAppTicket:int = 92;
 		/***********/
 		/* Overlay */
 		/***********/
-		private static const AIRSteam_ActivateGameOverlay:int = 91;
-		private static const AIRSteam_ActivateGameOverlayToUser:int = 92;
-		private static const AIRSteam_ActivateGameOverlayToWebPage:int = 93;
-		private static const AIRSteam_ActivateGameOverlayToStore:int = 94;
-		private static const AIRSteam_ActivateGameOverlayInviteDialog:int = 95;
-		private static const AIRSteam_IsOverlayEnabled:int = 96;
-		private static const AIRSteam_SetOverlayNotificationPosition:int = 97;
+		private static const AIRSteam_ActivateGameOverlay:int = 93;
+		private static const AIRSteam_ActivateGameOverlayToUser:int = 94;
+		private static const AIRSteam_ActivateGameOverlayToWebPage:int = 95;
+		private static const AIRSteam_ActivateGameOverlayToStore:int = 96;
+		private static const AIRSteam_ActivateGameOverlayInviteDialog:int = 97;
+		private static const AIRSteam_IsOverlayEnabled:int = 98;
+		private static const AIRSteam_SetOverlayNotificationPosition:int = 99;
 		/***********************/
 		/* DLC / subscriptions */
 		/***********************/
-		private static const AIRSteam_IsSubscribedApp:int = 98;
-		private static const AIRSteam_IsDLCInstalled:int = 99;
-		private static const AIRSteam_GetDLCCount:int = 100;
-		private static const AIRSteam_InstallDLC:int = 101;
-		private static const AIRSteam_UninstallDLC:int = 102;
-		private static const AIRSteam_DLCInstalledResult:int = 103;
+		private static const AIRSteam_IsSubscribedApp:int = 100;
+		private static const AIRSteam_IsDLCInstalled:int = 101;
+		private static const AIRSteam_GetDLCCount:int = 102;
+		private static const AIRSteam_InstallDLC:int = 103;
+		private static const AIRSteam_UninstallDLC:int = 104;
+		private static const AIRSteam_DLCInstalledResult:int = 105;
 		/********************/
 		/* Microtransaction */
 		/********************/
-		private static const AIRSteam_MicroTxnResult:int = 104;
+		private static const AIRSteam_MicroTxnResult:int = 106;
 		/**********************************/
 		/* Other non-Steamworks functions */
 		/**********************************/
-		private static const AIRSteam_GetEnv:int = 105;
-		private static const AIRSteam_SetEnv:int = 106;
+		private static const AIRSteam_GetEnv:int = 107;
+		private static const AIRSteam_SetEnv:int = 108;
 		// END GENERATED VALUES
 
 		public function FRESteamWorks (target:IEventDispatcher = null) {
@@ -966,6 +968,16 @@ package com.amanitadesign.steam {
 		public function userHasLicenseForApp(steamID:String, appID:uint):int {
 			if(!callWrapper(AIRSteam_UserHasLicenseForApp, [steamID, appID])) return UserConstants.LICENSE_NoAuth;
 			return readIntResponse();
+		}
+
+		public function requestEncryptedAppTicket():Boolean {
+			if(!callWrapper(AIRSteam_RequestEncryptedAppTicket, [])) return false;
+			return readBoolResponse();
+		}
+
+		public function getEncryptedAppTicket(ticket:ByteArray):Boolean {
+			if(!callWrapper(AIRSteam_GetEncryptedAppTicket, [ticket])) return false;
+			return readBoolResponse();
 		}
 
 		/***********/

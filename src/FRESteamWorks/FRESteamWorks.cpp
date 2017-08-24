@@ -583,12 +583,12 @@ AIR_FUNC(AIRSteam_SetCloudEnabledForApp) {
 AIR_FUNC(AIRSteam_GetQuota) {
 	if (!g_Steam) return FREArray(0);
 
-	int32 total, avail;
+	uint64 total, avail;
 	if (!g_Steam->GetQuota(&total, &avail)) return FREArray(0);
 
 	FREObject array = FREArray(2);
-	FRESetArrayElementAt(array, 0, FREInt(total));
-	FRESetArrayElementAt(array, 1, FREInt(avail));
+	FRESetArrayElementAt(array, 0, FREUint64(total));
+	FRESetArrayElementAt(array, 1, FREUint64(avail));
 
 	return array;
 }
@@ -1273,6 +1273,35 @@ AIR_FUNC(AIRSteam_UserHasLicenseForApp) {
 		  !FREGetUint32(argv[1], &appId)) return FREInt(k_EUserHasLicenseResultNoAuth);
 
 	return FREInt(g_Steam->UserHasLicenseForApp(CSteamID(steamId), appId));
+}
+
+AIR_FUNC(AIRSteam_RequestEncryptedAppTicket) {
+	if (!g_Steam) return 0;
+	bool result = g_Steam->RequestEncryptedAppTicket();
+	return FREBool(result);
+}
+
+AIR_FUNC(AIRSteam_GetEncryptedAppTicket) {
+	ARG_CHECK(1, FREBool(false));
+
+	char* data = nullptr;
+	uint32 length = 0;
+	bool ret = g_Steam->GetEncryptedAppTicket(&data, &length);
+
+	SET_PROP(argv[0], "length", FREUint(length));
+
+	FREByteArray byteArray;
+	if (FREAcquireByteArray(argv[0], &byteArray) != FRE_OK) {
+		delete[] data;
+		return FREBool(false);
+	}
+
+	memcpy(byteArray.bytes, data, length);
+	delete[] data;
+
+	FREReleaseByteArray(argv[0]);
+
+	return FREBool(ret);
 }
 
 /*

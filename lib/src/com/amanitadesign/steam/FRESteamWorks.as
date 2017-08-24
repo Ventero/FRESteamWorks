@@ -495,6 +495,14 @@ package com.amanitadesign.steam {
 			return _ExtensionContext.call("AIRSteam_UserHasLicenseForApp", steamID, appID) as int;
 		}
 
+		public function requestEncryptedAppTicket():Boolean {
+			return _ExtensionContext.call("AIRSteam_RequestEncryptedAppTicket") as Boolean;
+		}
+
+		public function getEncryptedAppTicket(ticket:ByteArray):Boolean {
+			return _ExtensionContext.call("AIRSteam_GetEncryptedAppTicket", ticket) as Boolean;
+		}
+
 		/***********/
 		/* Overlay */
 		/***********/
