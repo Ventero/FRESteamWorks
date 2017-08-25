@@ -557,6 +557,15 @@ public function getFriendByIndex(index:int, flags:uint):String
 // @default ""
 public function getFriendPersonaName(id:String):String
 
+// GetSmallFriendAvatar(id)
+// @default null
+// Returns friend small avatar bitmap data
+public function getSmallFriendAvatar(id:String):BitmapData
+
+// GetMediumFriendAvatar(id)
+// @default null
+// Returns friend medium avatar bitmap data
+public function getMediumFriendAvatar(id:String):BitmapData
 /******************************/
 /* Authentication & Ownership */
 /******************************/

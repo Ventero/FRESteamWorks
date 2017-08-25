@@ -9,6 +9,7 @@
  */
 
 package com.amanitadesign.steam {
+	import flash.display.BitmapData;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -466,6 +467,14 @@ package com.amanitadesign.steam {
 
 		public function getFriendPersonaName(id:String):String {
 			return _ExtensionContext.call("AIRSteam_GetFriendPersonaName", id) as String;
+		}
+
+		public function getSmallFriendAvatar(id:String):BitmapData {
+			return _ExtensionContext.call("AIRSteam_GetSmallFriendAvatar", id) as BitmapData;
+		}
+
+		public function getMediumFriendAvatar(id:String):BitmapData {
+			return _ExtensionContext.call("AIRSteam_GetMediumFriendAvatar", id) as BitmapData;
 		}
 
 		/******************************/

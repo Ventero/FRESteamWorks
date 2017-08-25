@@ -7,6 +7,7 @@
  */
 
 package com.amanitadesign.steam {
+	import flash.display.BitmapData;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.IEventDispatcher;
 	import flash.utils.ByteArray;
@@ -128,6 +129,8 @@ package com.amanitadesign.steam {
 		function getFriendCount(flags:uint):int
 		function getFriendByIndex(index:int, flags:uint):String
 		function getFriendPersonaName(id:String):String
+		function getSmallFriendAvatar(id:String):BitmapData
+		function getMediumFriendAvatar(id:String):BitmapData
 		/******************************/
 		/* Authentication & Ownership */
 		/******************************/

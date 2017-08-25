@@ -141,45 +141,47 @@ package com.amanitadesign.steam {
 		private static const AIRSteam_GetFriendCount:int = 82;
 		private static const AIRSteam_GetFriendByIndex:int = 83;
 		private static const AIRSteam_GetFriendPersonaName:int = 84;
+		private static const AIRSteam_GetSmallFriendAvatar:int = 85;
+		private static const AIRSteam_GetMediumFriendAvatar:int = 86;
 		/******************************/
 		/* Authentication & Ownership */
 		/******************************/
-		private static const AIRSteam_GetAuthSessionTicket:int = 85;
-		private static const AIRSteam_GetAuthSessionTicketResult:int = 86;
-		private static const AIRSteam_BeginAuthSession:int = 87;
-		private static const AIRSteam_EndAuthSession:int = 88;
-		private static const AIRSteam_CancelAuthTicket:int = 89;
-		private static const AIRSteam_UserHasLicenseForApp:int = 90;
-		private static const AIRSteam_RequestEncryptedAppTicket:int = 91;
-		private static const AIRSteam_GetEncryptedAppTicket:int = 92;
+		private static const AIRSteam_GetAuthSessionTicket:int = 87;
+		private static const AIRSteam_GetAuthSessionTicketResult:int = 88;
+		private static const AIRSteam_BeginAuthSession:int = 89;
+		private static const AIRSteam_EndAuthSession:int = 90;
+		private static const AIRSteam_CancelAuthTicket:int = 91;
+		private static const AIRSteam_UserHasLicenseForApp:int = 92;
+		private static const AIRSteam_RequestEncryptedAppTicket:int = 93;
+		private static const AIRSteam_GetEncryptedAppTicket:int = 94;
 		/***********/
 		/* Overlay */
 		/***********/
-		private static const AIRSteam_ActivateGameOverlay:int = 93;
-		private static const AIRSteam_ActivateGameOverlayToUser:int = 94;
-		private static const AIRSteam_ActivateGameOverlayToWebPage:int = 95;
-		private static const AIRSteam_ActivateGameOverlayToStore:int = 96;
-		private static const AIRSteam_ActivateGameOverlayInviteDialog:int = 97;
-		private static const AIRSteam_IsOverlayEnabled:int = 98;
-		private static const AIRSteam_SetOverlayNotificationPosition:int = 99;
+		private static const AIRSteam_ActivateGameOverlay:int = 95;
+		private static const AIRSteam_ActivateGameOverlayToUser:int = 96;
+		private static const AIRSteam_ActivateGameOverlayToWebPage:int = 97;
+		private static const AIRSteam_ActivateGameOverlayToStore:int = 98;
+		private static const AIRSteam_ActivateGameOverlayInviteDialog:int = 99;
+		private static const AIRSteam_IsOverlayEnabled:int = 100;
+		private static const AIRSteam_SetOverlayNotificationPosition:int = 101;
 		/***********************/
 		/* DLC / subscriptions */
 		/***********************/
-		private static const AIRSteam_IsSubscribedApp:int = 100;
-		private static const AIRSteam_IsDLCInstalled:int = 101;
-		private static const AIRSteam_GetDLCCount:int = 102;
-		private static const AIRSteam_InstallDLC:int = 103;
-		private static const AIRSteam_UninstallDLC:int = 104;
-		private static const AIRSteam_DLCInstalledResult:int = 105;
+		private static const AIRSteam_IsSubscribedApp:int = 102;
+		private static const AIRSteam_IsDLCInstalled:int = 103;
+		private static const AIRSteam_GetDLCCount:int = 104;
+		private static const AIRSteam_InstallDLC:int = 105;
+		private static const AIRSteam_UninstallDLC:int = 106;
+		private static const AIRSteam_DLCInstalledResult:int = 107;
 		/********************/
 		/* Microtransaction */
 		/********************/
-		private static const AIRSteam_MicroTxnResult:int = 106;
+		private static const AIRSteam_MicroTxnResult:int = 108;
 		/**********************************/
 		/* Other non-Steamworks functions */
 		/**********************************/
-		private static const AIRSteam_GetEnv:int = 107;
-		private static const AIRSteam_SetEnv:int = 108;
+		private static const AIRSteam_GetEnv:int = 109;
+		private static const AIRSteam_SetEnv:int = 110;
 		// END GENERATED VALUES
 
 		public function FRESteamWorks (target:IEventDispatcher = null) {
@@ -937,6 +939,16 @@ package com.amanitadesign.steam {
 		public function getFriendPersonaName(id:String):String {
 			if(!callWrapper(AIRSteam_GetFriendPersonaName, [id])) return "";
 			return readStringResponse();
+		}
+
+		public function getSmallFriendAvatar(id:String):BitmapData {
+			if(!callWrapper(AIRSteam_GetSmallFriendAvatar, [id])) return null;
+			return readResponse() as BitmapData;
+		}
+
+		public function getMediumFriendAvatar(id:String):BitmapData {
+			if(!callWrapper(AIRSteam_GetMediumFriendAvatar, [id])) return null;
+			return readResponse() as BitmapData;
 		}
 
 		/******************************/

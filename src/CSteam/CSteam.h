@@ -182,6 +182,8 @@ public:
 	int GetFriendCount(int flags);
 	CSteamID GetFriendByIndex(int index, int flags);
 	std::string GetFriendPersonaName(CSteamID steamId);
+	uint8* GetSmallFriendAvatar(CSteamID steamId, uint32* width, uint32* height);
+	uint8* GetMediumFriendAvatar(CSteamID steamId, uint32* width, uint32* height);
 
 	// authentication & ownership
 	HAuthTicket GetAuthSessionTicket(char** data, uint32* length);
@@ -232,6 +234,8 @@ private:
 	std::map<UGCHandle_t, RemoteStorageDownloadUGCResult_t> m_DownloadResults;
 	std::map<PublishedFileId_t, RemoteStorageGetPublishedFileDetailsResult_t> m_PublishedFileDetails;
 	std::queue<MicroTxnAuthorizationResponse_t> m_MicroTxnResponses;
+
+	uint8* GetImageData(int iImage, uint32* width, uint32* height);
 
 	// can't use unique_ptr because we need to target OS X 10.6 ...
 #pragma GCC diagnostic push

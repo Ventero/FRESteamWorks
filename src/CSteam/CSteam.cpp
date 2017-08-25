@@ -718,6 +718,40 @@ std::string CSteam::GetFriendPersonaName(CSteamID steamId) {
 	return std::string(m_ctx.SteamFriends()->GetFriendPersonaName(steamId));
 }
 
+uint8* CSteam::GetSmallFriendAvatar(CSteamID steamId, uint32* width, uint32* height)
+{
+	if (!m_bInitialized) return NULL;
+
+	int iImage = m_ctx.SteamFriends()->GetSmallFriendAvatar(steamId);
+	uint8 *pImageRGBA = GetImageData(iImage, width, height);
+	return pImageRGBA;
+}
+
+uint8* CSteam::GetMediumFriendAvatar(CSteamID steamId, uint32* width, uint32* height)
+{
+	if (!m_bInitialized) return NULL;
+
+	int iImage = m_ctx.SteamFriends()->GetMediumFriendAvatar(steamId);
+	uint8 *pImageRGBA = GetImageData(iImage, width, height);
+	return pImageRGBA;
+}
+
+uint8* CSteam::GetImageData(int iImage, uint32* width, uint32* height)
+{
+	bool success = m_ctx.SteamUtils()->GetImageSize(iImage, width, height);
+
+	if (!success) return NULL;
+
+	int uImageSizeInPixels = (*width) * (*height);
+	int uImageSizeInBytes = uImageSizeInPixels * 4;
+
+	uint8 *pImageRGBA = new uint8[uImageSizeInBytes];
+	success = SteamUtils()->GetImageRGBA(iImage, pImageRGBA, uImageSizeInBytes);
+
+	if (!success) return NULL;
+	return pImageRGBA;
+}
+
 // authentication & ownership
 HAuthTicket CSteam::GetAuthSessionTicket(char** data, uint32* length) {
 	if (!m_bInitialized) return k_HAuthTicketInvalid;

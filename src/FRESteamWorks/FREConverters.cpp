@@ -65,6 +65,61 @@ FREObject FREArray(uint32 length) {
 	return array;
 }
 
+FREObject FREBitmapDataFromImageRGBA(uint32 width, uint32 height, uint8* pImageRGBA)
+{
+	FREObject freWidth;
+	FRENewObjectFromUint32(uint32_t(width), &freWidth);
+
+	FREObject freHeight;
+	FRENewObjectFromUint32(uint32_t(height), &freHeight);
+
+	FREObject freTransparent;
+	FRENewObjectFromBool(uint32_t(0), &freTransparent);
+
+	FREObject freFillColor;
+	FRENewObjectFromUint32(uint32_t(0xFF0000), &freFillColor);
+
+	FREObject freArguments[4] = { freWidth, freHeight, freTransparent, freFillColor };
+
+	FREObject freoBitmapData;
+	FRENewObject((uint8_t *)"flash.display.BitmapData", 4, freArguments, &freoBitmapData, NULL);
+
+	FREBitmapData freBitmapData;
+	FREAcquireBitmapData(freoBitmapData, &freBitmapData);
+
+	int x, y;
+	// There may be extra pixels in each row due to the value of
+	// bmd.lineStride32, we'll skip over those as needed
+	int offset = freBitmapData.lineStride32 - freBitmapData.width;
+	uint32_t *bmdPixels = freBitmapData.bits32;
+
+	int index = 0;
+	int bitmapWidth = freBitmapData.width;
+	int bitmapHeight = freBitmapData.height;
+	for (y = bitmapHeight - 1; y > -1; y--)
+	{
+		for (x = 0; x < bitmapWidth; x++, bmdPixels++)
+		{
+			index = y * freBitmapData.width + x;
+			int red = *(pImageRGBA + index * 4);
+			int green = *(pImageRGBA + index * 4 + 1);
+			int blue = *(pImageRGBA + index * 4 + 2);
+			int alpha = *(pImageRGBA + index * 4 + 3);
+
+			// Combine values into ARGB32
+			*bmdPixels = (alpha << 24) | (red << 16) | (green << 8) | blue;
+		}
+		bmdPixels += offset;
+	}
+
+	FREInvalidateBitmapDataRect(freoBitmapData, 0, 0, freBitmapData.width, freBitmapData.height);
+	// Release our control over the bitmapData
+	FREReleaseBitmapData(freoBitmapData);
+
+	delete[] pImageRGBA;
+	return freoBitmapData;
+}
+
 /*
  * Functions to extract native primitives out of FREObjects.
  */

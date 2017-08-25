@@ -103,43 +103,45 @@ X(AIRSteam_SetUserPublishedFileAction) /* = 81 */
 X(AIRSteam_GetFriendCount) /* = 82 */
 X(AIRSteam_GetFriendByIndex) /* = 83 */
 X(AIRSteam_GetFriendPersonaName) /* = 84 */
+X(AIRSteam_GetSmallFriendAvatar) /* = 85 */
+X(AIRSteam_GetMediumFriendAvatar) /* = 86 */
 /******************************/
 /* Authentication & Ownership */
 /******************************/
-X(AIRSteam_GetAuthSessionTicket) /* = 85 */
-X(AIRSteam_GetAuthSessionTicketResult) /* = 86 */
-X(AIRSteam_BeginAuthSession) /* = 87 */
-X(AIRSteam_EndAuthSession) /* = 88 */
-X(AIRSteam_CancelAuthTicket) /* = 89 */
-X(AIRSteam_UserHasLicenseForApp) /* = 90 */
-X(AIRSteam_RequestEncryptedAppTicket) /* = 91 */
-X(AIRSteam_GetEncryptedAppTicket) /* = 92 */
+X(AIRSteam_GetAuthSessionTicket) /* = 87 */
+X(AIRSteam_GetAuthSessionTicketResult) /* = 88 */
+X(AIRSteam_BeginAuthSession) /* = 89 */
+X(AIRSteam_EndAuthSession) /* = 90 */
+X(AIRSteam_CancelAuthTicket) /* = 91 */
+X(AIRSteam_UserHasLicenseForApp) /* = 92 */
+X(AIRSteam_RequestEncryptedAppTicket) /* = 93 */
+X(AIRSteam_GetEncryptedAppTicket) /* = 94 */
 /***********/
 /* Overlay */
 /***********/
-X(AIRSteam_ActivateGameOverlay) /* = 93 */
-X(AIRSteam_ActivateGameOverlayToUser) /* = 94 */
-X(AIRSteam_ActivateGameOverlayToWebPage) /* = 95 */
-X(AIRSteam_ActivateGameOverlayToStore) /* = 96 */
-X(AIRSteam_ActivateGameOverlayInviteDialog) /* = 97 */
-X(AIRSteam_IsOverlayEnabled) /* = 98 */
-X(AIRSteam_SetOverlayNotificationPosition) /* = 99 */
+X(AIRSteam_ActivateGameOverlay) /* = 95 */
+X(AIRSteam_ActivateGameOverlayToUser) /* = 96 */
+X(AIRSteam_ActivateGameOverlayToWebPage) /* = 97 */
+X(AIRSteam_ActivateGameOverlayToStore) /* = 98 */
+X(AIRSteam_ActivateGameOverlayInviteDialog) /* = 99 */
+X(AIRSteam_IsOverlayEnabled) /* = 100 */
+X(AIRSteam_SetOverlayNotificationPosition) /* = 101 */
 /***********************/
 /* DLC / subscriptions */
 /***********************/
-X(AIRSteam_IsSubscribedApp) /* = 100 */
-X(AIRSteam_IsDLCInstalled) /* = 101 */
-X(AIRSteam_GetDLCCount) /* = 102 */
-X(AIRSteam_InstallDLC) /* = 103 */
-X(AIRSteam_UninstallDLC) /* = 104 */
-X(AIRSteam_DLCInstalledResult) /* = 105 */
+X(AIRSteam_IsSubscribedApp) /* = 102 */
+X(AIRSteam_IsDLCInstalled) /* = 103 */
+X(AIRSteam_GetDLCCount) /* = 104 */
+X(AIRSteam_InstallDLC) /* = 105 */
+X(AIRSteam_UninstallDLC) /* = 106 */
+X(AIRSteam_DLCInstalledResult) /* = 107 */
 /********************/
 /* Microtransaction */
 /********************/
-X(AIRSteam_MicroTxnResult) /* = 106 */
+X(AIRSteam_MicroTxnResult) /* = 108 */
 /**********************************/
 /* Other non-Steamworks functions */
 /**********************************/
-X(AIRSteam_GetEnv) /* = 107 */
-X(AIRSteam_SetEnv) /* = 108 */
+X(AIRSteam_GetEnv) /* = 109 */
+X(AIRSteam_SetEnv) /* = 110 */
 /* END GENERATED CODE */
