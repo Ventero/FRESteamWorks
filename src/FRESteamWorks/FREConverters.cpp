@@ -84,10 +84,10 @@ FREObject FREBitmapDataFromImageRGBA(uint32 width, uint32 height, uint8* pImageR
 	FREObject freoBitmapData;
 	FRENewObject((uint8_t *)"flash.display.BitmapData", 4, freArguments, &freoBitmapData, NULL);
 
-	FREBitmapData freBitmapData;
-	FREAcquireBitmapData(freoBitmapData, &freBitmapData);
+	FREBitmapData2 freBitmapData;
+	FREAcquireBitmapData2(freoBitmapData, &freBitmapData);
 
-	int x, y;
+	int x, y, y2;
 	// There may be extra pixels in each row due to the value of
 	// bmd.lineStride32, we'll skip over those as needed
 	int offset = freBitmapData.lineStride32 - freBitmapData.width;
@@ -96,11 +96,12 @@ FREObject FREBitmapDataFromImageRGBA(uint32 width, uint32 height, uint8* pImageR
 	int index = 0;
 	int bitmapWidth = freBitmapData.width;
 	int bitmapHeight = freBitmapData.height;
-	for (y = bitmapHeight - 1; y > -1; y--)
+	for (y = 0; y < bitmapHeight; y++)
 	{
+		y2 = freBitmapData.isInvertedY ? (bitmapHeight - y - 1) : y;
 		for (x = 0; x < bitmapWidth; x++, bmdPixels++)
 		{
-			index = y * freBitmapData.width + x;
+			index = y2 * freBitmapData.width + x;
 			int red = *(pImageRGBA + index * 4);
 			int green = *(pImageRGBA + index * 4 + 1);
 			int blue = *(pImageRGBA + index * 4 + 2);
