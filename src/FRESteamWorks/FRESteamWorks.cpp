@@ -1199,12 +1199,12 @@ AIR_FUNC(AIRSteam_GetSmallFriendAvatar) {
 	ARG_CHECK(1, FREInt(0));
 
 	uint64 steamId;
-	if (!FREGetUint64(argv[0], &steamId)) return FREString("");
+	if (!FREGetUint64(argv[0], &steamId)) return nullptr;
 
 	uint32 avatarWidth, avatarHeight;
 	uint8* imageRGBA = g_Steam->GetSmallFriendAvatar(CSteamID(steamId), &avatarWidth, &avatarHeight);
 
-	if (imageRGBA == NULL) return NULL;
+	if (imageRGBA == NULL) return nullptr;
 	return FREBitmapDataFromImageRGBA(avatarWidth, avatarHeight, imageRGBA);
 }
 
@@ -1212,12 +1212,12 @@ AIR_FUNC(AIRSteam_GetMediumFriendAvatar) {
 	ARG_CHECK(1, FREInt(0));
 
 	uint64 steamId;
-	if (!FREGetUint64(argv[0], &steamId)) return FREString("");
+	if (!FREGetUint64(argv[0], &steamId)) return nullptr;
 
 	uint32 avatarWidth, avatarHeight;
 	uint8* imageRGBA = g_Steam->GetMediumFriendAvatar(CSteamID(steamId), &avatarWidth, &avatarHeight);
 
-	if (imageRGBA == NULL) return NULL;
+	if (imageRGBA == NULL) return nullptr;
 	return FREBitmapDataFromImageRGBA(avatarWidth, avatarHeight, imageRGBA);
 }
 
