@@ -67,17 +67,13 @@ FREObject FREArray(uint32 length) {
 
 FREObject FREBitmapDataFromImageRGBA(uint32 width, uint32 height, uint8* pImageRGBA)
 {
-	FREObject freWidth;
-	FRENewObjectFromUint32(uint32_t(width), &freWidth);
+	FREObject freWidth = FREUint(width);
 
-	FREObject freHeight;
-	FRENewObjectFromUint32(uint32_t(height), &freHeight);
+	FREObject freHeight = FREUint(height);
 
-	FREObject freTransparent;
-	FRENewObjectFromBool(uint32_t(0), &freTransparent);
+	FREObject freTransparent = FREUint(0);
 
-	FREObject freFillColor;
-	FRENewObjectFromUint32(uint32_t(0xFF0000), &freFillColor);
+	FREObject freFillColor = FREUint(0);
 
 	FREObject freArguments[4] = { freWidth, freHeight, freTransparent, freFillColor };
 
