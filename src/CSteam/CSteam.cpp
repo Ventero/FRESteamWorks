@@ -746,7 +746,7 @@ uint8* CSteam::GetImageData(int iImage, uint32* width, uint32* height)
 	int uImageSizeInBytes = uImageSizeInPixels * 4;
 
 	uint8 *pImageRGBA = new uint8[uImageSizeInBytes];
-	success = SteamUtils()->GetImageRGBA(iImage, pImageRGBA, uImageSizeInBytes);
+	success = m_ctx.SteamUtils()->GetImageRGBA(iImage, pImageRGBA, uImageSizeInBytes);
 
 	if (!success) return NULL;
 	return pImageRGBA;
@@ -798,11 +798,10 @@ EUserHasLicenseForAppResult CSteam::UserHasLicenseForApp(CSteamID steamId, AppId
 	return m_ctx.SteamUser()->UserHasLicenseForApp(steamId, appId);
 }
 
-bool CSteam::RequestEncryptedAppTicket()
+bool CSteam::RequestEncryptedAppTicket(void *pDataToInclude, int cbDataToInclude)
 {
 	if (!m_bInitialized) return false;
-	uint16 k_unSecretData = 0x4040;
-	SteamAPICall_t result = m_ctx.SteamUser()->RequestEncryptedAppTicket(&k_unSecretData, sizeof(k_unSecretData));
+	SteamAPICall_t result = m_ctx.SteamUser()->RequestEncryptedAppTicket(pDataToInclude, cbDataToInclude);
 	m_CallbackEncryptedAppTicketResponse.Set(result, this, &CSteam::OnEncryptedAppTicketResponse);
 	return true;
 }

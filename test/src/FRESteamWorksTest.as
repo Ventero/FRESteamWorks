@@ -458,7 +458,8 @@ package {
 		private function requestEncryptedAppTicket(e:Event = null):void {
 			if(!Steamworks.isReady) return;
 			log("Try to request encrypted app ticket");
-			var result:Boolean = Steamworks.requestEncryptedAppTicket();
+			var byteArray:ByteArray = new ByteArray();
+			var result:Boolean = Steamworks.requestEncryptedAppTicket(byteArray);
 			log("Request encrypted app ticket result: " + result);
 		}
 

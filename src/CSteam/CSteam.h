@@ -192,7 +192,7 @@ public:
 	bool EndAuthSession(CSteamID steamId);
 	bool CancelAuthTicket(HAuthTicket handle);
 	EUserHasLicenseForAppResult UserHasLicenseForApp(CSteamID steamId, AppId_t appId);
-	bool RequestEncryptedAppTicket();
+	bool RequestEncryptedAppTicket(void *pDataToInclude, int cbDataToInclude);
 	bool GetEncryptedAppTicket(char** data, uint32* length);
 
 	// overlay

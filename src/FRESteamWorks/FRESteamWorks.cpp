@@ -1302,8 +1302,16 @@ AIR_FUNC(AIRSteam_UserHasLicenseForApp) {
 }
 
 AIR_FUNC(AIRSteam_RequestEncryptedAppTicket) {
-	if (!g_Steam) return 0;
-	bool result = g_Steam->RequestEncryptedAppTicket();
+	ARG_CHECK(1, FREBool(false));
+
+	FREByteArray byteArray;
+	if (FREAcquireByteArray(argv[0], &byteArray) != FRE_OK)
+		return FREBool(false);
+
+	bool result = g_Steam->RequestEncryptedAppTicket(byteArray.bytes, byteArray.length);
+
+	FREReleaseByteArray(argv[0]);
+
 	return FREBool(result);
 }
 

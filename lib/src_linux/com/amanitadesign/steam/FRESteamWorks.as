@@ -982,8 +982,8 @@ package com.amanitadesign.steam {
 			return readIntResponse();
 		}
 
-		public function requestEncryptedAppTicket():Boolean {
-			if(!callWrapper(AIRSteam_RequestEncryptedAppTicket, [])) return false;
+		public function requestEncryptedAppTicket(secretData:ByteArray):Boolean {
+			if(!callWrapper(AIRSteam_RequestEncryptedAppTicket, [secretData])) return false;
 			return readBoolResponse();
 		}
 

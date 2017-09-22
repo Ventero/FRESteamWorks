@@ -140,7 +140,7 @@ package com.amanitadesign.steam {
 		function endAuthSession(steamID:String):Boolean
 		function cancelAuthTicket(ticketHandle:uint):Boolean
 		function userHasLicenseForApp(steamID:String, appID:uint):int
-		function requestEncryptedAppTicket():Boolean
+		function requestEncryptedAppTicket(secretData:ByteArray):Boolean
 		function getEncryptedAppTicket(ticket:ByteArray):Boolean
 		/***********/
 		/* Overlay */
