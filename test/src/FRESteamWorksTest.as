@@ -443,16 +443,16 @@ package {
 			authTicket = new ByteArray();
 			authHandle = Steamworks.getAuthSessionTicket(authTicket)
 			log("getAuthSessionTicket(ticket) == " + authHandle);
-			logTicket(authTicket);
+			logTicket(authTicket, "authTicket");
 		}
 
-		private function logTicket(ticket:ByteArray):void {
+		private function logTicket(ticket:ByteArray, ticketName:String = "Ticket"):void {
 			var s:String = "";
 			for (var i:int = 0; i < ticket.length; ++i) {
 				var n:String = ticket[i].toString(16);
 				s += (n.length < 2 ? "0" : "") + n;
 			}
-			log("Ticket: " + ticket.bytesAvailable + "//" + ticket.length + "\n" + s);
+			log(ticketName + ": " + ticket.bytesAvailable + "//" + ticket.length + "\n" + s);
 		}
 
 		private function requestEncryptedAppTicket(e:Event = null):void {
@@ -460,15 +460,6 @@ package {
 			log("Try to request encrypted app ticket");
 			var result:Boolean = Steamworks.requestEncryptedAppTicket();
 			log("Request encrypted app ticket result: " + result);
-		}
-
-		private function logEncryptedAppTicket(ticket:ByteArray):void {
-			var s:String = "";
-			for (var i:int = 0; i < ticket.length; ++i) {
-				var n:String = ticket[i].toString(16);
-				s += (n.length < 2 ? "0" : "") + n;
-			}
-			log("Encrypted app ticket: " + ticket.bytesAvailable + "//" + ticket.length + "\n" + s);
 		}
 
 		private function activateOverlay(e:Event = null):void {
@@ -1001,7 +992,7 @@ package {
 					}
 					var encryptedAppTicket:ByteArray = new ByteArray();
 					Steamworks.getEncryptedAppTicket(encryptedAppTicket);
-					logEncryptedAppTicket(encryptedAppTicket);
+					logTicket(encryptedAppTicket, "encryptedAppTicket");
 					break;
 				case SteamConstants.RESPONSE_OnValidateAuthTicketResponse:
 					log("RESPONSE_OnValidateAuthTicketResponse: " + e.response);
