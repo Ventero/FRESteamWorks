@@ -718,8 +718,7 @@ std::string CSteam::GetFriendPersonaName(CSteamID steamId) {
 	return std::string(m_ctx.SteamFriends()->GetFriendPersonaName(steamId));
 }
 
-uint8* CSteam::GetSmallFriendAvatar(CSteamID steamId, uint32* width, uint32* height)
-{
+uint8* CSteam::GetSmallFriendAvatar(CSteamID steamId, uint32* width, uint32* height) {
 	if (!m_bInitialized) return NULL;
 
 	int iImage = m_ctx.SteamFriends()->GetSmallFriendAvatar(steamId);
@@ -727,8 +726,7 @@ uint8* CSteam::GetSmallFriendAvatar(CSteamID steamId, uint32* width, uint32* hei
 	return pImageRGBA;
 }
 
-uint8* CSteam::GetMediumFriendAvatar(CSteamID steamId, uint32* width, uint32* height)
-{
+uint8* CSteam::GetMediumFriendAvatar(CSteamID steamId, uint32* width, uint32* height) {
 	if (!m_bInitialized) return NULL;
 
 	int iImage = m_ctx.SteamFriends()->GetMediumFriendAvatar(steamId);
@@ -736,8 +734,7 @@ uint8* CSteam::GetMediumFriendAvatar(CSteamID steamId, uint32* width, uint32* he
 	return pImageRGBA;
 }
 
-uint8* CSteam::GetImageData(int iImage, uint32* width, uint32* height)
-{
+uint8* CSteam::GetImageData(int iImage, uint32* width, uint32* height) {
 	bool success = m_ctx.SteamUtils()->GetImageSize(iImage, width, height);
 
 	if (!success) return NULL;
@@ -798,8 +795,7 @@ EUserHasLicenseForAppResult CSteam::UserHasLicenseForApp(CSteamID steamId, AppId
 	return m_ctx.SteamUser()->UserHasLicenseForApp(steamId, appId);
 }
 
-bool CSteam::RequestEncryptedAppTicket(void *pDataToInclude, int cbDataToInclude)
-{
+bool CSteam::RequestEncryptedAppTicket(void *pDataToInclude, int cbDataToInclude) {
 	if (!m_bInitialized) return false;
 	SteamAPICall_t result = m_ctx.SteamUser()->RequestEncryptedAppTicket(pDataToInclude, cbDataToInclude);
 	m_CallbackEncryptedAppTicketResponse.Set(result, this, &CSteam::OnEncryptedAppTicketResponse);

@@ -614,11 +614,11 @@ public function cancelAuthTicket(ticketHandle:uint):Boolean
 // with response = USerConstants.SESSION_OK.
 public function userHasLicenseForApp(steamID:String, appID:uint):int
 
-// RequestEncryptedAppTicket(dataToInclude, dataToIncludeLength );
+// RequestEncryptedAppTicket(dataToInclude, dataToIncludeLength);
 // @default false
 // @event RESPONSE_OnEncryptedAppTicketResponse, response = m_eResult
 // Requests an application ticket encrypted with the secret "encrypted app ticket key".
-// You can pass your own secret data ByteArrayThe which will be encrypted into the ticket.
+// You can pass your own secret data ByteArray which will be encrypted into the ticket.
 // If response = SteamResults.OK, call GetEncryptedAppTicket to get the ticket data.
 public function requestEncryptedAppTicket(secretData:ByteArray):Boolean
 
