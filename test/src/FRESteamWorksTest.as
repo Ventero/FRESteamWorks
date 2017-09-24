@@ -36,7 +36,8 @@ package {
 	import com.amanitadesign.steam.WorkshopFilesResult;
 
 	import flash.desktop.NativeApplication;
-	import flash.display.SimpleButton;
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
@@ -57,8 +58,10 @@ package {
 		private var _enumerateContainer:Sprite;
 		private var _overlayContainer:Sprite;
 		private var _leaderboardsContainer:Sprite;
+		private var _friendsContainer:Sprite;
 		private var _appId:uint;
 		private var _userId:String;
+		private var _avatarBitmap:Bitmap;
 
 		public function FRESteamWorksTest() {
 			// wait for the invoke event before setting up UI etc
@@ -81,6 +84,7 @@ package {
 			_enumerateContainer = new Sprite();
 			_overlayContainer = new Sprite();
 			_leaderboardsContainer = new Sprite();
+			_friendsContainer = new Sprite();
 			_container.addChild(_buttonContainer);
 
 			addButton("Stats/achievements", null, _buttonContainer, _statsContainer);
@@ -88,10 +92,11 @@ package {
 			addButton("Enumerate workshop", null, _buttonContainer, _enumerateContainer);
 			addButton("Show overlay", null, _buttonContainer, _overlayContainer);
 			addButton("Query leaderboard", null, _buttonContainer, _leaderboardsContainer);
-			addButton("Check friends", checkFriends, _buttonContainer);
+			addButton("Friends actions", null, _buttonContainer, _friendsContainer);
 			addButton("Toggle cloud enabled", toggleCloudEnabled, _buttonContainer);
 			addButton("Toggle fullscreen", toggleFullscreen, _buttonContainer);
 			addButton("Get auth ticket", getAuthTicket, _buttonContainer);
+			addButton("Get encrypted app ticket", requestEncryptedAppTicket, _buttonContainer);
 			addButton("Invalid API call", invalidCall, _buttonContainer);
 
 			addButton("Back", null, _statsContainer);
@@ -131,6 +136,12 @@ package {
 			addButton("Upload, force", uploadForceScore, _leaderboardsContainer);
 			addButton("Upload with data", uploadScoreWithData, _leaderboardsContainer);
 			addButton("Invalid download", invalidLeaderboardEntries, _leaderboardsContainer);
+
+			addButton("Back", null, _friendsContainer);
+			addButton("Check friends", checkFriends, _friendsContainer);
+			addButton("Show small avatar", getSmallFriendAvatar, _friendsContainer);
+			addButton("Show medium avatar", getMediumFriendAvatar, _friendsContainer);
+			addButton("Hide avatar", clearAvatarBitmap, _friendsContainer);
 
 			Steamworks.addEventListener(SteamEvent.STEAM_RESPONSE, onSteamResponse);
 			Steamworks.addOverlayWorkaround(stage, true);
@@ -316,6 +327,57 @@ package {
 			}
 		}
 
+		private function getSmallFriendAvatar(e:Event = null):void {
+			if (!Steamworks.isReady) return;
+
+			var flags:int = FriendConstants.FRIENDFLAG_Immediate;
+			var count:int = Steamworks.getFriendCount(flags);
+			var id:String;
+			log("getFriendCount(Immediate) == " + count);
+			if (count > 0) {
+				id = Steamworks.getFriendByIndex(0, flags);
+				var avatarBitmapData:BitmapData = Steamworks.getSmallFriendAvatar(id);
+				log("Steamworks.getSmallFriendAvatar(" + id + ") result == " + (avatarBitmapData != null).toString());
+				changeAvatarBitmap(avatarBitmapData);
+			}
+			else log("Can't show avatar because you have no friends");
+		}
+
+		private function getMediumFriendAvatar(e:Event = null):void
+		{
+			if (!Steamworks.isReady) return;
+
+			var flags:int = FriendConstants.FRIENDFLAG_Immediate;
+			var count:int = Steamworks.getFriendCount(flags);
+			var id:String;
+			log("getFriendCount(Immediate) == " + count);
+			if (count > 0) {
+				id = Steamworks.getFriendByIndex(0, flags);
+				var avatarBitmapData:BitmapData = Steamworks.getMediumFriendAvatar(id);
+				log("Steamworks.getSmallFriendAvatar(" + id + ") result == " + (avatarBitmapData != null).toString());
+				changeAvatarBitmap(avatarBitmapData);
+			}
+			else log("Can't show avatar because you have no friends");
+		}
+
+		private function clearAvatarBitmap(e:Event = null):void
+		{
+			if (_avatarBitmap)
+			{
+				if (_avatarBitmap.parent) _avatarBitmap.parent.removeChild(_avatarBitmap);
+				_avatarBitmap.bitmapData.dispose();
+				_avatarBitmap = null;
+			}
+		}
+
+		private function changeAvatarBitmap(avatarBitmapData:BitmapData):void
+		{
+			clearAvatarBitmap();
+			_avatarBitmap = new flash.display.Bitmap(avatarBitmapData);
+			_avatarBitmap.x = stage.width - _avatarBitmap.width;
+			addChild(_avatarBitmap);
+		}
+
 		private function toggleCloudEnabled(e:Event = null):void {
 			if(!Steamworks.isReady) return;
 
@@ -381,16 +443,24 @@ package {
 			authTicket = new ByteArray();
 			authHandle = Steamworks.getAuthSessionTicket(authTicket)
 			log("getAuthSessionTicket(ticket) == " + authHandle);
-			logTicket(authTicket);
+			logTicket(authTicket, "authTicket");
 		}
 
-		private function logTicket(ticket:ByteArray):void {
+		private function logTicket(ticket:ByteArray, ticketName:String = "Ticket"):void {
 			var s:String = "";
 			for (var i:int = 0; i < ticket.length; ++i) {
 				var n:String = ticket[i].toString(16);
 				s += (n.length < 2 ? "0" : "") + n;
 			}
-			log("Ticket: " + ticket.bytesAvailable + "//" + ticket.length + "\n" + s);
+			log(ticketName + ": " + ticket.bytesAvailable + "//" + ticket.length + "\n" + s);
+		}
+
+		private function requestEncryptedAppTicket(e:Event = null):void {
+			if(!Steamworks.isReady) return;
+			log("Try to request encrypted app ticket");
+			var byteArray:ByteArray = new ByteArray();
+			var result:Boolean = Steamworks.requestEncryptedAppTicket(byteArray);
+			log("Request encrypted app ticket result: " + result);
 		}
 
 		private function activateOverlay(e:Event = null):void {
@@ -914,6 +984,16 @@ package {
 					log("beginAuthSession(ticket, " + _userId + ") == " + Steamworks.beginAuthSession(
 						authTicket, _userId));
 
+					break;
+				case SteamConstants.RESPONSE_OnEncryptedAppTicketResponse:
+					log("RESPONSE_OnGetEncryptedAppKeyResponse: " + e.response);
+					if(e.response != SteamResults.OK) {
+						log("FAILED!");
+						break;
+					}
+					var encryptedAppTicket:ByteArray = new ByteArray();
+					Steamworks.getEncryptedAppTicket(encryptedAppTicket);
+					logTicket(encryptedAppTicket, "encryptedAppTicket");
 					break;
 				case SteamConstants.RESPONSE_OnValidateAuthTicketResponse:
 					log("RESPONSE_OnValidateAuthTicketResponse: " + e.response);

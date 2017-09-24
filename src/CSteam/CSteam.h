@@ -124,7 +124,7 @@ public:
 	UGCHandle_t FileShareResult();
 	bool IsCloudEnabledForApp();
 	bool SetCloudEnabledForApp(bool enabled);
-	bool GetQuota(int32 *total, int32 *available);
+	bool GetQuota(uint64 *total, uint64 *available);
 
 	// workshop/ugc
 	bool UGCDownload(UGCHandle_t handle, uint32 priority);
@@ -182,6 +182,8 @@ public:
 	int GetFriendCount(int flags);
 	CSteamID GetFriendByIndex(int index, int flags);
 	std::string GetFriendPersonaName(CSteamID steamId);
+	uint8* GetSmallFriendAvatar(CSteamID steamId, uint32* width, uint32* height);
+	uint8* GetMediumFriendAvatar(CSteamID steamId, uint32* width, uint32* height);
 
 	// authentication & ownership
 	HAuthTicket GetAuthSessionTicket(char** data, uint32* length);
@@ -190,6 +192,8 @@ public:
 	bool EndAuthSession(CSteamID steamId);
 	bool CancelAuthTicket(HAuthTicket handle);
 	EUserHasLicenseForAppResult UserHasLicenseForApp(CSteamID steamId, AppId_t appId);
+	bool RequestEncryptedAppTicket(void *pDataToInclude, int cbDataToInclude);
+	bool GetEncryptedAppTicket(char** data, uint32* length);
 
 	// overlay
 	bool ActivateGameOverlay(std::string dialog);
@@ -230,6 +234,8 @@ private:
 	std::map<UGCHandle_t, RemoteStorageDownloadUGCResult_t> m_DownloadResults;
 	std::map<PublishedFileId_t, RemoteStorageGetPublishedFileDetailsResult_t> m_PublishedFileDetails;
 	std::queue<MicroTxnAuthorizationResponse_t> m_MicroTxnResponses;
+
+	uint8* GetImageData(int iImage, uint32* width, uint32* height);
 
 	// can't use unique_ptr because we need to target OS X 10.6 ...
 #pragma GCC diagnostic push
@@ -334,6 +340,9 @@ private:
 	               m_CallbackGetAuthSessionTicketResponse);
 	STEAM_CALLBACK(CSteam, OnValidateAuthTicketResponse, ValidateAuthTicketResponse_t,
 	               m_OnValidateAuthTicketResponse);
+	STEAM_CALLRESULT(CSteam, OnEncryptedAppTicketResponse, EncryptedAppTicketResponse_t,
+		m_CallbackEncryptedAppTicketResponse);
+
 
 	// overlay
 	STEAM_CALLBACK(CSteam, OnGameOverlayActivated, GameOverlayActivated_t,

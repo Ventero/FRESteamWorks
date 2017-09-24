@@ -297,7 +297,7 @@ public function setCloudEnabledForApp(enabled:Boolean):Boolean
 
 // GetQuota(...)
 // @default []
-// Returns an Array containing two ints, total and available bytes, in that order.
+// Returns an Array containing two strings, total and available bytes count, in that order.
 public function getQuota():Array
 
 /******************/
@@ -557,6 +557,15 @@ public function getFriendByIndex(index:int, flags:uint):String
 // @default ""
 public function getFriendPersonaName(id:String):String
 
+// GetSmallFriendAvatar(id)
+// @default null
+// Returns friend small avatar bitmap data
+public function getSmallFriendAvatar(id:String):BitmapData
+
+// GetMediumFriendAvatar(id)
+// @default null
+// Returns friend medium avatar bitmap data
+public function getMediumFriendAvatar(id:String):BitmapData
 /******************************/
 /* Authentication & Ownership */
 /******************************/
@@ -604,6 +613,19 @@ public function cancelAuthTicket(ticketHandle:uint):Boolean
 // Only call this after receiving a RESPONSE_OnValidateAuthTicketResponse event
 // with response = USerConstants.SESSION_OK.
 public function userHasLicenseForApp(steamID:String, appID:uint):int
+
+// RequestEncryptedAppTicket(dataToInclude, dataToIncludeLength );
+// @default false
+// @event RESPONSE_OnEncryptedAppTicketResponse, response = m_eResult
+// Requests an application ticket encrypted with the secret "encrypted app ticket key".
+// You can pass your own secret data ByteArrayThe which will be encrypted into the ticket.
+// If response = SteamResults.OK, call GetEncryptedAppTicket to get the ticket data.
+public function requestEncryptedAppTicket(secretData:ByteArray):Boolean
+
+// GetEncryptedAppTicket(...)
+// @default false
+// The encrypted app ticket will be written to the passed ByteArray, after clearing it first.
+public function getEncryptedAppTicket(ticket:ByteArray):Boolean
 
 /***********/
 /* Overlay */
