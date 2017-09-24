@@ -1,4 +1,4 @@
-#!/usr/bin/ruby1.9.1
+#!/usr/bin/env ruby
 
 def create_lib line, func
 	<<-EOD
