@@ -444,6 +444,7 @@ package {
 			if(!Steamworks.isReady) return;
 			log("Try to request encrypted app ticket");
 			var byteArray:ByteArray = new ByteArray();
+			byteArray.writeUTFBytes("Example payload");
 			var result:Boolean = Steamworks.requestEncryptedAppTicket(byteArray);
 			log("Request encrypted app ticket result: " + result);
 		}

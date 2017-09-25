@@ -1093,6 +1093,28 @@ int AIRSteam_UserHasLicenseForApp() {
 	return g_Steam->UserHasLicenseForApp(CSteamID(steamId), appId);
 }
 
+bool AIRSteam_RequestEncryptedAppTicket() {
+	std::string data = g_Steam->get_bytearray();
+	if (!g_Steam) return false;
+
+	// non-const void *? Come on Valve, you already got it right in BeginAuthSession() ...
+	void* buf = const_cast<char *>(data.data());
+	return g_Steam->RequestEncryptedAppTicket(buf, static_cast<int>(data.length()));
+}
+
+bool AIRSteam_GetEncryptedAppTicket() {
+	if (!g_Steam) return false;
+
+	char* data = nullptr;
+	uint32 length = 0;
+	bool ret = g_Steam->GetEncryptedAppTicket(&data, &length);
+
+	g_Steam->sendBuffer(AmfByteArray(data, data + length));
+	delete[] data;
+
+	return ret;
+}
+
 /*
  * overlay
  */

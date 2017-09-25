@@ -107,6 +107,8 @@ int AIRSteam_BeginAuthSession();
 bool AIRSteam_EndAuthSession();
 bool AIRSteam_CancelAuthTicket();
 int AIRSteam_UserHasLicenseForApp();
+bool AIRSteam_RequestEncryptedAppTicket();
+bool AIRSteam_GetEncryptedAppTicket();
 bool AIRSteam_ActivateGameOverlay();
 bool AIRSteam_ActivateGameOverlayToUser();
 bool AIRSteam_ActivateGameOverlayToWebPage();
