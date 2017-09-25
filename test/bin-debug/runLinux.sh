@@ -3,7 +3,11 @@
 [ ! -e ../../config.sh ] && die "FRESteamWorks/config.sh is not set up!"
 . ../../config.sh
 
-STEAM_LIB="$STEAM_SDK/redistributable_bin/linux32/libsteam_api.so"
+if [ $(uname -s) = Darwin ]; then
+    STEAM_LIB="$STEAM_SDK/redistributable_bin/osx32"
+else
+    STEAM_LIB="$STEAM_SDK/redistributable_bin/linux32/libsteam_api.so"
+fi
 
 if [ -z "$SteamAppId" ] && [ ! -e "steam_appid.txt" ] && [[ "$@" != *-appid* ]]; then
 	echo "\$SteamAppId not set and steam_appid.txt not found"
@@ -21,5 +25,11 @@ if [ ! -x "NativeApps/Linux/APIWrapper" ]; then
 	exit 4
 fi
 
-export LD_PRELOAD="$STEAM_LIB${LD_PRELOAD+:$LD_PRELOAD}"
+if [ $(uname -s) = Darwin ]; then
+    export DYLD_LIBRARY_PATH="$STEAM_LIB${DYLD_LIBRARY_PATH+:$DYLD_LIBRARY_PATH}"
+    install_name_tool -add_rpath "$AIR_SDK/runtimes/air/mac" NativeApps/Linux/APIWrapper
+else
+    export LD_PRELOAD="$STEAM_LIB${LD_PRELOAD+:$LD_PRELOAD}"
+fi
+
 "$AIR_SDK/bin/adl" FRESteamWorksTest-linux.xml . -- "$@"
