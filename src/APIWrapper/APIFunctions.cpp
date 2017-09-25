@@ -354,7 +354,7 @@ bool AIRSteam_UploadLeaderboardScore() {
 
 	return g_Steam->UploadLeaderboardScore(handle,
 		ELeaderboardUploadScoreMethod(method), score,
-		details.data(), details.size());
+		details.data(), static_cast<int>(details.size()));
 }
 
 AmfObject AIRSteam_UploadLeaderboardScoreResult() {
@@ -448,7 +448,7 @@ bool AIRSteam_FileWrite() {
 	std::string data = g_Steam->get_bytearray();
 	if(!g_Steam || name.empty()) return false;
 
-	return g_Steam->FileWrite(name, data.c_str(), data.length());
+	return g_Steam->FileWrite(name, data.c_str(), static_cast<int32>(data.length()));
 }
 
 bool AIRSteam_FileRead() {
@@ -504,11 +504,11 @@ AmfArray AIRSteam_GetQuota() {
 
 	if(!g_Steam) return array;
 
-	int32 total, avail;
+	uint64 total, avail;
 	if(!g_Steam->GetQuota(&total, &avail)) return array;
 
-	array.push_back(AmfInteger(total));
-	array.push_back(AmfInteger(avail));
+	array.push_back(AmfString(std::to_string(total)));
+	array.push_back(AmfString(std::to_string(avail)));
 
 	return array;
 }
@@ -1068,7 +1068,7 @@ int AIRSteam_BeginAuthSession() {
 	uint64 steamId = g_Steam->get_uint64();
 	if (!g_Steam || data.empty()) return k_EBeginAuthSessionResultInvalidTicket;
 
-	return g_Steam->BeginAuthSession(data.c_str(), data.length(), CSteamID(steamId));
+	return g_Steam->BeginAuthSession(data.c_str(), static_cast<int>(data.length()), CSteamID(steamId));
 }
 
 bool AIRSteam_EndAuthSession() {

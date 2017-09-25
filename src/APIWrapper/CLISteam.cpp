@@ -43,7 +43,7 @@ void CLISteam::sendData(Serializer& serializer) {
 	serializer.clear();
 
 	// first, send a length prefix
-	std::vector<u8> length = AmfInteger(data.size()).serialize();
+	std::vector<u8> length = AmfInteger(static_cast<int>(data.size())).serialize();
 	std::copy(length.begin(), length.end(), std::ostream_iterator<u8>(std::cout));
 	// send actual data
 	std::copy(data.begin(), data.end(), std::ostream_iterator<u8>(std::cout));
@@ -55,7 +55,7 @@ void CLISteam::sendDataTempFile(Serializer& serializer) {
 	serializer.clear();
 
 	// send length via stdout
-	std::vector<u8> length = AmfInteger(data.size()).serialize();
+	std::vector<u8> length = AmfInteger(static_cast<int>(data.size())).serialize();
 	std::copy(length.begin(), length.end(), std::ostream_iterator<u8>(std::cout));
 
 	std::string filename = std::tmpnam(nullptr);
