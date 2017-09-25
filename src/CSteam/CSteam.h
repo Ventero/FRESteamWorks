@@ -23,43 +23,7 @@
 
 #include <steam/steam_api.h>
 
-// used to store a LeaderboardEntry_t in combination with any possible details
-class LeaderboardEntry {
-public:
-	explicit LeaderboardEntry(int maxDetails) :
-		max_details(maxDetails),
-		details(nullptr)
-	{
-		if (max_details) details = new int32[max_details];
-	}
-
-	LeaderboardEntry(const LeaderboardEntry& other) :
-		entry(other.entry),
-		max_details(other.max_details),
-		details(nullptr)
-	{
-		if (max_details) {
-			details = new int32[max_details];
-			std::copy(other.details, other.details + max_details, details);
-		}
-	}
-
-	LeaderboardEntry& operator=(LeaderboardEntry other) {
-		std::swap(entry, other.entry);
-		std::swap(max_details, other.max_details);
-		std::swap(details, other.details);
-
-		return *this;
-	}
-
-	~LeaderboardEntry() {
-		delete[] details;
-	}
-
-	LeaderboardEntry_t entry;
-	int max_details;
-	int32 *details;
-};
+#include "CTypes.h"
 
 class CSteam {
 public:
@@ -182,8 +146,8 @@ public:
 	int GetFriendCount(int flags);
 	CSteamID GetFriendByIndex(int index, int flags);
 	std::string GetFriendPersonaName(CSteamID steamId);
-	uint8* GetSmallFriendAvatar(CSteamID steamId, uint32* width, uint32* height);
-	uint8* GetMediumFriendAvatar(CSteamID steamId, uint32* width, uint32* height);
+	Image GetSmallFriendAvatar(CSteamID steamId);
+	Image GetMediumFriendAvatar(CSteamID steamId);
 
 	// authentication & ownership
 	HAuthTicket GetAuthSessionTicket(char** data, uint32* length);
@@ -235,7 +199,7 @@ private:
 	std::map<PublishedFileId_t, RemoteStorageGetPublishedFileDetailsResult_t> m_PublishedFileDetails;
 	std::queue<MicroTxnAuthorizationResponse_t> m_MicroTxnResponses;
 
-	uint8* GetImageData(int iImage, uint32* width, uint32* height);
+	Image GetImageData(int image_handle);
 
 	// can't use unique_ptr because we need to target OS X 10.6 ...
 #pragma GCC diagnostic push

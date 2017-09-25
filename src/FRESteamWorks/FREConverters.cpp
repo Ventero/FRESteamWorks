@@ -68,53 +68,45 @@ FREObject FREArray(uint32 length) {
 FREObject FREBitmapDataFromImageRGBA(uint32 width, uint32 height, uint8* pImageRGBA)
 {
 	FREObject freWidth = FREUint(width);
-
 	FREObject freHeight = FREUint(height);
-
 	FREObject freTransparent = FREUint(0);
-
 	FREObject freFillColor = FREUint(0);
-
 	FREObject freArguments[4] = { freWidth, freHeight, freTransparent, freFillColor };
 
-	FREObject freoBitmapData;
-	FRENewObject((uint8_t *)"flash.display.BitmapData", 4, freArguments, &freoBitmapData, NULL);
+	FREObject bitmap_data_object;
+	FRENewObject((uint8_t *)"flash.display.BitmapData", 4, freArguments, &bitmap_data_object, NULL);
 
-	FREBitmapData2 freBitmapData;
-	FREAcquireBitmapData2(freoBitmapData, &freBitmapData);
+	FREBitmapData2 bitmap_data;
+	FREAcquireBitmapData2(bitmap_data_object, &bitmap_data);
 
-	int x, y, y2;
 	// There may be extra pixels in each row due to the value of
-	// bmd.lineStride32, we'll skip over those as needed
-	int offset = freBitmapData.lineStride32 - freBitmapData.width;
-	uint32_t *bmdPixels = freBitmapData.bits32;
+	// bmd.lineStride32, we'll skip over those as needed.
+	uint32 stride = bitmap_data.lineStride32;
+	uint32 *row_buf = bitmap_data.bits32;
 
-	int index = 0;
-	int bitmapWidth = freBitmapData.width;
-	int bitmapHeight = freBitmapData.height;
-	for (y = 0; y < bitmapHeight; y++)
+	for (uint32 y = 0; y < height; y++)
 	{
-		y2 = freBitmapData.isInvertedY ? (bitmapHeight - y - 1) : y;
-		for (x = 0; x < bitmapWidth; x++, bmdPixels++)
+		uint32 src_row = bitmap_data.isInvertedY ? (height - y - 1) : y;
+		for (uint32 x = 0; x < width; x++)
 		{
-			index = y2 * freBitmapData.width + x;
-			int red = *(pImageRGBA + index * 4);
-			int green = *(pImageRGBA + index * 4 + 1);
-			int blue = *(pImageRGBA + index * 4 + 2);
-			int alpha = *(pImageRGBA + index * 4 + 3);
+			uint32 src_index = src_row * width + x;
 
-			// Combine values into ARGB32
-			*bmdPixels = (alpha << 24) | (red << 16) | (green << 8) | blue;
+			// Convert RGBA into ARGB.
+			uint8 red = pImageRGBA[src_index * 4];
+			uint8 green = pImageRGBA[src_index * 4 + 1];
+			uint8 blue = pImageRGBA[src_index * 4 + 2];
+			uint8 alpha = pImageRGBA[src_index * 4 + 3];
+			row_buf[x] = (alpha << 24) | (red << 16) | (green << 8) | blue;
 		}
-		bmdPixels += offset;
+
+		row_buf += stride;
 	}
 
-	FREInvalidateBitmapDataRect(freoBitmapData, 0, 0, freBitmapData.width, freBitmapData.height);
-	// Release our control over the bitmapData
-	FREReleaseBitmapData(freoBitmapData);
+	// Release our control over the bitmapData.
+	FREInvalidateBitmapDataRect(bitmap_data_object, 0, 0, width, height);
+	FREReleaseBitmapData(bitmap_data_object);
 
-	delete[] pImageRGBA;
-	return freoBitmapData;
+	return bitmap_data_object;
 }
 
 /*

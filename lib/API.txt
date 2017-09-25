@@ -566,6 +566,7 @@ public function getSmallFriendAvatar(id:String):BitmapData
 // @default null
 // Returns friend medium avatar bitmap data
 public function getMediumFriendAvatar(id:String):BitmapData
+
 /******************************/
 /* Authentication & Ownership */
 /******************************/

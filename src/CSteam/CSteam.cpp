@@ -718,35 +718,31 @@ std::string CSteam::GetFriendPersonaName(CSteamID steamId) {
 	return std::string(m_ctx.SteamFriends()->GetFriendPersonaName(steamId));
 }
 
-uint8* CSteam::GetSmallFriendAvatar(CSteamID steamId, uint32* width, uint32* height) {
-	if (!m_bInitialized) return NULL;
+Image CSteam::GetSmallFriendAvatar(CSteamID steamId) {
+	if (!m_bInitialized) return Image(0, 0);
 
-	int iImage = m_ctx.SteamFriends()->GetSmallFriendAvatar(steamId);
-	uint8 *pImageRGBA = GetImageData(iImage, width, height);
-	return pImageRGBA;
+	int image_handle = m_ctx.SteamFriends()->GetSmallFriendAvatar(steamId);
+	return GetImageData(image_handle);
 }
 
-uint8* CSteam::GetMediumFriendAvatar(CSteamID steamId, uint32* width, uint32* height) {
-	if (!m_bInitialized) return NULL;
+Image CSteam::GetMediumFriendAvatar(CSteamID steamId) {
+	if (!m_bInitialized) return Image(0, 0);
 
-	int iImage = m_ctx.SteamFriends()->GetMediumFriendAvatar(steamId);
-	uint8 *pImageRGBA = GetImageData(iImage, width, height);
-	return pImageRGBA;
+	int image_handle = m_ctx.SteamFriends()->GetMediumFriendAvatar(steamId);
+	return GetImageData(image_handle);
 }
 
-uint8* CSteam::GetImageData(int iImage, uint32* width, uint32* height) {
-	bool success = m_ctx.SteamUtils()->GetImageSize(iImage, width, height);
+Image CSteam::GetImageData(int image_handle) {
+	uint32 width, height;
+	bool success = m_ctx.SteamUtils()->GetImageSize(image_handle, &width, &height);
+	if (!success) return Image(0, 0);
 
-	if (!success) return NULL;
+	Image image(width, height);
+	std::vector<uint8> & buf = image.data;
+	success = m_ctx.SteamUtils()->GetImageRGBA(image_handle, buf.data(), static_cast<int>(buf.size()));
+	if (!success) return Image(0, 0);
 
-	int uImageSizeInPixels = (*width) * (*height);
-	int uImageSizeInBytes = uImageSizeInPixels * 4;
-
-	uint8 *pImageRGBA = new uint8[uImageSizeInBytes];
-	success = m_ctx.SteamUtils()->GetImageRGBA(iImage, pImageRGBA, uImageSizeInBytes);
-
-	if (!success) return NULL;
-	return pImageRGBA;
+	return image;
 }
 
 // authentication & ownership

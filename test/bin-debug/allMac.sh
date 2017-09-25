@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # Builds the native lib *and* the ANE (as post-build script).
 (cd ../../src && xcodebuild -configuration Debug)

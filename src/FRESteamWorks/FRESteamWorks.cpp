@@ -1196,29 +1196,25 @@ AIR_FUNC(AIRSteam_GetFriendPersonaName) {
 }
 
 AIR_FUNC(AIRSteam_GetSmallFriendAvatar) {
-	ARG_CHECK(1, FREInt(0));
+	ARG_CHECK(1, nullptr);
 
 	uint64 steamId;
 	if (!FREGetUint64(argv[0], &steamId)) return nullptr;
 
-	uint32 avatarWidth, avatarHeight;
-	uint8* imageRGBA = g_Steam->GetSmallFriendAvatar(CSteamID(steamId), &avatarWidth, &avatarHeight);
-
-	if (imageRGBA == NULL) return nullptr;
-	return FREBitmapDataFromImageRGBA(avatarWidth, avatarHeight, imageRGBA);
+	Image image = g_Steam->GetSmallFriendAvatar(CSteamID(steamId));
+	if (image.data.size() == 0) return nullptr;
+	return FREBitmapDataFromImageRGBA(image.width, image.height, image.data.data());
 }
 
 AIR_FUNC(AIRSteam_GetMediumFriendAvatar) {
-	ARG_CHECK(1, FREInt(0));
+	ARG_CHECK(1, nullptr);
 
 	uint64 steamId;
 	if (!FREGetUint64(argv[0], &steamId)) return nullptr;
 
-	uint32 avatarWidth, avatarHeight;
-	uint8* imageRGBA = g_Steam->GetMediumFriendAvatar(CSteamID(steamId), &avatarWidth, &avatarHeight);
-
-	if (imageRGBA == NULL) return nullptr;
-	return FREBitmapDataFromImageRGBA(avatarWidth, avatarHeight, imageRGBA);
+	Image image = g_Steam->GetMediumFriendAvatar(CSteamID(steamId));
+	if (image.data.size() == 0) return nullptr;
+	return FREBitmapDataFromImageRGBA(image.width, image.height, image.data.data());
 }
 
 /*

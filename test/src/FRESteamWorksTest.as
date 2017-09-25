@@ -304,76 +304,61 @@ package {
 			log("indicateAchievementProgress('ACH_TRAVEL_FAR_SINGLE', 1, 3) == " + result);
 		}
 
+		private function getFriendByIndex(index:int, flags:int = FriendConstants.FRIENDFLAG_Immediate):String {
+			var count:int = Steamworks.getFriendCount(flags);
+			log("getFriendCount(" + flags + ") == " + count);
+
+			if (count == 0) {
+				log("No friends, returning own id");
+				return _userId;
+			}
+
+			var id:String = Steamworks.getFriendByIndex(0, flags);
+			log("getFriendByIndex(0, " + flags + ") == " + id);
+			log("getFriendPersonaName(" + id + ") == " + Steamworks.getFriendPersonaName(id));
+			return id;
+		}
+
 		private function checkFriends(e:Event = null):void {
 			if (!Steamworks.isReady) return;
 
-			var flags:int = FriendConstants.FRIENDFLAG_Immediate;
-			var count:int = Steamworks.getFriendCount(flags);
-			var id:String;
-			log("getFriendCount(Immediate) == " + count);
-			if (count > 0) {
-				id = Steamworks.getFriendByIndex(0, flags);
-				log("getFriendByIndex(0, Immediate) == " + id);
-				log("getFriendPersonaName(" + id + ") == " + Steamworks.getFriendPersonaName(id));
-			}
-
-			flags = FriendConstants.FRIENDFLAG_Blocked | FriendConstants.FRIENDFLAG_Ignored;
-			count = Steamworks.getFriendCount(flags);
-			log("getFriendCount(Blocked | Ignored) == " + count);
-			if (count > 0) {
-				id = Steamworks.getFriendByIndex(0, flags);
-				log("getFriendByIndex(0, Blocked | Ignored) == " + id);
-				log("getFriendPersonaName(" + id + ") == " + Steamworks.getFriendPersonaName(id));
-			}
+			getFriendByIndex(0);
+			getFriendByIndex(0, FriendConstants.FRIENDFLAG_Blocked | FriendConstants.FRIENDFLAG_Ignored);
 		}
+
 
 		private function getSmallFriendAvatar(e:Event = null):void {
 			if (!Steamworks.isReady) return;
 
-			var flags:int = FriendConstants.FRIENDFLAG_Immediate;
-			var count:int = Steamworks.getFriendCount(flags);
-			var id:String;
-			log("getFriendCount(Immediate) == " + count);
-			if (count > 0) {
-				id = Steamworks.getFriendByIndex(0, flags);
-				var avatarBitmapData:BitmapData = Steamworks.getSmallFriendAvatar(id);
-				log("Steamworks.getSmallFriendAvatar(" + id + ") result == " + (avatarBitmapData != null).toString());
-				changeAvatarBitmap(avatarBitmapData);
-			}
-			else log("Can't show avatar because you have no friends");
+			var id:String = getFriendByIndex(0);
+			var avatar:BitmapData = Steamworks.getSmallFriendAvatar(id);
+			var result:String = (avatar != null ? "(" + avatar.width + ", " + avatar.height + ")" : "null");
+			log("Steamworks.getSmallFriendAvatar(" + id + ") result == " + result);
+			changeAvatarBitmap(avatar);
 		}
 
 		private function getMediumFriendAvatar(e:Event = null):void
 		{
 			if (!Steamworks.isReady) return;
 
-			var flags:int = FriendConstants.FRIENDFLAG_Immediate;
-			var count:int = Steamworks.getFriendCount(flags);
-			var id:String;
-			log("getFriendCount(Immediate) == " + count);
-			if (count > 0) {
-				id = Steamworks.getFriendByIndex(0, flags);
-				var avatarBitmapData:BitmapData = Steamworks.getMediumFriendAvatar(id);
-				log("Steamworks.getSmallFriendAvatar(" + id + ") result == " + (avatarBitmapData != null).toString());
-				changeAvatarBitmap(avatarBitmapData);
-			}
-			else log("Can't show avatar because you have no friends");
+			var id:String = getFriendByIndex(0);
+			var avatar:BitmapData = Steamworks.getMediumFriendAvatar(id);
+			var result:String = (avatar != null ? "(" + avatar.width + ", " + avatar.height + ")" : "null");
+			log("Steamworks.getMediumFriendAvatar(" + id + ") result == " + result);
+			changeAvatarBitmap(avatar);
 		}
 
 		private function clearAvatarBitmap(e:Event = null):void
 		{
-			if (_avatarBitmap)
-			{
-				if (_avatarBitmap.parent) _avatarBitmap.parent.removeChild(_avatarBitmap);
-				_avatarBitmap.bitmapData.dispose();
-				_avatarBitmap = null;
+			if (_avatarBitmap != null && _avatarBitmap.parent) {
+				_avatarBitmap.parent.removeChild(_avatarBitmap);
 			}
 		}
 
-		private function changeAvatarBitmap(avatarBitmapData:BitmapData):void
+		private function changeAvatarBitmap(avatar:BitmapData):void
 		{
 			clearAvatarBitmap();
-			_avatarBitmap = new flash.display.Bitmap(avatarBitmapData);
+			_avatarBitmap = new Bitmap(avatar);
 			_avatarBitmap.x = stage.width - _avatarBitmap.width;
 			addChild(_avatarBitmap);
 		}
