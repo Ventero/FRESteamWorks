@@ -1040,6 +1040,30 @@ std::string AIRSteam_GetFriendPersonaName() {
 	return g_Steam->GetFriendPersonaName(CSteamID(steamId));
 }
 
+bool AIRSteam_GetSmallFriendAvatar() {
+	uint64 steamId = g_Steam->get_uint64();
+
+	Image image = g_Steam->GetSmallFriendAvatar(CSteamID(steamId));
+
+	g_Steam->send(image.width);
+	g_Steam->send(image.height);
+	g_Steam->sendBuffer(AmfByteArray(image.argb_data()));
+
+	return (image.data.size() != 0);
+}
+
+bool AIRSteam_GetMediumFriendAvatar() {
+	uint64 steamId = g_Steam->get_uint64();
+
+	Image image = g_Steam->GetMediumFriendAvatar(CSteamID(steamId));
+
+	g_Steam->send(image.width);
+	g_Steam->send(image.height);
+	g_Steam->sendBuffer(AmfByteArray(image.argb_data()));
+
+	return (image.data.size() != 0);
+}
+
 /*
  * authentication & ownership
  */

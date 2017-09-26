@@ -9,6 +9,7 @@
 package com.amanitadesign.steam {
 	import flash.desktop.NativeProcess;
 	import flash.desktop.NativeProcessStartupInfo;
+	import flash.display.BitmapData;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
@@ -18,6 +19,7 @@ package com.amanitadesign.steam {
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	import flash.geom.Rectangle;
 	import flash.net.registerClassAlias;
 	import flash.utils.ByteArray;
 	import flash.utils.IDataInput;
@@ -429,6 +431,20 @@ package com.amanitadesign.steam {
 			return readResponse(true) as ByteArray;
 		}
 
+		private function readBitmapDataResponse():BitmapData {
+			if(!_process.running) return null;
+
+			var width:uint = readIntResponse();
+			var height:uint = readIntResponse();
+			var data:ByteArray = readByteArrayResponse();
+			if (width == 0 || height == 0 || data.length == 0) return null;
+
+			var rect:Rectangle = new Rectangle(0, 0, width, height);
+			var bitmap_data:BitmapData = new BitmapData(width, height);
+			bitmap_data.setPixels(rect, data);
+			return bitmap_data;
+		}
+
 		private function eventDispatched(e:ProgressEvent):void {
 			var stderr:IDataInput = _process.standardError;
 			var avail:uint = stderr.bytesAvailable;
@@ -511,6 +527,18 @@ package com.amanitadesign.steam {
 			ticket.position = 0;
 
 			return readBoolResponse();
+		}
+
+		public function getSmallFriendAvatar(id:String):BitmapData {
+			if (!callWrapper(AIRSteam_GetSmallFriendAvatar, [id])) return null;
+
+			return readBitmapDataResponse();
+		}
+
+		public function getMediumFriendAvatar(id:String):BitmapData {
+			if (!callWrapper(AIRSteam_GetMediumFriendAvatar, [id])) return null;
+
+			return readBitmapDataResponse();
 		}
 
 		/*
@@ -951,15 +979,11 @@ package com.amanitadesign.steam {
 			return readStringResponse();
 		}
 
-		public function getSmallFriendAvatar(id:String):BitmapData {
-			if(!callWrapper(AIRSteam_GetSmallFriendAvatar, [id])) return null;
-			return readResponse() as BitmapData;
-		}
+		// manual implementation
+		// public function getSmallFriendAvatar(id:String):BitmapData
 
-		public function getMediumFriendAvatar(id:String):BitmapData {
-			if(!callWrapper(AIRSteam_GetMediumFriendAvatar, [id])) return null;
-			return readResponse() as BitmapData;
-		}
+		// manual implementation
+		// public function getMediumFriendAvatar(id:String):BitmapData
 
 		/******************************/
 		/* Authentication & Ownership */

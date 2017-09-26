@@ -1203,7 +1203,7 @@ AIR_FUNC(AIRSteam_GetSmallFriendAvatar) {
 
 	Image image = g_Steam->GetSmallFriendAvatar(CSteamID(steamId));
 	if (image.data.size() == 0) return nullptr;
-	return FREBitmapDataFromImageRGBA(image.width, image.height, image.data.data());
+	return FREBitmapDataFromImageRGBA(image.width, image.height, image.argb_data());
 }
 
 AIR_FUNC(AIRSteam_GetMediumFriendAvatar) {
@@ -1214,7 +1214,7 @@ AIR_FUNC(AIRSteam_GetMediumFriendAvatar) {
 
 	Image image = g_Steam->GetMediumFriendAvatar(CSteamID(steamId));
 	if (image.data.size() == 0) return nullptr;
-	return FREBitmapDataFromImageRGBA(image.width, image.height, image.data.data());
+	return FREBitmapDataFromImageRGBA(image.width, image.height, image.argb_data());
 }
 
 /*

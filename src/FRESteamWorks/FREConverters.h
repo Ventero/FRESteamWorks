@@ -25,7 +25,7 @@ FREObject FREUint64(uint64);
 FREObject FREString(std::string);
 FREObject FREString(const char*);
 FREObject FREArray(uint32);
-FREObject FREBitmapDataFromImageRGBA(uint32 width, uint32 height, uint8* imageRGBA);
+FREObject FREBitmapDataFromImageRGBA(uint32 width, uint32 height, std::vector<uint8> const & argb_data);
 bool FREGetBool(FREObject object, bool* val);
 bool FREGetDouble(FREObject, double* val);
 bool FREGetInt32(FREObject, int32* val);

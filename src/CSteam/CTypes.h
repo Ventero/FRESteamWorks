@@ -1,6 +1,8 @@
 #ifndef CTYPES_H
 #define CTYPES_H
 
+#include <vector>
+
 #include <steam/steam_api.h>
 
 // used to store a LeaderboardEntry_t in combination with any possible details
@@ -48,6 +50,20 @@ struct Image {
         , data(width * height * 4)
     {
         /* empty */
+    }
+
+    std::vector<uint8> argb_data() const {
+        // Not very optimized, but good enough
+        std::vector<uint8> ret(data);
+
+        for (size_t i = 0; i < ret.size(); i += 4) {
+            ret[i] = data[i + 3];
+            ret[i + 1] = data[i];
+            ret[i + 2] = data[i + 1];
+            ret[i + 3] = data[i + 2];
+        }
+
+        return ret;
     }
 
     uint32 width;

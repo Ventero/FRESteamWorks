@@ -43,7 +43,8 @@ files = [
 	{
 		:file => "src_linux/com/amanitadesign/steam/FRESteamWorks.as",
 		:ignore => %w{init runCallbacks fileRead UGCRead getAuthSessionTicket
-					  getEncryptedAppTicket restartAppIfNecessary},
+					  getEncryptedAppTicket getMediumFriendAvatar getSmallFriendAvatar
+					  restartAppIfNecessary},
 		:format => method(:create_lib_linux)
 	},
 	{

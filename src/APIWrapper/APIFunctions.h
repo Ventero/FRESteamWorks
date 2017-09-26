@@ -101,6 +101,8 @@ bool AIRSteam_SetUserPublishedFileAction();
 int AIRSteam_GetFriendCount();
 uint64 AIRSteam_GetFriendByIndex();
 std::string AIRSteam_GetFriendPersonaName();
+bool AIRSteam_GetSmallFriendAvatar();
+bool AIRSteam_GetMediumFriendAvatar();
 uint32 AIRSteam_GetAuthSessionTicket();
 uint32 AIRSteam_GetAuthSessionTicketResult();
 int AIRSteam_BeginAuthSession();

@@ -65,7 +65,7 @@ FREObject FREArray(uint32 length) {
 	return array;
 }
 
-FREObject FREBitmapDataFromImageRGBA(uint32 width, uint32 height, uint8* pImageRGBA)
+FREObject FREBitmapDataFromImageRGBA(uint32 width, uint32 height, std::vector<uint8> const & argb_data)
 {
 	FREObject freWidth = FREUint(width);
 	FREObject freHeight = FREUint(height);
@@ -90,12 +90,10 @@ FREObject FREBitmapDataFromImageRGBA(uint32 width, uint32 height, uint8* pImageR
 		for (uint32 x = 0; x < width; x++)
 		{
 			uint32 src_index = src_row * width + x;
-
-			// Convert RGBA into ARGB.
-			uint8 red = pImageRGBA[src_index * 4];
-			uint8 green = pImageRGBA[src_index * 4 + 1];
-			uint8 blue = pImageRGBA[src_index * 4 + 2];
-			uint8 alpha = pImageRGBA[src_index * 4 + 3];
+			uint8 alpha = argb_data[src_index * 4];
+			uint8 red = argb_data[src_index * 4 + 1];
+			uint8 green = argb_data[src_index * 4 + 2];
+			uint8 blue = argb_data[src_index * 4 + 3];
 			row_buf[x] = (alpha << 24) | (red << 16) | (green << 8) | blue;
 		}
 
