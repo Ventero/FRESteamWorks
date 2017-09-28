@@ -48,12 +48,13 @@ done
 pushd "$target"
 
 steam_sdk_version=$(grep -m1 -F v1. "$STEAM_SDK/Readme.txt")
+air_sdk_version=$(head -n1 "$AIR_SDK/AIR SDK Readme.txt")
 cat <<EOD > README.txt
 FRESteamWorks ${target}
 
 https://github.com/Ventero/FRESteamWorks/commits/${target}
 
-Built against Steam SDK ${steam_sdk_version}
+Built against Steam SDK ${steam_sdk_version} and ${air_sdk_version}.
 EOD
 
 pushd "../../lib/bin/"
