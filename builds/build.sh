@@ -8,7 +8,11 @@ die() {
 	exit 1
 }
 
-target="$(git describe --tags --always)"
+if [ -n "$1" ]; then
+	target="$1"
+else
+	target="$(git describe --tags --always)"
+fi
 
 for type in Debug Release; do
 	dir="$target/$type"
@@ -32,7 +36,7 @@ for type in Debug Release; do
 	unzip -o FRESteamWorksLib.swc
 
 	cp ../../../lib/bin/descriptor.xml .
-	version="$(git describe --long --always --tags | sed 's/-g.*//;s/-/./')"
+	version="$(git describe --long --always --tags "$target" | sed 's/-g.*//;s/-/./')"
 	sed -E -i "" -e "s/<versionNumber>[^<]+/<versionNumber>${version##v}/" descriptor.xml
 
 	"$AIR_SDK"/bin/adt -package -target ane FRESteamWorks.ane descriptor.xml \
@@ -69,6 +73,6 @@ popd
 
 if [ -n "$UPLOAD_URL" ]; then
 	curl --ftp-create-dirs -nT \
-	     "{$target/FRESteamWorks-Debug.ane,$target/FRESteamWorks.ane,$target/FRESteamWorksLibLinux.swc,README.txt}" \
+	     "{$target/FRESteamWorks-Debug.ane,$target/FRESteamWorks.ane,$target/FRESteamWorksLibLinux.swc,$target/README.txt}" \
 	     "$UPLOAD_URL/$target/"
 fi
