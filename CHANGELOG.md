@@ -7,6 +7,11 @@ version number.
 
 ### [HEAD](https://github.com/Ventero/FRESteamWorks/blob/HEAD/lib/API.txt)
 
+### [v0.7](https://github.com/Ventero/FRESteamWorks/blob/v0.7/lib/API.txt) - [Download](http://dump.ventero.de/FRESteamWorks/v0.7/)
+ - Added `getSmallFriendAvatar`, `getMediumFriendAvatar` and `requestEncryptedAppTicket` - implemented by [Ilya Diev](https://github.com/kiripu) ([#43](https://github.com/Ventero/FRESteamWorks/pull/43)).
+ - Added README.txt to builds describing what SDKs it was built against.
+ - Don't compile SWFs in debug mode.
+
 ### [v0.6](https://github.com/Ventero/FRESteamWorks/blob/v0.6/lib/API.txt)
  - Added support for 64-bit version of Adobe AIR (20+) on Mac OS X .
  - Make code compile with VS2015 (PR #27, thanks [jonongjs](https://github.com/jonongjs)!).
