@@ -10,6 +10,10 @@ set ANE_PATH=..\..\lib\bin
 copy "%STEAM_SDK%\redistributable_bin\steam_api.dll" .
 copy "%STEAM_SDK%\redistributable_bin\osx32\libsteam_api.dylib" .
 
+REM Generate cert on the fly
+call "%AIR_SDK%\bin\adt.bat" -certificate -cn MyCertificateName 2048-RSA ^
+                             CertificateTest.p12 test
+
 call "%AIR_SDK%\bin\adt.bat" -package -XnoAneValidate -tsa none ^
                              -storetype pkcs12 -keystore CertificateTest.p12 ^
                              -storepass test -target bundle FRESteamWorksTest ^

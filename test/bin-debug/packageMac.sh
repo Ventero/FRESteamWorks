@@ -11,6 +11,11 @@ rm -rf FRESteamWorksTest.app
 cp "$STEAM_SDK/redistributable_bin/steam_api.dll" .
 cp "$STEAM_SDK/redistributable_bin/osx32/libsteam_api.dylib" .
 
+# Generate cert on the fly
+"$AIR_SDK/bin/adt" -certificate -cn MyCertificateName 2048-RSA \
+                   CertificateTest.p12 test
+
+
 "$AIR_SDK"/bin/adt -package -XnoAneValidate -tsa none -storetype pkcs12 \
                    -keystore CertificateTest.p12 -storepass test \
                    -target bundle FRESteamWorksTest FRESteamWorksTest-app.xml \
